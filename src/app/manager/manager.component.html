@@ -1,0 +1,278 @@
+<div class="content-wrapper">
+
+  <!-- ===== Breadcrumb ===== -->
+  <nz-breadcrumb class="page-breadcrumb">
+    <nz-breadcrumb-item>
+      <a routerLink="/app">Home</a>
+    </nz-breadcrumb-item>
+
+    <nz-breadcrumb-item>
+      Lista de Gestores
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- ===== Page Header ===== -->
+  <div class="page-header">
+    <p>Lista de Gestores</p>
+
+    <span (click)="onBack()" class="back-arrow">
+      <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
+    </span>
+  </div>
+
+  <!-- ===== Summary Section ===== -->
+  <div class="summary-section">
+    <div class="summary-background">
+      <div [nzGutter]="8" nz-row>
+
+        <!-- Total -->
+        <div [nzSpan]="8" nz-col>
+          <nz-card nzSize="small">
+            <div class="summary-card">
+              <div class="icon-wrapper total">
+                <nz-icon nzTheme="outline" nzType="team"></nz-icon>
+              </div>
+              <div class="summary-content">
+                <span class="title">Total Gestores</span>
+                <p>{{ totalManagers }}</p>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <!-- Active -->
+        <div [nzSpan]="8" nz-col>
+          <nz-card nzSize="small">
+            <div class="summary-card">
+              <div class="icon-wrapper active">
+                <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
+              </div>
+              <div class="summary-content">
+                <span class="title">Ativos</span>
+                <p>{{ activeManagers }}</p>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <!-- Inactive -->
+        <div [nzSpan]="8" nz-col>
+          <nz-card nzSize="small">
+            <div class="summary-card">
+              <div class="icon-wrapper inactive">
+                <nz-icon nzTheme="outline" nzType="warning"></nz-icon>
+              </div>
+              <div class="summary-content">
+                <span class="title">Inativos</span>
+                <p>{{ inactiveManagers }}</p>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Filters Panel ===== -->
+  <div class="filters-panel">
+    <input
+      (ngModelChange)="search()"
+      [(ngModel)]="searchValue"
+      nz-input
+      placeholder="Pesquisar nome/contacto/endereço"
+      type="text"
+    />
+
+    <button (click)="openManagerDrawer()" nz-button nzType="primary">
+      <nz-icon nzTheme="outline" nzType="user-add"></nz-icon>
+      Novo Gestor
+    </button>
+  </div>
+
+  <!-- ===== Table ===== -->
+  <div class="table-wrapper">
+    <div class="table-scroll">
+
+      <nz-spin
+        [nzSpinning]="isLoading"
+        nzSize="large"
+        nzTip="A carregar Gestores...">
+
+        <nz-table
+          #nzTable
+          [nzData]="listOfDisplayData"
+          [nzScroll]="{ x: '1150px', y: '440px' }"
+          nzTableLayout="fixed">
+
+          <thead>
+          <tr>
+            <th nzCustomFilter>
+              Nome
+              <nz-filter-trigger
+                [(nzVisible)]="visible"
+                [nzActive]="searchValue.length > 0"
+                [nzDropdownMenu]="menu">
+                <nz-icon nzType="search"></nz-icon>
+              </nz-filter-trigger>
+            </th>
+            <th>Contacto</th>
+            <th>Endereço</th>
+            <th>Status</th>
+            <th>Criado em</th>
+            <th>Ações</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let data of nzTable.data">
+            <td>{{ data.name }}</td>
+            <td>{{ data.contact }}</td>
+            <td>{{ data.address }}</td>
+
+            <td>
+              <nz-tag [nzColor]="data.status === 'ACTIVO' ? 'green' : 'red'">
+                {{ data.status }}
+              </nz-tag>
+            </td>
+
+            <td>{{ data.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+
+            <td>
+              <button (click)="viewManager(data)" nz-button nzSize="small" nzType="link">
+                <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+              </button>
+
+              <button (click)="editManager(data)" nz-button nzSize="small" nzType="link">
+                <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+              </button>
+
+              <button (click)="deleteManager(data)" nz-button nzDanger nzSize="small" nzType="link">
+                <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+
+        </nz-table>
+      </nz-spin>
+
+      <!-- ===== Filter Dropdown ===== -->
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <div class="search-box">
+            <input
+              (ngModelChange)="search()"
+              [(ngModel)]="searchValue"
+              nz-input
+              placeholder="Pesquisar..."
+              type="text"
+            />
+
+            <button (click)="search()" nz-button nzSize="small" nzType="primary">Search</button>
+            <button (click)="reset()" nz-button nzSize="small">Reset</button>
+          </div>
+        </div>
+      </nz-dropdown-menu>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== Drawer ===== -->
+<nz-drawer
+  (nzOnClose)="closeManagerDrawer()"
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzFooter]="managerDrawerFooter"
+  [nzMaskClosable]="false"
+  [nzTitle]="managerDrawerTitle"
+  [nzVisible]="isManagerDrawerVisible"
+  [nzWidth]="drawerWidth">
+
+  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar gestor...">
+    <form [formGroup]="managerForm" class="drawer-form" nz-form>
+
+      <div class="drawer-section">
+        <h3 class="section-title">Informação do Gestor</h3>
+
+        <div [nzGutter]="16" nz-row>
+
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Nome</nz-form-label>
+              <nz-form-control>
+                <input formControlName="name" nz-input placeholder="Digite o nome"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Contacto</nz-form-label>
+              <nz-form-control>
+                <nz-input-group nzAddOnBefore="+258">
+                  <input formControlName="contact" nz-input placeholder="Digite o contacto"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+        </div>
+
+        <div [nzGutter]="16" nz-row>
+
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Endereço</nz-form-label>
+              <nz-form-control>
+                <input formControlName="address" nz-input placeholder="Digite o endereço"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Status</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="status" nzPlaceHolder="Selecione o status">
+                  <nz-option nzLabel="ACTIVO" nzValue="ACTIVO"></nz-option>
+                  <nz-option nzLabel="INACTIVO" nzValue="INACTIVO"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+        </div>
+
+      </div>
+
+    </form>
+  </nz-spin>
+
+  <ng-template #managerDrawerFooter>
+    <div class="drawer-footer">
+      <button (click)="closeManagerDrawer()" [disabled]="isSaving" class="btn-cancel" nz-button nzType="default">
+        Cancelar
+      </button>
+
+      <button
+        (click)="saveManager()"
+        [disabled]="managerForm.invalid || isSaving"
+        class="btn-save"
+        nz-button
+        nzType="primary">
+
+        <ng-container *ngIf="!isSaving; else savingTpl">
+          {{ isEditMode ? 'Salvar' : 'Criar' }}
+        </ng-container>
+
+        <ng-template #savingTpl>
+          <nz-spin nzSize="small"></nz-spin>
+          A gravar...
+        </ng-template>
+
+      </button>
+    </div>
+  </ng-template>
+
+</nz-drawer>
