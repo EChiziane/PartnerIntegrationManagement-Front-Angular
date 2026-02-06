@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
           if (response && response.token && isPlatformBrowser(this.platformId)) {
             localStorage.setItem('token', response.token);
             this.loginSuccess.emit();
-            this.router.navigate(['/app/customer']);
+            this.router.navigate(['/app/dashboard']);
           } else {
             this.responseMessage = 'Erro ao receber o token da API.';
           }

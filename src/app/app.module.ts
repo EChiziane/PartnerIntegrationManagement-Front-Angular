@@ -62,6 +62,7 @@ import {DriverComponent} from './CSM/driver/driver.component';
 import {ManagerComponent} from './CSM/manager/manager.component';
 import {SprintComponent} from './CSM/sprint/sprint.component';
 import {CarLoadComponent} from './CSM/carload/carload.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
 
 
 registerLocaleData(en);
@@ -78,7 +79,8 @@ registerLocaleData(en);
     ManagerComponent,
     SprintComponent,
     CarLoadComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    DashboardComponent
 
   ],
   imports: [

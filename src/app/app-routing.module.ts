@@ -14,6 +14,9 @@ import {ManagerComponent} from './CSM/manager/manager.component';
 
 import {SprintDetailsComponent} from './CSM/sprint-details/sprint-details.component';
 import {CarLoadComponent} from './CSM/carload/carload.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {InvoiceComponent} from './invoice/invoice.component';
+import {QuatationComponent} from './quatation/quatation.component';
 
 
 const routes: Routes = [
@@ -30,7 +33,10 @@ const routes: Routes = [
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
     children: [
+      {path: 'dashboard', component: DashboardComponent},
       {path: 'carload', component: CarLoadComponent},
+      {path: 'quotation', component: QuatationComponent},
+      {path: 'invoice', component: InvoiceComponent},
       {path: 'manager', component: ManagerComponent},
       {path: 'sprint', component: SprintComponent},
       {path: 'sprint-detail/:id', component: SprintDetailsComponent},
