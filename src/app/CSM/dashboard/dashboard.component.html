@@ -62,46 +62,46 @@
     <div class="left-filters">
 
       <input
-        nz-input
-        [(ngModel)]="searchValue"
         (ngModelChange)="applyFilters()"
+        [(ngModel)]="searchValue"
+        nz-input
         placeholder="Pesquisar cliente, destino, material, número..."
       />
 
       <div class="quick-filters">
-        <button nz-button nzType="default" (click)="filterToday()">
+        <button (click)="filterToday()" nz-button nzType="default">
           <nz-icon nzTheme="outline" nzType="clock-circle"></nz-icon>
           Hoje
         </button>
 
         <button
+          (click)="toggleRange()"
+          [class.active]="filterMode === 'RANGE'"
           nz-button
           nzType="default"
-          [class.active]="filterMode === 'RANGE'"
-          (click)="toggleRange()"
         >
           <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
           Intervalo
         </button>
       </div>
 
-      <div class="range-box" *ngIf="filterMode === 'RANGE'">
+      <div *ngIf="filterMode === 'RANGE'" class="range-box">
         <nz-date-picker
-          [(ngModel)]="rangeStart"
           (ngModelChange)="applyFilters()"
+          [(ngModel)]="rangeStart"
           nzFormat="yyyy-MM-dd"
           nzPlaceHolder="Início"
         ></nz-date-picker>
 
         <nz-date-picker
-          [(ngModel)]="rangeEnd"
           (ngModelChange)="applyFilters()"
+          [(ngModel)]="rangeEnd"
           nzFormat="yyyy-MM-dd"
           nzPlaceHolder="Fim"
         ></nz-date-picker>
       </div>
 
-      <button nz-button nzType="default" (click)="resetFilters()">
+      <button (click)="resetFilters()" nz-button nzType="default">
         Limpar
       </button>
     </div>
@@ -112,7 +112,7 @@
         Ver Carradas
       </button>
 
-      <button nz-button nzType="primary" (click)="reload()">
+      <button (click)="reload()" nz-button nzType="primary">
         <nz-icon nzTheme="outline" nzType="reload"></nz-icon>
         Atualizar
       </button>
@@ -137,8 +137,8 @@
           <div class="col-body">
             <ng-container *ngIf="inProgressList.length; else emptyProgress">
               <nz-card
-                class="carload-card"
                 *ngFor="let c of inProgressList; trackBy: trackById"
+                class="carload-card"
                 nzSize="small"
               >
                 <div class="card-top">
@@ -147,7 +147,7 @@
                     <span class="material">{{ c.transportedMaterial }}</span>
                   </div>
 
-                  <nz-tag class="status-tag" [nzColor]="statusColor(c.deliveryStatus)">
+                  <nz-tag [nzColor]="statusColor(c.deliveryStatus)" class="status-tag">
                     {{ getStatusLabel(c.deliveryStatus) }}
                   </nz-tag>
                 </div>
@@ -162,7 +162,7 @@
                 </div>
 
                 <div class="card-footer">
-                  <button nz-button nzType="link" nzSize="small" (click)="openInCarradas(c)">
+                  <button (click)="openInCarradas(c)" nz-button nzSize="small" nzType="link">
                     <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
                     Ver
                   </button>
@@ -192,8 +192,8 @@
           <div class="col-body">
             <ng-container *ngIf="scheduledList.length; else emptyScheduled">
               <nz-card
-                class="carload-card"
                 *ngFor="let c of scheduledList; trackBy: trackById"
+                class="carload-card"
                 nzSize="small"
               >
                 <div class="card-top">
@@ -202,7 +202,7 @@
                     <span class="material">{{ c.transportedMaterial }}</span>
                   </div>
 
-                  <nz-tag class="status-tag" [nzColor]="statusColor(c.deliveryStatus)">
+                  <nz-tag [nzColor]="statusColor(c.deliveryStatus)" class="status-tag">
                     {{ getStatusLabel(c.deliveryStatus) }}
                   </nz-tag>
                 </div>
@@ -218,7 +218,7 @@
                 </div>
 
                 <div class="card-footer">
-                  <button nz-button nzType="link" nzSize="small" (click)="openInCarradas(c)">
+                  <button (click)="openInCarradas(c)" nz-button nzSize="small" nzType="link">
                     <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
                     Ver
                   </button>
@@ -248,8 +248,8 @@
           <div class="col-body">
             <ng-container *ngIf="doneList.length; else emptyDone">
               <nz-card
-                class="carload-card"
                 *ngFor="let c of doneList; trackBy: trackById"
+                class="carload-card"
                 nzSize="small"
               >
                 <div class="card-top">
@@ -258,7 +258,7 @@
                     <span class="material">{{ c.transportedMaterial }}</span>
                   </div>
 
-                  <nz-tag class="status-tag" [nzColor]="statusColor(c.deliveryStatus)">
+                  <nz-tag [nzColor]="statusColor(c.deliveryStatus)" class="status-tag">
                     {{ getStatusLabel(c.deliveryStatus) }}
                   </nz-tag>
                 </div>
@@ -274,7 +274,7 @@
                 </div>
 
                 <div class="card-footer">
-                  <button nz-button nzType="link" nzSize="small" (click)="openInCarradas(c)">
+                  <button (click)="openInCarradas(c)" nz-button nzSize="small" nzType="link">
                     <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
                     Ver
                   </button>

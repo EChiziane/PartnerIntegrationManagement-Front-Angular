@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { QuatationComponent } from './quatation.component';
+import {QuatationComponent} from './quatation.component';
 
 describe('QuatationComponent', () => {
   let component: QuatationComponent;
@@ -10,7 +10,7 @@ describe('QuatationComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [QuatationComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(QuatationComponent);
     component = fixture.componentInstance;

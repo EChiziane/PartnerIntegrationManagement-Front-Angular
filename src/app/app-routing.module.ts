@@ -6,7 +6,7 @@ import {ListuserComponent} from './UASM/listuser/listuser.component';
 
 
 import {LandingPageComponent} from './landpage/landingpage.component';
-import {MainLayoutComponent} from './main-layout/main-layout.component';
+import {MainLayoutComponent} from './CSM/main-layout/main-layout.component';
 import {AuthGuard} from './services/auth.guard';
 import {DriverComponent} from './CSM/driver/driver.component';
 import {SprintComponent} from './CSM/sprint/sprint.component';
@@ -14,9 +14,9 @@ import {ManagerComponent} from './CSM/manager/manager.component';
 
 import {SprintDetailsComponent} from './CSM/sprint-details/sprint-details.component';
 import {CarLoadComponent} from './CSM/carload/carload.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {InvoiceComponent} from './invoice/invoice.component';
-import {QuatationComponent} from './quatation/quatation.component';
+import {DashboardComponent} from './CSM/dashboard/dashboard.component';
+import {InvoiceComponent} from './CSM/invoice/invoice.component';
+import {QuatationComponent} from './CSM/quatation/quatation.component';
 
 
 const routes: Routes = [

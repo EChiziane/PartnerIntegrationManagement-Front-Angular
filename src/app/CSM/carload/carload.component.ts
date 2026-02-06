@@ -1,20 +1,20 @@
 // carload.component.ts ✅ COMPLETO com os 4 cenários (CANCELLED / DELIVERED / SCHEDULED / PENDING)
 
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
-import { CarLoad } from '../../models/CSM/carlaod';
-import { CarloadService } from '../../services/carload.service';
+import {CarLoad} from '../../models/CSM/carlaod';
+import {CarloadService} from '../../services/carload.service';
 
-import { Driver } from '../../models/CSM/driver';
-import { Manager } from '../../models/CSM/manager';
-import { Sprint } from '../../models/CSM/sprint';
+import {Driver} from '../../models/CSM/driver';
+import {Manager} from '../../models/CSM/manager';
+import {Sprint} from '../../models/CSM/sprint';
 
-import { DriverService } from '../../services/driver.service';
-import { ManagerService } from '../../services/manager.service';
-import { SprintService } from '../../services/sprint.service';
+import {DriverService} from '../../services/driver.service';
+import {ManagerService} from '../../services/manager.service';
+import {SprintService} from '../../services/sprint.service';
 
 type CarLoadStatus = 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'ENTREGUE' | string;
 
@@ -102,7 +102,21 @@ export class CarLoadComponent implements OnInit {
     private sprintService: SprintService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
+
+  // ✅ Helpers para UI
+  get selectedStatusUpper(): string {
+    return (this.carLoadForm.get('deliveryStatus')?.value || 'PENDING').toString().toUpperCase();
+  }
+
+  get shouldShowScheduledDate(): boolean {
+    return this.selectedStatusUpper === 'SCHEDULED';
+  }
+
+  get shouldShowDeliveredDate(): boolean {
+    return this.selectedStatusUpper === 'DELIVERED' || this.selectedStatusUpper === 'ENTREGUE';
+  }
 
   ngOnInit(): void {
     this.getCarLoads();
@@ -133,65 +147,23 @@ export class CarLoadComponent implements OnInit {
   // ========= Status helpers =========
   getStatusLabel(status: CarLoadStatus): string {
     switch ((status || '').toUpperCase()) {
-      case 'SCHEDULED': return 'Agendada';
-      case 'PENDING': return 'Pendente';
+      case 'SCHEDULED':
+        return 'Agendada';
+      case 'PENDING':
+        return 'Pendente';
       case 'DELIVERED':
-      case 'ENTREGUE': return 'Entregue';
-      case 'CANCELLED': return 'Cancelada';
-      default: return status as string;
+      case 'ENTREGUE':
+        return 'Entregue';
+      case 'CANCELLED':
+        return 'Cancelada';
+      default:
+        return status as string;
     }
   }
 
   isDelivered(status: CarLoadStatus): boolean {
     const s = (status || '').toUpperCase();
     return s === 'DELIVERED' || s === 'ENTREGUE';
-  }
-
-  // ✅ Helpers para UI
-  get selectedStatusUpper(): string {
-    return (this.carLoadForm.get('deliveryStatus')?.value || 'PENDING').toString().toUpperCase();
-  }
-  get shouldShowScheduledDate(): boolean {
-    return this.selectedStatusUpper === 'SCHEDULED';
-  }
-  get shouldShowDeliveredDate(): boolean {
-    return this.selectedStatusUpper === 'DELIVERED' || this.selectedStatusUpper === 'ENTREGUE';
-  }
-
-  // ✅ aplica regras pedidas (validators + limpar campos)
-  private applyDateRulesByStatus(): void {
-    const status = this.selectedStatusUpper;
-
-    const scheduledCtrl = this.carLoadForm.get('deliveryScheduledDate')!;
-    const deliveredCtrl = this.carLoadForm.get('deliveredDate')!;
-
-    // limpar validadores
-    scheduledCtrl.clearValidators();
-    deliveredCtrl.clearValidators();
-
-    // aplicar regras
-    if (status === 'SCHEDULED') {
-      // precisa data agendada, não precisa entrega
-      scheduledCtrl.setValidators([Validators.required]);
-      deliveredCtrl.setValue('', { emitEvent: false });
-    } else if (status === 'DELIVERED' || status === 'ENTREGUE') {
-      // precisa data entrega, scheduled não é obrigatório
-      deliveredCtrl.setValidators([Validators.required]);
-      // opcional: se quiseres, podes limpar agendado ao marcar entregue:
-      // scheduledCtrl.setValue('', { emitEvent: false });
-    } else if (status === 'CANCELLED') {
-      // não tem nenhuma data
-      scheduledCtrl.setValue('', { emitEvent: false });
-      deliveredCtrl.setValue('', { emitEvent: false });
-    } else if (status === 'PENDING') {
-      // não pede nenhuma data (createdAt automático no backend)
-      scheduledCtrl.setValue('', { emitEvent: false });
-      deliveredCtrl.setValue('', { emitEvent: false });
-    }
-
-    // atualizar estado do form
-    scheduledCtrl.updateValueAndValidity({ emitEvent: false });
-    deliveredCtrl.updateValueAndValidity({ emitEvent: false });
   }
 
   // ========= Lookups =========
@@ -356,7 +328,7 @@ export class CarLoadComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData: any = { ...this.carLoadForm.value };
+    const formData: any = {...this.carLoadForm.value};
 
     // Normalizar phone para +258
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
@@ -433,6 +405,42 @@ export class CarLoadComponent implements OnInit {
 
   onBack() {
     window.history.back();
+  }
+
+  // ✅ aplica regras pedidas (validators + limpar campos)
+  private applyDateRulesByStatus(): void {
+    const status = this.selectedStatusUpper;
+
+    const scheduledCtrl = this.carLoadForm.get('deliveryScheduledDate')!;
+    const deliveredCtrl = this.carLoadForm.get('deliveredDate')!;
+
+    // limpar validadores
+    scheduledCtrl.clearValidators();
+    deliveredCtrl.clearValidators();
+
+    // aplicar regras
+    if (status === 'SCHEDULED') {
+      // precisa data agendada, não precisa entrega
+      scheduledCtrl.setValidators([Validators.required]);
+      deliveredCtrl.setValue('', {emitEvent: false});
+    } else if (status === 'DELIVERED' || status === 'ENTREGUE') {
+      // precisa data entrega, scheduled não é obrigatório
+      deliveredCtrl.setValidators([Validators.required]);
+      // opcional: se quiseres, podes limpar agendado ao marcar entregue:
+      // scheduledCtrl.setValue('', { emitEvent: false });
+    } else if (status === 'CANCELLED') {
+      // não tem nenhuma data
+      scheduledCtrl.setValue('', {emitEvent: false});
+      deliveredCtrl.setValue('', {emitEvent: false});
+    } else if (status === 'PENDING') {
+      // não pede nenhuma data (createdAt automático no backend)
+      scheduledCtrl.setValue('', {emitEvent: false});
+      deliveredCtrl.setValue('', {emitEvent: false});
+    }
+
+    // atualizar estado do form
+    scheduledCtrl.updateValueAndValidity({emitEvent: false});
+    deliveredCtrl.updateValueAndValidity({emitEvent: false});
   }
 
   // ========= Date helpers =========

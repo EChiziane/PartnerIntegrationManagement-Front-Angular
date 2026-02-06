@@ -33,7 +33,7 @@ import {LoginComponent} from './UASM/login/login.component';
 import {NzAlertComponent} from 'ng-zorro-antd/alert';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
-import {MainLayoutComponent} from './main-layout/main-layout.component';
+import {MainLayoutComponent} from './CSM/main-layout/main-layout.component';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 
@@ -62,7 +62,7 @@ import {DriverComponent} from './CSM/driver/driver.component';
 import {ManagerComponent} from './CSM/manager/manager.component';
 import {SprintComponent} from './CSM/sprint/sprint.component';
 import {CarLoadComponent} from './CSM/carload/carload.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
+import {DashboardComponent} from './CSM/dashboard/dashboard.component';
 
 
 registerLocaleData(en);

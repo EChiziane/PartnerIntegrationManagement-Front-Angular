@@ -1,8 +1,8 @@
 // dashboard.component.ts
-import { Component, OnInit } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import {CarLoad} from '../models/CSM/carlaod';
-import {CarloadService} from '../services/carload.service';
+import {Component, OnInit} from '@angular/core';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {CarLoad} from '../../models/CSM/carlaod';
+import {CarloadService} from '../../services/carload.service';
 
 
 type CarLoadStatus = 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'ENTREGUE' | string;
@@ -34,7 +34,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private carloadService: CarloadService,
     private message: NzMessageService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.load();
@@ -42,21 +43,6 @@ export class DashboardComponent implements OnInit {
 
   reload(): void {
     this.load();
-  }
-
-  private load(): void {
-    this.isLoading = true;
-    this.carloadService.getCarLoads().subscribe({
-      next: (data) => {
-        this.dataSource = data || [];
-        this.applyFilters();
-        this.isLoading = false;
-      },
-      error: () => {
-        this.message.error('Erro ao carregar dashboard. 🚫');
-        this.isLoading = false;
-      }
-    });
   }
 
   filterToday(): void {
@@ -108,19 +94,6 @@ export class DashboardComponent implements OnInit {
     if (s === 'PENDING') return 'blue';
     if (s === 'CANCELLED') return 'red';
     return 'default';
-  }
-
-  private isDone(status: CarLoadStatus): boolean {
-    const s = (status || '').toUpperCase();
-    return s === 'DELIVERED' || s === 'ENTREGUE';
-  }
-
-  private isScheduled(status: CarLoadStatus): boolean {
-    return (status || '').toUpperCase() === 'SCHEDULED';
-  }
-
-  private isInProgress(status: CarLoadStatus): boolean {
-    return (status || '').toUpperCase() === 'PENDING';
   }
 
   applyFilters(): void {
@@ -202,6 +175,34 @@ export class DashboardComponent implements OnInit {
   formatDateTimeOrDash(v: string | null | undefined): string {
     if (!v) return '—';
     return this.formatDateTime(v);
+  }
+
+  private load(): void {
+    this.isLoading = true;
+    this.carloadService.getCarLoads().subscribe({
+      next: (data) => {
+        this.dataSource = data || [];
+        this.applyFilters();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.message.error('Erro ao carregar dashboard. 🚫');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  private isDone(status: CarLoadStatus): boolean {
+    const s = (status || '').toUpperCase();
+    return s === 'DELIVERED' || s === 'ENTREGUE';
+  }
+
+  private isScheduled(status: CarLoadStatus): boolean {
+    return (status || '').toUpperCase() === 'SCHEDULED';
+  }
+
+  private isInProgress(status: CarLoadStatus): boolean {
+    return (status || '').toUpperCase() === 'PENDING';
   }
 
   private parseDate(v: string | null | undefined): Date {
