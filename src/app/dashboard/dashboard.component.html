@@ -1,0 +1,298 @@
+<!-- dashboard.component.html ✅ atualizado -->
+<div class="content-wrapper">
+
+  <nz-breadcrumb class="page-breadcrumb">
+    <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
+    <nz-breadcrumb-item>Dashboard</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <div class="page-header">
+    <p>Dashboard</p>
+  </div>
+
+  <!-- ===== Summary ===== -->
+  <div class="summary-section">
+    <div [nzGutter]="8" nz-row>
+      <div [nzSpan]="8" nz-col>
+        <nz-card nzSize="small">
+          <div class="summary-card">
+            <div class="icon-wrapper total">
+              <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
+            </div>
+            <div class="summary-content">
+              <span class="title">Agendadas</span>
+              <p>{{ scheduledCount }}</p>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+
+      <div [nzSpan]="8" nz-col>
+        <nz-card nzSize="small">
+          <div class="summary-card">
+            <div class="icon-wrapper active">
+              <nz-icon nzTheme="outline" nzType="sync"></nz-icon>
+            </div>
+            <div class="summary-content">
+              <span class="title">Em execução</span>
+              <p>{{ inProgressCount }}</p>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+
+      <div [nzSpan]="8" nz-col>
+        <nz-card nzSize="small">
+          <div class="summary-card">
+            <div class="icon-wrapper inactive">
+              <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
+            </div>
+            <div class="summary-content">
+              <span class="title">Feitas</span>
+              <p>{{ doneCount }}</p>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Filters ===== -->
+  <div class="filters-panel dashboard-filters">
+    <div class="left-filters">
+
+      <input
+        nz-input
+        [(ngModel)]="searchValue"
+        (ngModelChange)="applyFilters()"
+        placeholder="Pesquisar cliente, destino, material, número..."
+      />
+
+      <div class="quick-filters">
+        <button nz-button nzType="default" (click)="filterToday()">
+          <nz-icon nzTheme="outline" nzType="clock-circle"></nz-icon>
+          Hoje
+        </button>
+
+        <button
+          nz-button
+          nzType="default"
+          [class.active]="filterMode === 'RANGE'"
+          (click)="toggleRange()"
+        >
+          <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
+          Intervalo
+        </button>
+      </div>
+
+      <div class="range-box" *ngIf="filterMode === 'RANGE'">
+        <nz-date-picker
+          [(ngModel)]="rangeStart"
+          (ngModelChange)="applyFilters()"
+          nzFormat="yyyy-MM-dd"
+          nzPlaceHolder="Início"
+        ></nz-date-picker>
+
+        <nz-date-picker
+          [(ngModel)]="rangeEnd"
+          (ngModelChange)="applyFilters()"
+          nzFormat="yyyy-MM-dd"
+          nzPlaceHolder="Fim"
+        ></nz-date-picker>
+      </div>
+
+      <button nz-button nzType="default" (click)="resetFilters()">
+        Limpar
+      </button>
+    </div>
+
+    <div class="right-actions">
+      <button nz-button nzType="primary" routerLink="/app/carload">
+        <nz-icon nzTheme="outline" nzType="unordered-list"></nz-icon>
+        Ver Carradas
+      </button>
+
+      <button nz-button nzType="primary" (click)="reload()">
+        <nz-icon nzTheme="outline" nzType="reload"></nz-icon>
+        Atualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- ✅ Wrapper que controla altura/scroll do board -->
+  <div class="board-wrapper">
+    <nz-spin [nzSpinning]="isLoading" nzTip="A carregar dashboard...">
+      <div class="board">
+
+        <!-- Em Execução (PENDING) ✅ sem data -->
+        <div class="board-col">
+          <div class="col-header">
+            <div class="col-title">
+              <span class="dot dot-progress"></span>
+              Em execução
+            </div>
+            <nz-tag nzColor="blue">{{ inProgressList.length }}</nz-tag>
+          </div>
+
+          <div class="col-body">
+            <ng-container *ngIf="inProgressList.length; else emptyProgress">
+              <nz-card
+                class="carload-card"
+                *ngFor="let c of inProgressList; trackBy: trackById"
+                nzSize="small"
+              >
+                <div class="card-top">
+                  <div class="row-1">
+                    <span class="client-name">{{ c.customerName }}</span>
+                    <span class="material">{{ c.transportedMaterial }}</span>
+                  </div>
+
+                  <nz-tag class="status-tag" [nzColor]="statusColor(c.deliveryStatus)">
+                    {{ getStatusLabel(c.deliveryStatus) }}
+                  </nz-tag>
+                </div>
+
+                <!-- ✅ aqui removemos a data -->
+                <div class="row-2">
+                  <span class="destination">{{ c.deliveryDestination }}</span>
+                </div>
+
+                <div class="row-3">
+                  <span class="phone">{{ c.customerPhoneNumber }}</span>
+                </div>
+
+                <div class="card-footer">
+                  <button nz-button nzType="link" nzSize="small" (click)="openInCarradas(c)">
+                    <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+                    Ver
+                  </button>
+                </div>
+              </nz-card>
+            </ng-container>
+
+            <ng-template #emptyProgress>
+              <div class="empty-state">
+                <nz-icon nzTheme="outline" nzType="inbox"></nz-icon>
+                <p>Sem carradas em execução.</p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Agendadas (SCHEDULED) ✅ mostra data agendada -->
+        <div class="board-col">
+          <div class="col-header">
+            <div class="col-title">
+              <span class="dot dot-scheduled"></span>
+              Agendadas
+            </div>
+            <nz-tag nzColor="orange">{{ scheduledList.length }}</nz-tag>
+          </div>
+
+          <div class="col-body">
+            <ng-container *ngIf="scheduledList.length; else emptyScheduled">
+              <nz-card
+                class="carload-card"
+                *ngFor="let c of scheduledList; trackBy: trackById"
+                nzSize="small"
+              >
+                <div class="card-top">
+                  <div class="row-1">
+                    <span class="client-name">{{ c.customerName }}</span>
+                    <span class="material">{{ c.transportedMaterial }}</span>
+                  </div>
+
+                  <nz-tag class="status-tag" [nzColor]="statusColor(c.deliveryStatus)">
+                    {{ getStatusLabel(c.deliveryStatus) }}
+                  </nz-tag>
+                </div>
+
+                <div class="row-2">
+                  <span class="destination">{{ c.deliveryDestination }}</span>
+                  <!-- ✅ data agendada -->
+                  <span class="scheduled">{{ formatDateTime(c.deliveryScheduledDate) }}</span>
+                </div>
+
+                <div class="row-3">
+                  <span class="phone">{{ c.customerPhoneNumber }}</span>
+                </div>
+
+                <div class="card-footer">
+                  <button nz-button nzType="link" nzSize="small" (click)="openInCarradas(c)">
+                    <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+                    Ver
+                  </button>
+                </div>
+              </nz-card>
+            </ng-container>
+
+            <ng-template #emptyScheduled>
+              <div class="empty-state">
+                <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
+                <p>Sem carradas agendadas.</p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Feitas (DELIVERED/ENTREGUE) ✅ mostra deliveredDate -->
+        <div class="board-col">
+          <div class="col-header">
+            <div class="col-title">
+              <span class="dot dot-done"></span>
+              Feitas
+            </div>
+            <nz-tag nzColor="green">{{ doneList.length }}</nz-tag>
+          </div>
+
+          <div class="col-body">
+            <ng-container *ngIf="doneList.length; else emptyDone">
+              <nz-card
+                class="carload-card"
+                *ngFor="let c of doneList; trackBy: trackById"
+                nzSize="small"
+              >
+                <div class="card-top">
+                  <div class="row-1">
+                    <span class="client-name">{{ c.customerName }}</span>
+                    <span class="material">{{ c.transportedMaterial }}</span>
+                  </div>
+
+                  <nz-tag class="status-tag" [nzColor]="statusColor(c.deliveryStatus)">
+                    {{ getStatusLabel(c.deliveryStatus) }}
+                  </nz-tag>
+                </div>
+
+                <div class="row-2">
+                  <span class="destination">{{ c.deliveryDestination }}</span>
+                  <!-- ✅ data de entrega -->
+                  <span class="scheduled">{{ formatDateTimeOrDash(c.deliveredDate) }}</span>
+                </div>
+
+                <div class="row-3">
+                  <span class="phone">{{ c.customerPhoneNumber }}</span>
+                </div>
+
+                <div class="card-footer">
+                  <button nz-button nzType="link" nzSize="small" (click)="openInCarradas(c)">
+                    <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+                    Ver
+                  </button>
+                </div>
+              </nz-card>
+            </ng-container>
+
+            <ng-template #emptyDone>
+              <div class="empty-state">
+                <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
+                <p>Sem carradas feitas.</p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+      </div>
+    </nz-spin>
+  </div>
+
+</div>

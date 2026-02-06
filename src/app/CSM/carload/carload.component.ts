@@ -1,18 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
+// carload.component.ts ✅ COMPLETO com os 4 cenários (CANCELLED / DELIVERED / SCHEDULED / PENDING)
 
-import {CarLoad} from '../../models/CSM/carlaod';
-import {CarloadService} from '../../services/carload.service';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
-import {Driver} from '../../models/CSM/driver';
-import {Manager} from '../../models/CSM/manager';
-import {Sprint} from '../../models/CSM/sprint';
+import { CarLoad } from '../../models/CSM/carlaod';
+import { CarloadService } from '../../services/carload.service';
 
-import {DriverService} from '../../services/driver.service';
-import {ManagerService} from '../../services/manager.service';
-import {SprintService} from '../../services/sprint.service';
+import { Driver } from '../../models/CSM/driver';
+import { Manager } from '../../models/CSM/manager';
+import { Sprint } from '../../models/CSM/sprint';
+
+import { DriverService } from '../../services/driver.service';
+import { ManagerService } from '../../services/manager.service';
+import { SprintService } from '../../services/sprint.service';
 
 type CarLoadStatus = 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'ENTREGUE' | string;
 
@@ -44,12 +46,11 @@ export class CarLoadComponent implements OnInit {
   // ========= UI =========
   searchValue = '';
   visible = false;
-
   isCarLoadDrawerVisible = false;
 
   // ========= Edit / Copy =========
   isEditMode = false;
-  isCopyMode = false; // ✅ NOVO
+  isCopyMode = false;
   carLoadDrawerTitle = 'Criar Carrada';
   selectedCarLoadId: any | null = null;
 
@@ -67,11 +68,15 @@ export class CarLoadComponent implements OnInit {
   ];
 
   // ========= Form =========
+  // ✅ Regras:
+  // - CANCELLED: não tem scheduledDate nem deliveredDate
+  // - SCHEDULED: precisa deliveryScheduledDate
+  // - DELIVERED/ENTREGUE: precisa deliveredDate
+  // - PENDING: não pede nenhuma data (createdAt é automático no backend)
   carLoadForm = new FormGroup({
     customerName: new FormControl('', Validators.required),
     customerPhoneNumber: new FormControl('', [Validators.required, Validators.pattern('^[+0-9 ]+$')]),
     deliveryDestination: new FormControl('', Validators.required),
-
     transportedMaterial: new FormControl('', Validators.required),
 
     logisticsManagerId: new FormControl('', Validators.required),
@@ -83,8 +88,11 @@ export class CarLoadComponent implements OnInit {
 
     deliveryStatus: new FormControl<CarLoadStatus>('PENDING', Validators.required),
 
-    // datetime-local no input
-    deliveryScheduledDate: new FormControl('', Validators.required)
+    // ✅ data agendada (aparece só quando status = SCHEDULED)
+    deliveryScheduledDate: new FormControl<string | null>(''),
+
+    // ✅ NOVO: data de entrega (aparece só quando status = DELIVERED/ENTREGUE)
+    deliveredDate: new FormControl<string | null>(''),
   });
 
   constructor(
@@ -94,8 +102,7 @@ export class CarLoadComponent implements OnInit {
     private sprintService: SprintService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getCarLoads();
@@ -103,6 +110,14 @@ export class CarLoadComponent implements OnInit {
 
     this.updateDrawer();
     window.addEventListener('resize', () => this.updateDrawer());
+
+    // ✅ controla validadores e limpeza automática quando muda status
+    this.carLoadForm.get('deliveryStatus')!.valueChanges.subscribe(() => {
+      this.applyDateRulesByStatus();
+    });
+
+    // aplica regras iniciais
+    this.applyDateRulesByStatus();
   }
 
   updateDrawer() {
@@ -118,24 +133,65 @@ export class CarLoadComponent implements OnInit {
   // ========= Status helpers =========
   getStatusLabel(status: CarLoadStatus): string {
     switch ((status || '').toUpperCase()) {
-      case 'SCHEDULED':
-        return 'Agendada';
-      case 'PENDING':
-        return 'Pendente';
+      case 'SCHEDULED': return 'Agendada';
+      case 'PENDING': return 'Pendente';
       case 'DELIVERED':
-        return 'Entregue';
-      case 'ENTREGUE':
-        return 'Entregue';
-      case 'CANCELLED':
-        return 'Cancelada';
-      default:
-        return status as string;
+      case 'ENTREGUE': return 'Entregue';
+      case 'CANCELLED': return 'Cancelada';
+      default: return status as string;
     }
   }
 
   isDelivered(status: CarLoadStatus): boolean {
     const s = (status || '').toUpperCase();
     return s === 'DELIVERED' || s === 'ENTREGUE';
+  }
+
+  // ✅ Helpers para UI
+  get selectedStatusUpper(): string {
+    return (this.carLoadForm.get('deliveryStatus')?.value || 'PENDING').toString().toUpperCase();
+  }
+  get shouldShowScheduledDate(): boolean {
+    return this.selectedStatusUpper === 'SCHEDULED';
+  }
+  get shouldShowDeliveredDate(): boolean {
+    return this.selectedStatusUpper === 'DELIVERED' || this.selectedStatusUpper === 'ENTREGUE';
+  }
+
+  // ✅ aplica regras pedidas (validators + limpar campos)
+  private applyDateRulesByStatus(): void {
+    const status = this.selectedStatusUpper;
+
+    const scheduledCtrl = this.carLoadForm.get('deliveryScheduledDate')!;
+    const deliveredCtrl = this.carLoadForm.get('deliveredDate')!;
+
+    // limpar validadores
+    scheduledCtrl.clearValidators();
+    deliveredCtrl.clearValidators();
+
+    // aplicar regras
+    if (status === 'SCHEDULED') {
+      // precisa data agendada, não precisa entrega
+      scheduledCtrl.setValidators([Validators.required]);
+      deliveredCtrl.setValue('', { emitEvent: false });
+    } else if (status === 'DELIVERED' || status === 'ENTREGUE') {
+      // precisa data entrega, scheduled não é obrigatório
+      deliveredCtrl.setValidators([Validators.required]);
+      // opcional: se quiseres, podes limpar agendado ao marcar entregue:
+      // scheduledCtrl.setValue('', { emitEvent: false });
+    } else if (status === 'CANCELLED') {
+      // não tem nenhuma data
+      scheduledCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', { emitEvent: false });
+    } else if (status === 'PENDING') {
+      // não pede nenhuma data (createdAt automático no backend)
+      scheduledCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', { emitEvent: false });
+    }
+
+    // atualizar estado do form
+    scheduledCtrl.updateValueAndValidity({ emitEvent: false });
+    deliveredCtrl.updateValueAndValidity({ emitEvent: false });
   }
 
   // ========= Lookups =========
@@ -223,7 +279,8 @@ export class CarLoadComponent implements OnInit {
       deliveryStatus: 'PENDING',
       totalSpent: 0,
       totalEarnings: 0,
-      deliveryScheduledDate: ''
+      deliveryScheduledDate: '',
+      deliveredDate: ''
     });
 
     if (!this.drivers.length || !this.managers.length || !this.sprints.length) {
@@ -231,6 +288,9 @@ export class CarLoadComponent implements OnInit {
     }
 
     this.isCarLoadDrawerVisible = true;
+
+    // ✅ aplica as regras logo após reset
+    this.applyDateRulesByStatus();
   }
 
   closeCarLoadDrawer() {
@@ -254,13 +314,16 @@ export class CarLoadComponent implements OnInit {
     this.isCarLoadDrawerVisible = true;
 
     this.carLoadForm.patchValue(this.mapCarloadToForm(carload));
+
+    // ✅ garante validadores certos conforme status carregado
+    this.applyDateRulesByStatus();
   }
 
-  // ✅ NOVO: copiar carrada
+  // ✅ copiar carrada
   copyCarLoad(carload: CarLoad) {
-    this.isEditMode = false;          // 🔥 garante POST
+    this.isEditMode = false;
     this.isCopyMode = true;
-    this.selectedCarLoadId = null;    // 🔥 garante POST
+    this.selectedCarLoadId = null;
     this.carLoadDrawerTitle = 'Copiar Carrada';
 
     if (!this.drivers.length || !this.managers.length || !this.sprints.length) {
@@ -272,12 +335,20 @@ export class CarLoadComponent implements OnInit {
     // preencher com os mesmos dados
     this.carLoadForm.patchValue(this.mapCarloadToForm(carload));
 
-    // sugestão: ao copiar, por padrão deixa status PENDING
-    // (se não quiseres, apaga estas 2 linhas)
-    this.carLoadForm.patchValue({deliveryStatus: 'PENDING'});
+    // ao copiar, por padrão deixa status PENDING e limpa datas (porque PENDING usa createdAt automático)
+    this.carLoadForm.patchValue({
+      deliveryStatus: 'PENDING',
+      deliveryScheduledDate: '',
+      deliveredDate: ''
+    });
+
+    this.applyDateRulesByStatus();
   }
 
   saveCarLoad() {
+    // ✅ força revalidar regras antes de gravar
+    this.applyDateRulesByStatus();
+
     if (this.carLoadForm.invalid) {
       this.message.warning('Preencha todos os campos obrigatórios!');
       return;
@@ -285,7 +356,7 @@ export class CarLoadComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData: any = {...this.carLoadForm.value};
+    const formData: any = { ...this.carLoadForm.value };
 
     // Normalizar phone para +258
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
@@ -294,8 +365,26 @@ export class CarLoadComponent implements OnInit {
     // Enum
     formData.deliveryStatus = (formData.deliveryStatus || 'PENDING').toString().toUpperCase();
 
-    // LocalDateTime
-    formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
+    // ✅ aplicar regras finais antes do POST/PUT
+    if (formData.deliveryStatus === 'CANCELLED' || formData.deliveryStatus === 'PENDING') {
+      // não envia datas
+      formData.deliveryScheduledDate = null;
+      formData.deliveredDate = null;
+    }
+
+    if (formData.deliveryStatus === 'SCHEDULED') {
+      // precisa agendado
+      formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
+      formData.deliveredDate = null;
+    }
+
+    if (formData.deliveryStatus === 'DELIVERED' || formData.deliveryStatus === 'ENTREGUE') {
+      // precisa entregue
+      formData.deliveredDate = this.normalizeDateTimeLocal(formData.deliveredDate);
+      // scheduled é opcional — mantém se vier, senão nulo
+      formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
+      if (!formData.deliveryScheduledDate) formData.deliveryScheduledDate = null;
+    }
 
     const isUpdate = this.isEditMode && this.selectedCarLoadId;
     const request$ = isUpdate
@@ -361,21 +450,18 @@ export class CarLoadComponent implements OnInit {
   private toDatetimeLocalInput(iso: string | null | undefined): string {
     if (!iso) return '';
 
-    // remove timezone if exists
     const withoutZone = iso.replace('Z', '').split('+')[0];
-    // remove milliseconds
     const cleaned = withoutZone.split('.')[0];
 
     if (!cleaned.includes('T')) return `${cleaned}T00:00`;
 
-    // "YYYY-MM-DDTHH:mm:ss" -> "YYYY-MM-DDTHH:mm"
     return cleaned.substring(0, 16);
   }
 
   private mapCarloadToForm(carload: CarLoad) {
     return {
       customerName: carload.customerName,
-      customerPhoneNumber: carload.customerPhoneNumber,
+      customerPhoneNumber: carload.customerPhoneNumber?.replace('+258', '').trim() || carload.customerPhoneNumber,
       deliveryDestination: carload.deliveryDestination,
 
       transportedMaterial: carload.transportedMaterial,
@@ -389,7 +475,8 @@ export class CarLoadComponent implements OnInit {
 
       deliveryStatus: (carload.deliveryStatus as any) || 'PENDING',
 
-      deliveryScheduledDate: this.toDatetimeLocalInput(carload.deliveryScheduledDate as any)
+      deliveryScheduledDate: this.toDatetimeLocalInput(carload.deliveryScheduledDate as any),
+      deliveredDate: this.toDatetimeLocalInput((carload as any).deliveredDate)
     };
   }
 }

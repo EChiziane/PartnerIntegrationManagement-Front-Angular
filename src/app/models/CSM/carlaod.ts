@@ -9,10 +9,15 @@ export interface CarLoad {
   totalSpent: number;
   totalEarnings: number;
   deliveryStatus: string;
-  id: string
+  id: string;
+
   createdAt: string;
   logisticsManagerId: string;
   assignedDriverId: string;
   carloadBatchId: string;
+
   deliveryScheduledDate: string;
+
+  // ✅ NOVO: data real de entrega (para "Feitas")
+  deliveredDate?: string | null;
 }

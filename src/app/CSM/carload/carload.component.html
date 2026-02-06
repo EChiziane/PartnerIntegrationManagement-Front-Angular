@@ -1,3 +1,5 @@
+<!-- carload.component.html ✅ COMPLETO (apenas ajustei a área de datas para ser dinâmica) -->
+
 <div class="content-wrapper">
 
   <nz-breadcrumb class="page-breadcrumb">
@@ -122,7 +124,7 @@
             <td>{{ data.totalSpent | number:'1.2-2' }} Mts</td>
 
             <td>
-              <!-- 👇 COPY -->
+              <!-- COPY -->
               <button
                 (click)="copyCarLoad(data)"
                 nz-button
@@ -168,6 +170,7 @@
       <div class="drawer-section">
         <h3 class="section-title">Dados da Carrada</h3>
 
+        <!-- Cliente / Contacto -->
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
@@ -190,6 +193,7 @@
           </div>
         </div>
 
+        <!-- Destino / Material -->
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
@@ -216,6 +220,7 @@
           </div>
         </div>
 
+        <!-- Motorista / Gestor -->
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
@@ -242,6 +247,7 @@
           </div>
         </div>
 
+        <!-- Sprint / Datas (DINÂMICAS por Status) -->
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
@@ -255,16 +261,28 @@
             </nz-form-item>
           </div>
 
-          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+          <!-- ✅ SCHEDULED: mostrar data agendada -->
+          <div *ngIf="shouldShowScheduledDate" nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Agendar Data/Hora</nz-form-label>
-              <nz-form-control>
+              <nz-form-label>Data/Hora Agendada</nz-form-label>
+              <nz-form-control nzErrorTip="Informe a data agendada">
                 <input formControlName="deliveryScheduledDate" nz-input type="datetime-local"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- ✅ DELIVERED/ENTREGUE: mostrar data de entrega -->
+          <div *ngIf="shouldShowDeliveredDate" nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Data/Hora de Entrega</nz-form-label>
+              <nz-form-control nzErrorTip="Informe a data de entrega">
+                <input formControlName="deliveredDate" nz-input type="datetime-local"/>
               </nz-form-control>
             </nz-form-item>
           </div>
         </div>
 
+        <!-- Gastos / Ganhos -->
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
@@ -285,6 +303,7 @@
           </div>
         </div>
 
+        <!-- Status -->
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>

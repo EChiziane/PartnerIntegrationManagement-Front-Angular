@@ -1,0 +1,426 @@
+/* dashboard.component.scss */
+
+/* =========================================================
+   LAYOUT BASE
+========================================================= */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;         // ✅ importante para scroll interno
+  padding: 18px;
+  background: #f5f5f5;
+  overflow: hidden;      // ✅ desktop: sem scroll global (scroll fica nas colunas)
+}
+
+/* ✅ wrapper que “segura” a altura do board */
+.board-wrapper {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;      // ✅ garante que o grid não cria scroll estranho
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+
+  p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 300;
+  }
+}
+
+/* =========================================================
+   SUMMARY SECTION
+========================================================= */
+.summary-section {
+  margin-bottom: 12px;
+  padding: 4px 0;
+  flex-shrink: 0;
+
+  nz-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  nz-col {
+    flex: 1;
+    min-width: 220px;
+  }
+
+  nz-card {
+    height: 100%;
+    padding: 8px !important;
+    background: #fff;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: 0.25s;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    ::ng-deep .ant-card-body {
+      padding: 6px 12px !important;
+    }
+  }
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+  }
+
+  p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.icon-wrapper {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+
+  &.total {
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+  }
+
+  &.active {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+  }
+
+  &.inactive {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+  }
+}
+
+/* =========================================================
+   FILTERS PANEL
+========================================================= */
+.filters-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+
+  .left-filters, .right-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  input[nz-input] {
+    width: 280px;
+    border-radius: 8px;
+    transition: 0.3s;
+
+    &:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+    }
+  }
+
+  ::ng-deep .ant-picker {
+    border-radius: 8px;
+  }
+
+  button[nz-button] {
+    font-weight: 500;
+    border-radius: 8px;
+
+    nz-icon {
+      margin-right: 6px;
+    }
+  }
+}
+
+.quick-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  button.active {
+    border-color: #007bff;
+    color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.12);
+  }
+}
+
+.range-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  ::ng-deep .ant-picker {
+    min-width: 160px;
+  }
+}
+
+/* =========================================================
+   BOARD + SCROLL POR COLUNA (DESKTOP)
+========================================================= */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 14px;
+  height: 100%;       // ✅ agora o grid tem altura real
+  min-height: 0;
+  overflow: hidden;
+}
+
+.board-col {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.col-title {
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 99px;
+
+  &.dot-progress { background: #3b82f6; }
+  &.dot-scheduled { background: #f59e0b; }
+  &.dot-done { background: #22c55e; }
+}
+
+.col-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;   // ✅ scroll aqui
+  padding: 10px;
+  max-height: calc((110px * 4) + (10px * 3) + 20px);
+
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+  }
+  &::-webkit-scrollbar-track { background: transparent; }
+}
+
+/* =========================================================
+   CARLOAD CARD (COMPACTO)
+========================================================= */
+.carload-card {
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+
+  ::ng-deep .ant-card-body {
+    padding: 10px !important;
+  }
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.row-1 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.client-name {
+  font-weight: 600;
+  color: #111;
+  line-height: 1.1;
+  font-size: 13px;
+  max-width: 62%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.material {
+  font-size: 12px;
+  font-weight: 600;
+  color: #007bff;
+  text-align: right;
+  max-width: 38%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-tag {
+  margin-left: 8px;
+  line-height: 18px;
+  height: 20px;
+  padding: 0 8px;
+}
+
+.row-2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.destination {
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+  max-width: 68%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scheduled {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+  max-width: 32%;
+  white-space: nowrap;
+}
+
+.row-3 {
+  display: flex;
+  align-items: center;
+}
+
+.phone {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+
+  button[nz-button] {
+    padding: 0;
+    height: 22px;
+    line-height: 22px;
+  }
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+.empty-state {
+  text-align: center;
+  padding: 28px 10px;
+  color: #666;
+
+  nz-icon { font-size: 28px; margin-bottom: 8px; }
+  p { margin: 0; font-size: 13px; }
+}
+
+/* =========================================================
+   MOBILE: permitir scroll GLOBAL (não por coluna)
+========================================================= */
+@media (max-width: 1100px) {
+  .content-wrapper {
+    overflow: auto;    // ✅ agora o ecrã pequeno volta a ter scroll
+  }
+
+  .board-wrapper {
+    overflow: visible; // ✅ deixa o conteúdo crescer
+  }
+
+  .board {
+    grid-template-columns: 1fr;
+    height: auto;      // ✅ sem altura fixa no mobile
+    overflow: visible;
+  }
+
+  .board-col {
+    height: auto;
+    overflow: visible;
+  }
+
+  .col-body {
+    overflow: visible; // ✅ no mobile, scroll é do ecrã, não da coluna
+    max-height: none;
+  }
+
+  .filters-panel {
+    align-items: flex-start;
+    flex-direction: column;
+
+    .left-filters, .right-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    input[nz-input] {
+      width: 100%;
+      max-width: 520px;
+    }
+  }
+}
