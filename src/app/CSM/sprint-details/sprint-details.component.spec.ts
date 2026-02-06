@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SprintDetailsComponent } from './sprint-details.component';
+import {SprintDetailsComponent} from './sprint-details.component';
 
 describe('SprintDetailsComponent', () => {
   let component: SprintDetailsComponent;
@@ -10,7 +10,7 @@ describe('SprintDetailsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [SprintDetailsComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(SprintDetailsComponent);
     component = fixture.componentInstance;

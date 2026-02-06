@@ -12,7 +12,8 @@ export class CarloadService {
 
   private baseURL = environment.baseURL + '/carloads';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getCarLoads(): Observable<CarLoad[]> {
     return this.http.get<CarLoad[]>(this.baseURL);

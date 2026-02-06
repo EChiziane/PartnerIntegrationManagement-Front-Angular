@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import {DriverService} from '../services/driver.service';
-import {Driver} from '../models/CSM/driver';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {DriverService} from '../../services/driver.service';
+import {Driver} from '../../models/CSM/driver';
 
 
 @Component({
@@ -51,7 +51,8 @@ export class DriverComponent implements OnInit {
     private driverService: DriverService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getDrivers();
@@ -120,7 +121,7 @@ export class DriverComponent implements OnInit {
   openDriverDrawer() {
     this.isEditMode = false;
     this.driverDrawerTitle = 'Criar Motorista';
-    this.driverForm.reset({ status: 'ATIVO' });
+    this.driverForm.reset({status: 'ATIVO'});
     this.isDriverDrawerVisible = true;
   }
 
@@ -152,7 +153,7 @@ export class DriverComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData = { ...this.driverForm.value };
+    const formData = {...this.driverForm.value};
 
     // Normalizar phone (opcional) para +258
     const rawPhone = (formData.Phone || '').toString().trim();

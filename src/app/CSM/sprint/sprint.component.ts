@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import {Sprint} from '../models/CSM/sprint';
-import {SprintService} from '../services/sprint.service';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Sprint} from '../../models/CSM/sprint';
+import {SprintService} from '../../services/sprint.service';
 
 
 @Component({
@@ -51,7 +51,8 @@ export class SprintComponent implements OnInit {
     private sprintService: SprintService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getSprints();
@@ -121,7 +122,7 @@ export class SprintComponent implements OnInit {
   openSprintDrawer() {
     this.isEditMode = false;
     this.sprintDrawerTitle = 'Criar Sprint';
-    this.sprintForm.reset({ status: 'ACTIVO' });
+    this.sprintForm.reset({status: 'ACTIVO'});
     this.isSprintDrawerVisible = true;
   }
 
@@ -152,7 +153,7 @@ export class SprintComponent implements OnInit {
     }
 
     this.isSaving = true;
-    const formData = { ...this.sprintForm.value };
+    const formData = {...this.sprintForm.value};
 
     const request$ = this.isEditMode && this.selectedSprintId
       ? this.sprintService.updateSprint(this.selectedSprintId, formData)

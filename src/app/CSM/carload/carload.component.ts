@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
-import { CarLoad } from '../models/CSM/carlaod';
-import { CarloadService } from '../services/carload.service';
+import {CarLoad} from '../../models/CSM/carlaod';
+import {CarloadService} from '../../services/carload.service';
 
-import { Driver } from '../models/CSM/driver';
-import { Manager } from '../models/CSM/manager';
-import { Sprint } from '../models/CSM/sprint';
+import {Driver} from '../../models/CSM/driver';
+import {Manager} from '../../models/CSM/manager';
+import {Sprint} from '../../models/CSM/sprint';
 
-import { DriverService } from '../services/driver.service';
-import { ManagerService } from '../services/manager.service';
-import { SprintService } from '../services/sprint.service';
+import {DriverService} from '../../services/driver.service';
+import {ManagerService} from '../../services/manager.service';
+import {SprintService} from '../../services/sprint.service';
 
 type CarLoadStatus = 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'ENTREGUE' | string;
 
@@ -47,13 +47,24 @@ export class CarLoadComponent implements OnInit {
 
   isCarLoadDrawerVisible = false;
 
-  // ========= Edit =========
+  // ========= Edit / Copy =========
   isEditMode = false;
+  isCopyMode = false; // ✅ NOVO
   carLoadDrawerTitle = 'Criar Carrada';
   selectedCarLoadId: any | null = null;
 
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
+
+  // ========= Materials =========
+  materials: string[] = [
+    'Areia grossa',
+    'Areia vermelha',
+    'Areia fina',
+    'Pedra 3/4',
+    'Pedra enrocamento',
+    'Pedra sarrisca'
+  ];
 
   // ========= Form =========
   carLoadForm = new FormGroup({
@@ -70,10 +81,9 @@ export class CarLoadComponent implements OnInit {
     totalSpent: new FormControl(0, [Validators.required, Validators.min(0)]),
     totalEarnings: new FormControl(0, [Validators.required, Validators.min(0)]),
 
-    // ✅ backend enum
     deliveryStatus: new FormControl<CarLoadStatus>('PENDING', Validators.required),
 
-    // ✅ vamos usar datetime-local no input, mas enviar ISO para LocalDateTime
+    // datetime-local no input
     deliveryScheduledDate: new FormControl('', Validators.required)
   });
 
@@ -84,7 +94,8 @@ export class CarLoadComponent implements OnInit {
     private sprintService: SprintService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getCarLoads();
@@ -104,57 +115,21 @@ export class CarLoadComponent implements OnInit {
     }
   }
 
-  // ========= Date helpers =========
-  /**
-   * Recebe:
-   * - "YYYY-MM-DD" => "YYYY-MM-DDT00:00:00"
-   * - "YYYY-MM-DDTHH:mm" => "YYYY-MM-DDTHH:mm:00"
-   * - "YYYY-MM-DDTHH:mm:ss" => mantém
-   */
-  private normalizeDateTimeLocal(v: string | null | undefined): string | null {
-    if (!v) return null;
-
-    if (!v.includes('T')) return `${v}T00:00:00`;
-
-    // "2026-02-06T11:30" -> add seconds
-    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)) return `${v}:00`;
-
-    return v;
-  }
-
-  /**
-   * Para preencher input type="datetime-local"
-   * Recebe ISO do backend:
-   * - "2026-02-06T11:13:04.022+02:00"
-   * - "2026-02-06T11:13:04"
-   * Retorna: "2026-02-06T11:13"
-   */
-  private toDatetimeLocalInput(iso: string | null | undefined): string {
-    if (!iso) return '';
-    // cortar timezone e ms
-    const noZone = iso.replace('Z', '').split('+')[0].split('-')[0].length === 4
-      ? iso.split('+')[0]
-      : iso;
-
-    // se vier com milissegundos: 2026-02-06T11:13:04.022
-    const cleaned = noZone.split('.')[0];
-
-    // se vier "2026-02-06" sem hora
-    if (!cleaned.includes('T')) return `${cleaned}T00:00`;
-
-    // "2026-02-06T11:13:04" -> "2026-02-06T11:13"
-    return cleaned.substring(0, 16);
-  }
-
-  // ========= Status helpers (UI) =========
+  // ========= Status helpers =========
   getStatusLabel(status: CarLoadStatus): string {
     switch ((status || '').toUpperCase()) {
-      case 'SCHEDULED': return 'Agendada';
-      case 'PENDING': return 'Pendente';
-      case 'DELIVERED': return 'Entregue';
-      case 'ENTREGUE': return 'Entregue';
-      case 'CANCELLED': return 'Cancelada';
-      default: return status as string;
+      case 'SCHEDULED':
+        return 'Agendada';
+      case 'PENDING':
+        return 'Pendente';
+      case 'DELIVERED':
+        return 'Entregue';
+      case 'ENTREGUE':
+        return 'Entregue';
+      case 'CANCELLED':
+        return 'Cancelada';
+      default:
+        return status as string;
     }
   }
 
@@ -163,7 +138,7 @@ export class CarLoadComponent implements OnInit {
     return s === 'DELIVERED' || s === 'ENTREGUE';
   }
 
-  // ========= Load lists for selects =========
+  // ========= Lookups =========
   loadLookups() {
     this.isLoadingLookups = true;
 
@@ -185,7 +160,7 @@ export class CarLoadComponent implements OnInit {
     setTimeout(() => (this.isLoadingLookups = false), 500);
   }
 
-  // ========= Logic =========
+  // ========= Data =========
   getCarLoads() {
     this.isLoading = true;
     this.carLoadService.getCarLoads().subscribe({
@@ -240,6 +215,8 @@ export class CarLoadComponent implements OnInit {
   // ========= Drawer =========
   openCarLoadDrawer() {
     this.isEditMode = false;
+    this.isCopyMode = false;
+    this.selectedCarLoadId = null;
     this.carLoadDrawerTitle = 'Criar Carrada';
 
     this.carLoadForm.reset({
@@ -260,10 +237,13 @@ export class CarLoadComponent implements OnInit {
     this.isCarLoadDrawerVisible = false;
     this.carLoadForm.reset();
     this.selectedCarLoadId = null;
+    this.isEditMode = false;
+    this.isCopyMode = false;
   }
 
   editCarLoad(carload: CarLoad) {
     this.isEditMode = true;
+    this.isCopyMode = false;
     this.carLoadDrawerTitle = 'Editar Carrada';
     this.selectedCarLoadId = carload.id;
 
@@ -273,25 +253,28 @@ export class CarLoadComponent implements OnInit {
 
     this.isCarLoadDrawerVisible = true;
 
-    this.carLoadForm.patchValue({
-      customerName: carload.customerName,
-      customerPhoneNumber: carload.customerPhoneNumber,
-      deliveryDestination: carload.deliveryDestination,
+    this.carLoadForm.patchValue(this.mapCarloadToForm(carload));
+  }
 
-      transportedMaterial: carload.transportedMaterial,
+  // ✅ NOVO: copiar carrada
+  copyCarLoad(carload: CarLoad) {
+    this.isEditMode = false;          // 🔥 garante POST
+    this.isCopyMode = true;
+    this.selectedCarLoadId = null;    // 🔥 garante POST
+    this.carLoadDrawerTitle = 'Copiar Carrada';
 
-      logisticsManagerId: carload.logisticsManagerId,
-      assignedDriverId: carload.assignedDriverId,
-      carloadBatchId: carload.carloadBatchId,
+    if (!this.drivers.length || !this.managers.length || !this.sprints.length) {
+      this.loadLookups();
+    }
 
-      totalSpent: carload.totalSpent,
-      totalEarnings: carload.totalEarnings,
+    this.isCarLoadDrawerVisible = true;
 
-      deliveryStatus: (carload.deliveryStatus as any) || 'PENDING',
+    // preencher com os mesmos dados
+    this.carLoadForm.patchValue(this.mapCarloadToForm(carload));
 
-      // ✅ converter ISO do backend para datetime-local
-      deliveryScheduledDate: this.toDatetimeLocalInput(carload.deliveryScheduledDate as any)
-    });
+    // sugestão: ao copiar, por padrão deixa status PENDING
+    // (se não quiseres, apaga estas 2 linhas)
+    this.carLoadForm.patchValue({deliveryStatus: 'PENDING'});
   }
 
   saveCarLoad() {
@@ -302,19 +285,20 @@ export class CarLoadComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData: any = { ...this.carLoadForm.value };
+    const formData: any = {...this.carLoadForm.value};
 
     // Normalizar phone para +258
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
     formData.customerPhoneNumber = rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`;
 
-    // ✅ deliveryStatus (enum)
+    // Enum
     formData.deliveryStatus = (formData.deliveryStatus || 'PENDING').toString().toUpperCase();
 
-    // ✅ converter do input datetime-local para LocalDateTime (sem timezone)
+    // LocalDateTime
     formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
 
-    const request$ = this.isEditMode && this.selectedCarLoadId
+    const isUpdate = this.isEditMode && this.selectedCarLoadId;
+    const request$ = isUpdate
       ? this.carLoadService.updateCarLoad(this.selectedCarLoadId, formData)
       : this.carLoadService.addCarLoad(formData);
 
@@ -322,7 +306,15 @@ export class CarLoadComponent implements OnInit {
       next: () => {
         this.getCarLoads();
         this.closeCarLoadDrawer();
-        this.message.success(this.isEditMode ? 'Carrada atualizada com sucesso! ✅' : 'Carrada criada com sucesso! 🎉');
+
+        if (isUpdate) {
+          this.message.success('Carrada atualizada com sucesso! ✅');
+        } else if (this.isCopyMode) {
+          this.message.success('Carrada copiada e criada com sucesso! 📋✅');
+        } else {
+          this.message.success('Carrada criada com sucesso! 🎉');
+        }
+
         this.isSaving = false;
       },
       error: () => {
@@ -354,13 +346,50 @@ export class CarLoadComponent implements OnInit {
     window.history.back();
   }
 
-  materials: string[] = [
-    'Areia fina',
-    'Areia grossa',
-    'Areia vermelha',
-    'Pedra 3/4',
-    'Pedra sarrisca',
-    'Pedra enrocamento'
-  ];
+  // ========= Date helpers =========
+  private normalizeDateTimeLocal(v: string | null | undefined): string | null {
+    if (!v) return null;
 
+    if (!v.includes('T')) return `${v}T00:00:00`;
+
+    // "YYYY-MM-DDTHH:mm" -> add seconds
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)) return `${v}:00`;
+
+    return v;
+  }
+
+  private toDatetimeLocalInput(iso: string | null | undefined): string {
+    if (!iso) return '';
+
+    // remove timezone if exists
+    const withoutZone = iso.replace('Z', '').split('+')[0];
+    // remove milliseconds
+    const cleaned = withoutZone.split('.')[0];
+
+    if (!cleaned.includes('T')) return `${cleaned}T00:00`;
+
+    // "YYYY-MM-DDTHH:mm:ss" -> "YYYY-MM-DDTHH:mm"
+    return cleaned.substring(0, 16);
+  }
+
+  private mapCarloadToForm(carload: CarLoad) {
+    return {
+      customerName: carload.customerName,
+      customerPhoneNumber: carload.customerPhoneNumber,
+      deliveryDestination: carload.deliveryDestination,
+
+      transportedMaterial: carload.transportedMaterial,
+
+      logisticsManagerId: carload.logisticsManagerId,
+      assignedDriverId: carload.assignedDriverId,
+      carloadBatchId: carload.carloadBatchId,
+
+      totalSpent: carload.totalSpent,
+      totalEarnings: carload.totalEarnings,
+
+      deliveryStatus: (carload.deliveryStatus as any) || 'PENDING',
+
+      deliveryScheduledDate: this.toDatetimeLocalInput(carload.deliveryScheduledDate as any)
+    };
+  }
 }

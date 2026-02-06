@@ -11,7 +11,8 @@ export class DriverService {
 
   private baseURL = environment.baseURL + "/drivers";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   public getDrivers(): Observable<Driver[]> {
     return this.http.get<Driver[]>(this.baseURL);

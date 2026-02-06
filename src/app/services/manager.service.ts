@@ -11,7 +11,8 @@ import {Manager} from '../models/CSM/manager';
 export class ManagerService {
   private baseURL = environment.baseURL + '/managers';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   public getManagers(): Observable<Manager[]> {
     return this.http.get<Manager[]>(this.baseURL);

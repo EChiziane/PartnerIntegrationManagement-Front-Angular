@@ -66,13 +66,13 @@
   <!-- ===== Filters ===== -->
   <div class="filters-panel">
     <input
-      nz-input
-      [(ngModel)]="searchValue"
       (ngModelChange)="search()"
+      [(ngModel)]="searchValue"
+      nz-input
       placeholder="Pesquisar código, nome ou descrição"
     />
 
-    <button nz-button nzType="primary" (click)="openSprintDrawer()">
+    <button (click)="openSprintDrawer()" nz-button nzType="primary">
       <nz-icon nzType="plus"></nz-icon>
       Nova Sprint
     </button>
@@ -81,7 +81,7 @@
   <!-- ===== Table ===== -->
   <div class="table-wrapper">
     <nz-spin [nzSpinning]="isLoading" nzTip="A carregar sprints...">
-      <nz-table [nzData]="listOfDisplayData" nzTableLayout="fixed"  [nzScroll]="{ x: '1150px', y: '440px' }">
+      <nz-table [nzData]="listOfDisplayData" [nzScroll]="{ x: '1150px', y: '440px' }" nzTableLayout="fixed">
         <thead>
         <tr>
           <th>Código</th>
@@ -105,10 +105,10 @@
           </td>
           <td>{{ data.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>
-            <button nz-button nzType="link" nzSize="small" (click)="editSprint(data)">
+            <button (click)="editSprint(data)" nz-button nzSize="small" nzType="link">
               <nz-icon nzType="edit"></nz-icon>
             </button>
-            <button nz-button nzDanger nzType="link" nzSize="small" (click)="deleteSprint(data)">
+            <button (click)="deleteSprint(data)" nz-button nzDanger nzSize="small" nzType="link">
               <nz-icon nzType="delete"></nz-icon>
             </button>
           </td>
@@ -121,11 +121,11 @@
 
 <!-- ===== Drawer ===== -->
 <nz-drawer
-  [nzVisible]="isSprintDrawerVisible"
-  [nzTitle]="sprintDrawerTitle"
-  [nzWidth]="drawerWidth"
   (nzOnClose)="closeSprintDrawer()"
-  [nzFooter]="footerTpl">
+  [nzFooter]="footerTpl"
+  [nzTitle]="sprintDrawerTitle"
+  [nzVisible]="isSprintDrawerVisible"
+  [nzWidth]="drawerWidth">
 
   <nz-spin [nzSpinning]="isSaving">
     <form [formGroup]="sprintForm" class="drawer-form" nz-form>
@@ -136,21 +136,21 @@
         <nz-form-item>
           <nz-form-label>Código</nz-form-label>
           <nz-form-control>
-            <input nz-input formControlName="code">
+            <input formControlName="code" nz-input>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label>Nome</nz-form-label>
           <nz-form-control>
-            <input nz-input formControlName="name">
+            <input formControlName="name" nz-input>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label>Descrição</nz-form-label>
           <nz-form-control>
-            <textarea nz-input rows="3" formControlName="description"></textarea>
+            <textarea formControlName="description" nz-input rows="3"></textarea>
           </nz-form-control>
         </nz-form-item>
 
@@ -158,8 +158,8 @@
           <nz-form-label>Status</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="status">
-              <nz-option nzValue="ACTIVO" nzLabel="ACTIVO"></nz-option>
-              <nz-option nzValue="INACTIVO" nzLabel="INACTIVO"></nz-option>
+              <nz-option nzLabel="ACTIVO" nzValue="ACTIVO"></nz-option>
+              <nz-option nzLabel="INACTIVO" nzValue="INACTIVO"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -170,8 +170,8 @@
 
   <ng-template #footerTpl>
     <div class="drawer-footer">
-      <button nz-button (click)="closeSprintDrawer()">Cancelar</button>
-      <button nz-button nzType="primary" (click)="saveSprint()" [disabled]="isSaving || sprintForm.invalid">
+      <button (click)="closeSprintDrawer()" nz-button>Cancelar</button>
+      <button (click)="saveSprint()" [disabled]="isSaving || sprintForm.invalid" nz-button nzType="primary">
         {{ isEditMode ? 'Salvar' : 'Criar' }}
       </button>
     </div>

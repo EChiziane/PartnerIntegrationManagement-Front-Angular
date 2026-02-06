@@ -64,13 +64,13 @@
   <!-- ===== Filters ===== -->
   <div class="filters-panel">
     <input
-      nz-input
-      [(ngModel)]="searchValue"
       (ngModelChange)="search()"
+      [(ngModel)]="searchValue"
+      nz-input
       placeholder="Pesquisar cliente, destino, material, motorista..."
     />
 
-    <button nz-button nzType="primary" (click)="openCarLoadDrawer()">
+    <button (click)="openCarLoadDrawer()" nz-button nzType="primary">
       <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
       Nova Carrada
     </button>
@@ -93,7 +93,6 @@
             <th>Destino</th>
             <th>Material</th>
             <th>Motorista</th>
-
             <th>Sprint</th>
             <th>Status</th>
             <th>Agendado</th>
@@ -110,7 +109,6 @@
             <td>{{ data.deliveryDestination }}</td>
             <td>{{ data.transportedMaterial }}</td>
             <td>{{ data.assignedDriverName }}</td>
-
             <td>{{ data.carloadBatchName }}</td>
 
             <td>
@@ -124,11 +122,24 @@
             <td>{{ data.totalSpent | number:'1.2-2' }} Mts</td>
 
             <td>
-              <button nz-button nzType="link" nzSize="small" (click)="editCarLoad(data)">
+              <!-- 👇 COPY -->
+              <button
+                (click)="copyCarLoad(data)"
+                nz-button
+                nz-tooltip
+                nzSize="small"
+                nzTooltipTitle="Copiar carrada"
+                nzType="link">
+                <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
+              </button>
+
+              <!-- EDIT -->
+              <button (click)="editCarLoad(data)" nz-button nzSize="small" nzType="link">
                 <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
               </button>
 
-              <button nz-button nzDanger nzType="link" nzSize="small" (click)="deleteCarLoad(data)">
+              <!-- DELETE -->
+              <button (click)="deleteCarLoad(data)" nz-button nzDanger nzSize="small" nzType="link">
                 <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
               </button>
             </td>
@@ -162,7 +173,7 @@
             <nz-form-item>
               <nz-form-label>Cliente</nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="customerName" placeholder="Nome do cliente"/>
+                <input formControlName="customerName" nz-input placeholder="Nome do cliente"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -172,7 +183,7 @@
               <nz-form-label>Contacto</nz-form-label>
               <nz-form-control>
                 <nz-input-group nzAddOnBefore="+258">
-                  <input nz-input formControlName="customerPhoneNumber" placeholder="Contacto"/>
+                  <input formControlName="customerPhoneNumber" nz-input placeholder="Contacto"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -184,7 +195,7 @@
             <nz-form-item>
               <nz-form-label>Destino</nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="deliveryDestination" placeholder="Destino de entrega"/>
+                <input formControlName="deliveryDestination" nz-input placeholder="Destino de entrega"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -195,32 +206,24 @@
               <nz-form-control>
                 <nz-select
                   formControlName="transportedMaterial"
-                  nzShowSearch
                   nzAllowClear
-                  nzPlaceHolder="Selecione o material">
-
-                  <nz-option
-                    *ngFor="let m of materials"
-                    [nzValue]="m"
-                    [nzLabel]="m">
-                  </nz-option>
-
+                  nzPlaceHolder="Selecione o material"
+                  nzShowSearch>
+                  <nz-option *ngFor="let m of materials" [nzLabel]="m" [nzValue]="m"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
-
           </div>
         </div>
 
-        <!-- ===== SELECTS ===== -->
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>Motorista</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="assignedDriverId" nzShowSearch nzAllowClear
-                           nzPlaceHolder="Selecione o motorista" [nzLoading]="isLoadingLookups">
-                  <nz-option *ngFor="let d of drivers" [nzValue]="d.id" [nzLabel]="d.Name"></nz-option>
+                <nz-select [nzLoading]="isLoadingLookups" formControlName="assignedDriverId" nzAllowClear
+                           nzPlaceHolder="Selecione o motorista" nzShowSearch>
+                  <nz-option *ngFor="let d of drivers" [nzLabel]="d.Name" [nzValue]="d.id"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -230,9 +233,9 @@
             <nz-form-item>
               <nz-form-label>Gestor</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="logisticsManagerId" nzShowSearch nzAllowClear
-                           nzPlaceHolder="Selecione o gestor" [nzLoading]="isLoadingLookups">
-                  <nz-option *ngFor="let m of managers" [nzValue]="m.id" [nzLabel]="m.name"></nz-option>
+                <nz-select [nzLoading]="isLoadingLookups" formControlName="logisticsManagerId" nzAllowClear
+                           nzPlaceHolder="Selecione o gestor" nzShowSearch>
+                  <nz-option *ngFor="let m of managers" [nzLabel]="m.name" [nzValue]="m.id"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -244,20 +247,19 @@
             <nz-form-item>
               <nz-form-label>Sprint</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="carloadBatchId" nzShowSearch nzAllowClear
-                           nzPlaceHolder="Selecione a sprint" [nzLoading]="isLoadingLookups">
-                  <nz-option *ngFor="let s of sprints" [nzValue]="s.id" [nzLabel]="s.name"></nz-option>
+                <nz-select [nzLoading]="isLoadingLookups" formControlName="carloadBatchId" nzAllowClear
+                           nzPlaceHolder="Selecione a sprint" nzShowSearch>
+                  <nz-option *ngFor="let s of sprints" [nzLabel]="s.name" [nzValue]="s.id"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
 
-          <!-- ✅ datetime-local -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>Agendar Data/Hora</nz-form-label>
               <nz-form-control>
-                <input nz-input type="datetime-local" formControlName="deliveryScheduledDate"/>
+                <input formControlName="deliveryScheduledDate" nz-input type="datetime-local"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -268,7 +270,7 @@
             <nz-form-item>
               <nz-form-label>Gastos</nz-form-label>
               <nz-form-control>
-                <input nz-input type="number" formControlName="totalSpent"/>
+                <input formControlName="totalSpent" nz-input type="number"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -277,7 +279,7 @@
             <nz-form-item>
               <nz-form-label>Ganhos</nz-form-label>
               <nz-form-control>
-                <input nz-input type="number" formControlName="totalEarnings"/>
+                <input formControlName="totalEarnings" nz-input type="number"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -289,10 +291,10 @@
               <nz-form-label>Status</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="deliveryStatus">
-                  <nz-option nzValue="SCHEDULED" nzLabel="Agendada"></nz-option>
-                  <nz-option nzValue="PENDING" nzLabel="Pendente"></nz-option>
-                  <nz-option nzValue="DELIVERED" nzLabel="Entregue"></nz-option>
-                  <nz-option nzValue="CANCELLED" nzLabel="Cancelada"></nz-option>
+                  <nz-option nzLabel="Agendada" nzValue="SCHEDULED"></nz-option>
+                  <nz-option nzLabel="Pendente" nzValue="PENDING"></nz-option>
+                  <nz-option nzLabel="Entregue" nzValue="DELIVERED"></nz-option>
+                  <nz-option nzLabel="Cancelada" nzValue="CANCELLED"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -305,14 +307,14 @@
 
   <ng-template #carLoadDrawerFooter>
     <div class="drawer-footer">
-      <button nz-button nzType="default" class="btn-cancel" (click)="closeCarLoadDrawer()" [disabled]="isSaving">
+      <button (click)="closeCarLoadDrawer()" [disabled]="isSaving" class="btn-cancel" nz-button nzType="default">
         Cancelar
       </button>
 
-      <button nz-button nzType="primary" class="btn-save"
-              (click)="saveCarLoad()" [disabled]="carLoadForm.invalid || isSaving">
+      <button (click)="saveCarLoad()" [disabled]="carLoadForm.invalid || isSaving" class="btn-save"
+              nz-button nzType="primary">
         <ng-container *ngIf="!isSaving; else savingTpl">
-          {{ isEditMode ? 'Salvar' : 'Criar' }}
+          {{ isEditMode ? 'Salvar' : (isCopyMode ? 'Criar Cópia' : 'Criar') }}
         </ng-container>
 
         <ng-template #savingTpl>

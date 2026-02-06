@@ -9,8 +9,8 @@
   >
     <div class="sidebar-logo">
       <a>
-        <img alt="logo" src="https://ng.ant.design/assets/img/logo.svg" />
-        <h1>AGUA'S Chiziane</h1>
+        <img alt="logo" src="https://ng.ant.design/assets/img/logo.svg"/>
+        <h1>TRANSPORTES Chiziane</h1>
       </a>
     </div>
 
@@ -25,11 +25,6 @@
             </a>
           </li>
 
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/customer">
-              <span nz-icon nzType="team"></span> Clientes
-            </a>
-          </li>
 
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/carload">
@@ -56,8 +51,13 @@
           </li>
 
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/reports">
-              <span nz-icon nzType="bar-chart"></span> Relatórios
+            <a routerLink="/app/quotation">
+              <span nz-icon nzType="bar-chart"></span> Cotacoes
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/invoice">
+              <span nz-icon nzType="bar-chart"></span> Facturas
             </a>
           </li>
         </ul>
@@ -105,7 +105,7 @@
             <li nz-menu-item>
               <a routerLink="/profile">Perfil</a>
             </li>
-            <li nz-menu-item (click)="logout()">Logout</li>
+            <li (click)="logout()" nz-menu-item>Logout</li>
           </ul>
         </nz-dropdown-menu>
       </div>

@@ -3,21 +3,17 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './UASM/login/login.component';
 import {SigninComponent} from './UASM/signin/signin.component';
 import {ListuserComponent} from './UASM/listuser/listuser.component';
-import {CustomerDetailsComponent} from './WSM/customer/customer-details/customer-details.component';
-import {PaymentDetailsComponent} from './WSM/payment/payment-details/payment-details.component';
-import {PaymentComponent} from './WSM/payment/payment.component';
-import {CustomerComponent} from './WSM/customer/customer.component';
-import {CalendarComponent} from './calendar/calendar.component';
-import {ReciboComponent} from './WSM/recibo/recibo.component';
+
+
 import {LandingPageComponent} from './landpage/landingpage.component';
 import {MainLayoutComponent} from './main-layout/main-layout.component';
 import {AuthGuard} from './services/auth.guard';
-import {DriverComponent} from './driver/driver.component';
-import {SprintComponent} from './sprint/sprint.component';
-import {ManagerComponent} from './manager/manager.component';
+import {DriverComponent} from './CSM/driver/driver.component';
+import {SprintComponent} from './CSM/sprint/sprint.component';
+import {ManagerComponent} from './CSM/manager/manager.component';
 
-import {SprintDetailsComponent} from './sprint-details/sprint-details.component';
-import {CarLoadComponent} from './carload/carload.component';
+import {SprintDetailsComponent} from './CSM/sprint-details/sprint-details.component';
+import {CarLoadComponent} from './CSM/carload/carload.component';
 
 
 const routes: Routes = [
@@ -39,14 +35,8 @@ const routes: Routes = [
       {path: 'sprint', component: SprintComponent},
       {path: 'sprint-detail/:id', component: SprintDetailsComponent},
       {path: 'driver', component: DriverComponent},
-      {path: 'customer', component: CustomerComponent},
-      {path: 'customer-detail/:id', component: CustomerDetailsComponent},
 
-      {path: 'payment', component: PaymentComponent},
-      {path: 'payment-detail/:id', component: PaymentDetailsComponent},
 
-      {path: 'calendar', component: CalendarComponent},
-      {path: 'recibo', component: ReciboComponent},
       {path: 'users', component: ListuserComponent},
 
       // rota default do sistema

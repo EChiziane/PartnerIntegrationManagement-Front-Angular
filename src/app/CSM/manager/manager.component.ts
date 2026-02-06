@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import {Manager} from '../models/CSM/manager';
-import {ManagerService} from '../services/manager.service';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Manager} from '../../models/CSM/manager';
+import {ManagerService} from '../../services/manager.service';
 
 
 @Component({
@@ -51,7 +51,8 @@ export class ManagerComponent implements OnInit {
     private managerService: ManagerService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getManagers();
@@ -121,7 +122,7 @@ export class ManagerComponent implements OnInit {
   openManagerDrawer() {
     this.isEditMode = false;
     this.managerDrawerTitle = 'Criar Gestor';
-    this.managerForm.reset({ status: 'ACTIVO' });
+    this.managerForm.reset({status: 'ACTIVO'});
     this.isManagerDrawerVisible = true;
   }
 
@@ -154,7 +155,7 @@ export class ManagerComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData = { ...this.managerForm.value };
+    const formData = {...this.managerForm.value};
 
     // Normalizar contacto (opcional) para +258
     const rawContact = (formData.contact || '').toString().trim();

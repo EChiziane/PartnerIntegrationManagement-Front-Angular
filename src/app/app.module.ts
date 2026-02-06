@@ -44,21 +44,13 @@ import {NzStatisticComponent} from 'ng-zorro-antd/statistic';
 import {NzPageHeaderComponent, NzPageHeaderContentDirective} from 'ng-zorro-antd/page-header';
 import {NzSpaceComponent, NzSpaceItemDirective} from 'ng-zorro-antd/space';
 import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-antd/descriptions';
-import {CustomerDetailsComponent} from './WSM/customer/customer-details/customer-details.component';
-import {CustomerComponent} from './WSM/customer/customer.component';
 
-import {PaymentComponent} from './WSM/payment/payment.component';
-import {PaymentDetailsComponent} from './WSM/payment/payment-details/payment-details.component';
-
-import {NzCalendarComponent} from 'ng-zorro-antd/calendar';
-import {CalendarComponent} from './calendar/calendar.component';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatButton} from '@angular/material/button';
 
-import {ReciboComponent} from './WSM/recibo/recibo.component';
 
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {NzTooltipDirective} from "ng-zorro-antd/tooltip";
@@ -66,11 +58,10 @@ import {NzTooltipDirective} from "ng-zorro-antd/tooltip";
 import {NzCarouselComponent, NzCarouselContentDirective} from 'ng-zorro-antd/carousel';
 import {LandingPageComponent} from './landpage/landingpage.component';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from "ng-zorro-antd/breadcrumb";
-import {DriverComponent} from './driver/driver.component';
-import {ManagerComponent} from './manager/manager.component';
-import {SprintComponent} from './sprint/sprint.component';
-import {CarLoadComponent} from './carload/carload.component';
-
+import {DriverComponent} from './CSM/driver/driver.component';
+import {ManagerComponent} from './CSM/manager/manager.component';
+import {SprintComponent} from './CSM/sprint/sprint.component';
+import {CarLoadComponent} from './CSM/carload/carload.component';
 
 
 registerLocaleData(en);
@@ -78,21 +69,15 @@ registerLocaleData(en);
 @NgModule({
   declarations: [
     AppComponent,
-    CustomerDetailsComponent,
-    CustomerComponent,
+
     LoginComponent,
     MainLayoutComponent,
     SigninComponent,
     ListuserComponent,
-    CalendarComponent,
-    PaymentComponent,
-    PaymentDetailsComponent,
-    CustomerDetailsComponent,
-    ReciboComponent,
     DriverComponent,
     ManagerComponent,
     SprintComponent,
-CarLoadComponent,
+    CarLoadComponent,
     LandingPageComponent
 
   ],
@@ -145,7 +130,7 @@ CarLoadComponent,
     NzAvatarModule,
     NzSwitchModule,
     NzStatisticComponent,
-    NzCalendarComponent,
+
     NzFilterTriggerComponent,
     NzThAddOnComponent,
     NzRowDirective,
@@ -174,7 +159,7 @@ CarLoadComponent,
     NzAvatarModule,
     NzSwitchModule,
     NzStatisticComponent,
-    NzCalendarComponent,
+
     NzPageHeaderComponent,
     NzSpaceComponent,
     NzPageHeaderContentDirective,

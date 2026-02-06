@@ -11,7 +11,8 @@ export class SprintService {
 
   private baseURL = environment.baseURL + '/sprints';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getSprints(): Observable<Sprint[]> {
     return this.http.get<Sprint[]>(this.baseURL);
