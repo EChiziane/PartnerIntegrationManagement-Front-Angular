@@ -1,8 +1,8 @@
-export interface Sprint {
+export interface Manager {
   id: string;
-  code: string;
   name: string;
-  description: string;
+  contact: string;
+  address: string;
   status: 'ACTIVO' | 'INACTIVO' | string;
   createdAt: string; // ISO 8601
 }

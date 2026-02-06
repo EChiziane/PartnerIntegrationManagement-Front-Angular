@@ -4,5 +4,5 @@ export interface Driver {
   Phone: string;
   CarDescription: string;
   status: string;
-  createdAt: string;   // Data de criação do usuário (em formato ISO 8601)
+  createdAt: string; // ISO 8601
 }

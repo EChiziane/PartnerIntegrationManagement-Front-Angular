@@ -10,42 +10,28 @@ import {CarLoad} from '../models/CSM/carlaod';
 })
 export class CarloadService {
 
-  private baseURL = environment.baseURL + "/carloads";
+  private baseURL = environment.baseURL + '/carloads';
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
-  public getCarloads(): Observable<CarLoad[]> {
+  getCarLoads(): Observable<CarLoad[]> {
     return this.http.get<CarLoad[]>(this.baseURL);
   }
 
-  public getScheduledCarloads(): Observable<CarLoad[]> {
-    return this.http.get<CarLoad[]>(`${this.baseURL}/scheduled`);
-  }
-
-  public getCarloadsBySprint(id: any): Observable<CarLoad[]> {
-    return this.http.get<CarLoad[]>(`${this.baseURL}/sprint/${id}`);
-  }
-
-  public encerarCarload(id: any, carload: CarLoad): Observable<CarLoad> {
-    return this.http.put<CarLoad>(`${this.baseURL}/${id}`, carload).pipe(take(1));
-  }
-
-
-  public getCarloadById(id: number): Observable<CarLoad> {
+  getCarLoadById(id: any): Observable<CarLoad> {
     return this.http.get<CarLoad>(`${this.baseURL}/${id}`);
   }
 
-  public addCarload(carload: CarLoad): Observable<CarLoad> {
+  addCarLoad(carload: any): Observable<CarLoad> {
     return this.http.post<CarLoad>(this.baseURL, carload).pipe(take(1));
   }
 
-  public deleteCarload(id: string): Observable<CarLoad> {
-    return this.http.delete<CarLoad>(`${this.baseURL}/${id}`);
+  updateCarLoad(id: any, carload: any): Observable<CarLoad> {
+    return this.http.put<CarLoad>(`${this.baseURL}/${id}`, carload).pipe(take(1));
   }
 
-  public updateCarload(id: string, carload: CarLoad): Observable<CarLoad> {
-    return this.http.put<CarLoad>(`${this.baseURL}/${id}`, carload).pipe(take(1));
+  deleteCarLoad(id: any): Observable<CarLoad> {
+    return this.http.delete<CarLoad>(`${this.baseURL}/${id}`);
   }
 
 
