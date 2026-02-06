@@ -1,57 +1,63 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-
 import {LoginComponent} from './UASM/login/login.component';
 import {SigninComponent} from './UASM/signin/signin.component';
 import {ListuserComponent} from './UASM/listuser/listuser.component';
-
-import {CarloadComponent} from './CLSM/carload/carload.component';
-import {ManagerComponent} from './CLSM/manager/manager.component';
-
-import {DriverComponent} from './CLSM/driver/driver.component';
-import {CustomerDetailsComponent} from './CLSM/customer/customer-details/customer-details.component';
+import {CustomerDetailsComponent} from './WSM/customer/customer-details/customer-details.component';
 import {PaymentDetailsComponent} from './WSM/payment/payment-details/payment-details.component';
 import {PaymentComponent} from './WSM/payment/payment.component';
-import {CustomerComponent} from './CLSM/customer/customer.component';
-import {SprintComponent} from './CLSM/sprint/sprint.component';
-import {SprintDetailsComponent} from './CLSM/sprint/sprint-details/sprint-details.component';
+import {CustomerComponent} from './WSM/customer/customer.component';
 import {CalendarComponent} from './calendar/calendar.component';
-import {StudentComponent} from './students/students.component';
-import {TeacherComponent} from './teacher/teacher.component';
-import {ClassroomComponent} from './classroom/classroom.component';
-import {ReciboComponent} from './recibo/recibo.component';
-import {CarloadInvoiceComponent} from './CLSM/carload-invoice/carload-invoice.component';
-import {CarloadCustomerComponent} from './CLSM/carload-customer/carload-customer.component';
-import {CarloadCotacaoComponent} from './CLSM/carload-cotacao/carload-cotacao.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
+import {ReciboComponent} from './WSM/recibo/recibo.component';
+import {LandingPageComponent} from './landpage/landingpage.component';
+import {MainLayoutComponent} from './main-layout/main-layout.component';
+import {AuthGuard} from './services/auth.guard';
+import {DriverComponent} from './driver/driver.component';
+import {SprintComponent} from './sprint/sprint.component';
+import {ManagerComponent} from './manager/manager.component';
+
+import {SprintDetailsComponent} from './sprint-details/sprint-details.component';
+import {CarLoadComponent} from './carload/carload.component';
 
 
 const routes: Routes = [
-  // Alterar o redirecionamento para 'login' como a rota inicial
-  {path: '', pathMatch: 'full', redirectTo: '/login'},
-  {path: 'carload', component: CarloadComponent},
+
+  // 🌍 Público
+  {path: '', redirectTo: 'landing-page', pathMatch: 'full'},
+  {path: 'landing-page', component: LandingPageComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: SigninComponent},
-  {path: 'users', component: ListuserComponent},
-  {path: 'customer-detail/:id', component: CustomerDetailsComponent},
-  {path: 'payment-detail/:id', component: PaymentDetailsComponent},
-  {path: 'payment', component: PaymentComponent},
-  {path: 'customer', component: CustomerComponent},
-  {path: 'manager', component: ManagerComponent},
-  {path: 'sprint', component: SprintComponent},
-  {path: 'sprint-detail/:id', component: SprintDetailsComponent},
-  {path: 'driver', component: DriverComponent},
-  {path: 'calendar', component: CalendarComponent},
-  {path: 'student', component: StudentComponent},
-  {path: 'teacher', component: TeacherComponent},
-  {path: 'classroom', component: ClassroomComponent},
-  {path: 'carload-invoice', component: CarloadInvoiceComponent},
-  {path: 'carload-cotacao', component: CarloadCotacaoComponent},
-  {path: 'carload-customer', component: CarloadCustomerComponent},
-  {path: 'recibo', component: ReciboComponent},
-  {path: 'dasboard', component: DashboardComponent},
-  {path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule)}
+
+  // 🔐 Sistema protegido
+  {
+    path: 'app',
+    component: MainLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {path: 'carload', component: CarLoadComponent},
+      {path: 'manager', component: ManagerComponent},
+      {path: 'sprint', component: SprintComponent},
+      {path: 'sprint-detail/:id', component: SprintDetailsComponent},
+      {path: 'driver', component: DriverComponent},
+      {path: 'customer', component: CustomerComponent},
+      {path: 'customer-detail/:id', component: CustomerDetailsComponent},
+
+      {path: 'payment', component: PaymentComponent},
+      {path: 'payment-detail/:id', component: PaymentDetailsComponent},
+
+      {path: 'calendar', component: CalendarComponent},
+      {path: 'recibo', component: ReciboComponent},
+      {path: 'users', component: ListuserComponent},
+
+      // rota default do sistema
+      {path: '', redirectTo: 'customer', pathMatch: 'full'}
+    ]
+  },
+
+  // fallback
+  {path: '**', redirectTo: 'landing-page'}
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

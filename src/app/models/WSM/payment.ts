@@ -1,3 +1,5 @@
+import {Customer} from './customer';
+
 export interface Payment {
   id: string;
   customerId: string;
@@ -7,6 +9,7 @@ export interface Payment {
   referenceMonth: string;
   paymentMethod: 'EMOLA,MPESA,BCI,NUMERARIO';
   confirmed: boolean;
+  customer: Customer;
   paymentDate: string;
 }
 

@@ -5,174 +5,128 @@
             nzBreakpoint="md"
             nzCollapsible
             nzWidth="256px">
+
     <div class="sidebar-logo">
-      <a href="https://ng.ant.design/" target="_blank">
+      <a>
         <img alt="logo" src="https://ng.ant.design/assets/img/logo.svg">
-        <h1>Transporte Chiziane</h1>
+        <h1>AGUA'S Chiziane</h1>
       </a>
     </div>
+
     <ul [nzInlineCollapsed]="isCollapsed" nz-menu nzMode="inline" nzTheme="dark">
-      <li nz-submenu nzIcon="dashboard" nzOpen nzTitle="CSM">
-        <ul>
 
-          <!-- Operacional -->
-          <li nz-submenu nzIcon="car" nzTitle="Operacional">
-            <ul>
-              <li nz-menu-item nzMatchRouter>
-                <a routerLink="/dasboard">
-                  <span class="menu-icon-right"><i nz-icon nzType="dashboard"></i></span>
-                  Dashboard
-                </a>
-              </li>
-              <li nz-menu-item nzMatchRouter>
-                <a routerLink="/carload">
-                  <span class="menu-icon-right"><i nz-icon nzType="car"></i></span>
-                  Carload
-                </a>
-              </li>
-              <li nz-menu-item nzMatchRouter>
-                <a routerLink="/driver">
-                  <span class="menu-icon-right"><i nz-icon nzType="team"></i></span>
-                  Driver
-                </a>
-              </li>
-              <li nz-menu-item nzMatchRouter>
-                <a routerLink="/sprint">
-                  <span class="menu-icon-right"><i nz-icon nzType="rocket"></i></span>
-                  Sprint
-                </a>
-              </li>
-            </ul>
-          </li>
-
-          <!-- Administrativo -->
-          <li nz-submenu nzIcon="user" nzTitle="Administrativo">
-            <ul>
-              <li nz-menu-item nzMatchRouter>
-                <a routerLink="/manager">
-                  <span class="menu-icon-right"><i nz-icon nzType="user"></i></span>
-                  Manager
-                </a>
-              </li>
-              <li nz-menu-item nzMatchRouter>
-                <a routerLink="/carload-invoice">
-                  <span class="menu-icon-right"><i nz-icon nzType="file"></i></span>
-                  Invoice
-                </a>
-              </li>
-              <li nz-menu-item nzMatchRouter>
-                <a routerLink="/carload-cotacao">
-                  <span class="menu-icon-right"><i nz-icon nzType="file"></i></span>
-                  Cotacao
-                </a>
-              </li>
-
-              <li nz-menu-item nzMatchRouter>
-                <a routerLink="/carload-customer">
-                  <span class="menu-icon-right"><i nz-icon nzType="team"></i></span>
-                  Customer
-                </a>
-              </li>
-            </ul>
-          </li>
-
-          <!-- Materiais -->
-          <li nz-submenu nzIcon="appstore" nzTitle="Materiais">
-            <ul>
-              <li nz-menu-item nzMatchRouter>
-                <a routerLink="/materials">
-                  <span class="menu-icon-right"><i nz-icon nzType="appstore"></i></span>
-                  Item Material
-                </a>
-              </li>
-            </ul>
-          </li>
-
-        </ul>
-      </li>
-
-      <li nz-submenu nzIcon="dashboard" nzOpen nzTitle="WSM">
+      <!-- WSM -->
+      <li nz-submenu nzIcon="appstore" nzOpen nzTitle="WSM">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/customer">Customer</a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/payment">Payment</a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/recibo">Recibo</a>
+            <a routerLink="/app/customer">
+              <span nz-icon nzType="team"></span> Clientes
+            </a>
           </li>
 
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/payment">
+              <span nz-icon nzType="credit-card"></span> Pagamentos
+            </a>
+          </li>
 
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/recibo">
+              <span nz-icon nzType="file-done"></span> Recibos
+            </a>
+          </li>
         </ul>
       </li>
 
 
-      <li nz-submenu nzIcon="dashboard" nzOpen nzTitle="EISSM">
+      <!-- WSM -->
+      <li nz-submenu nzIcon="appstore" nzOpen nzTitle="CSM">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/student">Students</a>
+            <a routerLink="/app/customer">
+              <span nz-icon nzType="team"></span> Clientes
+            </a>
           </li>
 
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/teacher">Teachers</a>
+            <a routerLink="/app/carload">
+              <span nz-icon nzType="credit-card"></span> Carload
+            </a>
           </li>
 
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/classroom">Class Room</a>
+            <a routerLink="/app/sprint">
+              <span nz-icon nzType="file-done"></span> Sprint
+            </a>
           </li>
 
+
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/manager">
+              <span nz-icon nzType="file-done"></span> Manager
+            </a>
+          </li>
+
+
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/driver">
+              <span nz-icon nzType="file-done"></span> Driver
+            </a>
+          </li>
         </ul>
       </li>
 
-
-      <li nz-submenu nzIcon="dashboard" nzOpen nzTitle="CALENDAR">
+      <!-- CALENDAR -->
+      <li nz-submenu nzIcon="calendar" nzOpen nzTitle="Calendário">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/calendar">Calendar</a>
-          </li>
-
-
-        </ul>
-      </li>
-      <li nz-submenu nzIcon="user" nzOpen nzTitle="Account">
-        <ul>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/users">Users</a>
+            <a routerLink="/app/calendar">
+              <span nz-icon nzType="calendar"></span> Calendário
+            </a>
           </li>
         </ul>
       </li>
 
+      <!-- ACCOUNT -->
+      <li nz-submenu nzIcon="user" nzOpen nzTitle="Conta">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/users">
+              <span nz-icon nzType="user"></span> Utilizadores
+            </a>
+          </li>
+        </ul>
+      </li>
 
     </ul>
   </nz-sider>
+
   <nz-layout>
     <nz-header>
       <div class="app-header">
         <span (click)="isCollapsed = !isCollapsed" class="header-trigger">
-            <span [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-                  class="trigger"
-                  nz-icon>
-            </span>
+          <span [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" class="trigger"
+                nz-icon>
+          </span>
         </span>
-        <div class="user-menu">
-          <a [nzDropdownMenu]="userMenu" nz-dropdown>
-            <span class="user-icon" nz-icon nzType="user"></span>
-            <span class="username">{{ username }}</span>
-            <nz-icon nzType="down"></nz-icon>
-          </a>
-          <nz-dropdown-menu #userMenu="nzDropdownMenu">
-            <ul nz-menu>
-              <li nz-menu-item>
-                <a routerLink="/profile">Perfil</a>
-              </li>
-              <li (click)="logout()" nz-menu-item>Logout</li>
-            </ul>
-          </nz-dropdown-menu>
+
+        <div [nzDropdownMenu]="userMenu" class="user-menu" nz-dropdown>
+          <span class="user-icon" nz-icon nzType="user"></span>
+          <span class="username">{{ username }}</span>
+          <nz-icon nzType="down"></nz-icon>
         </div>
+
+        <nz-dropdown-menu #userMenu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item>
+              <a routerLink="/profile">Perfil</a>
+            </li>
+            <li (click)="logout()" nz-menu-item>Logout</li>
+          </ul>
+        </nz-dropdown-menu>
       </div>
     </nz-header>
+
     <nz-content>
       <div class="inner-content">
         <router-outlet></router-outlet>

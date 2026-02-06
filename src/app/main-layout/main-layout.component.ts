@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main-layout',
@@ -9,6 +10,10 @@ import {Component} from '@angular/core';
 export class MainLayoutComponent {
   isCollapsed = false;
   username?: string | null; // default caso não haja user
+
+
+  constructor(private router: Router) {
+  }
 
   ngOnInit(): void {
     // Supondo que guardaste os dados do user em localStorage
@@ -23,5 +28,7 @@ export class MainLayoutComponent {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+
+    this.router.navigate(['/landing-page']);
   }
 }

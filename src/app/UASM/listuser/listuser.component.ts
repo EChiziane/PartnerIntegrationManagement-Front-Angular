@@ -16,6 +16,8 @@ export class ListuserComponent {
   dataSource: User[] = [];
   listOfDisplayData: User[] = [];
 
+  drawerWidth: string | number = 720;
+
   totalUsers = 0;
   activeUsers = 0;
   inactiveUsers = 0;
@@ -26,6 +28,7 @@ export class ListuserComponent {
   userForm!: FormGroup;
   currentEditingUserId: string | null = null;
   isUserDrawerVisible = false;
+  isSaving = false;
 
   constructor(
     private http: HttpClient,
@@ -41,31 +44,78 @@ export class ListuserComponent {
     return this.currentEditingUserId ? 'Editar Utilizador' : 'Criar Utilizador';
   }
 
-  ngOnInit(): void {
-    this.loadUsers();
+  onBack() {
+    window.history.back();
   }
 
   loadUsers() {
     this.userService.getUsers().subscribe(users => {
-      console.log(users);
-      this.listOfDisplayData = users; // Atualiza após receber os dados
+      this.dataSource = users;              // <<< importante
+      this.listOfDisplayData = [...users];
+
       this.totalUsers = users.length;
-      this.activeUsers = users.filter(user => user.status === 'ACTIVE').length;
-      this.inactiveUsers = users.filter(user => user.status === 'INACTIVE').length;
+      this.activeUsers = users.filter(u => u.status === 'ACTIVE').length;
+      this.inactiveUsers = users.filter(u => u.status === 'INACTIVE').length;
     });
   }
+
+  search(): void {
+    this.visible = false;
+
+    const q = this.searchValue.toLowerCase().trim();
+    this.listOfDisplayData = this.dataSource.filter(u =>
+      u.name?.toLowerCase().includes(q) ||
+      u.email?.toLowerCase().includes(q) ||
+      u.login?.toLowerCase().includes(q)
+    );
+  }
+
+  submitUser() {
+    if (!this.userForm.valid) return;
+
+    this.isSaving = true;
+
+    const userData = this.userForm.value;
+
+    if (this.currentEditingUserId) {
+      this.userService.updateUser(this.currentEditingUserId, userData).subscribe({
+        next: () => {
+          this.loadUsers();
+          this.closeUserDrawer();
+          this.message.success('Utilizador atualizado com sucesso! ✅');
+          this.isSaving = false;
+        },
+        error: () => {
+          this.message.error('Erro ao atualizar o utilizador.');
+          this.isSaving = false;
+        }
+      });
+    } else {
+      this.userService.addUser(userData).subscribe({
+        next: () => {
+          this.loadUsers();
+          this.closeUserDrawer();
+          this.message.success('Utilizador guardado com sucesso!');
+          this.isSaving = false;
+        },
+        error: () => {
+          this.message.error('Erro ao guardar o utilizador.');
+          this.isSaving = false;
+        }
+      });
+    }
+  }
+
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
 
   reset(): void {
     this.searchValue = '';
     this.search();
   }
 
-  search(): void {
-    this.visible = false;
-    this.listOfDisplayData = this.dataSource.filter(
-      (item: User) => item.name.toLowerCase().includes(this.searchValue.toLowerCase())
-    );
-  }
 
   open(): void {
     this.visible1 = true;
@@ -104,35 +154,6 @@ export class ListuserComponent {
     this.userForm.reset({status: 'CREATED'});
   }
 
-  submitUser() {
-    if (this.userForm.valid) {
-      const userData = this.userForm.value;
-
-      if (this.currentEditingUserId) {
-        this.userService.updateUser(this.currentEditingUserId, userData).subscribe({
-          next: () => {
-            this.loadUsers();
-            this.closeUserDrawer();
-            this.message.success('Utilizador atualizado com sucesso! ✅');
-          },
-          error: () => {
-            this.message.error("Erro ao atualizar o utilizador.");
-          }
-        });
-      } else {
-        this.userService.addUser(userData).subscribe({
-          next: () => {
-            this.loadUsers();
-            this.closeUserDrawer();
-            this.message.success('Utilizador guardado com sucesso!');
-          },
-          error: () => {
-            this.message.error("Erro ao guardar o utilizador.");
-          }
-        });
-      }
-    }
-  }
 
   deleteUser(user: User): void {
     this.modal.confirm({

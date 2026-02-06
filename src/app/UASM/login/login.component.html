@@ -1,39 +1,69 @@
-<div class="login-container">
-  <nz-card class="login-card centered-card" nzTitle="Login">
+<div class="login-page">
+
+  <nz-card class="login-card" nzTitle="Área do Sistema">
     <form (ngSubmit)="login()" [formGroup]="userForm">
-      <nz-input-group class="input-spacing" nzAddOnBeforeIcon="user">
-        <input formControlName="login" id="login" nz-input placeholder="Usuário" type="text"/>
+
+      <!-- USER -->
+      <nz-input-group class="form-field" nzAddOnBeforeIcon="user">
+        <input
+          formControlName="login"
+          nz-input
+          placeholder="Usuário"
+          type="text"/>
       </nz-input-group>
 
-      <br/>
-
-      <nz-input-group class="input-spacing" nzAddOnBeforeIcon="lock">
-        <input formControlName="password" id="password" nz-input placeholder="Senha" type="password"/>
+      <!-- PASSWORD -->
+      <nz-input-group class="form-field" nzAddOnBeforeIcon="lock">
+        <input
+          formControlName="password"
+          nz-input
+          placeholder="Senha"
+          type="password"/>
       </nz-input-group>
 
-      <br/>
+      <!-- OPTIONS -->
+      <div class="options">
+        <label formControlName="rememberMe" nz-checkbox>
+          Lembrar-me
+        </label>
 
-      <label class="input-spacing" formControlName="rememberMe" nz-checkbox>Lembrar-me</label>
-
-      <div class="actions">
-        <a (click)="openForgotPasswordModal()" class="forgot-password">Esqueceu a senha?</a>
+        <a (click)="openForgotPasswordModal()" class="forgot-password">
+          Esqueceu a senha?
+        </a>
       </div>
 
-      <!-- Botão de login com spinner -->
-      <button [disabled]="isLoading" class="login-button" nz-button nzType="primary" type="submit">
+      <!-- BUTTON -->
+      <button
+        [disabled]="isLoading"
+        class="login-button"
+        nz-button
+        nzBlock
+        nzType="primary"
+        type="submit">
+
         <span *ngIf="!isLoading">Entrar</span>
         <span *ngIf="isLoading">
-          <nz-spin nzSize="small"></nz-spin> A entrar...
+          <nz-spin nzSize="small"></nz-spin>
+          A entrar...
         </span>
       </button>
 
+      <!-- REGISTER -->
       <div class="register-link">
-        Não tem conta? <a (click)="openRegisterModal()">Registrar</a>
+        Não tem conta?
+        <a (click)="openRegisterModal()">Criar conta</a>
       </div>
 
-      <div *ngIf="responseMessage" class="response-container">
-        <nz-alert [nzMessage]="responseMessage" nzShowIcon nzType="error"></nz-alert>
-      </div>
+      <!-- ERROR -->
+      <nz-alert
+        *ngIf="responseMessage"
+        [nzMessage]="responseMessage"
+        class="error-alert"
+        nzShowIcon
+        nzType="error">
+      </nz-alert>
+
     </form>
   </nz-card>
+
 </div>

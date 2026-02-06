@@ -1,0 +1,289 @@
+/* =====================================================
+   LAYOUT BASE
+===================================================== */
+.layout {
+  min-height: 100vh;
+  background: #f5faff;
+}
+
+/* =====================================================
+   HEADER FIXO + RESPONSIVO
+===================================================== */
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  padding: 0 24px;
+}
+
+.header-content {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e88e5;
+  white-space: nowrap;
+}
+
+/* Menu desktop */
+.desktop-menu {
+  background: transparent;
+  border: none;
+}
+
+/* Botão mobile */
+.mobile-menu-btn {
+  display: none;
+}
+
+/* Espaço para conteúdo não sobreposto */
+nz-content {
+  margin-top: 64px;
+}
+
+/* =====================================================
+   HERO / SLIDER
+===================================================== */
+.hero {
+  height: 70vh;
+}
+
+.hero-slide {
+  height: 70vh;
+  background: linear-gradient(to right, #e3f2fd, #bbdefb);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* não centraliza verticalmente */
+  align-items: flex-start; /* conteúdo começa à esquerda */
+  padding: 80px 10% 0 10%; /* 80px do topo, 10% laterais, 0 abaixo */
+  color: #0d47a1;
+}
+
+.hero-slide.second {
+  background: linear-gradient(to right, #b3e5fc, #e1f5fe);
+}
+
+.hero-slide h1 {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.hero-slide p {
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+/* =====================================================
+   BOTÕES WHATSAPP
+===================================================== */
+.whatsapp-btn,
+.service-btn,
+.whatsapp-btn-footer {
+  background-color: #25d366;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  transition: background 0.3s;
+}
+
+.whatsapp-btn:hover,
+.service-btn:hover,
+.whatsapp-btn-footer:hover {
+  background-color: #1ebe57;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* =====================================================
+   SECTIONS
+===================================================== */
+.section {
+  padding: 64px 10%;
+  text-align: center;
+}
+
+.section.light {
+  background: #ffffff;
+}
+
+.section h2 {
+  font-size: 32px;
+  color: #1565c0;
+  margin-bottom: 16px;
+}
+
+.section .section-text {
+  max-width: 700px;
+  margin: auto;
+  font-size: 16px;
+  color: #555;
+}
+
+/* =====================================================
+   SERVICES
+===================================================== */
+.service-card {
+  text-align: center;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+  padding: 20px;
+}
+
+.service-card span[nz-icon] {
+  font-size: 32px;
+  color: #1e88e5;
+  margin-bottom: 12px;
+}
+
+.service-card h3 {
+  margin-top: 12px;
+  color: #0d47a1;
+}
+
+.service-card p {
+  font-size: 14px;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+}
+
+/* =====================================================
+   CONTACTOS
+===================================================== */
+.contact-grid span[nz-icon] {
+  font-size: 28px;
+  color: #1e88e5;
+  margin-bottom: 12px;
+}
+
+/* =====================================================
+   FORMULÁRIO DE CONTACTO
+===================================================== */
+.contact-form {
+  margin-top: 32px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.contact-form h3 {
+  margin-bottom: 12px;
+  color: #1565c0;
+}
+
+.contact-form form input,
+.contact-form form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.contact-form form button {
+  background-color: #1e88e5;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+}
+
+.contact-form form button:hover {
+  background-color: #1565c0;
+}
+
+/* =====================================================
+   MAPA
+===================================================== */
+.map-card {
+  text-align: center;
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.map-container {
+  margin-top: 16px;
+  width: 100%;
+  height: 300px;
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+.footer {
+  text-align: center;
+  background: #e3f2fd;
+  color: #0d47a1;
+  padding: 24px 10%;
+}
+
+.footer .footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* =====================================================
+   RESPONSIVO (iPhone 12 / Mobile)
+===================================================== */
+@media (max-width: 768px) {
+
+  .header {
+    padding: 0 16px;
+  }
+
+  .header-content {
+    height: 56px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .desktop-menu {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex;
+    font-size: 22px;
+    color: #1e88e5;
+  }
+
+  nz-content {
+    margin-top: 56px;
+  }
+
+  .hero-slide h1 {
+
+    font-size: 26px;
+  }
+
+  .hero-slide p {
+    font-size: 15px;
+  }
+}

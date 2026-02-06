@@ -155,22 +155,13 @@
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
 
   input[nz-input] {
-    width: 250px;
+    width: 320px;
     border-radius: 8px;
     transition: 0.3s;
 
     &:focus {
       border-color: #007bff;
       box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
-    }
-  }
-
-  button[nz-button] {
-    font-weight: 500;
-    border-radius: 8px;
-
-    nz-icon {
-      margin-right: 6px;
     }
   }
 }
@@ -205,91 +196,20 @@
   }
 }
 
-/* =========================================================
-   DRAWER
-========================================================= */
-.drawer-form {
-  padding: 8px 16px 24px;
-  background: #fff;
+/* Ellipsis para colunas longas */
+.cell-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.drawer-section {
-  padding: 16px;
-  background: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.05);
+/* Spinner text */
+::ng-deep .ant-spin-text {
+  font-size: 14px;
+  white-space: nowrap;
 }
 
-.section-title {
-  margin-bottom: 12px;
-  padding-left: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  border-left: 4px solid #007bff;
-}
-
-nz-form-item {
-  margin-bottom: 18px;
-}
-
-nz-form-label {
-  font-weight: 500;
-  color: #444;
-}
-
-input[nz-input],
-textarea[nz-input],
-nz-select {
-  border-radius: 8px;
-}
-
-/* Drawer Footer */
-.drawer-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 12px 0;
-  background: #f8f9fa;
-
-  .btn-cancel {
-    border-radius: 8px;
-    color: #555;
-  }
-
-  .btn-save {
-    border-radius: 8px;
-    background: #007bff;
-    color: #fff;
-    transition: 0.3s;
-
-    &:hover {
-      background: #0056b3;
-    }
-  }
-}
-
-/* Avatar (centralizado e limpo) */
-.avatar-pace {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-
-  p {
-    margin: 0;
-    font-weight: 500;
-    color: #333;
-  }
-}
-
-.avatar {
-  flex-shrink: 0;
-}
-
-/* =========================================================
-   GLOBAL BUTTON FIX
-========================================================= */
+/* Global button spacing */
 [nz-button] {
   margin-right: 8px;
 
