@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable, take} from 'rxjs';
 import {CarloadInvoice} from '../models/CarloadInvoice';
 import {HttpClient} from '@angular/common/http';

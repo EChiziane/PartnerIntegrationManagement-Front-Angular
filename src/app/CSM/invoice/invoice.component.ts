@@ -31,11 +31,11 @@ export class InvoiceComponent {
   selectedCustomerId: string | null = null;
 
   itemsOptions: string[] = [
-    "M4_AREIA_GROSSA", "M4_AREIA_VERMELHA","M4_PEDRA_3_4", "M4_PEDRA_SARRISCA", "M4_PO_DE_PEDRA", "M4_AREIA_FINA",
-    "M7_AREIA_GROSSA","M7_AREIA_VERMELHA", "M7_PEDRA_3_4", "M7_PEDRA_SARRISCA", "M7_PO_DE_PEDRA", "M7_AREIA_FINA",
-    "M18_AREIA_GROSSA","M18_AREIA_VERMELHA", "M18_PEDRA_3_4", "M18_PEDRA_SARRISCA", "M18_PO_DE_PEDRA", "M18_AREIA_FINA",
-    "M20_AREIA_GROSSA","M20_AREIA_VERMELHA", "M20_PEDRA_3_4", "M20_PEDRA_SARRISCA", "M20_PO_DE_PEDRA", "M20_AREIA_FINA",
-    "M22_AREIA_GROSSA","M22_AREIA_VERMELHA", "M22_PEDRA_3_4", "M22_PEDRA_SARRISCA", "M22_PO_DE_PEDRA", "M22_AREIA_FINA"
+    "M4_AREIA_GROSSA", "M4_AREIA_VERMELHA", "M4_PEDRA_3_4", "M4_PEDRA_SARRISCA", "M4_PO_DE_PEDRA", "M4_AREIA_FINA",
+    "M7_AREIA_GROSSA", "M7_AREIA_VERMELHA", "M7_PEDRA_3_4", "M7_PEDRA_SARRISCA", "M7_PO_DE_PEDRA", "M7_AREIA_FINA",
+    "M18_AREIA_GROSSA", "M18_AREIA_VERMELHA", "M18_PEDRA_3_4", "M18_PEDRA_SARRISCA", "M18_PO_DE_PEDRA", "M18_AREIA_FINA",
+    "M20_AREIA_GROSSA", "M20_AREIA_VERMELHA", "M20_PEDRA_3_4", "M20_PEDRA_SARRISCA", "M20_PO_DE_PEDRA", "M20_AREIA_FINA",
+    "M22_AREIA_GROSSA", "M22_AREIA_VERMELHA", "M22_PEDRA_3_4", "M22_PEDRA_SARRISCA", "M22_PO_DE_PEDRA", "M22_AREIA_FINA"
   ];
 
   itemsPrices: { [key: string]: number } = {
@@ -70,6 +70,7 @@ export class InvoiceComponent {
     "M22_PO_DE_PEDRA": 22000,
     "M22_AREIA_FINA": 16000
   };
+  isSaving = false;
 
   // ===================== CONSTRUTOR =====================
   constructor(
@@ -120,14 +121,12 @@ export class InvoiceComponent {
     this.updateItemAmount(itemGroup);
   }
 
-
   closeDrawer(): void {
     this.isDrawerVisible = false;
     this.invoiceForm.reset({taxRate: 0.16});
     this.items.clear();
     this.currentInvoiceId = null;
   }
-  isSaving = false;
 
   // ===================== CRUD DE INVOICES =====================
   submitInvoice(): void {
@@ -148,7 +147,8 @@ export class InvoiceComponent {
           this.closeDrawer();
           this.message.success('Invoice updated ✅');
         },
-        error: () =>{ this.message.error('Error updating invoice 🚫');
+        error: () => {
+          this.message.error('Error updating invoice 🚫');
           this.isSaving = false; // desativa spinner
         }
       });
@@ -215,8 +215,6 @@ export class InvoiceComponent {
   }
 
 
-
-
   // ===================== DOWNLOAD =====================
   downloadInvoice(invoice: CarloadInvoice) {
     this.invoiceService.downloadRecibo(invoice.id).subscribe((fileBlob: Blob) => {
@@ -228,6 +226,7 @@ export class InvoiceComponent {
       window.URL.revokeObjectURL(url);
     });
   }
+
   onCustomerChange(value: string | null): void {
     this.selectedCustomerId = value; // garante que a variável está atualizada
     this.applyFilters();
@@ -246,6 +245,49 @@ export class InvoiceComponent {
     // Preencher o campo no formulário e torná-lo não editável
     this.invoiceForm.patchValue({invoiceCode: nextCode.toString()});
     this.invoiceForm.get('invoiceCode')?.disable();
+  }
+
+  applyFilters(): void {
+    let filtered = [...this.allInvoices];
+
+    // Filtro por cliente
+    if (this.selectedCustomerId) {
+      filtered = filtered.filter(inv => inv.carloadCustomerId === this.selectedCustomerId);
+    }
+
+    // Filtro por intervalo de datas
+    if (this.dateRange && this.dateRange.length === 2) {
+      const [start, end] = this.dateRange;
+      const startDate = new Date(start).setHours(0, 0, 0, 0);
+      const endDate = new Date(end).setHours(23, 59, 59, 999);
+      filtered = filtered.filter(inv => {
+        const createdAt = new Date(inv.createdAt).getTime();
+        return createdAt >= startDate && createdAt <= endDate;
+      });
+    }
+
+    // Filtro de pesquisa
+    const val = this.searchValue.toLowerCase();
+    if (val) {
+      filtered = filtered.filter(inv =>
+        inv.invoiceCode.toLowerCase().includes(val) ||
+        inv.items.some((it: any) => it.description.toLowerCase().includes(val))
+      );
+    }
+
+    this.invoices = filtered;
+  }
+
+  filterByCustomer(): void {
+    this.applyFilters();
+  }
+
+  filterByDateRange(): void {
+    this.applyFilters();
+  }
+
+  search(): void {
+    this.applyFilters();
   }
 
   // ===================== INICIALIZAÇÃO =====================
@@ -309,49 +351,6 @@ export class InvoiceComponent {
     const total = subtotal + tax;
 
     this.invoiceForm.patchValue({subtotal, tax, total}, {emitEvent: false});
-  }
-
-  applyFilters(): void {
-    let filtered = [...this.allInvoices];
-
-    // Filtro por cliente
-    if (this.selectedCustomerId) {
-      filtered = filtered.filter(inv => inv.carloadCustomerId === this.selectedCustomerId);
-    }
-
-    // Filtro por intervalo de datas
-    if (this.dateRange && this.dateRange.length === 2) {
-      const [start, end] = this.dateRange;
-      const startDate = new Date(start).setHours(0, 0, 0, 0);
-      const endDate = new Date(end).setHours(23, 59, 59, 999);
-      filtered = filtered.filter(inv => {
-        const createdAt = new Date(inv.createdAt).getTime();
-        return createdAt >= startDate && createdAt <= endDate;
-      });
-    }
-
-    // Filtro de pesquisa
-    const val = this.searchValue.toLowerCase();
-    if (val) {
-      filtered = filtered.filter(inv =>
-        inv.invoiceCode.toLowerCase().includes(val) ||
-        inv.items.some((it: any) => it.description.toLowerCase().includes(val))
-      );
-    }
-
-    this.invoices = filtered;
-  }
-
-  filterByCustomer(): void {
-    this.applyFilters();
-  }
-
-  filterByDateRange(): void {
-    this.applyFilters();
-  }
-
-  search(): void {
-    this.applyFilters();
   }
 
 

@@ -21,10 +21,10 @@
 
     <!-- Seletor de cliente -->
     <nz-select
-      [nzAllowClear]="true"
-      nzPlaceHolder="Select customer"
+      (ngModelChange)="onCustomerChange($event)"
       [(ngModel)]="selectedCustomerId"
-      (ngModelChange)="onCustomerChange($event)">
+      [nzAllowClear]="true"
+      nzPlaceHolder="Select customer">
       <nz-option
         *ngFor="let customer of dataCustomer"
         [nzLabel]="customer.name"
@@ -271,7 +271,8 @@
     <div class="drawer-footer">
       <button (click)="closeDrawer()"
               class="btn-cancel"
-              nz-button>Cancelar</button>
+              nz-button>Cancelar
+      </button>
       <button
         (click)="submitInvoice()"
         [disabled]="!invoiceForm.valid"
