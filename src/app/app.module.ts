@@ -63,6 +63,7 @@ import {ManagerComponent} from './CSM/manager/manager.component';
 import {SprintComponent} from './CSM/sprint/sprint.component';
 import {CarLoadComponent} from './CSM/carload/carload.component';
 import {DashboardComponent} from './CSM/dashboard/dashboard.component';
+import {InvoiceComponent} from './CSM/invoice/invoice.component';
 
 
 registerLocaleData(en);
@@ -80,7 +81,8 @@ registerLocaleData(en);
     SprintComponent,
     CarLoadComponent,
     LandingPageComponent,
-    DashboardComponent
+    DashboardComponent,
+    InvoiceComponent
 
   ],
   imports: [
