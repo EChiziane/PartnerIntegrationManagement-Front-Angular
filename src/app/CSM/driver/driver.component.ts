@@ -1,10 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {DriverService} from '../../services/driver.service';
-import {Driver} from '../../models/CSM/driver';
-
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DriverService } from '../../services/driver.service';
+import { Driver } from '../../models/CSM/driver';
 
 @Component({
   selector: 'app-driver',
@@ -34,25 +33,36 @@ export class DriverComponent implements OnInit {
   // ========= Edit State =========
   isEditMode = false;
   driverDrawerTitle = 'Criar Motorista';
-  selectedDriverId: any | null = null;
+  selectedDriverId: string | null = null;
+
+  // ✅ Guardar o driver original para não perder id/createdAt no update
+  private selectedDriver: Driver | null = null;
 
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
+
+  // ✅ Opções de carros
+  carOptions: string[] = [
+    '4m3(DYNA)',
+    '7m3(HINO-RANGER)',
+    '18m3(TATA AMARELO)',
+    '22m3(TATA SIGNA)',
+    '24m3(SINOTRUK)'
+  ];
 
   // ========= Forms =========
   driverForm = new FormGroup({
     Name: new FormControl('', Validators.required),
     Phone: new FormControl('', [Validators.required, Validators.pattern('^[+0-9 ]+$')]),
     CarDescription: new FormControl('', Validators.required),
-    status: new FormControl('ATIVO', Validators.required)
+    status: new FormControl('ACTIVO', Validators.required)
   });
 
   constructor(
     private driverService: DriverService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getDrivers();
@@ -75,7 +85,8 @@ export class DriverComponent implements OnInit {
     this.isLoading = true;
     this.driverService.getDrivers().subscribe({
       next: (drivers) => {
-        this.dataSource = drivers;
+        this.dataSource = drivers
+        console.log(drivers)
         this.listOfDisplayData = [...drivers];
         this.calculateStats();
         this.isLoading = false;
@@ -89,8 +100,8 @@ export class DriverComponent implements OnInit {
 
   calculateStats() {
     this.totalDrivers = this.dataSource.length;
-    this.activeDrivers = this.dataSource.filter(d => d.status === 'ATIVO').length;
-    this.inactiveDrivers = this.dataSource.filter(d => d.status !== 'ATIVO').length;
+    this.activeDrivers = this.dataSource.filter(d => d.status === 'ACTIVO').length;
+    this.inactiveDrivers = this.dataSource.filter(d => d.status !== 'ACTIVO').length;
   }
 
   applyFilters() {
@@ -121,20 +132,34 @@ export class DriverComponent implements OnInit {
   openDriverDrawer() {
     this.isEditMode = false;
     this.driverDrawerTitle = 'Criar Motorista';
-    this.driverForm.reset({status: 'ATIVO'});
+
+    this.selectedDriverId = null;
+    this.selectedDriver = null;
+
+    this.driverForm.reset({
+      status: 'ACTIVO',
+      CarDescription: null
+    });
+
     this.isDriverDrawerVisible = true;
   }
 
   closeDriverDrawer() {
+    if (this.isSaving) return;
+
     this.isDriverDrawerVisible = false;
     this.driverForm.reset();
     this.selectedDriverId = null;
+    this.selectedDriver = null;
   }
 
   editDriver(driver: Driver) {
     this.isEditMode = true;
     this.driverDrawerTitle = 'Editar Motorista';
+
     this.selectedDriverId = driver.id;
+    this.selectedDriver = driver;
+
     this.isDriverDrawerVisible = true;
 
     this.driverForm.patchValue({
@@ -153,26 +178,35 @@ export class DriverComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData = {...this.driverForm.value};
+    // Valores do form
+    const formData: any = { ...this.driverForm.value };
 
-    // Normalizar phone (opcional) para +258
+    // Normalizar phone para +258
     const rawPhone = (formData.Phone || '').toString().trim();
     formData.Phone = rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`;
 
-    const request$ = this.isEditMode && this.selectedDriverId
-      ? this.driverService.updateDriver(this.selectedDriverId, formData)
-      : this.driverService.addDriver(formData);
+    // ✅ No update, preserva campos fora do form (id, createdAt, etc.)
+    const payload = (this.isEditMode && this.selectedDriver)
+      ? { ...this.selectedDriver, ...formData } // mantém id/createdAt
+      : formData;
+
+    const request$ = (this.isEditMode && this.selectedDriverId)
+      ? this.driverService.updateDriver(this.selectedDriverId, payload)
+      : this.driverService.addDriver(payload);
 
     request$.subscribe({
       next: () => {
+        // ✅ importante: desligar saving antes de fechar
+        this.isSaving = false;
+
         this.getDrivers();
         this.closeDriverDrawer();
+
         this.message.success(this.isEditMode ? 'Motorista atualizado com sucesso! ✅' : 'Motorista criado com sucesso! 🎉');
-        this.isSaving = false;
       },
       error: () => {
-        this.message.error('Erro ao gravar motorista. 🚫');
         this.isSaving = false;
+        this.message.error('Erro ao gravar motorista. 🚫');
       }
     });
   }

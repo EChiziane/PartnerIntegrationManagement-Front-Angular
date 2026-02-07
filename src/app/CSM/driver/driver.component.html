@@ -187,7 +187,8 @@
   [nzMaskClosable]="false"
   [nzTitle]="driverDrawerTitle"
   [nzVisible]="isDriverDrawerVisible"
-  [nzWidth]="drawerWidth">
+  [nzWidth]="drawerWidth"
+  [nzPlacement]="drawerPlacement">
 
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar motorista...">
     <form [formGroup]="driverForm" class="drawer-form" nz-form>
@@ -223,12 +224,24 @@
 
         <div [nzGutter]="16" nz-row>
 
-          <!-- CarDescription -->
+          <!-- ✅ CarDescription (SELECT) -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Descrição do Carro</nz-form-label>
+              <nz-form-label>Carro</nz-form-label>
               <nz-form-control>
-                <input formControlName="CarDescription" nz-input placeholder="Ex: Canter / TATA / Placa..."/>
+                <nz-select
+                  formControlName="CarDescription"
+                  nzPlaceHolder="Selecione o carro"
+                  nzShowSearch
+                  [nzDisabled]="isSaving">
+
+                  <nz-option
+                    *ngFor="let car of carOptions"
+                    [nzLabel]="car"
+                    [nzValue]="car">
+                  </nz-option>
+
+                </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -238,9 +251,9 @@
             <nz-form-item>
               <nz-form-label>Status</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="status" nzPlaceHolder="Selecione o status">
-                  <nz-option nzLabel="ATIVO" nzValue="ATIVO"></nz-option>
-                  <nz-option nzLabel="INATIVO" nzValue="INATIVO"></nz-option>
+                <nz-select formControlName="status" nzPlaceHolder="Selecione o status" [nzDisabled]="isSaving">
+                  <nz-option nzLabel="ATIVO" nzValue="ACTIVO"></nz-option>
+                  <nz-option nzLabel="INATIVO" nzValue="INACTIVO"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
