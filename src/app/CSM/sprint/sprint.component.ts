@@ -1,10 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Sprint} from '../../models/CSM/sprint';
-import {SprintService} from '../../services/sprint.service';
-
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Sprint } from '../../models/CSM/sprint';
+import { SprintService } from '../../services/sprint.service';
 
 @Component({
   selector: 'app-sprint',
@@ -22,20 +21,23 @@ export class SprintComponent implements OnInit {
   isSaving = false;
 
   totalSprints = 0;
-  activeSprints = 0;
-  inactiveSprints = 0;
+  activeSprints = 0;   // EM_EXECUCAO
+  inactiveSprints = 0; // ENCERRADO
 
   // ========= UI =========
   searchValue = '';
-  visible = false;
 
   isSprintDrawerVisible = false;
 
   // ========= Edit =========
   isEditMode = false;
   sprintDrawerTitle = 'Criar Sprint';
-  selectedSprintId: any | null = null;
+  selectedSprintId: string | null = null;
 
+  // Guardar sprint original (id/createdAt etc.)
+  private selectedSprint: Sprint | null = null;
+
+  // Drawer responsive
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
@@ -44,15 +46,14 @@ export class SprintComponent implements OnInit {
     code: new FormControl('', Validators.required),
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    status: new FormControl('ACTIVO', Validators.required)
+    status: new FormControl<'EM_EXECUCAO' | 'ENCERRADO'>('EM_EXECUCAO', Validators.required)
   });
 
   constructor(
     private sprintService: SprintService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getSprints();
@@ -60,7 +61,7 @@ export class SprintComponent implements OnInit {
     window.addEventListener('resize', () => this.updateDrawer());
   }
 
-  updateDrawer() {
+  updateDrawer(): void {
     if (window.innerWidth <= 768) {
       this.drawerWidth = '100%';
       this.drawerPlacement = 'bottom';
@@ -70,13 +71,14 @@ export class SprintComponent implements OnInit {
     }
   }
 
-  // ========= Logic =========
-  getSprints() {
+  // ========= Load =========
+  getSprints(): void {
     this.isLoading = true;
+
     this.sprintService.getSprints().subscribe({
       next: (data) => {
-        this.dataSource = data;
-        this.listOfDisplayData = [...data];
+        this.dataSource = data || [];
+        this.listOfDisplayData = [...this.dataSource];
         this.calculateStats();
         this.isLoading = false;
       },
@@ -87,95 +89,111 @@ export class SprintComponent implements OnInit {
     });
   }
 
-  calculateStats() {
+  calculateStats(): void {
     this.totalSprints = this.dataSource.length;
-    this.activeSprints = this.dataSource.filter(s => s.status === 'ACTIVO').length;
-    this.inactiveSprints = this.dataSource.filter(s => s.status !== 'ACTIVO').length;
+    this.activeSprints = this.dataSource.filter(s => s.status === 'EM_EXECUCAO').length;
+    this.inactiveSprints = this.dataSource.filter(s => s.status === 'ENCERRADO').length;
   }
 
-  applyFilters() {
+  // ========= Search =========
+  private applyFilters(): void {
     let data = [...this.dataSource];
 
-    if (this.searchValue) {
-      const v = this.searchValue.toLowerCase();
+    const v = (this.searchValue || '').toLowerCase().trim();
+    if (v) {
       data = data.filter(s =>
-        s.name.toLowerCase().includes(v) ||
-        s.code.toLowerCase().includes(v) ||
-        s.description.toLowerCase().includes(v)
+        (s.name || '').toLowerCase().includes(v) ||
+        (s.code || '').toLowerCase().includes(v) ||
+        (s.description || '').toLowerCase().includes(v) ||
+        (s.status || '').toLowerCase().includes(v)
       );
     }
 
     this.listOfDisplayData = data;
   }
 
-  search() {
-    this.visible = false;
+  search(): void {
     this.applyFilters();
   }
 
-  reset() {
-    this.searchValue = '';
-    this.search();
-  }
-
   // ========= Drawer =========
-  openSprintDrawer() {
+  openSprintDrawer(): void {
     this.isEditMode = false;
     this.sprintDrawerTitle = 'Criar Sprint';
-    this.sprintForm.reset({status: 'ACTIVO'});
+
+    this.selectedSprintId = null;
+    this.selectedSprint = null;
+
+    this.sprintForm.reset({ status: 'EM_EXECUCAO' });
     this.isSprintDrawerVisible = true;
   }
 
-  closeSprintDrawer() {
+  closeSprintDrawer(): void {
+    if (this.isSaving) return;
+
     this.isSprintDrawerVisible = false;
     this.sprintForm.reset();
     this.selectedSprintId = null;
+    this.selectedSprint = null;
   }
 
-  editSprint(sprint: Sprint) {
+  editSprint(sprint: Sprint): void {
     this.isEditMode = true;
     this.sprintDrawerTitle = 'Editar Sprint';
+
     this.selectedSprintId = sprint.id;
+    this.selectedSprint = sprint;
+
     this.isSprintDrawerVisible = true;
 
     this.sprintForm.patchValue({
       code: sprint.code,
       name: sprint.name,
       description: sprint.description,
-      status: sprint.status
+      status: (sprint.status as any) || 'EM_EXECUCAO'
     });
   }
 
-  saveSprint() {
+  saveSprint(): void {
     if (this.sprintForm.invalid) {
       this.message.warning('Preencha todos os campos obrigatórios!');
       return;
     }
 
     this.isSaving = true;
-    const formData = {...this.sprintForm.value};
 
-    const request$ = this.isEditMode && this.selectedSprintId
-      ? this.sprintService.updateSprint(this.selectedSprintId, formData)
-      : this.sprintService.addSprint(formData);
+    const formData: any = { ...this.sprintForm.value };
+
+    // Preservar campos fora do form (id/createdAt), se necessário
+    const payload = (this.isEditMode && this.selectedSprint)
+      ? { ...this.selectedSprint, ...formData }
+      : formData;
+
+    const request$ = (this.isEditMode && this.selectedSprintId)
+      ? this.sprintService.updateSprint(this.selectedSprintId, payload)
+      : this.sprintService.addSprint(payload);
 
     request$.subscribe({
       next: () => {
+        // ✅ importante: desligar saving antes de fechar
+        this.isSaving = false;
+
         this.getSprints();
         this.closeSprintDrawer();
-        this.message.success(
-          this.isEditMode ? 'Sprint atualizada com sucesso! ✅' : 'Sprint criada com sucesso! 🎉'
+
+        this.message.success(this.isEditMode
+          ? 'Sprint atualizada com sucesso! ✅'
+          : 'Sprint criada com sucesso! 🎉'
         );
-        this.isSaving = false;
       },
       error: () => {
-        this.message.error('Erro ao gravar sprint. 🚫');
         this.isSaving = false;
+        this.message.error('Erro ao gravar sprint. 🚫');
       }
     });
   }
 
-  deleteSprint(data: Sprint) {
+  deleteSprint(data: Sprint): void {
     this.modal.confirm({
       nzTitle: 'Tens certeza que quer eliminar esta Sprint?',
       nzContent: `Sprint: <strong>${data.name}</strong>`,
@@ -193,7 +211,7 @@ export class SprintComponent implements OnInit {
     });
   }
 
-  onBack() {
+  onBack(): void {
     window.history.back();
   }
 }
