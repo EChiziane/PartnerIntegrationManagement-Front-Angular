@@ -17,7 +17,7 @@ import {CarLoadComponent} from './CSM/carload/carload.component';
 import {DashboardComponent} from './CSM/dashboard/dashboard.component';
 import {InvoiceComponent} from './CSM/invoice/invoice.component';
 import {QuatationComponent} from './CSM/quatation/quatation.component';
-import {CarloadCustomerComponent} from './carload-customer/carload-customer.component';
+import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.component';
 
 
 const routes: Routes = [

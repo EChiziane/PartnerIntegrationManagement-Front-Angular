@@ -1,0 +1,339 @@
+<div class="content-wrapper">
+
+  <!-- ===== Breadcrumb ===== -->
+  <nz-breadcrumb class="page-breadcrumb">
+    <nz-breadcrumb-item>
+      <a routerLink="/app">Home</a>
+    </nz-breadcrumb-item>
+
+    <nz-breadcrumb-item>
+      Lista de Clientes
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- ===== Page Header ===== -->
+  <div class="page-header">
+    <p>Lista de Clientes</p>
+
+    <span (click)="onBack()" class="back-arrow">
+      <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
+    </span>
+  </div>
+
+  <!-- ===== Summary Section ===== -->
+  <div class="summary-section">
+    <div class="summary-background">
+      <div [nzGutter]="8" nz-row>
+
+        <!-- Total -->
+        <div [nzSpan]="8" nz-col>
+          <nz-card nzSize="small">
+            <div class="summary-card">
+              <div class="icon-wrapper total">
+                <nz-icon nzTheme="outline" nzType="team"></nz-icon>
+              </div>
+              <div class="summary-content">
+                <span class="title">Total Clientes</span>
+                <p>{{ totalCustomers }}</p>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <!-- Com Email -->
+        <div [nzSpan]="8" nz-col>
+          <nz-card nzSize="small">
+            <div class="summary-card">
+              <div class="icon-wrapper active">
+                <nz-icon nzTheme="outline" nzType="mail"></nz-icon>
+              </div>
+              <div class="summary-content">
+                <span class="title">Com Email</span>
+                <p>{{ customersWithEmail }}</p>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <!-- Sem Email -->
+        <div [nzSpan]="8" nz-col>
+          <nz-card nzSize="small">
+            <div class="summary-card">
+              <div class="icon-wrapper inactive">
+                <nz-icon nzTheme="outline" nzType="stop"></nz-icon>
+              </div>
+              <div class="summary-content">
+                <span class="title">Sem Email</span>
+                <p>{{ customersWithoutEmail }}</p>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Filters Panel ===== -->
+  <div class="filters-panel">
+    <input
+      (ngModelChange)="search()"
+      [(ngModel)]="searchValue"
+      nz-input
+      placeholder="Pesquisar nome/código/email/telefone"
+      type="text"
+    />
+
+    <button (click)="openDrawer()" nz-button nzType="primary">
+      <nz-icon nzTheme="outline" nzType="user-add"></nz-icon>
+      Novo Cliente
+    </button>
+  </div>
+
+  <!-- ===== Table ===== -->
+  <div class="table-wrapper">
+    <div class="table-scroll">
+
+      <nz-spin
+        [nzSpinning]="isLoading"
+        nzSize="large"
+        nzTip="A carregar clientes..."
+      >
+        <nz-table
+          #customerTable
+          [nzData]="customers"
+          [nzScroll]="{ x: '1100px', y: '340px' }"
+          nzTableLayout="fixed"
+        >
+          <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Código</th>
+            <th>Telefone</th>
+            <th>Email</th>
+            <th>Morada</th>
+            <th>Criado em</th>
+            <th>Ações</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let customer of customerTable.data">
+
+            <!-- Editable Name -->
+            <td>
+              <ng-container
+                *ngIf="editingCustomer?.id === customer.id && editingField === 'name'; else viewName"
+              >
+                <input
+                  (blur)="saveInlineEdit(customer, 'name')"
+                  (keyup.enter)="saveInlineEdit(customer, 'name')"
+                  [(ngModel)]="editingCustomer!.name"
+                  nz-input
+                />
+              </ng-container>
+
+              <ng-template #viewName>
+                <span (click)="startInlineEdit(customer, 'name')" class="editable-cell">
+                  {{ customer.name }}
+                </span>
+              </ng-template>
+            </td>
+
+            <!-- Editable Code -->
+            <td>
+              <ng-container
+                *ngIf="editingCustomer?.id === customer.id && editingField === 'customerCode'; else viewCode"
+              >
+                <input
+                  (blur)="saveInlineEdit(customer, 'customerCode')"
+                  (keyup.enter)="saveInlineEdit(customer, 'customerCode')"
+                  [(ngModel)]="editingCustomer!.customerCode"
+                  nz-input
+                />
+              </ng-container>
+
+              <ng-template #viewCode>
+                <span (click)="startInlineEdit(customer, 'customerCode')" class="editable-cell">
+                  {{ customer.customerCode }}
+                </span>
+              </ng-template>
+            </td>
+
+            <!-- Phone -->
+            <td>{{ customer.phoneNumber }}</td>
+
+            <!-- Email -->
+            <td>{{ customer.emailAddress }}</td>
+
+            <!-- Address -->
+            <td>{{ customer.streetAddress }}, {{ customer.city }}, {{ customer.zipCode }}</td>
+
+            <!-- Created -->
+            <td>{{ customer.createdAt | date:'dd/MM/yyyy - HH:mm' }}</td>
+
+            <!-- Actions -->
+            <td>
+              <button (click)="editCustomer(customer)" nz-button nzSize="small" nzType="link">
+                <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+              </button>
+
+              <button (click)="deleteCustomer(customer)" nz-button nzDanger nzSize="small" nzType="link">
+                <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+              </button>
+            </td>
+
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-spin>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== Drawer ===== -->
+<nz-drawer
+  (nzOnClose)="closeDrawer()"
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzFooter]="drawerFooter"
+  [nzMaskClosable]="false"
+  [nzTitle]="drawerTitle"
+  [nzVisible]="isDrawerVisible"
+  [nzWidth]="drawerWidth"
+  [nzPlacement]="drawerPlacement"
+>
+  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar cliente...">
+    <form [formGroup]="customerForm" class="drawer-form" nz-form>
+
+      <div class="drawer-section">
+        <h3 class="section-title">Informação do Cliente</h3>
+
+        <div [nzGutter]="16" nz-row>
+
+          <!-- Name -->
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Nome</nz-form-label>
+              <nz-form-control>
+                <input formControlName="name" nz-input placeholder="Nome do cliente"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Phone -->
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Telefone</nz-form-label>
+              <nz-form-control>
+                <nz-input-group nzAddOnBefore="+258">
+                  <input formControlName="phoneNumber" nz-input placeholder="Número de telefone"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+        </div>
+
+        <div [nzGutter]="16" nz-row>
+
+          <!-- Code -->
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Código</nz-form-label>
+              <nz-form-control>
+                <input formControlName="customerCode" nz-input placeholder="Ex. CUST001"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- NUIT -->
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>NUIT</nz-form-label>
+              <nz-form-control>
+                <input formControlName="nuitNumber" nz-input placeholder="Ex. 123456789"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+        </div>
+
+        <div [nzGutter]="16" nz-row>
+
+          <!-- Address -->
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Morada</nz-form-label>
+              <nz-form-control>
+                <input formControlName="streetAddress" nz-input placeholder="Ex. Rua Principal"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- City -->
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Cidade</nz-form-label>
+              <nz-form-control>
+                <input formControlName="city" nz-input placeholder="Ex. Maputo Cidade"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+        </div>
+
+        <div [nzGutter]="16" nz-row>
+
+          <!-- Zip -->
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Zip Code</nz-form-label>
+              <nz-form-control>
+                <input formControlName="zipCode" nz-input placeholder="Ex. 12345"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <!-- Email -->
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Email</nz-form-label>
+              <nz-form-control>
+                <input formControlName="emailAddress" nz-input placeholder="Ex. customer@gmail.com"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+        </div>
+
+      </div>
+    </form>
+  </nz-spin>
+
+  <ng-template #drawerFooter>
+    <div class="drawer-footer">
+      <button (click)="closeDrawer()" [disabled]="isSaving" class="btn-cancel" nz-button nzType="default">
+        Cancelar
+      </button>
+
+      <button
+        (click)="submitCustomer()"
+        [disabled]="customerForm.get('name')?.invalid || customerForm.get('phoneNumber')?.invalid || isSaving"
+        class="btn-save"
+        nz-button
+        nzType="primary"
+      >
+        <ng-container *ngIf="!isSaving; else savingTpl">
+          {{ currentEditingCustomerId ? 'Salvar' : 'Criar' }}
+        </ng-container>
+
+        <ng-template #savingTpl>
+          <nz-spin nzSize="small"></nz-spin>
+          A gravar...
+        </ng-template>
+      </button>
+    </div>
+  </ng-template>
+
+</nz-drawer>
