@@ -1,3 +1,5 @@
+/* carload.component.scss ✅ COMPLETO (com quick filters) */
+
 /* =========================================================
    LAYOUT BASE
 ========================================================= */
@@ -138,6 +140,27 @@
   &.inactive {
     background: rgba(239, 68, 68, 0.12);
     color: #ef4444;
+  }
+}
+
+/* =========================================================
+   QUICK FILTERS (NOVO)
+========================================================= */
+.quick-filters {
+  display: flex;
+  gap: 10px;
+  margin: 8px 0 14px;
+  flex-wrap: wrap;
+
+  button {
+    border-radius: 999px;
+    font-weight: 500;
+  }
+
+  button.active {
+    border-color: #007bff;
+    color: #007bff;
+    background: rgba(0, 123, 255, 0.08);
   }
 }
 

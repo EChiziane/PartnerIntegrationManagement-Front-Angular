@@ -121,6 +121,14 @@
             <td>{{ data.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
 
             <td>
+              <button
+                [routerLink]="['/app/sprint-detail', data.id]"
+                nz-button
+                nzSize="small"
+                nzType="link"
+              >
+                <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+              </button>
               <button (click)="editSprint(data)" nz-button nzSize="small" nzType="link">
                 <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
               </button>

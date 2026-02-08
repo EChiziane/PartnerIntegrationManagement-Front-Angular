@@ -1,22 +1,23 @@
-// carload.component.ts ✅ COMPLETO com os 4 cenários (CANCELLED / DELIVERED / SCHEDULED / PENDING)
+// carload.component.ts ✅ COMPLETO (com quick filters + 4 cenários datas)
 
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
-import {CarLoad} from '../../models/CSM/carlaod';
-import {CarloadService} from '../../services/carload.service';
+import { CarLoad } from '../../models/CSM/carlaod';
+import { CarloadService } from '../../services/carload.service';
 
-import {Driver} from '../../models/CSM/driver';
-import {Manager} from '../../models/CSM/manager';
-import {Sprint} from '../../models/CSM/sprint';
+import { Driver } from '../../models/CSM/driver';
+import { Manager } from '../../models/CSM/manager';
+import { Sprint } from '../../models/CSM/sprint';
 
-import {DriverService} from '../../services/driver.service';
-import {ManagerService} from '../../services/manager.service';
-import {SprintService} from '../../services/sprint.service';
+import { DriverService } from '../../services/driver.service';
+import { ManagerService } from '../../services/manager.service';
+import { SprintService } from '../../services/sprint.service';
 
 type CarLoadStatus = 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'ENTREGUE' | string;
+type FilterMode = 'ALL' | 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED';
 
 @Component({
   selector: 'app-carload',
@@ -47,6 +48,9 @@ export class CarLoadComponent implements OnInit {
   searchValue = '';
   visible = false;
   isCarLoadDrawerVisible = false;
+
+  // ✅ Quick filter
+  filterMode: FilterMode = 'ALL';
 
   // ========= Edit / Copy =========
   isEditMode = false;
@@ -91,7 +95,7 @@ export class CarLoadComponent implements OnInit {
     // ✅ data agendada (aparece só quando status = SCHEDULED)
     deliveryScheduledDate: new FormControl<string | null>(''),
 
-    // ✅ NOVO: data de entrega (aparece só quando status = DELIVERED/ENTREGUE)
+    // ✅ data de entrega (aparece só quando status = DELIVERED/ENTREGUE)
     deliveredDate: new FormControl<string | null>(''),
   });
 
@@ -102,8 +106,7 @@ export class CarLoadComponent implements OnInit {
     private sprintService: SprintService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {
-  }
+  ) {}
 
   // ✅ Helpers para UI
   get selectedStatusUpper(): string {
@@ -196,6 +199,7 @@ export class CarLoadComponent implements OnInit {
         this.dataSource = data;
         this.listOfDisplayData = [...data];
         this.calculateStats();
+        this.applyFilters();
         this.isLoading = false;
       },
       error: () => {
@@ -211,9 +215,27 @@ export class CarLoadComponent implements OnInit {
     this.pending = this.totalCarLoads - this.delivered;
   }
 
+  // ========= Quick Filters =========
+  setFilterMode(mode: FilterMode): void {
+    this.filterMode = mode;
+    this.applyFilters();
+  }
+
+  // ========= Filters/Search =========
   applyFilters() {
     let data = [...this.dataSource];
 
+    // ✅ filtro rápido por status
+    if (this.filterMode !== 'ALL') {
+      const mode = this.filterMode.toUpperCase();
+      data = data.filter(item => {
+        const s = (item.deliveryStatus || '').toString().toUpperCase();
+        if (mode === 'DELIVERED') return s === 'DELIVERED' || s === 'ENTREGUE';
+        return s === mode;
+      });
+    }
+
+    // ✅ search
     if (this.searchValue) {
       const v = this.searchValue.toLowerCase();
       data = data.filter(item =>
@@ -237,6 +259,7 @@ export class CarLoadComponent implements OnInit {
 
   reset() {
     this.searchValue = '';
+    this.filterMode = 'ALL';
     this.search();
   }
 
@@ -260,8 +283,6 @@ export class CarLoadComponent implements OnInit {
     }
 
     this.isCarLoadDrawerVisible = true;
-
-    // ✅ aplica as regras logo após reset
     this.applyDateRulesByStatus();
   }
 
@@ -286,12 +307,9 @@ export class CarLoadComponent implements OnInit {
     this.isCarLoadDrawerVisible = true;
 
     this.carLoadForm.patchValue(this.mapCarloadToForm(carload));
-
-    // ✅ garante validadores certos conforme status carregado
     this.applyDateRulesByStatus();
   }
 
-  // ✅ copiar carrada
   copyCarLoad(carload: CarLoad) {
     this.isEditMode = false;
     this.isCopyMode = true;
@@ -304,10 +322,8 @@ export class CarLoadComponent implements OnInit {
 
     this.isCarLoadDrawerVisible = true;
 
-    // preencher com os mesmos dados
     this.carLoadForm.patchValue(this.mapCarloadToForm(carload));
 
-    // ao copiar, por padrão deixa status PENDING e limpa datas (porque PENDING usa createdAt automático)
     this.carLoadForm.patchValue({
       deliveryStatus: 'PENDING',
       deliveryScheduledDate: '',
@@ -318,7 +334,6 @@ export class CarLoadComponent implements OnInit {
   }
 
   saveCarLoad() {
-    // ✅ força revalidar regras antes de gravar
     this.applyDateRulesByStatus();
 
     if (this.carLoadForm.invalid) {
@@ -328,7 +343,7 @@ export class CarLoadComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData: any = {...this.carLoadForm.value};
+    const formData: any = { ...this.carLoadForm.value };
 
     // Normalizar phone para +258
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
@@ -337,23 +352,19 @@ export class CarLoadComponent implements OnInit {
     // Enum
     formData.deliveryStatus = (formData.deliveryStatus || 'PENDING').toString().toUpperCase();
 
-    // ✅ aplicar regras finais antes do POST/PUT
+    // ✅ regras finais antes do POST/PUT
     if (formData.deliveryStatus === 'CANCELLED' || formData.deliveryStatus === 'PENDING') {
-      // não envia datas
       formData.deliveryScheduledDate = null;
       formData.deliveredDate = null;
     }
 
     if (formData.deliveryStatus === 'SCHEDULED') {
-      // precisa agendado
       formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
       formData.deliveredDate = null;
     }
 
     if (formData.deliveryStatus === 'DELIVERED' || formData.deliveryStatus === 'ENTREGUE') {
-      // precisa entregue
       formData.deliveredDate = this.normalizeDateTimeLocal(formData.deliveredDate);
-      // scheduled é opcional — mantém se vier, senão nulo
       formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
       if (!formData.deliveryScheduledDate) formData.deliveryScheduledDate = null;
     }
@@ -414,55 +425,39 @@ export class CarLoadComponent implements OnInit {
     const scheduledCtrl = this.carLoadForm.get('deliveryScheduledDate')!;
     const deliveredCtrl = this.carLoadForm.get('deliveredDate')!;
 
-    // limpar validadores
     scheduledCtrl.clearValidators();
     deliveredCtrl.clearValidators();
 
-    // aplicar regras
     if (status === 'SCHEDULED') {
-      // precisa data agendada, não precisa entrega
       scheduledCtrl.setValidators([Validators.required]);
-      deliveredCtrl.setValue('', {emitEvent: false});
+      deliveredCtrl.setValue('', { emitEvent: false });
     } else if (status === 'DELIVERED' || status === 'ENTREGUE') {
-      // precisa data entrega, scheduled não é obrigatório
       deliveredCtrl.setValidators([Validators.required]);
-      // opcional: se quiseres, podes limpar agendado ao marcar entregue:
-      // scheduledCtrl.setValue('', { emitEvent: false });
     } else if (status === 'CANCELLED') {
-      // não tem nenhuma data
-      scheduledCtrl.setValue('', {emitEvent: false});
-      deliveredCtrl.setValue('', {emitEvent: false});
+      scheduledCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', { emitEvent: false });
     } else if (status === 'PENDING') {
-      // não pede nenhuma data (createdAt automático no backend)
-      scheduledCtrl.setValue('', {emitEvent: false});
-      deliveredCtrl.setValue('', {emitEvent: false});
+      scheduledCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', { emitEvent: false });
     }
 
-    // atualizar estado do form
-    scheduledCtrl.updateValueAndValidity({emitEvent: false});
-    deliveredCtrl.updateValueAndValidity({emitEvent: false});
+    scheduledCtrl.updateValueAndValidity({ emitEvent: false });
+    deliveredCtrl.updateValueAndValidity({ emitEvent: false });
   }
 
   // ========= Date helpers =========
   private normalizeDateTimeLocal(v: string | null | undefined): string | null {
     if (!v) return null;
-
     if (!v.includes('T')) return `${v}T00:00:00`;
-
-    // "YYYY-MM-DDTHH:mm" -> add seconds
     if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)) return `${v}:00`;
-
     return v;
   }
 
   private toDatetimeLocalInput(iso: string | null | undefined): string {
     if (!iso) return '';
-
     const withoutZone = iso.replace('Z', '').split('+')[0];
     const cleaned = withoutZone.split('.')[0];
-
     if (!cleaned.includes('T')) return `${cleaned}T00:00`;
-
     return cleaned.substring(0, 16);
   }
 

@@ -17,6 +17,8 @@ export class SprintComponent implements OnInit {
   dataSource: Sprint[] = [];
   listOfDisplayData: Sprint[] = [];
 
+  currentEditingSprintId: string | null = null;
+
   isLoading = false;
   isSaving = false;
 

@@ -1,4 +1,4 @@
-<!-- carload.component.html ✅ COMPLETO (apenas ajustei a área de datas para ser dinâmica) -->
+<!-- carload.component.html ✅ COMPLETO (com botões de filtro rápido) -->
 
 <div class="content-wrapper">
 
@@ -61,6 +61,29 @@
       </div>
 
     </div>
+  </div>
+
+  <!-- ✅ Quick Filters (NOVO) -->
+  <div class="quick-filters">
+    <button nz-button nzType="default" (click)="setFilterMode('ALL')" [class.active]="filterMode==='ALL'">
+      Todas
+    </button>
+
+    <button nz-button nzType="default" (click)="setFilterMode('SCHEDULED')" [class.active]="filterMode==='SCHEDULED'">
+      Agendadas
+    </button>
+
+    <button nz-button nzType="default" (click)="setFilterMode('PENDING')" [class.active]="filterMode==='PENDING'">
+      Pendentes
+    </button>
+
+    <button nz-button nzType="default" (click)="setFilterMode('DELIVERED')" [class.active]="filterMode==='DELIVERED'">
+      Entregues
+    </button>
+
+    <button nz-button nzType="default" (click)="setFilterMode('CANCELLED')" [class.active]="filterMode==='CANCELLED'">
+      Canceladas
+    </button>
   </div>
 
   <!-- ===== Filters ===== -->
@@ -162,7 +185,8 @@
   [nzMaskClosable]="false"
   [nzTitle]="carLoadDrawerTitle"
   [nzVisible]="isCarLoadDrawerVisible"
-  [nzWidth]="drawerWidth">
+  [nzWidth]="drawerWidth"
+  [nzPlacement]="drawerPlacement">
 
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar carrada...">
 
@@ -261,7 +285,7 @@
             </nz-form-item>
           </div>
 
-          <!-- ✅ SCHEDULED: mostrar data agendada -->
+          <!-- ✅ SCHEDULED -->
           <div *ngIf="shouldShowScheduledDate" nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>Data/Hora Agendada</nz-form-label>
@@ -271,7 +295,7 @@
             </nz-form-item>
           </div>
 
-          <!-- ✅ DELIVERED/ENTREGUE: mostrar data de entrega -->
+          <!-- ✅ DELIVERED/ENTREGUE -->
           <div *ngIf="shouldShowDeliveredDate" nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>Data/Hora de Entrega</nz-form-label>
