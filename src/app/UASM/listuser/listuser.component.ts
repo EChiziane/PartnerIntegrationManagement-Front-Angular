@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {AuthService} from '../../services/auth.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-listuser',
@@ -33,7 +34,7 @@ export class ListuserComponent {
   constructor(
     private http: HttpClient,
     private message: NzMessageService,
-    private userService: AuthService,
+    private userService: UserService,
     private modal: NzModalService,
     private fb: FormBuilder
   ) {
