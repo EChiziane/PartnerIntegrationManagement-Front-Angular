@@ -16,7 +16,7 @@ Tudo cabe numa página (sem scroll)
       <nz-tag [nzColor]="statusColor">{{ statusLabel }}</nz-tag>
     </div>
 
-    <button nz-button nzType="default" (click)="onBack()">
+    <button (click)="onBack()" nz-button nzType="default">
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
       Voltar
     </button>
@@ -171,12 +171,14 @@ Tudo cabe numa página (sem scroll)
           <div class="section-body">
             <div class="kv">
               <span class="k">Agendado</span>
-              <span class="v">{{ carload?.deliveryScheduledDate ? (carload.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+              <span
+                class="v">{{ carload?.deliveryScheduledDate ? (carload.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
             </div>
 
             <div class="kv">
               <span class="k">Entregue</span>
-              <span class="v">{{ carload?.deliveredDate ? (carload.deliveredDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+              <span
+                class="v">{{ carload?.deliveredDate ? (carload.deliveredDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
             </div>
 
             <div class="kv">

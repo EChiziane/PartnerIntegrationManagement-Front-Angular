@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ManagerDetailsComponent } from './manager-details.component';
+import {ManagerDetailsComponent} from './manager-details.component';
 
 describe('ManagerDetailsComponent', () => {
   let component: ManagerDetailsComponent;
@@ -10,7 +10,7 @@ describe('ManagerDetailsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ManagerDetailsComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ManagerDetailsComponent);
     component = fixture.componentInstance;

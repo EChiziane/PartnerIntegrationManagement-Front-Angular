@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CarloadService} from '../services/carload.service';
 import {DriverService} from '../services/driver.service';
@@ -30,12 +30,29 @@ export class CarloadDetailsComponent {
     private route: ActivatedRoute,
     private router: Router,
     private message: NzMessageService,
-
     private carloadService: CarloadService,
     private driverService: DriverService,
     private managerService: ManagerService,
     private sprintService: SprintService
   ) {
+  }
+
+  // ===== Helpers UI =====
+  get statusLabel(): string {
+    const s = (this.carload?.deliveryStatus || '').toUpperCase();
+    if (s === 'SCHEDULED') return 'Agendada';
+    if (s === 'PENDING') return 'Pendente';
+    if (s === 'DELIVERED' || s === 'ENTREGUE') return 'Entregue';
+    if (s === 'CANCELLED') return 'Cancelada';
+    return this.carload?.deliveryStatus || '';
+  }
+
+  get statusColor(): string {
+    const s = (this.carload?.deliveryStatus || '').toUpperCase();
+    if (s === 'DELIVERED' || s === 'ENTREGUE') return 'green';
+    if (s === 'CANCELLED') return 'red';
+    if (s === 'SCHEDULED') return 'blue';
+    return 'orange';
   }
 
   ngOnInit(): void {
@@ -51,6 +68,11 @@ export class CarloadDetailsComponent {
 
   onBack(): void {
     window.history.back();
+  }
+
+  money(v: number | null | undefined): string {
+    const n = Number(v || 0);
+    return `${n.toFixed(2)} Mts`;
   }
 
   private loadCarloadDetails(id: string): void {
@@ -109,28 +131,5 @@ export class CarloadDetailsComponent {
         }
       });
     }
-  }
-
-  // ===== Helpers UI =====
-  get statusLabel(): string {
-    const s = (this.carload?.deliveryStatus || '').toUpperCase();
-    if (s === 'SCHEDULED') return 'Agendada';
-    if (s === 'PENDING') return 'Pendente';
-    if (s === 'DELIVERED' || s === 'ENTREGUE') return 'Entregue';
-    if (s === 'CANCELLED') return 'Cancelada';
-    return this.carload?.deliveryStatus || '';
-  }
-
-  get statusColor(): string {
-    const s = (this.carload?.deliveryStatus || '').toUpperCase();
-    if (s === 'DELIVERED' || s === 'ENTREGUE') return 'green';
-    if (s === 'CANCELLED') return 'red';
-    if (s === 'SCHEDULED') return 'blue';
-    return 'orange';
-  }
-
-  money(v: number | null | undefined): string {
-    const n = Number(v || 0);
-    return `${n.toFixed(2)} Mts`;
   }
 }

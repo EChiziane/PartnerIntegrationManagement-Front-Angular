@@ -20,21 +20,6 @@ export class DriverDetailsComponent {
   @Output() edit = new EventEmitter<Driver>();
   @Output() remove = new EventEmitter<Driver>();
 
-  close(): void {
-    this.visible = false;
-    this.visibleChange.emit(false);
-  }
-
-  onEdit(): void {
-    if (!this.driver) return;
-    this.edit.emit(this.driver);
-  }
-
-  onDelete(): void {
-    if (!this.driver) return;
-    this.remove.emit(this.driver);
-  }
-
   get initials(): string {
     const name = (this.driver?.Name ?? '').trim();
     if (!name) return 'DR';
@@ -57,6 +42,21 @@ export class DriverDetailsComponent {
     if (s === 'ACTIVO' || s === 'ATIVO') return 'ATIVO';
     if (s === 'INACTIVO') return 'INATIVO';
     return this.driver?.status ?? '';
+  }
+
+  close(): void {
+    this.visible = false;
+    this.visibleChange.emit(false);
+  }
+
+  onEdit(): void {
+    if (!this.driver) return;
+    this.edit.emit(this.driver);
+  }
+
+  onDelete(): void {
+    if (!this.driver) return;
+    this.remove.emit(this.driver);
   }
 
 }

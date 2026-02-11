@@ -20,21 +20,6 @@ export class ManagerDetailsComponent {
   @Output() edit = new EventEmitter<Manager>();
   @Output() remove = new EventEmitter<Manager>();
 
-  close(): void {
-    this.visible = false;
-    this.visibleChange.emit(false);
-  }
-
-  onEdit(): void {
-    if (!this.manager) return;
-    this.edit.emit(this.manager);
-  }
-
-  onDelete(): void {
-    if (!this.manager) return;
-    this.remove.emit(this.manager);
-  }
-
   get initials(): string {
     const name = (this.manager?.name ?? '').trim();
     if (!name) return 'MG';
@@ -55,5 +40,20 @@ export class ManagerDetailsComponent {
     if (s === 'ACTIVO' || s === 'ATIVO') return 'ATIVO';
     if (s === 'INACTIVO') return 'INATIVO';
     return this.manager?.status ?? '';
+  }
+
+  close(): void {
+    this.visible = false;
+    this.visibleChange.emit(false);
+  }
+
+  onEdit(): void {
+    if (!this.manager) return;
+    this.edit.emit(this.manager);
+  }
+
+  onDelete(): void {
+    if (!this.manager) return;
+    this.remove.emit(this.manager);
   }
 }

@@ -295,10 +295,10 @@
 
 <!-- ===== Driver Details Drawer ===== -->
 <app-driver-details
-  [(visible)]="isDriverDetailsVisible"
-  [driver]="selectedDriverDetails"
-  [drawerWidth]="detailsDrawerWidth"
-  [drawerPlacement]="detailsDrawerPlacement"
   (edit)="editFromDetails($event)"
-  (remove)="deleteFromDetails($event)">
+  (remove)="deleteFromDetails($event)"
+  [(visible)]="isDriverDetailsVisible"
+  [drawerPlacement]="detailsDrawerPlacement"
+  [drawerWidth]="detailsDrawerWidth"
+  [driver]="selectedDriverDetails">
 </app-driver-details>

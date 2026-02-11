@@ -91,9 +91,9 @@ registerLocaleData(en);
     InvoiceComponent,
     CarloadCustomerComponent,
     SprintDetailsComponent
-,DriverDetailsComponent
-    ,ManagerDetailsComponent
-    ,CarloadDetailsComponent
+    , DriverDetailsComponent
+    , ManagerDetailsComponent
+    , CarloadDetailsComponent
 
   ],
   imports: [

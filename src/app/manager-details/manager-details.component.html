@@ -1,18 +1,18 @@
 <!-- manager-details.component.html -->
 <nz-drawer
+  (nzOnClose)="close()"
+  [nzMaskClosable]="true"
+  [nzPlacement]="drawerPlacement"
   [nzVisible]="visible"
   [nzWidth]="drawerWidth"
-  [nzPlacement]="drawerPlacement"
-  nzTitle="Detalhes do Gestor"
-  [nzMaskClosable]="true"
-  (nzOnClose)="close()">
+  nzTitle="Detalhes do Gestor">
 
   <ng-container *nzDrawerContent>
     <ng-container *ngIf="manager; else emptyState">
 
       <!-- Header -->
       <div class="details-header">
-        <nz-avatar class="avatar" [nzText]="initials" nzSize="large"></nz-avatar>
+        <nz-avatar [nzText]="initials" class="avatar" nzSize="large"></nz-avatar>
 
         <div class="title-block">
           <div class="name">{{ manager.name }}</div>
@@ -26,17 +26,17 @@
 
       <!-- Actions -->
       <div class="actions">
-        <button nz-button nzType="primary" (click)="onEdit()">
+        <button (click)="onEdit()" nz-button nzType="primary">
           <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
           Editar
         </button>
 
-        <button nz-button nzDanger (click)="onDelete()">
+        <button (click)="onDelete()" nz-button nzDanger>
           <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
           Eliminar
         </button>
 
-        <button nz-button nzType="default" (click)="close()">
+        <button (click)="close()" nz-button nzType="default">
           Fechar
         </button>
       </div>

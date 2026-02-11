@@ -278,10 +278,10 @@
 </nz-drawer>
 <!-- manager.component.html (ADICIONAR NO FIM) -->
 <app-manager-details
-  [(visible)]="isManagerDetailsVisible"
-  [manager]="selectedManagerDetails"
-  [drawerWidth]="detailsDrawerWidth"
-  [drawerPlacement]="detailsDrawerPlacement"
   (edit)="editFromDetails($event)"
-  (remove)="deleteFromDetails($event)">
+  (remove)="deleteFromDetails($event)"
+  [(visible)]="isManagerDetailsVisible"
+  [drawerPlacement]="detailsDrawerPlacement"
+  [drawerWidth]="detailsDrawerWidth"
+  [manager]="selectedManagerDetails">
 </app-manager-details>
