@@ -18,6 +18,7 @@ import {DashboardComponent} from './CSM/dashboard/dashboard.component';
 import {InvoiceComponent} from './CSM/invoice/invoice.component';
 import {QuatationComponent} from './CSM/quatation/quatation.component';
 import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.component';
+import {CarloadDetailsComponent} from './carload-details/carload-details.component';
 
 
 const routes: Routes = [
@@ -43,6 +44,7 @@ const routes: Routes = [
       {path: 'sprint', component: SprintComponent},
       {path: 'sprint-detail/:id', component: SprintDetailsComponent},
       {path: 'driver', component: DriverComponent},
+      {path: 'carload-details/:id', component: CarloadDetailsComponent},
 
 
       {path: 'users', component: ListuserComponent},
