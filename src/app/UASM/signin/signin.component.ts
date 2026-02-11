@@ -1,6 +1,7 @@
-import {Component} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../services/auth.service';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signin',
@@ -11,34 +12,75 @@ import {AuthService} from '../../services/auth.service';
 export class SigninComponent {
   signinForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  isLoading = false;
+  isPasswordVisible = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private msg: NzMessageService
+  ) {
     this.signinForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
+      phone: ['', Validators.required], // aqui guardamos só os dígitos (sem +258)
       login: ['', Validators.required],
       password: ['', Validators.required],
-      role: ['USER', Validators.required] // Valor padrão USER
+      role: ['USER', Validators.required]
     });
   }
 
-  submitForm(): void {
-    if (this.signinForm.valid) {
-      const user = this.signinForm.value;
-      console.log('Enviando dados:', user);
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
 
-      this.authService.signup(user).subscribe({
-        next: (response) => {
-          console.log('Usuário registrado com sucesso!', response);
-          alert('Registro bem-sucedido!');
-        },
-        error: (err) => {
-          console.error('Erro ao registrar usuário:', err);
-          alert('Falha ao registrar usuário!');
-        }
-      });
-    } else {
-      console.log('Formulário inválido!');
+  normalizePhone(): void {
+    const raw = (this.signinForm.value.phone ?? '').toString();
+    const digits = raw.replace(/\D/g, '');
+
+    // Se o user colar +258..., remove o prefixo e fica só com os dígitos locais
+    const normalized = digits.startsWith('258') ? digits.substring(3) : digits;
+
+    this.signinForm.patchValue({ phone: normalized });
+  }
+
+  private buildPayload(): any {
+    const v = this.signinForm.value;
+
+    const phoneDigits = (v.phone ?? '').toString().replace(/\D/g, '');
+    const phoneWithPrefix = phoneDigits.startsWith('258') ? `+${phoneDigits}` : `+258${phoneDigits}`;
+
+    return {
+      name: v.name?.trim(),
+      email: v.email?.trim(),
+      phone: phoneWithPrefix,
+      login: v.login?.trim(),
+      password: v.password,
+      role: v.role
+    };
+  }
+
+  submitForm(): void {
+    if (this.signinForm.invalid) {
+      Object.values(this.signinForm.controls).forEach(c => c.markAsTouched());
+      this.msg.error('Preencha os campos obrigatórios.');
+      return;
     }
+
+    this.isLoading = true;
+    const userPayload = this.buildPayload();
+
+    this.authService.signup(userPayload).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.msg.success('Utilizador registado com sucesso!');
+        this.signinForm.reset({ role: 'USER' });
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Erro ao registrar usuário:', err);
+        this.msg.error('Falha ao registar utilizador.');
+      }
+    });
   }
 }

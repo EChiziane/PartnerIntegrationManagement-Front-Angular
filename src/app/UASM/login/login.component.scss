@@ -3,18 +3,24 @@
 ===================================================== */
 .login-page {
   min-height: 100vh;
-  background: linear-gradient(to right, #e3f2fd, #bbdefb);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+
   padding: 24px;
+  background: linear-gradient(to right, #e3f2fd, #bbdefb);
+
+  /* IMPORTANTE: em telas pequenas o teclado / viewport pode cortar.
+     Então permitimos scroll. */
+  overflow-y: auto;
 }
 
 /* =====================================================
    LOGIN CARD
 ===================================================== */
 .login-card {
-  width: 360px;
+  width: 380px;
+  max-width: 100%;
   border-radius: 16px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
@@ -22,22 +28,48 @@
 .login-card ::ng-deep .ant-card-head-title {
   text-align: center;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 650;
   color: #1565c0;
 }
 
 /* =====================================================
-   FORM
+   FORM / FIELDS
 ===================================================== */
-.form-field {
-  margin-bottom: 16px;
+.field {
+  margin-bottom: 14px;
 }
 
+.field-error {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #d32f2f;
+  line-height: 1.2;
+}
+
+.password-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(21, 101, 192, 0.08);
+  }
+}
+
+/* =====================================================
+   OPTIONS
+===================================================== */
 .options {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin: 6px 0 14px 0;
 }
 
 .forgot-password,
@@ -45,7 +77,8 @@
   color: #1e88e5;
   cursor: pointer;
   font-size: 13px;
-  transition: color 0.3s;
+  transition: color 0.2s ease;
+  user-select: none;
 }
 
 .forgot-password:hover,
@@ -58,12 +91,19 @@
    BUTTON
 ===================================================== */
 .login-button {
-  margin-top: 8px;
-  font-weight: 500;
+  margin-top: 6px;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.loading {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
 }
 
 /* =====================================================
-   REGISTER
+   REGISTER / ERROR
 ===================================================== */
 .register-link {
   margin-top: 16px;
@@ -71,19 +111,22 @@
   font-size: 14px;
 }
 
-/* =====================================================
-   ERROR
-===================================================== */
 .error-alert {
-  margin-top: 16px;
-  border-radius: 8px;
+  margin-top: 14px;
+  border-radius: 10px;
 }
 
 /* =====================================================
    RESPONSIVO
 ===================================================== */
 @media (max-width: 480px) {
+  .login-page {
+    padding: 16px;
+    align-items: flex-start; /* melhor quando tem teclado/viewport pequeno */
+  }
+
   .login-card {
     width: 100%;
+    margin-top: 16px;
   }
 }

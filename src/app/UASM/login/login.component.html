@@ -1,48 +1,73 @@
 <div class="login-page">
-
   <nz-card class="login-card" nzTitle="Área do Sistema">
-    <form (ngSubmit)="login()" [formGroup]="userForm">
+    <form [formGroup]="userForm" (ngSubmit)="login()" novalidate>
 
       <!-- USER -->
-      <nz-input-group class="form-field" nzAddOnBeforeIcon="user">
-        <input
-          formControlName="login"
-          nz-input
-          placeholder="Usuário"
-          type="text"/>
-      </nz-input-group>
+      <div class="field">
+        <nz-input-group nzAddOnBeforeIcon="user">
+          <input
+            nz-input
+            type="text"
+            placeholder="Usuário"
+            formControlName="login"
+            autocomplete="username" />
+        </nz-input-group>
 
-      <!-- PASSWORD -->
-      <nz-input-group class="form-field" nzAddOnBeforeIcon="lock">
-        <input
-          formControlName="password"
-          nz-input
-          placeholder="Senha"
-          type="password"/>
-      </nz-input-group>
+        <div class="field-error" *ngIf="isInvalid('login')">
+          Informe o usuário.
+        </div>
+      </div>
+
+      <!-- PASSWORD + SHOW/HIDE -->
+      <div class="field">
+        <nz-input-group nzAddOnBeforeIcon="lock" [nzSuffix]="passwordSuffixTpl">
+          <input
+            nz-input
+            [type]="isPasswordVisible ? 'text' : 'password'"
+            placeholder="Senha"
+            formControlName="password"
+            autocomplete="current-password" />
+        </nz-input-group>
+
+        <ng-template #passwordSuffixTpl>
+          <span
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha'">
+            <nz-icon
+              nzTheme="outline"
+              [nzType]="isPasswordVisible ? 'eye-invisible' : 'eye'">
+            </nz-icon>
+          </span>
+        </ng-template>
+
+        <div class="field-error" *ngIf="isInvalid('password')">
+          Informe a senha.
+        </div>
+      </div>
 
       <!-- OPTIONS -->
       <div class="options">
-        <label formControlName="rememberMe" nz-checkbox>
+        <label nz-checkbox formControlName="rememberMe">
           Lembrar-me
         </label>
 
-        <a (click)="openForgotPasswordModal()" class="forgot-password">
+        <a class="forgot-password" (click)="openForgotPasswordModal()">
           Esqueceu a senha?
         </a>
       </div>
 
       <!-- BUTTON -->
       <button
-        [disabled]="isLoading"
-        class="login-button"
         nz-button
-        nzBlock
         nzType="primary"
-        type="submit">
+        nzBlock
+        class="login-button"
+        type="submit"
+        [disabled]="isLoading || userForm.invalid">
 
         <span *ngIf="!isLoading">Entrar</span>
-        <span *ngIf="isLoading">
+        <span *ngIf="isLoading" class="loading">
           <nz-spin nzSize="small"></nz-spin>
           A entrar...
         </span>
@@ -57,13 +82,28 @@
       <!-- ERROR -->
       <nz-alert
         *ngIf="responseMessage"
-        [nzMessage]="responseMessage"
         class="error-alert"
         nzShowIcon
-        nzType="error">
+        nzType="error"
+        [nzMessage]="responseMessage">
       </nz-alert>
 
     </form>
   </nz-card>
+  <nz-modal
+    [(nzVisible)]="isRegisterVisible"
+    nzTitle="Criar conta"
+    [nzFooter]="null"
+    (nzOnCancel)="closeRegisterModal()"
+    [nzMaskClosable]="false"
+    nzWidth="700"
+  nzCentered>
+
+    <ng-container *nzModalContent>
+      <app-signin></app-signin>
+    </ng-container>
+
+  </nz-modal>
+
 
 </div>
