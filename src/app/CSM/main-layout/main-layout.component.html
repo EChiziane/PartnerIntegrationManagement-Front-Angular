@@ -16,77 +16,111 @@
 
     <ul [nzInlineCollapsed]="isCollapsed" nz-menu nzMode="inline" nzTheme="dark">
 
-      <!-- CSM -->
-      <li nz-submenu nzIcon="appstore" nzOpen nzTitle="CSM">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/dashboard">
-              <span nz-icon nzType="dashboard"></span> Dashboard
-            </a>
-          </li>
+      <!-- ===== INÍCIO ===== -->
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/app/dashboard">
+          <span nz-icon nzType="dashboard"></span>
+          <span>Dashboard</span>
+        </a>
+      </li>
 
+      <li nz-menu-divider></li>
+
+      <!-- ===== OPERAÇÕES (Carradas) ===== -->
+      <li nz-submenu nzIcon="car" nzOpen nzTitle="Operações">
+        <ul>
 
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/carload">
-              <span nz-icon nzType="car"></span> Carradas
+              <span nz-icon nzType="unordered-list"></span>
+              <span>Carradas</span>
             </a>
           </li>
 
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/sprint">
-              <span nz-icon nzType="partition"></span> Sprints
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/driver">
-              <span nz-icon nzType="idcard"></span> Motoristas
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/manager">
-              <span nz-icon nzType="solution"></span> Gestores
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/quotation">
-              <span nz-icon nzType="bar-chart"></span> Cotacoes
-            </a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/invoice">
-              <span nz-icon nzType="bar-chart"></span> Facturas
+              <span nz-icon nzType="partition"></span>
+              <span>Sprints</span>
             </a>
           </li>
 
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/carload-customer">
-              <span nz-icon nzType="bar-chart"></span> Customer
+              <span nz-icon nzType="team"></span>
+              <span>Clientes</span>
             </a>
           </li>
+
         </ul>
       </li>
 
-      <!-- ACCOUNT / USERS -->
-      <li nz-submenu nzIcon="user" nzOpen nzTitle="Conta">
+      <!-- ===== EQUIPA & FROTA ===== -->
+      <li nz-submenu nzIcon="solution" nzTitle="Equipa & Frota">
         <ul>
+
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/users">
-              <span nz-icon nzType="user"></span> Utilizadores
+            <a routerLink="/app/driver">
+              <span nz-icon nzType="idcard"></span>
+              <span>Motoristas</span>
             </a>
           </li>
 
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/profile">
-              <span nz-icon nzType="setting"></span> Perfil
+            <a routerLink="/app/manager">
+              <span nz-icon nzType="user-switch"></span>
+              <span>Gestores</span>
             </a>
           </li>
+
+        </ul>
+      </li>
+
+      <!-- ===== FINANCEIRO ===== -->
+      <li nz-submenu nzIcon="wallet" nzTitle="Financeiro">
+        <ul>
+
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/quotation">
+              <span nz-icon nzType="file-text"></span>
+              <span>Cotações</span>
+            </a>
+          </li>
+
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/invoice">
+              <span nz-icon nzType="file-done"></span>
+              <span>Facturas</span>
+            </a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li nz-menu-divider></li>
+
+      <!-- ===== CONTA & SEGURANÇA ===== -->
+      <li nz-submenu nzIcon="setting" nzTitle="Conta & Segurança">
+        <ul>
+
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/profile">
+              <span nz-icon nzType="profile"></span>
+              <span>Perfil</span>
+            </a>
+          </li>
+
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/users">
+              <span nz-icon nzType="user"></span>
+              <span>Utilizadores</span>
+            </a>
+          </li>
+
         </ul>
       </li>
 
     </ul>
+
   </nz-sider>
 
   <nz-layout>

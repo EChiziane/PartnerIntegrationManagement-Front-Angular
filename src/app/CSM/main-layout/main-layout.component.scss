@@ -98,3 +98,26 @@ nz-content {
 .username {
   margin-right: 8px;
 }
+/* ===== MENU: toque moderno ===== */
+::ng-deep .menu-sidebar .ant-menu-dark {
+  background: #001529;
+}
+
+::ng-deep .menu-sidebar .ant-menu-item,
+::ng-deep .menu-sidebar .ant-menu-submenu-title {
+  border-radius: 10px;
+  margin: 4px 8px;
+}
+
+::ng-deep .menu-sidebar .ant-menu-item-selected {
+  background: rgba(24, 144, 255, 0.18) !important;
+}
+
+::ng-deep .menu-sidebar .ant-menu-item:hover,
+::ng-deep .menu-sidebar .ant-menu-submenu-title:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+::ng-deep .menu-sidebar .ant-menu-inline .ant-menu-item::after {
+  display: none; /* remove a barrinha azul lateral */
+}
