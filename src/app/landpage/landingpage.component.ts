@@ -40,7 +40,7 @@ export class LandingPageComponent {
     {
       title: 'Materiais de Construção com Entrega Rápida',
       subtitle: 'Areia grossa · Areia vermelha · Pedra 3/4 · Pedra sarrisca · Pó de pedra',
-      image: 'assets/landing/slide-1.png'
+      image: 'landing/slide-1.jpg'
     }
   ];
 
