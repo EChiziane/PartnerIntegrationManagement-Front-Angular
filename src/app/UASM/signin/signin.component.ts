@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { AuthService } from '../../services/auth.service';
+import {Component} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-signin',
@@ -41,23 +41,7 @@ export class SigninComponent {
     // Se o user colar +258..., remove o prefixo e fica só com os dígitos locais
     const normalized = digits.startsWith('258') ? digits.substring(3) : digits;
 
-    this.signinForm.patchValue({ phone: normalized });
-  }
-
-  private buildPayload(): any {
-    const v = this.signinForm.value;
-
-    const phoneDigits = (v.phone ?? '').toString().replace(/\D/g, '');
-    const phoneWithPrefix = phoneDigits.startsWith('258') ? `+${phoneDigits}` : `+258${phoneDigits}`;
-
-    return {
-      name: v.name?.trim(),
-      email: v.email?.trim(),
-      phone: phoneWithPrefix,
-      login: v.login?.trim(),
-      password: v.password,
-      role: v.role
-    };
+    this.signinForm.patchValue({phone: normalized});
   }
 
   submitForm(): void {
@@ -74,7 +58,7 @@ export class SigninComponent {
       next: () => {
         this.isLoading = false;
         this.msg.success('Utilizador registado com sucesso!');
-        this.signinForm.reset({ role: 'USER' });
+        this.signinForm.reset({role: 'USER'});
       },
       error: (err) => {
         this.isLoading = false;
@@ -82,5 +66,21 @@ export class SigninComponent {
         this.msg.error('Falha ao registar utilizador.');
       }
     });
+  }
+
+  private buildPayload(): any {
+    const v = this.signinForm.value;
+
+    const phoneDigits = (v.phone ?? '').toString().replace(/\D/g, '');
+    const phoneWithPrefix = phoneDigits.startsWith('258') ? `+${phoneDigits}` : `+258${phoneDigits}`;
+
+    return {
+      name: v.name?.trim(),
+      email: v.email?.trim(),
+      phone: phoneWithPrefix,
+      login: v.login?.trim(),
+      password: v.password,
+      role: v.role
+    };
   }
 }

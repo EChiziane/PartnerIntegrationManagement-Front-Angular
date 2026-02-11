@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import {Component, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
-import { CarloadInvoice } from '../../models/CarloadInvoice';
-import { CarloadCustomer } from '../../models/CarloadCustomer';
+import {CarloadInvoice} from '../../models/CarloadInvoice';
+import {CarloadCustomer} from '../../models/CarloadCustomer';
 
-import { CarloadInvoiceService } from '../../services/carload-invoice.service';
-import { CarloadCustomerService } from '../../services/carload-customer.service';
+import {CarloadInvoiceService} from '../../services/carload-invoice.service';
+import {CarloadCustomerService} from '../../services/carload-customer.service';
 
 @Component({
   selector: 'app-invoice',
@@ -96,7 +96,8 @@ export class InvoiceComponent implements OnInit {
     private customerService: CarloadCustomerService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   // ========= Getters =========
   get items(): FormArray {
@@ -148,39 +149,6 @@ export class InvoiceComponent implements OnInit {
     this.applyFilters();
   }
 
-  private applyFilters(): void {
-    let filtered = [...this.allInvoices];
-
-    // Customer
-    if (this.selectedCustomerId) {
-      filtered = filtered.filter(inv => inv.carloadCustomerId === this.selectedCustomerId);
-    }
-
-    // Date range
-    if (this.dateRange && this.dateRange.length === 2) {
-      const [start, end] = this.dateRange;
-      const startDate = new Date(start).setHours(0, 0, 0, 0);
-      const endDate = new Date(end).setHours(23, 59, 59, 999);
-
-      filtered = filtered.filter(inv => {
-        const createdAt = new Date(inv.createdAt).getTime();
-        return createdAt >= startDate && createdAt <= endDate;
-      });
-    }
-
-    // Search
-    const val = (this.searchValue || '').toLowerCase().trim();
-    if (val) {
-      filtered = filtered.filter(inv =>
-        (inv.invoiceCode || '').toLowerCase().includes(val) ||
-        (inv.carloadCustomerName || '').toLowerCase().includes(val) ||
-        (inv.items || []).some((it: any) => (it.description || '').toLowerCase().includes(val))
-      );
-    }
-
-    this.invoices = filtered;
-  }
-
   // ========= Drawer =========
   openDrawer(): void {
     this.currentInvoiceId = null;
@@ -197,8 +165,8 @@ export class InvoiceComponent implements OnInit {
     this.addItem();
 
     const nextCode = this.generateNextInvoiceCode();
-    this.invoiceForm.patchValue({ invoiceCode: nextCode.toString() });
-    this.invoiceForm.get('invoiceCode')?.disable({ emitEvent: false });
+    this.invoiceForm.patchValue({invoiceCode: nextCode.toString()});
+    this.invoiceForm.get('invoiceCode')?.disable({emitEvent: false});
   }
 
   closeDrawer(): void {
@@ -223,7 +191,7 @@ export class InvoiceComponent implements OnInit {
       description: ['', Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
-      amount: [{ value: 0, disabled: true }]
+      amount: [{value: 0, disabled: true}]
     });
 
     itemGroup.get('quantity')?.valueChanges.subscribe(() => this.updateItemAmount(itemGroup));
@@ -242,30 +210,8 @@ export class InvoiceComponent implements OnInit {
     const itemGroup = this.items.at(index) as FormGroup;
     const price = this.itemsPrices[itemName] || 0;
 
-    itemGroup.patchValue({ unitPrice: price, quantity: 1 }, { emitEvent: false });
+    itemGroup.patchValue({unitPrice: price, quantity: 1}, {emitEvent: false});
     this.updateItemAmount(itemGroup);
-  }
-
-  private updateItemAmount(itemGroup: FormGroup): void {
-    const quantity = Number(itemGroup.get('quantity')?.value || 0);
-    const unitPrice = Number(itemGroup.get('unitPrice')?.value || 0);
-    const amount = quantity * unitPrice;
-
-    itemGroup.patchValue({ amount }, { emitEvent: false });
-    this.calculateTotals();
-  }
-
-  private calculateTotals(): void {
-    const subtotal = this.items.controls.reduce((sum, item) => {
-      const amount = Number(item.get('amount')?.value || 0);
-      return sum + amount;
-    }, 0);
-
-    const taxRate = Number(this.invoiceForm.get('taxRate')?.value || 0);
-    const tax = subtotal * taxRate;
-    const total = subtotal + tax;
-
-    this.invoiceForm.patchValue({ subtotal, tax, total }, { emitEvent: false });
   }
 
   // ========= CRUD =========
@@ -278,9 +224,9 @@ export class InvoiceComponent implements OnInit {
     this.isSaving = true;
 
     // Garantir que invoiceCode entra no payload
-    this.invoiceForm.get('invoiceCode')?.enable({ emitEvent: false });
+    this.invoiceForm.get('invoiceCode')?.enable({emitEvent: false});
     const invoiceData = this.invoiceForm.getRawValue();
-    this.invoiceForm.get('invoiceCode')?.disable({ emitEvent: false });
+    this.invoiceForm.get('invoiceCode')?.disable({emitEvent: false});
 
     const request$ = this.currentInvoiceId
       ? this.invoiceService.updateInvoice(this.currentInvoiceId, invoiceData)
@@ -312,7 +258,7 @@ export class InvoiceComponent implements OnInit {
         description: [it.description, Validators.required],
         quantity: [it.quantity, [Validators.required, Validators.min(1)]],
         unitPrice: [it.unitPrice, [Validators.required, Validators.min(0)]],
-        amount: [{ value: Number(it.quantity) * Number(it.unitPrice), disabled: true }]
+        amount: [{value: Number(it.quantity) * Number(it.unitPrice), disabled: true}]
       });
 
       group.get('quantity')?.valueChanges.subscribe(() => this.updateItemAmount(group));
@@ -328,7 +274,7 @@ export class InvoiceComponent implements OnInit {
     });
 
     // manter invoiceCode readonly/disabled
-    this.invoiceForm.get('invoiceCode')?.disable({ emitEvent: false });
+    this.invoiceForm.get('invoiceCode')?.disable({emitEvent: false});
 
     this.calculateTotals();
   }
@@ -364,6 +310,61 @@ export class InvoiceComponent implements OnInit {
     });
   }
 
+  private applyFilters(): void {
+    let filtered = [...this.allInvoices];
+
+    // Customer
+    if (this.selectedCustomerId) {
+      filtered = filtered.filter(inv => inv.carloadCustomerId === this.selectedCustomerId);
+    }
+
+    // Date range
+    if (this.dateRange && this.dateRange.length === 2) {
+      const [start, end] = this.dateRange;
+      const startDate = new Date(start).setHours(0, 0, 0, 0);
+      const endDate = new Date(end).setHours(23, 59, 59, 999);
+
+      filtered = filtered.filter(inv => {
+        const createdAt = new Date(inv.createdAt).getTime();
+        return createdAt >= startDate && createdAt <= endDate;
+      });
+    }
+
+    // Search
+    const val = (this.searchValue || '').toLowerCase().trim();
+    if (val) {
+      filtered = filtered.filter(inv =>
+        (inv.invoiceCode || '').toLowerCase().includes(val) ||
+        (inv.carloadCustomerName || '').toLowerCase().includes(val) ||
+        (inv.items || []).some((it: any) => (it.description || '').toLowerCase().includes(val))
+      );
+    }
+
+    this.invoices = filtered;
+  }
+
+  private updateItemAmount(itemGroup: FormGroup): void {
+    const quantity = Number(itemGroup.get('quantity')?.value || 0);
+    const unitPrice = Number(itemGroup.get('unitPrice')?.value || 0);
+    const amount = quantity * unitPrice;
+
+    itemGroup.patchValue({amount}, {emitEvent: false});
+    this.calculateTotals();
+  }
+
+  private calculateTotals(): void {
+    const subtotal = this.items.controls.reduce((sum, item) => {
+      const amount = Number(item.get('amount')?.value || 0);
+      return sum + amount;
+    }, 0);
+
+    const taxRate = Number(this.invoiceForm.get('taxRate')?.value || 0);
+    const tax = subtotal * taxRate;
+    const total = subtotal + tax;
+
+    this.invoiceForm.patchValue({subtotal, tax, total}, {emitEvent: false});
+  }
+
   // ========= Init / Load =========
   private initForm(): void {
     this.invoiceForm = this.fb.group({
@@ -373,9 +374,9 @@ export class InvoiceComponent implements OnInit {
       items: this.fb.array([]),
 
       taxRate: [0.16, Validators.required], // decimal
-      subtotal: [{ value: 0, disabled: true }],
-      tax: [{ value: 0, disabled: true }],
-      total: [{ value: 0, disabled: true }]
+      subtotal: [{value: 0, disabled: true}],
+      tax: [{value: 0, disabled: true}],
+      total: [{value: 0, disabled: true}]
     });
 
     this.invoiceForm.get('taxRate')?.valueChanges.subscribe(() => this.calculateTotals());

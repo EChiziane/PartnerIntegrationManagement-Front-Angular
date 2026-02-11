@@ -1,20 +1,20 @@
 // carload.component.ts ✅ COMPLETO (com quick filters + 4 cenários datas)
 
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
-import { CarLoad } from '../../models/CSM/carlaod';
-import { CarloadService } from '../../services/carload.service';
+import {CarLoad} from '../../models/CSM/carlaod';
+import {CarloadService} from '../../services/carload.service';
 
-import { Driver } from '../../models/CSM/driver';
-import { Manager } from '../../models/CSM/manager';
-import { Sprint } from '../../models/CSM/sprint';
+import {Driver} from '../../models/CSM/driver';
+import {Manager} from '../../models/CSM/manager';
+import {Sprint} from '../../models/CSM/sprint';
 
-import { DriverService } from '../../services/driver.service';
-import { ManagerService } from '../../services/manager.service';
-import { SprintService } from '../../services/sprint.service';
+import {DriverService} from '../../services/driver.service';
+import {ManagerService} from '../../services/manager.service';
+import {SprintService} from '../../services/sprint.service';
 
 type CarLoadStatus = 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'ENTREGUE' | string;
 type FilterMode = 'ALL' | 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED';
@@ -106,7 +106,8 @@ export class CarLoadComponent implements OnInit {
     private sprintService: SprintService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   // ✅ Helpers para UI
   get selectedStatusUpper(): string {
@@ -343,7 +344,7 @@ export class CarLoadComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData: any = { ...this.carLoadForm.value };
+    const formData: any = {...this.carLoadForm.value};
 
     // Normalizar phone para +258
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
@@ -430,19 +431,19 @@ export class CarLoadComponent implements OnInit {
 
     if (status === 'SCHEDULED') {
       scheduledCtrl.setValidators([Validators.required]);
-      deliveredCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', {emitEvent: false});
     } else if (status === 'DELIVERED' || status === 'ENTREGUE') {
       deliveredCtrl.setValidators([Validators.required]);
     } else if (status === 'CANCELLED') {
-      scheduledCtrl.setValue('', { emitEvent: false });
-      deliveredCtrl.setValue('', { emitEvent: false });
+      scheduledCtrl.setValue('', {emitEvent: false});
+      deliveredCtrl.setValue('', {emitEvent: false});
     } else if (status === 'PENDING') {
-      scheduledCtrl.setValue('', { emitEvent: false });
-      deliveredCtrl.setValue('', { emitEvent: false });
+      scheduledCtrl.setValue('', {emitEvent: false});
+      deliveredCtrl.setValue('', {emitEvent: false});
     }
 
-    scheduledCtrl.updateValueAndValidity({ emitEvent: false });
-    deliveredCtrl.updateValueAndValidity({ emitEvent: false });
+    scheduledCtrl.updateValueAndValidity({emitEvent: false});
+    deliveredCtrl.updateValueAndValidity({emitEvent: false});
   }
 
   // ========= Date helpers =========

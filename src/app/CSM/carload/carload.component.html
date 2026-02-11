@@ -65,23 +65,23 @@
 
   <!-- ✅ Quick Filters (NOVO) -->
   <div class="quick-filters">
-    <button nz-button nzType="default" (click)="setFilterMode('ALL')" [class.active]="filterMode==='ALL'">
+    <button (click)="setFilterMode('ALL')" [class.active]="filterMode==='ALL'" nz-button nzType="default">
       Todas
     </button>
 
-    <button nz-button nzType="default" (click)="setFilterMode('SCHEDULED')" [class.active]="filterMode==='SCHEDULED'">
+    <button (click)="setFilterMode('SCHEDULED')" [class.active]="filterMode==='SCHEDULED'" nz-button nzType="default">
       Agendadas
     </button>
 
-    <button nz-button nzType="default" (click)="setFilterMode('PENDING')" [class.active]="filterMode==='PENDING'">
+    <button (click)="setFilterMode('PENDING')" [class.active]="filterMode==='PENDING'" nz-button nzType="default">
       Pendentes
     </button>
 
-    <button nz-button nzType="default" (click)="setFilterMode('DELIVERED')" [class.active]="filterMode==='DELIVERED'">
+    <button (click)="setFilterMode('DELIVERED')" [class.active]="filterMode==='DELIVERED'" nz-button nzType="default">
       Entregues
     </button>
 
-    <button nz-button nzType="default" (click)="setFilterMode('CANCELLED')" [class.active]="filterMode==='CANCELLED'">
+    <button (click)="setFilterMode('CANCELLED')" [class.active]="filterMode==='CANCELLED'" nz-button nzType="default">
       Canceladas
     </button>
   </div>
@@ -183,10 +183,10 @@
   [nzBodyStyle]="{ overflow: 'auto' }"
   [nzFooter]="carLoadDrawerFooter"
   [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
   [nzTitle]="carLoadDrawerTitle"
   [nzVisible]="isCarLoadDrawerVisible"
-  [nzWidth]="drawerWidth"
-  [nzPlacement]="drawerPlacement">
+  [nzWidth]="drawerWidth">
 
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar carrada...">
 

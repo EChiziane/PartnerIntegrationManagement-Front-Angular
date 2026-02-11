@@ -83,8 +83,8 @@
       (ngModelChange)="onCustomerChange($event)"
       [(ngModel)]="selectedCustomerId"
       [nzAllowClear]="true"
-      nzPlaceHolder="Selecionar cliente"
       class="filter-select"
+      nzPlaceHolder="Selecionar cliente"
     >
       <nz-option
         *ngFor="let customer of dataCustomer"
@@ -96,9 +96,9 @@
     <nz-range-picker
       (ngModelChange)="filterByDateRange()"
       [(ngModel)]="dateRange"
+      class="filter-date"
       nzFormat="dd/MM/yyyy"
       nzPlaceHolder="Intervalo de datas"
-      class="filter-date"
     ></nz-range-picker>
 
     <button (click)="openDrawer()" nz-button nzType="primary">
@@ -199,10 +199,10 @@
   [nzBodyStyle]="{ overflow: 'auto' }"
   [nzFooter]="drawerFooter"
   [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
   [nzTitle]="currentInvoiceId ? 'Edit Invoice' : 'New Invoice'"
   [nzVisible]="isDrawerVisible"
   [nzWidth]="drawerWidth"
-  [nzPlacement]="drawerPlacement"
 >
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar invoice...">
     <form [formGroup]="invoiceForm" class="drawer-form" nz-form>
@@ -218,9 +218,9 @@
               <nz-form-label nzRequired>Cliente</nz-form-label>
               <nz-form-control>
                 <nz-select
+                  [nzDisabled]="isSaving"
                   formControlName="carloadCustomerId"
                   nzPlaceHolder="Nome do Cliente"
-                  [nzDisabled]="isSaving"
                 >
                   <nz-option
                     *ngFor="let customer of dataCustomer"
@@ -236,7 +236,7 @@
             <nz-form-item>
               <nz-form-label nzRequired>Invoice Code</nz-form-label>
               <nz-form-control>
-                <input formControlName="invoiceCode" nz-input readonly />
+                <input formControlName="invoiceCode" nz-input readonly/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -262,9 +262,9 @@
                 <nz-form-control>
                   <nz-select
                     (ngModelChange)="onItemChange($event, i)"
+                    [nzDisabled]="isSaving"
                     formControlName="description"
                     nzPlaceHolder="Selecione o item"
-                    [nzDisabled]="isSaving"
                   >
                     <nz-option *ngFor="let it of itemsOptions" [nzLabel]="it" [nzValue]="it"></nz-option>
                   </nz-select>
@@ -274,21 +274,21 @@
               <nz-form-item>
                 <nz-form-label nzRequired>Qtd</nz-form-label>
                 <nz-form-control>
-                  <input formControlName="quantity" nz-input type="number" [disabled]="isSaving" />
+                  <input [disabled]="isSaving" formControlName="quantity" nz-input type="number"/>
                 </nz-form-control>
               </nz-form-item>
 
               <nz-form-item>
                 <nz-form-label nzRequired>Preço Unit.</nz-form-label>
                 <nz-form-control>
-                  <input formControlName="unitPrice" nz-input type="number" [disabled]="isSaving" />
+                  <input [disabled]="isSaving" formControlName="unitPrice" nz-input type="number"/>
                 </nz-form-control>
               </nz-form-item>
 
               <nz-form-item>
                 <nz-form-label>Subtotal</nz-form-label>
                 <nz-form-control>
-                  <input formControlName="amount" nz-input readonly />
+                  <input formControlName="amount" nz-input readonly/>
                 </nz-form-control>
               </nz-form-item>
 
@@ -296,11 +296,11 @@
 
             <button
               (click)="removeItem(i)"
+              [disabled]="isSaving || items.length <= 1"
               class="remove-btn"
               nz-button
               nzType="default"
               type="button"
-              [disabled]="isSaving || items.length <= 1"
             >
               <nz-icon nzType="minus-circle"></nz-icon>
               Remover
@@ -311,11 +311,11 @@
 
         <button
           (click)="addItem()"
+          [disabled]="isSaving"
           class="add-item-btn"
           nz-button
           nzType="dashed"
           type="button"
-          [disabled]="isSaving"
         >
           <nz-icon nzType="plus"></nz-icon>
           Adicionar Item
@@ -332,28 +332,28 @@
           <nz-form-item>
             <nz-form-label nzRequired>Taxa (decimal)</nz-form-label>
             <nz-form-control nzExtra="Ex: 0.16 = 16%">
-              <input formControlName="taxRate" nz-input type="number" [disabled]="isSaving" />
+              <input [disabled]="isSaving" formControlName="taxRate" nz-input type="number"/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>Subtotal</nz-form-label>
             <nz-form-control>
-              <input formControlName="subtotal" nz-input readonly />
+              <input formControlName="subtotal" nz-input readonly/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>Tax</nz-form-label>
             <nz-form-control>
-              <input formControlName="tax" nz-input readonly />
+              <input formControlName="tax" nz-input readonly/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>Total</nz-form-label>
             <nz-form-control>
-              <input formControlName="total" nz-input readonly />
+              <input formControlName="total" nz-input readonly/>
             </nz-form-control>
           </nz-form-item>
 

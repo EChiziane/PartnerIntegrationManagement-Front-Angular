@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Sprint } from '../../models/CSM/sprint';
-import { SprintService } from '../../services/sprint.service';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Sprint} from '../../models/CSM/sprint';
+import {SprintService} from '../../services/sprint.service';
 
 @Component({
   selector: 'app-sprint',
@@ -35,14 +35,9 @@ export class SprintComponent implements OnInit {
   isEditMode = false;
   sprintDrawerTitle = 'Criar Sprint';
   selectedSprintId: string | null = null;
-
-  // Guardar sprint original (id/createdAt etc.)
-  private selectedSprint: Sprint | null = null;
-
   // Drawer responsive
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
-
   // ========= Form =========
   sprintForm = new FormGroup({
     code: new FormControl('', Validators.required),
@@ -50,12 +45,15 @@ export class SprintComponent implements OnInit {
     description: new FormControl('', Validators.required),
     status: new FormControl<'EM_EXECUCAO' | 'ENCERRADO'>('EM_EXECUCAO', Validators.required)
   });
+  // Guardar sprint original (id/createdAt etc.)
+  private selectedSprint: Sprint | null = null;
 
   constructor(
     private sprintService: SprintService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getSprints();
@@ -97,23 +95,6 @@ export class SprintComponent implements OnInit {
     this.inactiveSprints = this.dataSource.filter(s => s.status === 'ENCERRADO').length;
   }
 
-  // ========= Search =========
-  private applyFilters(): void {
-    let data = [...this.dataSource];
-
-    const v = (this.searchValue || '').toLowerCase().trim();
-    if (v) {
-      data = data.filter(s =>
-        (s.name || '').toLowerCase().includes(v) ||
-        (s.code || '').toLowerCase().includes(v) ||
-        (s.description || '').toLowerCase().includes(v) ||
-        (s.status || '').toLowerCase().includes(v)
-      );
-    }
-
-    this.listOfDisplayData = data;
-  }
-
   search(): void {
     this.applyFilters();
   }
@@ -126,7 +107,7 @@ export class SprintComponent implements OnInit {
     this.selectedSprintId = null;
     this.selectedSprint = null;
 
-    this.sprintForm.reset({ status: 'EM_EXECUCAO' });
+    this.sprintForm.reset({status: 'EM_EXECUCAO'});
     this.isSprintDrawerVisible = true;
   }
 
@@ -164,11 +145,11 @@ export class SprintComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData: any = { ...this.sprintForm.value };
+    const formData: any = {...this.sprintForm.value};
 
     // Preservar campos fora do form (id/createdAt), se necessário
     const payload = (this.isEditMode && this.selectedSprint)
-      ? { ...this.selectedSprint, ...formData }
+      ? {...this.selectedSprint, ...formData}
       : formData;
 
     const request$ = (this.isEditMode && this.selectedSprintId)
@@ -215,5 +196,22 @@ export class SprintComponent implements OnInit {
 
   onBack(): void {
     window.history.back();
+  }
+
+  // ========= Search =========
+  private applyFilters(): void {
+    let data = [...this.dataSource];
+
+    const v = (this.searchValue || '').toLowerCase().trim();
+    if (v) {
+      data = data.filter(s =>
+        (s.name || '').toLowerCase().includes(v) ||
+        (s.code || '').toLowerCase().includes(v) ||
+        (s.description || '').toLowerCase().includes(v) ||
+        (s.status || '').toLowerCase().includes(v)
+      );
+    }
+
+    this.listOfDisplayData = data;
   }
 }

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environments';
-import { HttpClient } from '@angular/common/http';
-import { Observable, take, tap } from 'rxjs';
-import { User } from "../models/user";
+import {Injectable} from '@angular/core';
+import {environment} from '../../environments/environments';
+import {HttpClient} from '@angular/common/http';
+import {Observable, take, tap} from 'rxjs';
+import {User} from "../models/user";
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +11,11 @@ export class AuthService {
 
   private baseURL = environment.baseURL + "/auth";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   login(login: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.baseURL}/login`, { login, password }).pipe(
+    return this.http.post<{ token: string }>(`${this.baseURL}/login`, {login, password}).pipe(
       tap(response => {
         localStorage.setItem('token', response.token);
         localStorage.setItem('user', login);
@@ -28,24 +29,28 @@ export class AuthService {
 
   // ===== Recovery (WhatsApp + Email OTP) =====
 
-  requestPasswordReset(phoneWhatsApp: string): Observable<{ maskedName: string; maskedEmail: string; maskedPhone: string }> {
+  requestPasswordReset(phoneWhatsApp: string): Observable<{
+    maskedName: string;
+    maskedEmail: string;
+    maskedPhone: string
+  }> {
     return this.http.post<{ maskedName: string; maskedEmail: string; maskedPhone: string }>(
       `${this.baseURL}/password/reset/request`,
-      { phoneWhatsApp }
+      {phoneWhatsApp}
     ).pipe(take(1));
   }
 
   confirmPasswordReset(phoneWhatsApp: string): Observable<{ ok: boolean }> {
     return this.http.post<{ ok: boolean }>(
       `${this.baseURL}/password/reset/confirm`,
-      { phoneWhatsApp }
+      {phoneWhatsApp}
     ).pipe(take(1));
   }
 
   resetPassword(phoneWhatsApp: string, otpCode: string, newPassword: string): Observable<{ ok: boolean }> {
     return this.http.post<{ ok: boolean }>(
       `${this.baseURL}/password/reset`,
-      { phoneWhatsApp, otpCode, newPassword }
+      {phoneWhatsApp, otpCode, newPassword}
     ).pipe(take(1));
   }
 

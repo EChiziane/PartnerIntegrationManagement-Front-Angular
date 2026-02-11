@@ -154,10 +154,10 @@
   [nzBodyStyle]="{ overflow: 'auto' }"
   [nzFooter]="drawerFooter"
   [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
   [nzTitle]="sprintDrawerTitle"
   [nzVisible]="isSprintDrawerVisible"
-  [nzWidth]="drawerWidth"
-  [nzPlacement]="drawerPlacement">
+  [nzWidth]="drawerWidth">
 
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar sprint...">
     <form [formGroup]="sprintForm" class="drawer-form" nz-form>
@@ -193,7 +193,7 @@
             <nz-form-item>
               <nz-form-label nzRequired>Status</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="status" nzPlaceHolder="Selecione o status" [nzDisabled]="isSaving">
+                <nz-select [nzDisabled]="isSaving" formControlName="status" nzPlaceHolder="Selecione o status">
                   <nz-option nzLabel="EM_EXECUCAO" nzValue="EM_EXECUCAO"></nz-option>
                   <nz-option nzLabel="ENCERRADO" nzValue="ENCERRADO"></nz-option>
                 </nz-select>
@@ -205,7 +205,7 @@
             <nz-form-item>
               <nz-form-label nzRequired>Descrição</nz-form-label>
               <nz-form-control>
-                <textarea formControlName="description" nz-input rows="3" placeholder="Breve descrição..."></textarea>
+                <textarea formControlName="description" nz-input placeholder="Breve descrição..." rows="3"></textarea>
               </nz-form-control>
             </nz-form-item>
           </div>

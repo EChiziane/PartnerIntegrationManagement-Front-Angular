@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DriverService } from '../../services/driver.service';
-import { Driver } from '../../models/CSM/driver';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {DriverService} from '../../services/driver.service';
+import {Driver} from '../../models/CSM/driver';
 
 @Component({
   selector: 'app-driver',
@@ -34,13 +34,8 @@ export class DriverComponent implements OnInit {
   isEditMode = false;
   driverDrawerTitle = 'Criar Motorista';
   selectedDriverId: string | null = null;
-
-  // ✅ Guardar o driver original para não perder id/createdAt no update
-  private selectedDriver: Driver | null = null;
-
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
-
   // ✅ Opções de carros
   carOptions: string[] = [
     '4m3(DYNA)',
@@ -49,7 +44,6 @@ export class DriverComponent implements OnInit {
     '22m3(TATA SIGNA)',
     '24m3(SINOTRUK)'
   ];
-
   // ========= Forms =========
   driverForm = new FormGroup({
     Name: new FormControl('', Validators.required),
@@ -57,12 +51,15 @@ export class DriverComponent implements OnInit {
     CarDescription: new FormControl('', Validators.required),
     status: new FormControl('ACTIVO', Validators.required)
   });
+  // ✅ Guardar o driver original para não perder id/createdAt no update
+  private selectedDriver: Driver | null = null;
 
   constructor(
     private driverService: DriverService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getDrivers();
@@ -179,7 +176,7 @@ export class DriverComponent implements OnInit {
     this.isSaving = true;
 
     // Valores do form
-    const formData: any = { ...this.driverForm.value };
+    const formData: any = {...this.driverForm.value};
 
     // Normalizar phone para +258
     const rawPhone = (formData.Phone || '').toString().trim();
@@ -187,7 +184,7 @@ export class DriverComponent implements OnInit {
 
     // ✅ No update, preserva campos fora do form (id, createdAt, etc.)
     const payload = (this.isEditMode && this.selectedDriver)
-      ? { ...this.selectedDriver, ...formData } // mantém id/createdAt
+      ? {...this.selectedDriver, ...formData} // mantém id/createdAt
       : formData;
 
     const request$ = (this.isEditMode && this.selectedDriverId)

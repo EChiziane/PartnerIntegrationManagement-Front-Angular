@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { CarloadCustomer } from '../../models/CarloadCustomer';
-import { CarloadCustomerService } from '../../services/carload-customer.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {CarloadCustomer} from '../../models/CarloadCustomer';
+import {CarloadCustomerService} from '../../services/carload-customer.service';
 
 @Component({
   selector: 'app-carload-customer',
@@ -97,7 +97,7 @@ export class CarloadCustomerComponent implements OnInit {
 
   editCustomer(customer: CarloadCustomer): void {
     this.currentEditingCustomerId = customer.id;
-    this.customerForm.patchValue({ ...customer });
+    this.customerForm.patchValue({...customer});
     this.isDrawerVisible = true;
   }
 
@@ -124,14 +124,14 @@ export class CarloadCustomerComponent implements OnInit {
 
   /* ===================== Inline Edit ===================== */
   startInlineEdit(customer: CarloadCustomer, field: string): void {
-    this.editingCustomer = { ...customer };
+    this.editingCustomer = {...customer};
     this.editingField = field;
   }
 
   saveInlineEdit(original: CarloadCustomer, field: string): void {
     if (!this.editingCustomer) return;
 
-    const updated = { ...original, [field]: (this.editingCustomer as any)[field] };
+    const updated = {...original, [field]: (this.editingCustomer as any)[field]};
 
     this.customerService.updateCustomer(original.id, updated).subscribe({
       next: () => {
@@ -145,11 +145,6 @@ export class CarloadCustomerComponent implements OnInit {
         this.resetInlineEdit();
       },
     });
-  }
-
-  private resetInlineEdit(): void {
-    this.editingCustomer = null;
-    this.editingField = null;
   }
 
   /* ===================== Search ===================== */
@@ -179,7 +174,7 @@ export class CarloadCustomerComponent implements OnInit {
     this.isSaving = true;
 
     // Copia valores
-    const customerData: any = { ...this.customerForm.value };
+    const customerData: any = {...this.customerForm.value};
 
     // Normalizar telefone para +258
     const rawPhone = (customerData.phoneNumber || '').toString().trim();
@@ -216,6 +211,11 @@ export class CarloadCustomerComponent implements OnInit {
         this.message.error(this.currentEditingCustomerId ? 'Erro ao atualizar cliente 🚫' : 'Erro ao criar cliente 🚫');
       }
     });
+  }
+
+  private resetInlineEdit(): void {
+    this.editingCustomer = null;
+    this.editingField = null;
   }
 
   /* ===================== Load ===================== */

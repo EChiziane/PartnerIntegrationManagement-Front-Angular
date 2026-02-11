@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable, take} from 'rxjs';
 import {User} from '../models/user';
 import {HttpClient} from '@angular/common/http';
@@ -12,7 +12,8 @@ export class UserService {
 
   private baseURL = environment.baseURL + '/auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseURL}/users`).pipe(take(1));

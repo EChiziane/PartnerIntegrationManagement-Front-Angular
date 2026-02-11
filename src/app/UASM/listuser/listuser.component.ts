@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {User} from '../../models/user';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
-import {AuthService} from '../../services/auth.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {UserService} from '../../services/user.service';

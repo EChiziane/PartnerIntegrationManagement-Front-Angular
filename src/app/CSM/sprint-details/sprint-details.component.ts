@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
-import { CarLoad } from '../../models/CSM/carlaod';
-import { Driver } from '../../models/CSM/driver';
-import { Manager } from '../../models/CSM/manager';
+import {CarLoad} from '../../models/CSM/carlaod';
+import {Driver} from '../../models/CSM/driver';
+import {Manager} from '../../models/CSM/manager';
 
-import { CarloadService } from '../../services/carload.service';
-import { DriverService } from '../../services/driver.service';
-import { ManagerService } from '../../services/manager.service';
-import { SprintService } from '../../services/sprint.service';
+import {CarloadService} from '../../services/carload.service';
+import {DriverService} from '../../services/driver.service';
+import {ManagerService} from '../../services/manager.service';
+import {SprintService} from '../../services/sprint.service';
 
 type CarLoadStatus = 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'ENTREGUE' | string;
 type FilterMode = 'ALL' | 'SCHEDULED' | 'DELIVERED' | 'PENDING' | 'CANCELLED';
@@ -101,7 +101,8 @@ export class SprintDetailsComponent implements OnInit {
     private sprintService: SprintService,
     private modal: NzModalService,
     private message: NzMessageService
-  ) {}
+  ) {
+  }
 
   // ========= Helpers (UI) =========
   get selectedStatusUpper(): string {
@@ -144,12 +145,17 @@ export class SprintDetailsComponent implements OnInit {
   // ========= Status helpers =========
   getStatusLabel(status: CarLoadStatus): string {
     switch ((status || '').toUpperCase()) {
-      case 'SCHEDULED': return 'Agendada';
-      case 'PENDING': return 'Pendente';
+      case 'SCHEDULED':
+        return 'Agendada';
+      case 'PENDING':
+        return 'Pendente';
       case 'DELIVERED':
-      case 'ENTREGUE': return 'Entregue';
-      case 'CANCELLED': return 'Cancelada';
-      default: return status as string;
+      case 'ENTREGUE':
+        return 'Entregue';
+      case 'CANCELLED':
+        return 'Cancelada';
+      default:
+        return status as string;
     }
   }
 
@@ -196,25 +202,6 @@ export class SprintDetailsComponent implements OnInit {
     });
   }
 
-  private loadSprintName(): void {
-    this.sprintService.getSprintById(this.sprintId).subscribe({
-      next: (sprint) => (this.sprintName = sprint?.name || ''),
-      error: () => (this.sprintName = '')
-    });
-  }
-
-  // ========= Stats =========
-  private calculateStats(): void {
-    this.totalCarloads = this.allCarloads.length;
-
-    const up = (v: any) => (v || '').toString().toUpperCase();
-
-    this.totalAgendados = this.allCarloads.filter(c => up(c.deliveryStatus) === 'SCHEDULED').length;
-    this.totalEntregue = this.allCarloads.filter(c => up(c.deliveryStatus) === 'DELIVERED' || up(c.deliveryStatus) === 'ENTREGUE').length;
-    this.totalPendente = this.allCarloads.filter(c => up(c.deliveryStatus) === 'PENDING').length;
-    this.totalCanceladas = this.allCarloads.filter(c => up(c.deliveryStatus) === 'CANCELLED').length;
-  }
-
   // ========= Filters =========
   setFilterMode(mode: FilterMode): void {
     this.filterMode = mode;
@@ -234,47 +221,6 @@ export class SprintDetailsComponent implements OnInit {
     this.filterMode = 'ALL';
     this.dateRange = null;
     this.applyFilter();
-  }
-
-  private applyFilter(): void {
-    let filtered = [...this.allCarloads];
-    const up = (v: any) => (v || '').toString().toUpperCase();
-
-    // status
-    if (this.filterMode !== 'ALL') {
-      filtered = filtered.filter(c => up(c.deliveryStatus) === this.filterMode);
-    }
-
-    // date range (usa deliveryScheduledDate se existir, senão createdAt)
-    if (this.dateRange && this.dateRange.length === 2) {
-      const [start, end] = this.dateRange;
-      if (start && end) {
-        const startDate = new Date(start).setHours(0, 0, 0, 0);
-        const endDate = new Date(end).setHours(23, 59, 59, 999);
-
-        filtered = filtered.filter(c => {
-          const d = new Date((c as any).deliveryScheduledDate || (c as any).createdAt).getTime();
-          return d >= startDate && d <= endDate;
-        });
-      }
-    }
-
-    // search
-    const v = (this.searchValue || '').toLowerCase().trim();
-    if (v) {
-      filtered = filtered.filter(item =>
-        (item.customerName || '').toLowerCase().includes(v) ||
-        (item.customerPhoneNumber || '').toLowerCase().includes(v) ||
-        (item.deliveryDestination || '').toLowerCase().includes(v) ||
-        (item.transportedMaterial || '').toLowerCase().includes(v) ||
-        (item.assignedDriverName || '').toLowerCase().includes(v)
-      );
-    }
-
-    this.listOfDisplayData = filtered;
-
-    // cards devem refletir sprint total (allCarloads), mas se quiseres refletir filtrado:
-    // this.totalCarloads = this.listOfDisplayData.length;
   }
 
   // ========= Drawer =========
@@ -323,7 +269,7 @@ export class SprintDetailsComponent implements OnInit {
     this.carloadForm.patchValue(this.mapCarloadToForm(carload));
 
     // força sprint fixo
-    this.carloadForm.patchValue({ carloadBatchId: this.sprintId });
+    this.carloadForm.patchValue({carloadBatchId: this.sprintId});
 
     this.applyDateRulesByStatus();
   }
@@ -358,7 +304,7 @@ export class SprintDetailsComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData: any = { ...this.carloadForm.value };
+    const formData: any = {...this.carloadForm.value};
 
     // Sprint fixo
     formData.carloadBatchId = this.sprintId;
@@ -435,6 +381,66 @@ export class SprintDetailsComponent implements OnInit {
     window.history.back();
   }
 
+  private loadSprintName(): void {
+    this.sprintService.getSprintById(this.sprintId).subscribe({
+      next: (sprint) => (this.sprintName = sprint?.name || ''),
+      error: () => (this.sprintName = '')
+    });
+  }
+
+  // ========= Stats =========
+  private calculateStats(): void {
+    this.totalCarloads = this.allCarloads.length;
+
+    const up = (v: any) => (v || '').toString().toUpperCase();
+
+    this.totalAgendados = this.allCarloads.filter(c => up(c.deliveryStatus) === 'SCHEDULED').length;
+    this.totalEntregue = this.allCarloads.filter(c => up(c.deliveryStatus) === 'DELIVERED' || up(c.deliveryStatus) === 'ENTREGUE').length;
+    this.totalPendente = this.allCarloads.filter(c => up(c.deliveryStatus) === 'PENDING').length;
+    this.totalCanceladas = this.allCarloads.filter(c => up(c.deliveryStatus) === 'CANCELLED').length;
+  }
+
+  private applyFilter(): void {
+    let filtered = [...this.allCarloads];
+    const up = (v: any) => (v || '').toString().toUpperCase();
+
+    // status
+    if (this.filterMode !== 'ALL') {
+      filtered = filtered.filter(c => up(c.deliveryStatus) === this.filterMode);
+    }
+
+    // date range (usa deliveryScheduledDate se existir, senão createdAt)
+    if (this.dateRange && this.dateRange.length === 2) {
+      const [start, end] = this.dateRange;
+      if (start && end) {
+        const startDate = new Date(start).setHours(0, 0, 0, 0);
+        const endDate = new Date(end).setHours(23, 59, 59, 999);
+
+        filtered = filtered.filter(c => {
+          const d = new Date((c as any).deliveryScheduledDate || (c as any).createdAt).getTime();
+          return d >= startDate && d <= endDate;
+        });
+      }
+    }
+
+    // search
+    const v = (this.searchValue || '').toLowerCase().trim();
+    if (v) {
+      filtered = filtered.filter(item =>
+        (item.customerName || '').toLowerCase().includes(v) ||
+        (item.customerPhoneNumber || '').toLowerCase().includes(v) ||
+        (item.deliveryDestination || '').toLowerCase().includes(v) ||
+        (item.transportedMaterial || '').toLowerCase().includes(v) ||
+        (item.assignedDriverName || '').toLowerCase().includes(v)
+      );
+    }
+
+    this.listOfDisplayData = filtered;
+
+    // cards devem refletir sprint total (allCarloads), mas se quiseres refletir filtrado:
+    // this.totalCarloads = this.listOfDisplayData.length;
+  }
+
   // ========= Validators (igual ao carload) =========
   private applyDateRulesByStatus(): void {
     const status = this.selectedStatusUpper;
@@ -447,16 +453,16 @@ export class SprintDetailsComponent implements OnInit {
 
     if (status === 'SCHEDULED') {
       scheduledCtrl.setValidators([Validators.required]);
-      deliveredCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', {emitEvent: false});
     } else if (status === 'DELIVERED' || status === 'ENTREGUE') {
       deliveredCtrl.setValidators([Validators.required]);
     } else {
-      scheduledCtrl.setValue('', { emitEvent: false });
-      deliveredCtrl.setValue('', { emitEvent: false });
+      scheduledCtrl.setValue('', {emitEvent: false});
+      deliveredCtrl.setValue('', {emitEvent: false});
     }
 
-    scheduledCtrl.updateValueAndValidity({ emitEvent: false });
-    deliveredCtrl.updateValueAndValidity({ emitEvent: false });
+    scheduledCtrl.updateValueAndValidity({emitEvent: false});
+    deliveredCtrl.updateValueAndValidity({emitEvent: false});
   }
 
   // ========= Map/Date helpers =========

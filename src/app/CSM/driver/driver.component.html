@@ -185,10 +185,10 @@
   [nzBodyStyle]="{ overflow: 'auto' }"
   [nzFooter]="driverDrawerFooter"
   [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
   [nzTitle]="driverDrawerTitle"
   [nzVisible]="isDriverDrawerVisible"
-  [nzWidth]="drawerWidth"
-  [nzPlacement]="drawerPlacement">
+  [nzWidth]="drawerWidth">
 
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar motorista...">
     <form [formGroup]="driverForm" class="drawer-form" nz-form>
@@ -230,10 +230,10 @@
               <nz-form-label>Carro</nz-form-label>
               <nz-form-control>
                 <nz-select
+                  [nzDisabled]="isSaving"
                   formControlName="CarDescription"
                   nzPlaceHolder="Selecione o carro"
-                  nzShowSearch
-                  [nzDisabled]="isSaving">
+                  nzShowSearch>
 
                   <nz-option
                     *ngFor="let car of carOptions"
@@ -251,7 +251,7 @@
             <nz-form-item>
               <nz-form-label>Status</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="status" nzPlaceHolder="Selecione o status" [nzDisabled]="isSaving">
+                <nz-select [nzDisabled]="isSaving" formControlName="status" nzPlaceHolder="Selecione o status">
                   <nz-option nzLabel="ATIVO" nzValue="ACTIVO"></nz-option>
                   <nz-option nzLabel="INATIVO" nzValue="INACTIVO"></nz-option>
                 </nz-select>

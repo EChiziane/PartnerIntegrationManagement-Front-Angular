@@ -198,10 +198,10 @@
   [nzBodyStyle]="{ overflow: 'auto' }"
   [nzFooter]="drawerFooter"
   [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
   [nzTitle]="drawerTitle"
   [nzVisible]="isDrawerVisible"
   [nzWidth]="drawerWidth"
-  [nzPlacement]="drawerPlacement"
 >
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar cliente...">
     <form [formGroup]="customerForm" class="drawer-form" nz-form>

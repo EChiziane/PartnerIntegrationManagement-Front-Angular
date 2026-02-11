@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Inject, OnInit, Output, PLATFORM_ID } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { isPlatformBrowser } from '@angular/common';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import {Component, EventEmitter, Inject, OnInit, Output, PLATFORM_ID} from '@angular/core';
+import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {isPlatformBrowser} from '@angular/common';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',
@@ -52,7 +52,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: object,
     private msg: NzMessageService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.logout();
@@ -69,10 +70,6 @@ export class LoginComponent implements OnInit {
   isInvalid(controlName: 'login' | 'password'): boolean {
     const c = this.userForm.get(controlName);
     return !!c && c.invalid && (c.touched || c.dirty);
-  }
-
-  private markAllTouched(): void {
-    Object.values(this.userForm.controls).forEach(c => c.markAsTouched());
   }
 
   login() {
@@ -137,13 +134,6 @@ export class LoginComponent implements OnInit {
 
   toggleResetConfirmVisibility(): void {
     this.isResetConfirmVisible = !this.isResetConfirmVisible;
-  }
-
-  private normalizeMzPhoneToE164(raw: string): string {
-    const digits = (raw ?? '').toString().replace(/\D/g, '');
-    if (!digits) return '';
-    if (digits.startsWith('258')) return `+${digits}`;
-    return `+258${digits}`;
   }
 
   requestRecovery(): void {
@@ -222,5 +212,16 @@ export class LoginComponent implements OnInit {
         this.msg.error('Código inválido ou expirado.');
       }
     });
+  }
+
+  private markAllTouched(): void {
+    Object.values(this.userForm.controls).forEach(c => c.markAsTouched());
+  }
+
+  private normalizeMzPhoneToE164(raw: string): string {
+    const digits = (raw ?? '').toString().replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits.startsWith('258')) return `+${digits}`;
+    return `+258${digits}`;
   }
 }
