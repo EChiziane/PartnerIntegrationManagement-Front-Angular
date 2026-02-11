@@ -162,12 +162,13 @@
 @media (max-width: 480px) {
   .login-page {
     padding: 16px;
-    align-items: flex-start;
+    align-items: center;   /* ✅ centra verticalmente */
+    justify-content: center; /* ✅ garante centro */
   }
 
   .login-card {
     width: 100%;
-    margin-top: 16px;
+    margin-top: 0; /* ✅ remove o empurrão para baixo */
   }
 }
 
