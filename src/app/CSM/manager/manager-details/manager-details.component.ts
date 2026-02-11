@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Manager} from '../models/CSM/manager';
+import {Manager} from '../../../models/CSM/manager';
 
 @Component({
   selector: 'app-manager-details',

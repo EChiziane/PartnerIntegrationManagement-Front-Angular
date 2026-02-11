@@ -65,11 +65,11 @@ import {CarLoadComponent} from './CSM/carload/carload.component';
 import {DashboardComponent} from './CSM/dashboard/dashboard.component';
 import {InvoiceComponent} from './CSM/invoice/invoice.component';
 import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.component';
-import {SprintDetailsComponent} from './CSM/sprint-details/sprint-details.component';
-import {DriverDetailsComponent} from './driver-details/driver-details.component';
+import {SprintDetailsComponent} from './CSM/sprint/sprint-details/sprint-details.component';
+import {DriverDetailsComponent} from './CSM/driver/driver-details/driver-details.component';
 import {NzEmptyComponent} from 'ng-zorro-antd/empty';
-import {ManagerDetailsComponent} from './manager-details/manager-details.component';
-import {CarloadDetailsComponent} from './carload-details/carload-details.component';
+import {ManagerDetailsComponent} from './CSM/manager/manager-details/manager-details.component';
+import {CarloadDetailsComponent} from './CSM/carload/carload-details/carload-details.component';
 
 
 registerLocaleData(en);

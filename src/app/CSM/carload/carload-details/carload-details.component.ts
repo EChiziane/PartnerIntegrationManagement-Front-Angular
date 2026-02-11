@@ -1,14 +1,14 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CarloadService} from '../services/carload.service';
-import {DriverService} from '../services/driver.service';
-import {ManagerService} from '../services/manager.service';
-import {SprintService} from '../services/sprint.service';
+import {CarloadService} from '../../../services/carload.service';
+import {DriverService} from '../../../services/driver.service';
+import {ManagerService} from '../../../services/manager.service';
+import {SprintService} from '../../../services/sprint.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {Manager} from '../models/CSM/manager';
-import {Driver} from '../models/CSM/driver';
-import {CarLoad} from '../models/CSM/carlaod';
-import {Sprint} from '../models/CSM/sprint';
+import {Manager} from '../../../models/CSM/manager';
+import {Driver} from '../../../models/CSM/driver';
+import {CarLoad} from '../../../models/CSM/carlaod';
+import {Sprint} from '../../../models/CSM/sprint';
 
 @Component({
   selector: 'app-carload-details',

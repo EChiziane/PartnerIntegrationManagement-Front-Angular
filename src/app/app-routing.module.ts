@@ -12,13 +12,13 @@ import {DriverComponent} from './CSM/driver/driver.component';
 import {SprintComponent} from './CSM/sprint/sprint.component';
 import {ManagerComponent} from './CSM/manager/manager.component';
 
-import {SprintDetailsComponent} from './CSM/sprint-details/sprint-details.component';
+import {SprintDetailsComponent} from './CSM/sprint/sprint-details/sprint-details.component';
 import {CarLoadComponent} from './CSM/carload/carload.component';
 import {DashboardComponent} from './CSM/dashboard/dashboard.component';
 import {InvoiceComponent} from './CSM/invoice/invoice.component';
 import {QuatationComponent} from './CSM/quatation/quatation.component';
 import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.component';
-import {CarloadDetailsComponent} from './carload-details/carload-details.component';
+import {CarloadDetailsComponent} from './CSM/carload/carload-details/carload-details.component';
 
 
 const routes: Routes = [

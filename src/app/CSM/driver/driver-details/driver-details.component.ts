@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Driver} from '../models/CSM/driver';
+import {Driver} from '../../../models/CSM/driver';
 
 @Component({
   selector: 'app-driver-details',
