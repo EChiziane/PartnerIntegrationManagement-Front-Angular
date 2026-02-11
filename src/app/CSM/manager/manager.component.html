@@ -276,3 +276,12 @@
   </ng-template>
 
 </nz-drawer>
+<!-- manager.component.html (ADICIONAR NO FIM) -->
+<app-manager-details
+  [(visible)]="isManagerDetailsVisible"
+  [manager]="selectedManagerDetails"
+  [drawerWidth]="detailsDrawerWidth"
+  [drawerPlacement]="detailsDrawerPlacement"
+  (edit)="editFromDetails($event)"
+  (remove)="deleteFromDetails($event)">
+</app-manager-details>

@@ -1,10 +1,10 @@
+// manager.component.ts (ATUALIZADO - completo)
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {Manager} from '../../models/CSM/manager';
 import {ManagerService} from '../../services/manager.service';
-
 
 @Component({
   selector: 'app-manager',
@@ -39,6 +39,12 @@ export class ManagerComponent implements OnInit {
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
+  // ✅ Details Drawer State
+  isManagerDetailsVisible = false;
+  selectedManagerDetails: Manager | null = null;
+  detailsDrawerWidth: string | number = 560;
+  detailsDrawerPlacement: 'right' | 'bottom' = 'right';
+
   // ========= Forms =========
   managerForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -64,9 +70,15 @@ export class ManagerComponent implements OnInit {
     if (window.innerWidth <= 768) {
       this.drawerWidth = '100%';
       this.drawerPlacement = 'bottom';
+
+      this.detailsDrawerWidth = '100%';
+      this.detailsDrawerPlacement = 'bottom';
     } else {
       this.drawerWidth = 720;
       this.drawerPlacement = 'right';
+
+      this.detailsDrawerWidth = 560;
+      this.detailsDrawerPlacement = 'right';
     }
   }
 
@@ -89,8 +101,8 @@ export class ManagerComponent implements OnInit {
 
   calculateStats() {
     this.totalManagers = this.dataSource.length;
-    this.activeManagers = this.dataSource.filter(m => m.status === 'ACTIVO').length;
-    this.inactiveManagers = this.dataSource.filter(m => m.status !== 'ACTIVO').length;
+    this.activeManagers = this.dataSource.filter(m => m.status === 'ACTIVO' || m.status === 'ATIVO').length;
+    this.inactiveManagers = this.dataSource.filter(m => m.status !== 'ACTIVO' && m.status !== 'ATIVO').length;
   }
 
   applyFilters() {
@@ -122,11 +134,15 @@ export class ManagerComponent implements OnInit {
   openManagerDrawer() {
     this.isEditMode = false;
     this.managerDrawerTitle = 'Criar Gestor';
+    this.selectedManagerId = null;
+
     this.managerForm.reset({status: 'ACTIVO'});
     this.isManagerDrawerVisible = true;
   }
 
   closeManagerDrawer() {
+    if (this.isSaving) return;
+
     this.isManagerDrawerVisible = false;
     this.managerForm.reset();
     this.selectedManagerId = null;
@@ -155,7 +171,7 @@ export class ManagerComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData = {...this.managerForm.value};
+    const formData: any = {...this.managerForm.value};
 
     // Normalizar contacto (opcional) para +258
     const rawContact = (formData.contact || '').toString().trim();
@@ -167,14 +183,14 @@ export class ManagerComponent implements OnInit {
 
     request$.subscribe({
       next: () => {
+        this.isSaving = false;
         this.getManagers();
         this.closeManagerDrawer();
         this.message.success(this.isEditMode ? 'Gestor atualizado com sucesso! ✅' : 'Gestor criado com sucesso! 🎉');
-        this.isSaving = false;
       },
       error: () => {
-        this.message.error('Erro ao gravar gestor. 🚫');
         this.isSaving = false;
+        this.message.error('Erro ao gravar gestor. 🚫');
       }
     });
   }
@@ -198,8 +214,25 @@ export class ManagerComponent implements OnInit {
     });
   }
 
+  // ========= Details Drawer =========
   viewManager(data: Manager) {
-    console.log('Visualizar gestor:', data);
+    this.selectedManagerDetails = data;
+    this.isManagerDetailsVisible = true;
+  }
+
+  closeManagerDetails(): void {
+    this.isManagerDetailsVisible = false;
+    this.selectedManagerDetails = null;
+  }
+
+  editFromDetails(manager: Manager): void {
+    this.closeManagerDetails();
+    this.editManager(manager);
+  }
+
+  deleteFromDetails(manager: Manager): void {
+    this.closeManagerDetails();
+    this.deleteManager(manager);
   }
 
   onBack() {

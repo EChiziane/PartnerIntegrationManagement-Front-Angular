@@ -68,6 +68,7 @@ import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.
 import {SprintDetailsComponent} from './CSM/sprint-details/sprint-details.component';
 import {DriverDetailsComponent} from './driver-details/driver-details.component';
 import {NzEmptyComponent} from 'ng-zorro-antd/empty';
+import {ManagerDetailsComponent} from './manager-details/manager-details.component';
 
 
 registerLocaleData(en);
@@ -90,6 +91,7 @@ registerLocaleData(en);
     CarloadCustomerComponent,
     SprintDetailsComponent
 ,DriverDetailsComponent
+    ,ManagerDetailsComponent
 
   ],
   imports: [
