@@ -66,6 +66,8 @@ import {DashboardComponent} from './CSM/dashboard/dashboard.component';
 import {InvoiceComponent} from './CSM/invoice/invoice.component';
 import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.component';
 import {SprintDetailsComponent} from './CSM/sprint-details/sprint-details.component';
+import {DriverDetailsComponent} from './driver-details/driver-details.component';
+import {NzEmptyComponent} from 'ng-zorro-antd/empty';
 
 
 registerLocaleData(en);
@@ -87,6 +89,7 @@ registerLocaleData(en);
     InvoiceComponent,
     CarloadCustomerComponent,
     SprintDetailsComponent
+,DriverDetailsComponent
 
   ],
   imports: [
@@ -188,7 +191,8 @@ registerLocaleData(en);
     NzCarouselComponent,
     NzCarouselContentDirective,
     NzBreadCrumbItemComponent,
-    NzBreadCrumbComponent
+    NzBreadCrumbComponent,
+    NzEmptyComponent
 
   ],
   providers: [

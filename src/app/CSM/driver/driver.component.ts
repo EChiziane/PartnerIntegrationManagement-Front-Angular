@@ -36,6 +36,13 @@ export class DriverComponent implements OnInit {
   selectedDriverId: string | null = null;
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
+
+  // ✅ Details Drawer State
+  isDriverDetailsVisible = false;
+  selectedDriverDetails: Driver | null = null;
+  detailsDrawerWidth: string | number = 560;
+  detailsDrawerPlacement: 'right' | 'bottom' = 'right';
+
   // ✅ Opções de carros
   carOptions: string[] = [
     '4m3(DYNA)',
@@ -44,6 +51,7 @@ export class DriverComponent implements OnInit {
     '22m3(TATA SIGNA)',
     '24m3(SINOTRUK)'
   ];
+
   // ========= Forms =========
   driverForm = new FormGroup({
     Name: new FormControl('', Validators.required),
@@ -51,6 +59,7 @@ export class DriverComponent implements OnInit {
     CarDescription: new FormControl('', Validators.required),
     status: new FormControl('ACTIVO', Validators.required)
   });
+
   // ✅ Guardar o driver original para não perder id/createdAt no update
   private selectedDriver: Driver | null = null;
 
@@ -71,9 +80,15 @@ export class DriverComponent implements OnInit {
     if (window.innerWidth <= 768) {
       this.drawerWidth = '100%';
       this.drawerPlacement = 'bottom';
+
+      this.detailsDrawerWidth = '100%';
+      this.detailsDrawerPlacement = 'bottom';
     } else {
       this.drawerWidth = 720;
       this.drawerPlacement = 'right';
+
+      this.detailsDrawerWidth = 560;
+      this.detailsDrawerPlacement = 'right';
     }
   }
 
@@ -82,8 +97,7 @@ export class DriverComponent implements OnInit {
     this.isLoading = true;
     this.driverService.getDrivers().subscribe({
       next: (drivers) => {
-        this.dataSource = drivers
-        console.log(drivers)
+        this.dataSource = drivers;
         this.listOfDisplayData = [...drivers];
         this.calculateStats();
         this.isLoading = false;
@@ -97,8 +111,8 @@ export class DriverComponent implements OnInit {
 
   calculateStats() {
     this.totalDrivers = this.dataSource.length;
-    this.activeDrivers = this.dataSource.filter(d => d.status === 'ACTIVO').length;
-    this.inactiveDrivers = this.dataSource.filter(d => d.status !== 'ACTIVO').length;
+    this.activeDrivers = this.dataSource.filter(d => d.status === 'ACTIVO' || d.status === 'ATIVO').length;
+    this.inactiveDrivers = this.dataSource.filter(d => d.status !== 'ACTIVO' && d.status !== 'ATIVO').length;
   }
 
   applyFilters() {
@@ -126,6 +140,7 @@ export class DriverComponent implements OnInit {
     this.search();
   }
 
+  // ========= Drawer CRUD =========
   openDriverDrawer() {
     this.isEditMode = false;
     this.driverDrawerTitle = 'Criar Motorista';
@@ -175,7 +190,6 @@ export class DriverComponent implements OnInit {
 
     this.isSaving = true;
 
-    // Valores do form
     const formData: any = {...this.driverForm.value};
 
     // Normalizar phone para +258
@@ -184,7 +198,7 @@ export class DriverComponent implements OnInit {
 
     // ✅ No update, preserva campos fora do form (id, createdAt, etc.)
     const payload = (this.isEditMode && this.selectedDriver)
-      ? {...this.selectedDriver, ...formData} // mantém id/createdAt
+      ? {...this.selectedDriver, ...formData}
       : formData;
 
     const request$ = (this.isEditMode && this.selectedDriverId)
@@ -193,7 +207,6 @@ export class DriverComponent implements OnInit {
 
     request$.subscribe({
       next: () => {
-        // ✅ importante: desligar saving antes de fechar
         this.isSaving = false;
 
         this.getDrivers();
@@ -227,10 +240,28 @@ export class DriverComponent implements OnInit {
     });
   }
 
+  // ========= Details Drawer =========
   viewDriver(data: Driver) {
-    console.log('Visualizar motorista:', data);
+    this.selectedDriverDetails = data;
+    this.isDriverDetailsVisible = true;
   }
 
+  closeDriverDetails(): void {
+    this.isDriverDetailsVisible = false;
+    this.selectedDriverDetails = null;
+  }
+
+  editFromDetails(driver: Driver): void {
+    this.closeDriverDetails();
+    this.editDriver(driver);
+  }
+
+  deleteFromDetails(driver: Driver): void {
+    this.closeDriverDetails();
+    this.deleteDriver(driver);
+  }
+
+  // ========= Navigation =========
   onBack() {
     window.history.back();
   }

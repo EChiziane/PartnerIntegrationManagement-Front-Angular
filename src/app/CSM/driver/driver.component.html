@@ -131,8 +131,8 @@
             <td>{{ data.CarDescription }}</td>
 
             <td>
-              <nz-tag [nzColor]="data.status === 'ATIVO' ? 'green' : 'red'">
-                {{ data.status }}
+              <nz-tag [nzColor]="(data.status === 'ACTIVO' || data.status === 'ATIVO') ? 'green' : 'red'">
+                {{ data.status === 'ACTIVO' ? 'ATIVO' : data.status }}
               </nz-tag>
             </td>
 
@@ -179,7 +179,7 @@
   </div>
 </div>
 
-<!-- ===== Drawer ===== -->
+<!-- ===== Drawer (Create/Edit) ===== -->
 <nz-drawer
   (nzOnClose)="closeDriverDrawer()"
   [nzBodyStyle]="{ overflow: 'auto' }"
@@ -224,7 +224,7 @@
 
         <div [nzGutter]="16" nz-row>
 
-          <!-- ✅ CarDescription (SELECT) -->
+          <!-- CarDescription (SELECT) -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>Carro</nz-form-label>
@@ -292,3 +292,13 @@
   </ng-template>
 
 </nz-drawer>
+
+<!-- ===== Driver Details Drawer ===== -->
+<app-driver-details
+  [(visible)]="isDriverDetailsVisible"
+  [driver]="selectedDriverDetails"
+  [drawerWidth]="detailsDrawerWidth"
+  [drawerPlacement]="detailsDrawerPlacement"
+  (edit)="editFromDetails($event)"
+  (remove)="deleteFromDetails($event)">
+</app-driver-details>
