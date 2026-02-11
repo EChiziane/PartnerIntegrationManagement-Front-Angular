@@ -1,24 +1,47 @@
 import {Injectable} from '@angular/core';
-import {environment} from '../../environments/environments';
 import {HttpClient} from '@angular/common/http';
-import {Observable, take, tap} from 'rxjs';
-import {User} from "../models/user";
+import {environment} from '../../environments/environments';
+import {map, Observable, switchMap, take, tap} from 'rxjs';
+import {User} from '../models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseURL = environment.baseURL + "/auth";
+  private baseURL = environment.baseURL + '/auth';
 
   constructor(private http: HttpClient) {
   }
 
-  login(login: string, password: string): Observable<{ token: string }> {
+  // ✅ login: guarda token -> busca users -> encontra o user pelo login -> guarda user completo
+  login(login: string, password: string): Observable<User> {
     return this.http.post<{ token: string }>(`${this.baseURL}/login`, {login, password}).pipe(
-      tap(response => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', login);
+      tap(res => {
+        localStorage.setItem('token', res.token);
+      }),
+      switchMap(() => this.getUsers().pipe(take(1))),
+      map((users: User[]) => {
+        const found = users.find(u => u.login?.toLowerCase() === login.toLowerCase());
+        if (!found) {
+          throw new Error(`Utilizador não encontrado na lista /auth/users para o login: ${login}`);
+        }
+        return found;
+      }),
+      tap((user: User) => {
+        // ⚠️ nunca guardes password. Aqui garantimos que não vai
+        const safeUser: Partial<User> = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          status: user.status,
+          phone: user.phone,
+          login: user.login,
+          role: user.role,
+          createdAt: user.createdAt
+        };
+
+        localStorage.setItem('user', JSON.stringify(safeUser));
       })
     );
   }
@@ -28,7 +51,6 @@ export class AuthService {
   }
 
   // ===== Recovery (WhatsApp + Email OTP) =====
-
   requestPasswordReset(phoneWhatsApp: string): Observable<{
     maskedName: string;
     maskedEmail: string;
@@ -41,10 +63,7 @@ export class AuthService {
   }
 
   confirmPasswordReset(phoneWhatsApp: string): Observable<{ ok: boolean }> {
-    return this.http.post<{ ok: boolean }>(
-      `${this.baseURL}/password/reset/confirm`,
-      {phoneWhatsApp}
-    ).pipe(take(1));
+    return this.http.post<{ ok: boolean }>(`${this.baseURL}/password/reset/confirm`, {phoneWhatsApp}).pipe(take(1));
   }
 
   resetPassword(phoneWhatsApp: string, otpCode: string, newPassword: string): Observable<{ ok: boolean }> {
@@ -54,18 +73,18 @@ export class AuthService {
     ).pipe(take(1));
   }
 
+  // ===== Users =====
+  public getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseURL}/users`);
+  }
 
   public deleteUser(id: string): Observable<User> {
     return this.http.delete<User>(`${this.baseURL}/${id}`).pipe(take(1));
   }
 
-  // ===== Other =====
-  public getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseURL}/users`);
-  }
-
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 
   getToken(): string | null {

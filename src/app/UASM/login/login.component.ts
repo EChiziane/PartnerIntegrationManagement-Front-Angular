@@ -2,7 +2,6 @@ import {Component, EventEmitter, Inject, OnInit, Output, PLATFORM_ID} from '@ang
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {isPlatformBrowser} from '@angular/common';
 import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
@@ -72,39 +71,38 @@ export class LoginComponent implements OnInit {
     return !!c && c.invalid && (c.touched || c.dirty);
   }
 
-  login() {
-    this.responseMessage = null;
-
+  login(): void {
     if (this.userForm.invalid) {
-      this.markAllTouched();
-      this.responseMessage = 'Preencha todos os campos corretamente.';
+      this.userForm.markAllAsTouched();
+      return;
+    }
+
+    const loginValue = this.userForm.get('login')?.value;
+    const passwordValue = this.userForm.get('password')?.value;
+
+    const login = (loginValue ?? '').toString().trim();
+    const password = (passwordValue ?? '').toString();
+
+    if (!login || !password) {
+      this.userForm.markAllAsTouched();
       return;
     }
 
     this.isLoading = true;
 
-    const login = this.userForm.value.login!;
-    const password = this.userForm.value.password!;
-
     this.authService.login(login, password).subscribe({
-      next: (response) => {
+      next: () => {
         this.isLoading = false;
-
-        if (response && response.token && isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('token', response.token);
-          this.loginSuccess.emit();
-          this.router.navigate(['/app/dashboard']);
-        } else {
-          this.responseMessage = 'Erro ao receber o token da API.';
-        }
+        this.router.navigate(['/app/dashboard']);
       },
       error: (err) => {
         this.isLoading = false;
-        console.error('Erro no login', err);
-        this.responseMessage = 'Usuário ou senha inválidos.';
+        this.responseMessage = 'Login inválido';
+        console.error(err);
       }
     });
   }
+
 
   // ===== Register Modal =====
   openRegisterModal(): void {

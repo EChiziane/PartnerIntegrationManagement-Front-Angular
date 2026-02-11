@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 
 type MaterialKey = 'areia_grossa' | 'areia_vermelha' | 'pedra_34' | 'pedra_sarrisca' | 'po_de_pedra';
 
@@ -87,7 +87,8 @@ export class LandingPageComponent {
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
   goToLogin(): void {
     this.router.navigate(['/login']);
@@ -96,7 +97,7 @@ export class LandingPageComponent {
   scrollTo(id: string): void {
     const el = document.getElementById(id);
     if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.scrollIntoView({behavior: 'smooth', block: 'start'});
   }
 
   openWhatsApp(text: string): void {

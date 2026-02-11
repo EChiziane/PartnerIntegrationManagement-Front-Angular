@@ -2,7 +2,7 @@
 
   <nz-header class="header fixed-header">
     <div class="header-content">
-      <div class="logo" (click)="scrollTo('inicio')">
+      <div (click)="scrollTo('inicio')" class="logo">
         <span class="logo-dot"></span>
         {{ companyName }}
       </div>
@@ -44,12 +44,12 @@
   <nz-content>
 
     <!-- ✅ HERO FULL SCREEN -->
-    <section id="inicio" class="hero-full">
-      <nz-carousel class="hero-carousel" [nzAutoPlay]="false">
+    <section class="hero-full" id="inicio">
+      <nz-carousel [nzAutoPlay]="false" class="hero-carousel">
         <div
-          class="hero-slide"
           *ngFor="let slide of heroSlides"
           [style.backgroundImage]="'url(' + slide.image + ')'"
+          class="hero-slide"
           nz-carousel-content>
 
           <div class="hero-overlay"></div>
@@ -64,11 +64,11 @@
             <p>{{ slide.subtitle }}</p>
 
             <div class="hero-actions">
-              <button (click)="showQuoteModal()" nz-button nzType="primary" nzSize="large">
+              <button (click)="showQuoteModal()" nz-button nzSize="large" nzType="primary">
                 Pedir cotação no WhatsApp
               </button>
 
-              <button (click)="scrollTo('materiais')" nz-button nzType="default" nzSize="large">
+              <button (click)="scrollTo('materiais')" nz-button nzSize="large" nzType="default">
                 Ver catálogo
               </button>
             </div>
@@ -88,7 +88,7 @@
         </div>
       </nz-carousel>
 
-      <div class="scroll-hint" (click)="scrollTo('materiais')" title="Descer">
+      <div (click)="scrollTo('materiais')" class="scroll-hint" title="Descer">
         <span nz-icon nzType="down"></span>
       </div>
     </section>
@@ -107,7 +107,7 @@
           <nz-card class="material-card" nzHoverable>
             <div class="material-top">
               <div class="material-icon">
-                <span nz-icon [nzType]="item.icon"></span>
+                <span [nzType]="item.icon" nz-icon></span>
               </div>
 
               <div class="material-title">
@@ -125,10 +125,10 @@
 
             <div class="material-footer">
               <div class="chips">
-                <span class="chip" *ngFor="let c of capacities">{{ c }}</span>
+                <span *ngFor="let c of capacities" class="chip">{{ c }}</span>
               </div>
 
-              <button (click)="ctaMaterial(item)" nz-button nzType="primary" nzBlock>
+              <button (click)="ctaMaterial(item)" nz-button nzBlock nzType="primary">
                 Pedir este material
               </button>
             </div>
@@ -181,7 +181,7 @@
             <span nz-icon nzType="phone"></span>
             <h3>Telefone / WhatsApp</h3>
             <p>{{ phoneDisplay }}</p>
-            <a class="link-action" (click)="showQuoteModal()">Pedir cotação</a>
+            <a (click)="showQuoteModal()" class="link-action">Pedir cotação</a>
           </nz-card>
         </div>
       </div>
@@ -208,11 +208,11 @@
 
   <!-- ===== MODAL ===== -->
   <nz-modal
-    [(nzVisible)]="isQuoteModalVisible"
-    nzTitle="Cotação rápida"
-    [nzFooter]="null"
     (nzOnCancel)="closeQuoteModal()"
+    [(nzVisible)]="isQuoteModalVisible"
+    [nzFooter]="null"
     [nzMaskClosable]="true"
+    nzTitle="Cotação rápida"
   >
     <ng-container *nzModalContent>
       <div class="quote-modal">
@@ -230,7 +230,8 @@
         <div class="quote-form">
           <input [(ngModel)]="quoteName" name="quoteName" placeholder="Seu nome (opcional)" type="text">
           <input [(ngModel)]="quotePhone" name="quotePhone" placeholder="Seu contacto (opcional)" type="text">
-          <input [(ngModel)]="quoteLocation" name="quoteLocation" placeholder="Local de entrega (ex: Matola)" type="text">
+          <input [(ngModel)]="quoteLocation" name="quoteLocation" placeholder="Local de entrega (ex: Matola)"
+                 type="text">
 
           <label class="mini-label">Material</label>
           <nz-select [(ngModel)]="quoteMaterial" name="quoteMaterial">
@@ -242,7 +243,7 @@
             <nz-option *ngFor="let c of capacities" [nzLabel]="c" [nzValue]="c"></nz-option>
           </nz-select>
 
-          <button (click)="submitQuickQuote()" nz-button nzType="primary" nzBlock>
+          <button (click)="submitQuickQuote()" nz-button nzBlock nzType="primary">
             Enviar para WhatsApp
           </button>
         </div>
