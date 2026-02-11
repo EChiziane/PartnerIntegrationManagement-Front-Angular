@@ -1,209 +1,204 @@
 <nz-layout class="layout">
 
-  <!-- ================= HEADER FIXO ================= -->
   <nz-header class="header fixed-header">
     <div class="header-content">
-
-      <!-- LOGO -->
-      <div class="logo">
-        Águas&nbsp;Chiziane
+      <div class="logo" (click)="scrollTo('inicio')">
+        <span class="logo-dot"></span>
+        {{ companyName }}
       </div>
 
-      <!-- MENU DESKTOP -->
       <ul class="desktop-menu" nz-menu nzMode="horizontal">
-        <li nz-menu-item><a href="#inicio">Início</a></li>
-        <li nz-menu-item><a href="#quem-somos">Quem Somos</a></li>
-        <li nz-menu-item><a href="#servicos">Serviços</a></li>
-        <li nz-menu-item><a href="#contactos">Contactos</a></li>
-        <li nz-menu-item><a href="#localizacao">Onde Estamos</a></li>
-        <!-- LOGIN -->
-        <li class="login-menu-item" nz-menu-item>
+        <li nz-menu-item><a (click)="scrollTo('inicio')">Início</a></li>
+        <li nz-menu-item><a (click)="scrollTo('materiais')">Materiais</a></li>
+        <li nz-menu-item><a (click)="scrollTo('como-funciona')">Como funciona</a></li>
+        <li nz-menu-item><a (click)="scrollTo('contactos')">Contactos</a></li>
+        <li nz-menu-item><a (click)="scrollTo('localizacao')">Onde estamos</a></li>
+        <li nz-menu-item>
           <button (click)="goToLogin()" nz-button nzSize="small" nzType="primary">
-            Login
+            Área do Sistema
           </button>
         </li>
       </ul>
 
-      <!-- BOTÃO MOBILE -->
-      <button
-        (click)="menuVisible = true"
-        class="mobile-menu-btn"
-        nz-button
-        nzType="text">
+      <button (click)="menuVisible = true" class="mobile-menu-btn" nz-button nzType="text">
         <span nz-icon nzType="menu"></span>
       </button>
-
     </div>
   </nz-header>
 
-  <!-- ================= DRAWER MOBILE ================= -->
-  <nz-drawer
-    (nzOnClose)="menuVisible = false"
-    [nzVisible]="menuVisible"
-    nzPlacement="right"
-    nzTitle="Menu">
-
+  <nz-drawer (nzOnClose)="menuVisible = false" [nzVisible]="menuVisible" nzPlacement="right" nzTitle="Menu">
     <ul *nzDrawerContent nz-menu nzMode="vertical">
-      <li (click)="menuVisible = false" nz-menu-item><a href="#inicio">Início</a></li>
-      <li (click)="menuVisible = false" nz-menu-item><a href="#quem-somos">Quem Somos</a></li>
-      <li (click)="menuVisible = false" nz-menu-item><a href="#servicos">Serviços</a></li>
-      <li (click)="menuVisible = false" nz-menu-item><a href="#contactos">Contactos</a></li>
-      <li (click)="menuVisible = false" nz-menu-item><a href="#localizacao">Onde Estamos</a></li>
-      <!-- LOGIN MOBILE -->
+      <li (click)="menuVisible=false; scrollTo('inicio')" nz-menu-item>Início</li>
+      <li (click)="menuVisible=false; scrollTo('materiais')" nz-menu-item>Materiais</li>
+      <li (click)="menuVisible=false; scrollTo('como-funciona')" nz-menu-item>Como funciona</li>
+      <li (click)="menuVisible=false; scrollTo('contactos')" nz-menu-item>Contactos</li>
+      <li (click)="menuVisible=false; scrollTo('localizacao')" nz-menu-item>Onde estamos</li>
       <li nz-menu-item>
-        <button
-          (click)="goToLogin(); menuVisible = false"
-          nz-button
-          nzBlock
-          nzType="primary">
-          Login
+        <button (click)="goToLogin(); menuVisible=false" nz-button nzBlock nzType="primary">
+          Área do Sistema
         </button>
       </li>
     </ul>
-
   </nz-drawer>
 
-  <!-- ================= CONTEÚDO ================= -->
   <nz-content>
 
-    <!-- ===== HERO ===== -->
-    <section id="inicio">
-      <nz-carousel class="hero" nzAutoPlay>
-        <div class="hero-slide" nz-carousel-content>
-          <h1>Pureza que vem da natureza</h1>
-          <p>Água tratada com qualidade, segura e acessível para todos</p>
-          <a
-            class="whatsapp-btn"
-            href="https://wa.me/258841231234?text=Olá%2C%20gostaria%20de%20mais%20informações%20sobre%20Águas%20Chiziane"
-            nz-button
-            nzSize="large" nzType="primary" target="_blank">
-            Fale connosco no WhatsApp
-          </a>
-        </div>
+    <!-- ✅ HERO FULL SCREEN -->
+    <section id="inicio" class="hero-full">
+      <nz-carousel class="hero-carousel" [nzAutoPlay]="false">
+        <div
+          class="hero-slide"
+          *ngFor="let slide of heroSlides"
+          [style.backgroundImage]="'url(' + slide.image + ')'"
+          nz-carousel-content>
 
-        <div class="hero-slide second" nz-carousel-content>
-          <h1>Compromisso com a sua saúde</h1>
-          <p>Distribuição segura e sustentável desde 2010</p>
+          <div class="hero-overlay"></div>
+
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span nz-icon nzType="truck"></span>
+              Entrega rápida · Pagamento na entrega
+            </div>
+
+            <h1>{{ slide.title }}</h1>
+            <p>{{ slide.subtitle }}</p>
+
+            <div class="hero-actions">
+              <button (click)="showQuoteModal()" nz-button nzType="primary" nzSize="large">
+                Pedir cotação no WhatsApp
+              </button>
+
+              <button (click)="scrollTo('materiais')" nz-button nzType="default" nzSize="large">
+                Ver catálogo
+              </button>
+            </div>
+
+            <div class="hero-meta">
+              <div class="hero-meta-item">
+                <span nz-icon nzType="phone"></span>
+                <span>{{ phoneDisplay }}</span>
+              </div>
+              <div class="hero-meta-item">
+                <span nz-icon nzType="environment"></span>
+                <span>Maputo e arredores</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </nz-carousel>
+
+      <div class="scroll-hint" (click)="scrollTo('materiais')" title="Descer">
+        <span nz-icon nzType="down"></span>
+      </div>
     </section>
 
-    <!-- ===== QUEM SOMOS ===== -->
-    <section class="section" id="quem-somos">
-      <h2>Quem Somos</h2>
-      <p class="section-text">
-        A <strong>Águas Chiziane</strong> é uma empresa familiar que começou em 2010,
-        dedicada à produção e distribuição de água potável de qualidade.
-        Nosso objetivo é fornecer água segura e acessível, garantindo a satisfação da comunidade.
-      </p>
-    </section>
-
-    <!-- ===== SERVIÇOS ===== -->
-    <section class="section light" id="servicos">
-      <h2>Nossos Serviços</h2>
+    <!-- ===== MATERIAIS ===== -->
+    <section class="section" id="materiais">
+      <div class="section-head">
+        <h2>Catálogo de Materiais</h2>
+        <p class="section-text">
+          Escolhe o material e pede já pelo WhatsApp. Quantidades: <strong>{{ capacities.join(', ') }}</strong>.
+        </p>
+      </div>
 
       <div nz-row nzGutter="16">
-        <div nz-col nzMd="8" nzXs="24">
-          <nz-card class="service-card" nzHoverable>
-            <span nz-icon nzType="experiment"></span>
-            <h3>Água Purificada</h3>
-            <p>Processos modernos de purificação e controlo de qualidade.</p>
-            <a
-              class="service-btn"
-              href="https://wa.me/258841231234?text=Olá%2C%20quero%20saber%20mais%20sobre%20Água%20Purificada"
-              target="_blank">
-              Peça Agora
-            </a>
+        <div *ngFor="let item of materials" nz-col nzMd="8" nzSm="12" nzXs="24">
+          <nz-card class="material-card" nzHoverable>
+            <div class="material-top">
+              <div class="material-icon">
+                <span nz-icon [nzType]="item.icon"></span>
+              </div>
+
+              <div class="material-title">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.subtitle }}</p>
+              </div>
+            </div>
+
+            <ul class="material-list">
+              <li *ngFor="let h of item.highlights">
+                <span nz-icon nzType="check-circle"></span>
+                {{ h }}
+              </li>
+            </ul>
+
+            <div class="material-footer">
+              <div class="chips">
+                <span class="chip" *ngFor="let c of capacities">{{ c }}</span>
+              </div>
+
+              <button (click)="ctaMaterial(item)" nz-button nzType="primary" nzBlock>
+                Pedir este material
+              </button>
+            </div>
           </nz-card>
         </div>
+      </div>
+    </section>
 
-        <div nz-col nzMd="8" nzXs="24">
-          <nz-card class="service-card" nzHoverable>
-            <span nz-icon nzType="truck"></span>
-            <h3>Distribuição</h3>
-            <p>Entrega rápida e segura para residências, empresas e escolas.</p>
-            <a
-              class="service-btn"
-              href="https://wa.me/258841231234?text=Olá%2C%20quero%20saber%20mais%20sobre%20Distribuição"
-              target="_blank">
-              Peça Agora
-            </a>
-          </nz-card>
+    <!-- ===== COMO FUNCIONA ===== -->
+    <section class="section light" id="como-funciona">
+      <div class="section-head">
+        <h2>Como funciona</h2>
+        <p class="section-text">Pedido → agendamento → entrega → pagamento na entrega.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-icon"><span nz-icon nzType="message"></span></div>
+          <h3>1) Faz o pedido</h3>
+          <p>Escolhe o material, a quantidade e diz o local.</p>
         </div>
-
-        <div nz-col nzMd="8" nzXs="24">
-          <nz-card class="service-card" nzHoverable>
-            <span nz-icon nzType="safety"></span>
-            <h3>Qualidade Garantida</h3>
-            <p>Certificação do regulador local garantindo conformidade e segurança.</p>
-            <a
-              class="service-btn"
-              href="https://wa.me/258841231234?text=Olá%2C%20quero%20saber%20mais%20sobre%20Qualidade"
-              target="_blank">
-              Peça Agora
-            </a>
-          </nz-card>
+        <div class="step">
+          <div class="step-icon"><span nz-icon nzType="calendar"></span></div>
+          <h3>2) Agendamos</h3>
+          <p>Confirmamos disponibilidade e combinamos dia/hora.</p>
+        </div>
+        <div class="step">
+          <div class="step-icon"><span nz-icon nzType="car"></span></div>
+          <h3>3) Entregamos</h3>
+          <p>Entrega rápida no local combinado.</p>
+        </div>
+        <div class="step">
+          <div class="step-icon"><span nz-icon nzType="credit-card"></span></div>
+          <h3>4) Pagas na entrega</h3>
+          <p>Pagamento no acto da entrega.</p>
         </div>
       </div>
     </section>
 
     <!-- ===== CONTACTOS ===== -->
-    <section class="section light" id="contactos">
-      <h2>Contactos</h2>
+    <section class="section" id="contactos">
+      <div class="section-head">
+        <h2>Contactos</h2>
+        <p class="section-text">Fala connosco e pede a tua cotação com entrega.</p>
+      </div>
 
       <div class="contact-grid" nz-row nzGutter="16">
         <div nz-col nzMd="8" nzXs="24">
           <nz-card nzHoverable>
             <span nz-icon nzType="phone"></span>
-            <h3>Telefone</h3>
-            <p>+258 841231234</p>
+            <h3>Telefone / WhatsApp</h3>
+            <p>{{ phoneDisplay }}</p>
+            <a class="link-action" (click)="showQuoteModal()">Pedir cotação</a>
           </nz-card>
         </div>
-
-        <div nz-col nzMd="8" nzXs="24">
-          <nz-card nzHoverable>
-            <span nz-icon nzType="mail"></span>
-            <h3>Email</h3>
-            <p>aguaschiziane&#64;gmail.com</p>
-          </nz-card>
-        </div>
-
-        <div nz-col nzMd="8" nzXs="24">
-          <nz-card nzHoverable>
-            <span nz-icon nzType="clock-circle"></span>
-            <h3>Horário</h3>
-            <p>Seg–Sex: 08h às 17h | Sáb: 08h às 12h</p>
-          </nz-card>
-        </div>
-      </div>
-
-      <!-- FORMULÁRIO DE CONTACTO -->
-      <div class="contact-form">
-        <h3>Envie-nos uma mensagem</h3>
-        <form>
-          <input placeholder="Seu Nome" required type="text">
-          <input placeholder="Seu Email" required type="email">
-          <textarea placeholder="Sua Mensagem" required></textarea>
-          <button nz-button nzType="primary" type="submit">Enviar</button>
-        </form>
       </div>
     </section>
 
-    <!-- ===== ONDE ESTAMOS ===== -->
-    <section class="section" id="localizacao">
-      <h2>Onde Estamos</h2>
+    <!-- ===== LOCALIZAÇÃO ===== -->
+    <section class="section light" id="localizacao">
+      <div class="section-head">
+        <h2>Onde estamos</h2>
+        <p class="section-text">Av. de Moçambique, nº 534 · Cumbeza · Maputo – Moçambique</p>
+      </div>
 
       <nz-card class="map-card">
-        <span nz-icon nzType="environment"></span>
-        <p>
-          Av. de Moçambique, nº 534<br/>
-          Bairro Cumbeza, Maputo – Moçambique
-        </p>
-
         <div class="map-container">
           <iframe
             loading="lazy"
-            src="https://maps.google.com/maps?q=Maputo&t=&z=15&ie=UTF8&iwloc=&output=embed">
+            src="https://maps.google.com/maps?q=Av.%20de%20Mo%C3%A7ambique%20534%20Maputo&t=&z=15&ie=UTF8&iwloc=&output=embed">
           </iframe>
         </div>
       </nz-card>
@@ -211,21 +206,48 @@
 
   </nz-content>
 
-  <!-- ================= FOOTER ================= -->
-  <nz-footer class="footer">
-    <div class="footer-content">
-      <p>© 2026 Águas Chiziane · Todos os direitos reservados</p>
-      <a
-        class="whatsapp-btn-footer"
-        href="https://wa.me/258841231234?text=Olá%2C%20gostaria%20de%20mais%20informações%20sobre%20Águas%20Chiziane"
-        target="_blank">
-        Fale connosco no WhatsApp
-      </a>
+  <!-- ===== MODAL ===== -->
+  <nz-modal
+    [(nzVisible)]="isQuoteModalVisible"
+    nzTitle="Cotação rápida"
+    [nzFooter]="null"
+    (nzOnCancel)="closeQuoteModal()"
+    [nzMaskClosable]="true"
+  >
+    <ng-container *nzModalContent>
+      <div class="quote-modal">
+        <div class="quote-modal-head">
+          <div class="quote-badge">
+            <span nz-icon nzType="info-circle"></span>
+            Preenche (opcional) e enviamos no WhatsApp
+          </div>
 
-      <button (click)="goToLogin()" nz-button nzType="default">
-        Área do Sistema
-      </button>
-    </div>
-  </nz-footer>
+          <button (click)="quickWhatsAppDirect()" nz-button nzType="default">
+            WhatsApp directo
+          </button>
+        </div>
+
+        <div class="quote-form">
+          <input [(ngModel)]="quoteName" name="quoteName" placeholder="Seu nome (opcional)" type="text">
+          <input [(ngModel)]="quotePhone" name="quotePhone" placeholder="Seu contacto (opcional)" type="text">
+          <input [(ngModel)]="quoteLocation" name="quoteLocation" placeholder="Local de entrega (ex: Matola)" type="text">
+
+          <label class="mini-label">Material</label>
+          <nz-select [(ngModel)]="quoteMaterial" name="quoteMaterial">
+            <nz-option *ngFor="let m of materials" [nzLabel]="m.title" [nzValue]="m.key"></nz-option>
+          </nz-select>
+
+          <label class="mini-label">Quantidade</label>
+          <nz-select [(ngModel)]="quoteCapacity" name="quoteCapacity">
+            <nz-option *ngFor="let c of capacities" [nzLabel]="c" [nzValue]="c"></nz-option>
+          </nz-select>
+
+          <button (click)="submitQuickQuote()" nz-button nzType="primary" nzBlock>
+            Enviar para WhatsApp
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </nz-modal>
 
 </nz-layout>
