@@ -1,58 +1,53 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
-import {CarLoad} from '../../../models/CSM/carlaod';
-import {Driver} from '../../../models/CSM/driver';
-import {Manager} from '../../../models/CSM/manager';
+import { CarLoad, CarLoadStatus } from '../../../models/CSM/carlaod';
+import { Driver } from '../../../models/CSM/driver';
+import { Manager } from '../../../models/CSM/manager';
 
-import {CarloadService} from '../../../services/carload.service';
-import {DriverService} from '../../../services/driver.service';
-import {ManagerService} from '../../../services/manager.service';
-import {SprintService} from '../../../services/sprint.service';
+import { CarloadService } from '../../../services/carload.service';
+import { DriverService } from '../../../services/driver.service';
+import { ManagerService } from '../../../services/manager.service';
+import { SprintService } from '../../../services/sprint.service';
 
-type CarLoadStatus = 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'ENTREGUE' | string;
-type FilterMode = 'ALL' | 'SCHEDULED' | 'DELIVERED' | 'PENDING' | 'CANCELLED';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
 
 @Component({
   selector: 'app-sprint-details',
   standalone: false,
   templateUrl: './sprint-details.component.html',
-  styleUrl: './sprint-details.component.scss'
+  styleUrls: ['./sprint-details.component.scss']
 })
 export class SprintDetailsComponent implements OnInit {
-
-  // ========= Route / Sprint =========
   sprintId!: string;
   sprintName = '';
 
-  // ========= Data =========
   allCarloads: CarLoad[] = [];
   listOfDisplayData: CarLoad[] = [];
 
   isLoading = false;
   isSaving = false;
 
-  // ========= Stats =========
   totalCarloads = 0;
   totalAgendados = 0;
   totalEntregue = 0;
-  totalPendente = 0;
+  totalEmExecucao = 0;
   totalCanceladas = 0;
 
-  // ========= Lookups =========
   dataDrivers: Driver[] = [];
   dataManagers: Manager[] = [];
   isLoadingLookups = false;
 
-  // ========= UI / Filters =========
   searchValue = '';
   filterMode: FilterMode = 'ALL';
-  dateRange: Date[] | null = null; // usado no range picker
+  dateRange: Date[] | null = null;
 
-  // ========= Drawer =========
   isCarloadDrawerVisible = false;
   isEditMode = false;
   isCopyMode = false;
@@ -62,7 +57,6 @@ export class SprintDetailsComponent implements OnInit {
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
-  // ========= Materials =========
   materials: string[] = [
     'Areia grossa',
     'Areia vermelha',
@@ -72,7 +66,6 @@ export class SprintDetailsComponent implements OnInit {
     'Pedra sarrisca'
   ];
 
-  // ========= Form =========
   carloadForm = new FormGroup({
     customerName: new FormControl('', Validators.required),
     customerPhoneNumber: new FormControl('', [Validators.required, Validators.pattern('^[+0-9 ]+$')]),
@@ -81,16 +74,14 @@ export class SprintDetailsComponent implements OnInit {
 
     logisticsManagerId: new FormControl('', Validators.required),
     assignedDriverId: new FormControl('', Validators.required),
-
-    // sprint fixo: sempre vai o sprintId no payload
     carloadBatchId: new FormControl('', Validators.required),
 
     totalSpent: new FormControl(0, [Validators.required, Validators.min(0)]),
     totalEarnings: new FormControl(0, [Validators.required, Validators.min(0)]),
 
-    deliveryStatus: new FormControl<CarLoadStatus>('PENDING', Validators.required),
+    deliveryStatus: new FormControl<CarLoadStatus>('SCHEDULED', Validators.required),
     deliveryScheduledDate: new FormControl<string | null>(''),
-    deliveredDate: new FormControl<string | null>(''),
+    deliveryDate: new FormControl<string | null>(''),
   });
 
   constructor(
@@ -101,12 +92,10 @@ export class SprintDetailsComponent implements OnInit {
     private sprintService: SprintService,
     private modal: NzModalService,
     private message: NzMessageService
-  ) {
-  }
+  ) {}
 
-  // ========= Helpers (UI) =========
   get selectedStatusUpper(): string {
-    return (this.carloadForm.get('deliveryStatus')?.value || 'PENDING').toString().toUpperCase();
+    return (this.carloadForm.get('deliveryStatus')?.value || 'SCHEDULED').toString().toUpperCase();
   }
 
   get shouldShowScheduledDate(): boolean {
@@ -114,7 +103,7 @@ export class SprintDetailsComponent implements OnInit {
   }
 
   get shouldShowDeliveredDate(): boolean {
-    return this.selectedStatusUpper === 'DELIVERED' || this.selectedStatusUpper === 'ENTREGUE';
+    return this.selectedStatusUpper === 'DELIVERED';
   }
 
   ngOnInit(): void {
@@ -142,15 +131,13 @@ export class SprintDetailsComponent implements OnInit {
     }
   }
 
-  // ========= Status helpers =========
-  getStatusLabel(status: CarLoadStatus): string {
+  getStatusLabel(status: CarLoadStatus | string): string {
     switch ((status || '').toUpperCase()) {
       case 'SCHEDULED':
         return 'Agendada';
-      case 'PENDING':
-        return 'Pendente';
+      case 'IN_PROGRESS':
+        return 'Em execução';
       case 'DELIVERED':
-      case 'ENTREGUE':
         return 'Entregue';
       case 'CANCELLED':
         return 'Cancelada';
@@ -159,50 +146,48 @@ export class SprintDetailsComponent implements OnInit {
     }
   }
 
-  getTagColor(status: CarLoadStatus): string {
-    const s = (status || '').toUpperCase();
-    if (s === 'DELIVERED' || s === 'ENTREGUE') return 'green';
-    if (s === 'SCHEDULED') return 'blue';
-    if (s === 'CANCELLED') return 'red';
-    return 'orange'; // pending/outros
+  getTagColor(status: CarLoadStatus | string): string {
+    const value = (status || '').toUpperCase();
+    if (value === 'DELIVERED') return 'green';
+    if (value === 'SCHEDULED') return 'blue';
+    if (value === 'CANCELLED') return 'red';
+    if (value === 'IN_PROGRESS') return 'orange';
+    return 'default';
   }
 
-  // ========= Load Lookups =========
   loadLookups(): void {
     this.isLoadingLookups = true;
 
     this.driverService.getDrivers().subscribe({
-      next: (data) => (this.dataDrivers = data || []),
-      error: () => this.message.error('Erro ao carregar motoristas. 🚫')
+      next: data => (this.dataDrivers = data || []),
+      error: () => this.message.error('Erro ao carregar motoristas.')
     });
 
     this.managerService.getManagers().subscribe({
-      next: (data) => (this.dataManagers = data || []),
-      error: () => this.message.error('Erro ao carregar gestores. 🚫')
+      next: data => (this.dataManagers = data || []),
+      error: () => this.message.error('Erro ao carregar gestores.')
     });
 
     setTimeout(() => (this.isLoadingLookups = false), 400);
   }
 
-  // ========= Data (by sprint endpoint) =========
   loadCarloadsBySprint(): void {
     this.isLoading = true;
 
     this.carloadService.getCarloadsBySprint(this.sprintId).subscribe({
-      next: (data) => {
+      next: data => {
         this.allCarloads = data || [];
         this.calculateStats();
-        this.applyFilter(); // aplica status/date/search
+        this.applyFilter();
         this.isLoading = false;
       },
       error: () => {
-        this.message.error('Erro ao carregar carradas desta sprint. 🚫');
+        this.message.error('Erro ao carregar carradas desta sprint.');
         this.isLoading = false;
       }
     });
   }
 
-  // ========= Filters =========
   setFilterMode(mode: FilterMode): void {
     this.filterMode = mode;
     this.applyFilter();
@@ -223,7 +208,6 @@ export class SprintDetailsComponent implements OnInit {
     this.applyFilter();
   }
 
-  // ========= Drawer =========
   openCarloadDrawer(): void {
     this.isEditMode = false;
     this.isCopyMode = false;
@@ -231,11 +215,11 @@ export class SprintDetailsComponent implements OnInit {
     this.carLoadDrawerTitle = 'Criar Carrada';
 
     this.carloadForm.reset({
-      deliveryStatus: 'PENDING',
+      deliveryStatus: 'SCHEDULED',
       totalSpent: 0,
       totalEarnings: 0,
       deliveryScheduledDate: '',
-      deliveredDate: '',
+      deliveryDate: '',
       carloadBatchId: this.sprintId
     });
 
@@ -252,7 +236,7 @@ export class SprintDetailsComponent implements OnInit {
     this.isCopyMode = false;
 
     this.carloadForm.reset({
-      deliveryStatus: 'PENDING',
+      deliveryStatus: 'SCHEDULED',
       totalSpent: 0,
       totalEarnings: 0,
       carloadBatchId: this.sprintId
@@ -267,9 +251,7 @@ export class SprintDetailsComponent implements OnInit {
 
     this.isCarloadDrawerVisible = true;
     this.carloadForm.patchValue(this.mapCarloadToForm(carload));
-
-    // força sprint fixo
-    this.carloadForm.patchValue({carloadBatchId: this.sprintId});
+    this.carloadForm.patchValue({ carloadBatchId: this.sprintId });
 
     this.applyDateRulesByStatus();
   }
@@ -282,13 +264,11 @@ export class SprintDetailsComponent implements OnInit {
 
     this.isCarloadDrawerVisible = true;
     this.carloadForm.patchValue(this.mapCarloadToForm(carload));
-
-    // ao copiar: PENDING e limpa datas
     this.carloadForm.patchValue({
       carloadBatchId: this.sprintId,
-      deliveryStatus: 'PENDING',
+      deliveryStatus: 'SCHEDULED',
       deliveryScheduledDate: '',
-      deliveredDate: ''
+      deliveryDate: ''
     });
 
     this.applyDateRulesByStatus();
@@ -298,37 +278,32 @@ export class SprintDetailsComponent implements OnInit {
     this.applyDateRulesByStatus();
 
     if (this.carloadForm.invalid) {
-      this.message.warning('Preencha todos os campos obrigatórios!');
+      this.message.warning('Preencha todos os campos obrigatórios.');
       return;
     }
 
     this.isSaving = true;
 
-    const formData: any = {...this.carloadForm.value};
-
-    // Sprint fixo
+    const formData: any = { ...this.carloadForm.value };
     formData.carloadBatchId = this.sprintId;
 
-    // normalizar phone +258
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
     formData.customerPhoneNumber = rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`;
 
-    // normalizar status
-    formData.deliveryStatus = (formData.deliveryStatus || 'PENDING').toString().toUpperCase();
+    formData.deliveryStatus = (formData.deliveryStatus || 'SCHEDULED').toString().toUpperCase();
 
-    // regras finais para datas
-    if (formData.deliveryStatus === 'CANCELLED' || formData.deliveryStatus === 'PENDING') {
-      formData.deliveryScheduledDate = null;
-      formData.deliveredDate = null;
+    if (formData.deliveryStatus === 'CANCELLED' || formData.deliveryStatus === 'IN_PROGRESS') {
+      formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
+      formData.deliveryDate = null;
     }
 
     if (formData.deliveryStatus === 'SCHEDULED') {
       formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
-      formData.deliveredDate = null;
+      formData.deliveryDate = null;
     }
 
-    if (formData.deliveryStatus === 'DELIVERED' || formData.deliveryStatus === 'ENTREGUE') {
-      formData.deliveredDate = this.normalizeDateTimeLocal(formData.deliveredDate);
+    if (formData.deliveryStatus === 'DELIVERED') {
+      formData.deliveryDate = this.normalizeDateTimeLocal(formData.deliveryDate);
       formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
       if (!formData.deliveryScheduledDate) formData.deliveryScheduledDate = null;
     }
@@ -345,16 +320,16 @@ export class SprintDetailsComponent implements OnInit {
         this.loadCarloadsBySprint();
 
         if (isUpdate) {
-          this.message.success('Carrada atualizada com sucesso! ✅');
+          this.message.success('Carrada actualizada com sucesso.');
         } else if (this.isCopyMode) {
-          this.message.success('Carrada copiada e criada com sucesso! 📋✅');
+          this.message.success('Carrada copiada e criada com sucesso.');
         } else {
-          this.message.success('Carrada criada com sucesso! 🎉');
+          this.message.success('Carrada criada com sucesso.');
         }
       },
       error: () => {
         this.isSaving = false;
-        this.message.error('Erro ao gravar carrada. 🚫');
+        this.message.error('Erro ao gravar carrada.');
       }
     });
   }
@@ -369,10 +344,10 @@ export class SprintDetailsComponent implements OnInit {
       nzOnOk: () =>
         this.carloadService.deleteCarLoad(carload.id).subscribe({
           next: () => {
-            this.message.success('Carrada eliminada com sucesso! 🗑️');
+            this.message.success('Carrada eliminada com sucesso.');
             this.loadCarloadsBySprint();
           },
-          error: () => this.message.error('Erro ao eliminar carrada. 🚫')
+          error: () => this.message.error('Erro ao eliminar carrada.')
         })
     });
   }
@@ -381,35 +356,135 @@ export class SprintDetailsComponent implements OnInit {
     window.history.back();
   }
 
+  downloadSprintPdf(): void {
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const generatedAt = new Date();
+
+    const formatDate = (value: string | null | undefined): string => {
+      if (!value) return '—';
+
+      const date = new Date(value);
+      if (isNaN(date.getTime())) return '—';
+
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      const hh = String(date.getHours()).padStart(2, '0');
+      const mi = String(date.getMinutes()).padStart(2, '0');
+
+      return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+    };
+
+    const formatMoney = (value: number | null | undefined): string => {
+      return `${Number(value || 0).toFixed(2)} Mts`;
+    };
+
+    pdf.setFontSize(18);
+    pdf.setTextColor(40, 40, 40);
+    pdf.text('Relatório da Sprint', 14, 18);
+
+    pdf.setFontSize(11);
+    pdf.setTextColor(100, 100, 100);
+    pdf.text(`Sprint: ${this.sprintName || 'N/D'}`, 14, 26);
+    pdf.text(`Gerado em: ${formatDate(generatedAt.toISOString())}`, pageWidth - 70, 26);
+
+    pdf.setDrawColor(230, 230, 230);
+    pdf.line(14, 30, pageWidth - 14, 30);
+
+    pdf.setFontSize(11);
+    pdf.setTextColor(60, 60, 60);
+    pdf.text(`Total: ${this.totalCarloads}`, 14, 38);
+    pdf.text(`Agendadas: ${this.totalAgendados}`, 44, 38);
+    pdf.text(`Em execução: ${this.totalEmExecucao}`, 86, 38);
+    pdf.text(`Entregues: ${this.totalEntregue}`, 138, 38);
+    pdf.text(`Canceladas: ${this.totalCanceladas}`, 14, 45);
+
+    const rows = this.listOfDisplayData.map(item => [
+      item.customerName || '—',
+      item.customerPhoneNumber || '—',
+      item.deliveryDestination || '—',
+      item.transportedMaterial || '—',
+      item.assignedDriverName || '—',
+      this.getStatusLabel(item.deliveryStatus),
+      formatDate(item.deliveryScheduledDate),
+      formatDate(item.deliveryDate),
+      formatMoney(item.totalEarnings),
+      formatMoney(item.totalSpent)
+    ]);
+
+    autoTable(pdf, {
+      startY: 52,
+      head: [[
+        'Cliente',
+        'Contacto',
+        'Destino',
+        'Material',
+        'Motorista',
+        'Estado',
+        'Agendado',
+        'Entregue',
+        'Ganhos',
+        'Gastos'
+      ]],
+      body: rows,
+      styles: {
+        fontSize: 8,
+        cellPadding: 2.5,
+        valign: 'middle',
+        textColor: [50, 50, 50]
+      },
+      headStyles: {
+        fillColor: [0, 123, 255],
+        textColor: [255, 255, 255],
+        fontStyle: 'bold'
+      },
+      alternateRowStyles: {
+        fillColor: [248, 249, 250]
+      },
+      margin: { left: 10, right: 10 },
+      didDrawPage: () => {
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        pdf.setFontSize(9);
+        pdf.setTextColor(120, 120, 120);
+        pdf.text('Transportes Chiziane · Documento gerado pelo sistema', 14, pageHeight - 8);
+      }
+    });
+
+    const safeSprintName = (this.sprintName || 'sprint')
+      .replace(/[^\w\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '_');
+
+    pdf.save(`sprint_${safeSprintName}.pdf`);
+  }
+
   private loadSprintName(): void {
     this.sprintService.getSprintById(this.sprintId).subscribe({
-      next: (sprint) => (this.sprintName = sprint?.name || ''),
+      next: sprint => (this.sprintName = sprint?.name || ''),
       error: () => (this.sprintName = '')
     });
   }
 
-  // ========= Stats =========
   private calculateStats(): void {
     this.totalCarloads = this.allCarloads.length;
 
-    const up = (v: any) => (v || '').toString().toUpperCase();
+    const up = (value: any) => (value || '').toString().toUpperCase();
 
     this.totalAgendados = this.allCarloads.filter(c => up(c.deliveryStatus) === 'SCHEDULED').length;
-    this.totalEntregue = this.allCarloads.filter(c => up(c.deliveryStatus) === 'DELIVERED' || up(c.deliveryStatus) === 'ENTREGUE').length;
-    this.totalPendente = this.allCarloads.filter(c => up(c.deliveryStatus) === 'PENDING').length;
+    this.totalEntregue = this.allCarloads.filter(c => up(c.deliveryStatus) === 'DELIVERED').length;
+    this.totalEmExecucao = this.allCarloads.filter(c => up(c.deliveryStatus) === 'IN_PROGRESS').length;
     this.totalCanceladas = this.allCarloads.filter(c => up(c.deliveryStatus) === 'CANCELLED').length;
   }
 
   private applyFilter(): void {
     let filtered = [...this.allCarloads];
-    const up = (v: any) => (v || '').toString().toUpperCase();
+    const up = (value: any) => (value || '').toString().toUpperCase();
 
-    // status
     if (this.filterMode !== 'ALL') {
       filtered = filtered.filter(c => up(c.deliveryStatus) === this.filterMode);
     }
 
-    // date range (usa deliveryScheduledDate se existir, senão createdAt)
     if (this.dateRange && this.dateRange.length === 2) {
       const [start, end] = this.dateRange;
       if (start && end) {
@@ -417,65 +492,60 @@ export class SprintDetailsComponent implements OnInit {
         const endDate = new Date(end).setHours(23, 59, 59, 999);
 
         filtered = filtered.filter(c => {
-          const d = new Date((c as any).deliveryScheduledDate || (c as any).createdAt).getTime();
-          return d >= startDate && d <= endDate;
+          const rawDate = c.deliveryScheduledDate || c.createdAt;
+          const time = new Date(rawDate || '').getTime();
+          return time >= startDate && time <= endDate;
         });
       }
     }
 
-    // search
-    const v = (this.searchValue || '').toLowerCase().trim();
-    if (v) {
+    const value = (this.searchValue || '').toLowerCase().trim();
+    if (value) {
       filtered = filtered.filter(item =>
-        (item.customerName || '').toLowerCase().includes(v) ||
-        (item.customerPhoneNumber || '').toLowerCase().includes(v) ||
-        (item.deliveryDestination || '').toLowerCase().includes(v) ||
-        (item.transportedMaterial || '').toLowerCase().includes(v) ||
-        (item.assignedDriverName || '').toLowerCase().includes(v)
+        (item.customerName || '').toLowerCase().includes(value) ||
+        (item.customerPhoneNumber || '').toLowerCase().includes(value) ||
+        (item.deliveryDestination || '').toLowerCase().includes(value) ||
+        (item.transportedMaterial || '').toLowerCase().includes(value) ||
+        (item.assignedDriverName || '').toLowerCase().includes(value)
       );
     }
 
     this.listOfDisplayData = filtered;
-
-    // cards devem refletir sprint total (allCarloads), mas se quiseres refletir filtrado:
-    // this.totalCarloads = this.listOfDisplayData.length;
   }
 
-  // ========= Validators (igual ao carload) =========
   private applyDateRulesByStatus(): void {
     const status = this.selectedStatusUpper;
 
     const scheduledCtrl = this.carloadForm.get('deliveryScheduledDate')!;
-    const deliveredCtrl = this.carloadForm.get('deliveredDate')!;
+    const deliveredCtrl = this.carloadForm.get('deliveryDate')!;
 
     scheduledCtrl.clearValidators();
     deliveredCtrl.clearValidators();
 
     if (status === 'SCHEDULED') {
       scheduledCtrl.setValidators([Validators.required]);
-      deliveredCtrl.setValue('', {emitEvent: false});
-    } else if (status === 'DELIVERED' || status === 'ENTREGUE') {
+      deliveredCtrl.setValue('', { emitEvent: false });
+    } else if (status === 'DELIVERED') {
       deliveredCtrl.setValidators([Validators.required]);
     } else {
-      scheduledCtrl.setValue('', {emitEvent: false});
-      deliveredCtrl.setValue('', {emitEvent: false});
+      scheduledCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', { emitEvent: false });
     }
 
-    scheduledCtrl.updateValueAndValidity({emitEvent: false});
-    deliveredCtrl.updateValueAndValidity({emitEvent: false});
+    scheduledCtrl.updateValueAndValidity({ emitEvent: false });
+    deliveredCtrl.updateValueAndValidity({ emitEvent: false });
   }
 
-  // ========= Map/Date helpers =========
-  private normalizeDateTimeLocal(v: string | null | undefined): string | null {
-    if (!v) return null;
-    if (!v.includes('T')) return `${v}T00:00:00`;
-    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)) return `${v}:00`;
-    return v;
+  private normalizeDateTimeLocal(value: string | null | undefined): string | null {
+    if (!value) return null;
+    if (!value.includes('T')) return `${value}T00:00:00`;
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return `${value}:00`;
+    return value;
   }
 
-  private toDatetimeLocalInput(iso: string | null | undefined): string {
-    if (!iso) return '';
-    const withoutZone = iso.replace('Z', '').split('+')[0];
+  private toDatetimeLocalInput(value: string | null | undefined): string {
+    if (!value) return '';
+    const withoutZone = value.replace('Z', '').split('+')[0];
     const cleaned = withoutZone.split('.')[0];
     if (!cleaned.includes('T')) return `${cleaned}T00:00`;
     return cleaned.substring(0, 16);
@@ -490,13 +560,11 @@ export class SprintDetailsComponent implements OnInit {
       logisticsManagerId: carload.logisticsManagerId,
       assignedDriverId: carload.assignedDriverId,
       carloadBatchId: this.sprintId,
-
       totalSpent: carload.totalSpent,
       totalEarnings: carload.totalEarnings,
-
-      deliveryStatus: (carload.deliveryStatus as any) || 'PENDING',
-      deliveryScheduledDate: this.toDatetimeLocalInput((carload as any).deliveryScheduledDate),
-      deliveredDate: this.toDatetimeLocalInput((carload as any).deliveredDate)
+      deliveryStatus: carload.deliveryStatus || 'SCHEDULED',
+      deliveryScheduledDate: this.toDatetimeLocalInput(carload.deliveryScheduledDate),
+      deliveryDate: this.toDatetimeLocalInput(carload.deliveryDate)
     };
   }
 }
