@@ -1,14 +1,14 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CarloadService } from '../../../services/carload.service';
-import { DriverService } from '../../../services/driver.service';
-import { ManagerService } from '../../../services/manager.service';
-import { SprintService } from '../../../services/sprint.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { Manager } from '../../../models/CSM/manager';
-import { Driver } from '../../../models/CSM/driver';
-import { CarLoad } from '../../../models/CSM/carlaod';
-import { Sprint } from '../../../models/CSM/sprint';
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CarloadService} from '../../../services/carload.service';
+import {DriverService} from '../../../services/driver.service';
+import {ManagerService} from '../../../services/manager.service';
+import {SprintService} from '../../../services/sprint.service';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {Manager} from '../../../models/CSM/manager';
+import {Driver} from '../../../models/CSM/driver';
+import {CarLoad} from '../../../models/CSM/carlaod';
+import {Sprint} from '../../../models/CSM/sprint';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -38,7 +38,8 @@ export class CarloadDetailsComponent {
     private driverService: DriverService,
     private managerService: ManagerService,
     private sprintService: SprintService
-  ) {}
+  ) {
+  }
 
   get statusLabel(): string {
     const status = (this.carload?.deliveryStatus || '').toUpperCase();

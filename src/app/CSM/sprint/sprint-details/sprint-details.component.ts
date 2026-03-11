@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
-import { CarLoad, CarLoadStatus } from '../../../models/CSM/carlaod';
-import { Driver } from '../../../models/CSM/driver';
-import { Manager } from '../../../models/CSM/manager';
+import {CarLoad, CarLoadStatus} from '../../../models/CSM/carlaod';
+import {Driver} from '../../../models/CSM/driver';
+import {Manager} from '../../../models/CSM/manager';
 
-import { CarloadService } from '../../../services/carload.service';
-import { DriverService } from '../../../services/driver.service';
-import { ManagerService } from '../../../services/manager.service';
-import { SprintService } from '../../../services/sprint.service';
+import {CarloadService} from '../../../services/carload.service';
+import {DriverService} from '../../../services/driver.service';
+import {ManagerService} from '../../../services/manager.service';
+import {SprintService} from '../../../services/sprint.service';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -92,7 +92,8 @@ export class SprintDetailsComponent implements OnInit {
     private sprintService: SprintService,
     private modal: NzModalService,
     private message: NzMessageService
-  ) {}
+  ) {
+  }
 
   get selectedStatusUpper(): string {
     return (this.carloadForm.get('deliveryStatus')?.value || 'SCHEDULED').toString().toUpperCase();
@@ -251,7 +252,7 @@ export class SprintDetailsComponent implements OnInit {
 
     this.isCarloadDrawerVisible = true;
     this.carloadForm.patchValue(this.mapCarloadToForm(carload));
-    this.carloadForm.patchValue({ carloadBatchId: this.sprintId });
+    this.carloadForm.patchValue({carloadBatchId: this.sprintId});
 
     this.applyDateRulesByStatus();
   }
@@ -284,7 +285,7 @@ export class SprintDetailsComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData: any = { ...this.carloadForm.value };
+    const formData: any = {...this.carloadForm.value};
     formData.carloadBatchId = this.sprintId;
 
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
@@ -442,7 +443,7 @@ export class SprintDetailsComponent implements OnInit {
       alternateRowStyles: {
         fillColor: [248, 249, 250]
       },
-      margin: { left: 10, right: 10 },
+      margin: {left: 10, right: 10},
       didDrawPage: () => {
         const pageHeight = pdf.internal.pageSize.getHeight();
         pdf.setFontSize(9);
@@ -524,16 +525,16 @@ export class SprintDetailsComponent implements OnInit {
 
     if (status === 'SCHEDULED') {
       scheduledCtrl.setValidators([Validators.required]);
-      deliveredCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', {emitEvent: false});
     } else if (status === 'DELIVERED') {
       deliveredCtrl.setValidators([Validators.required]);
     } else {
-      scheduledCtrl.setValue('', { emitEvent: false });
-      deliveredCtrl.setValue('', { emitEvent: false });
+      scheduledCtrl.setValue('', {emitEvent: false});
+      deliveredCtrl.setValue('', {emitEvent: false});
     }
 
-    scheduledCtrl.updateValueAndValidity({ emitEvent: false });
-    deliveredCtrl.updateValueAndValidity({ emitEvent: false });
+    scheduledCtrl.updateValueAndValidity({emitEvent: false});
+    deliveredCtrl.updateValueAndValidity({emitEvent: false});
   }
 
   private normalizeDateTimeLocal(value: string | null | undefined): string | null {

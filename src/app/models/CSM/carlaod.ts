@@ -4,9 +4,11 @@ export type CarloadType = 'Produced' | 'Sold';
 export interface CarLoad {
   id: string;
 
-  deliveryDestination: string;
+  customerId?: string | null;
   customerName: string;
   customerPhoneNumber: string;
+
+  deliveryDestination: string;
 
   logisticsManagerName: string | null;
   logisticsManagerId: string | null;
@@ -27,5 +29,5 @@ export interface CarLoad {
 
   deliveryStatus: CarLoadStatus;
   carloadType: CarloadType;
-  createdAt: string; // ISO 8601
+  createdAt: string;
 }

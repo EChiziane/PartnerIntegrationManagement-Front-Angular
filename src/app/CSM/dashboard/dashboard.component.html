@@ -119,8 +119,8 @@
     <div class="right-actions">
       <button (click)="toggleDoneCard()" nz-button nzType="default">
         <nz-icon
-          nzTheme="outline"
-          [nzType]="showDoneCard ? 'eye-invisible' : 'eye'">
+          [nzType]="showDoneCard ? 'eye-invisible' : 'eye'"
+          nzTheme="outline">
         </nz-icon>
         {{ showDoneCard ? 'Ocultar Entregues' : 'Mostrar Entregues' }}
       </button>
@@ -180,7 +180,7 @@
                   <span class="staff">Motorista: {{ c.assignedDriverName }}</span>
                 </div>
 
-                <div class="row-4" *ngIf="c.logisticsManagerName">
+                <div *ngIf="c.logisticsManagerName" class="row-4">
                   <span class="staff">Gestor: {{ c.logisticsManagerName }}</span>
                 </div>
 
@@ -255,7 +255,7 @@
                 </div>
 
                 <div class="row-date-highlight">
-                  <span class="schedule-badge" [ngClass]="getScheduledBadgeClass(c.deliveryScheduledDate)">
+                  <span [ngClass]="getScheduledBadgeClass(c.deliveryScheduledDate)" class="schedule-badge">
                     {{ getScheduledBadgeLabel(c.deliveryScheduledDate) }}
                   </span>
                 </div>
@@ -268,7 +268,7 @@
                   <span class="staff">Motorista: {{ c.assignedDriverName }}</span>
                 </div>
 
-                <div class="row-4" *ngIf="c.logisticsManagerName">
+                <div *ngIf="c.logisticsManagerName" class="row-4">
                   <span class="staff">Gestor: {{ c.logisticsManagerName }}</span>
                 </div>
 
@@ -351,7 +351,7 @@
                   <span class="staff">Motorista: {{ c.assignedDriverName }}</span>
                 </div>
 
-                <div class="row-4" *ngIf="c.logisticsManagerName">
+                <div *ngIf="c.logisticsManagerName" class="row-4">
                   <span class="staff">Gestor: {{ c.logisticsManagerName }}</span>
                 </div>
 

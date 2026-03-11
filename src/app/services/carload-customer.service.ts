@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environments';
-import { HttpClient } from '@angular/common/http';
-import { Observable, take } from 'rxjs';
-import { CarloadCustomer } from '../models/CarloadCustomer';
+import {Injectable} from '@angular/core';
+import {environment} from '../../environments/environments';
+import {HttpClient} from '@angular/common/http';
+import {Observable, take} from 'rxjs';
+import {CarloadCustomer} from '../models/CarloadCustomer';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,8 @@ import { CarloadCustomer } from '../models/CarloadCustomer';
 export class CarloadCustomerService {
   private readonly baseURL = `${environment.baseURL}/carload-customers`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getCustomers(): Observable<CarloadCustomer[]> {
     return this.http.get<CarloadCustomer[]>(this.baseURL);

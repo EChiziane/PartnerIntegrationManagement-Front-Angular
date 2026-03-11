@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { CarloadCustomer } from '../../models/CarloadCustomer';
-import { CarloadCustomerService } from '../../services/carload-customer.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {CarloadCustomer} from '../../models/CarloadCustomer';
+import {CarloadCustomerService} from '../../services/carload-customer.service';
 
 @Component({
   selector: 'app-carload-customer',
@@ -82,7 +82,7 @@ export class CarloadCustomerComponent implements OnInit {
 
   editCustomer(customer: CarloadCustomer): void {
     this.currentEditingCustomerId = customer.id;
-    this.customerForm.patchValue({ ...customer });
+    this.customerForm.patchValue({...customer});
     this.isDrawerVisible = true;
   }
 
@@ -107,14 +107,14 @@ export class CarloadCustomerComponent implements OnInit {
   }
 
   startInlineEdit(customer: CarloadCustomer, field: string): void {
-    this.editingCustomer = { ...customer };
+    this.editingCustomer = {...customer};
     this.editingField = field;
   }
 
   saveInlineEdit(original: CarloadCustomer, field: string): void {
     if (!this.editingCustomer) return;
 
-    const updated = { ...original, [field]: (this.editingCustomer as any)[field] };
+    const updated = {...original, [field]: (this.editingCustomer as any)[field]};
 
     this.customerService.updateCustomer(original.id, updated).subscribe({
       next: () => {
@@ -135,22 +135,6 @@ export class CarloadCustomerComponent implements OnInit {
     this.applySearch();
   }
 
-  private applySearch(): void {
-    const value = this.searchValue.toLowerCase().trim();
-
-    if (!value) {
-      this.filteredCustomers = [...this.customers];
-      return;
-    }
-
-    this.filteredCustomers = this.customers.filter(customer =>
-      (customer.name || '').toLowerCase().includes(value) ||
-      (customer.customerCode || '').toLowerCase().includes(value) ||
-      (customer.emailAddress || '').toLowerCase().includes(value) ||
-      (customer.phoneNumber || '').toLowerCase().includes(value)
-    );
-  }
-
   submitCustomer(): void {
     if (this.customerForm.invalid) {
       this.message.warning('Preencha Nome e Telefone (obrigatórios).');
@@ -159,7 +143,7 @@ export class CarloadCustomerComponent implements OnInit {
 
     this.isSaving = true;
 
-    const customerData: any = { ...this.customerForm.value };
+    const customerData: any = {...this.customerForm.value};
 
     const rawPhone = (customerData.phoneNumber || '').toString().trim();
     customerData.phoneNumber = rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`;
@@ -189,6 +173,22 @@ export class CarloadCustomerComponent implements OnInit {
         );
       }
     });
+  }
+
+  private applySearch(): void {
+    const value = this.searchValue.toLowerCase().trim();
+
+    if (!value) {
+      this.filteredCustomers = [...this.customers];
+      return;
+    }
+
+    this.filteredCustomers = this.customers.filter(customer =>
+      (customer.name || '').toLowerCase().includes(value) ||
+      (customer.customerCode || '').toLowerCase().includes(value) ||
+      (customer.emailAddress || '').toLowerCase().includes(value) ||
+      (customer.phoneNumber || '').toLowerCase().includes(value)
+    );
   }
 
   private resetInlineEdit(): void {
