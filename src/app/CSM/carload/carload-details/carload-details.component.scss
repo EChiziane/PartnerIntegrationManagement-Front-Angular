@@ -1,8 +1,3 @@
-/* ===============================
-carload-details.page.scss
-Cabe numa página sem scroll
-=============================== */
-
 .details-page {
   height: 100%;
   padding: 18px;
@@ -25,6 +20,12 @@ Cabe numa página sem scroll
     gap: 10px;
   }
 
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .title {
     font-size: 16px;
     font-weight: 600;
@@ -35,6 +36,57 @@ Cabe numa página sem scroll
     border-radius: 8px;
     font-weight: 500;
   }
+}
+
+.pdf-export-area {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.pdf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ececec;
+}
+
+.pdf-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pdf-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.pdf-subtitle {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.pdf-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.pdf-status-label {
+  font-size: 11px;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.pdf-status-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
 }
 
 .top-summary {
@@ -53,6 +105,7 @@ Cabe numa página sem scroll
   display: flex;
   gap: 10px;
   align-items: center;
+  border: 1px solid #f0f0f0;
 }
 
 .icon {
@@ -109,7 +162,6 @@ Cabe numa página sem scroll
   }
 }
 
-/* 4 secções: motorista, gestor, sprint, carrada */
 .sections-grid {
   flex: 1;
   min-height: 0;
@@ -125,6 +177,7 @@ Cabe numa página sem scroll
   display: flex;
   flex-direction: column;
   min-height: 0;
+  border: 1px solid #f0f0f0;
 }
 
 .section-head {
@@ -182,13 +235,22 @@ Cabe numa página sem scroll
   }
 }
 
+.pdf-footer {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #ececec;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #6b7280;
+}
+
 .empty {
   padding: 24px;
   background: #fff;
   border-radius: 12px;
 }
 
-/* ===== Responsivo ===== */
 @media (max-width: 992px) {
   .top-summary {
     grid-template-columns: 1fr;
@@ -199,6 +261,31 @@ Cabe numa página sem scroll
   }
 
   .details-page {
-    overflow: auto; /* em telas pequenas é melhor permitir */
+    overflow: auto;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+
+    .header-actions {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+  }
+
+  .pdf-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pdf-status {
+    align-items: flex-start;
+  }
+
+  .pdf-footer {
+    flex-direction: column;
+    gap: 4px;
   }
 }

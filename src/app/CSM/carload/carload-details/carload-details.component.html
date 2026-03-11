@@ -1,8 +1,3 @@
-<!-- ===============================
-carload-details.page.html
-Tudo cabe numa página (sem scroll)
-=============================== -->
-
 <div class="details-page">
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
@@ -16,183 +11,199 @@ Tudo cabe numa página (sem scroll)
       <nz-tag [nzColor]="statusColor">{{ statusLabel }}</nz-tag>
     </div>
 
-    <button (click)="onBack()" nz-button nzType="default">
-      <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
-      Voltar
-    </button>
+    <div class="header-actions">
+      <button (click)="downloadPdf()" [disabled]="!carload || isDownloadingPdf" nz-button nzType="primary">
+        <nz-icon nzTheme="outline" nzType="download"></nz-icon>
+        {{ isDownloadingPdf ? 'A gerar PDF...' : 'Descarregar PDF' }}
+      </button>
+
+      <button (click)="onBack()" nz-button nzType="default">
+        <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
+        Voltar
+      </button>
+    </div>
   </div>
 
   <nz-spin [nzSpinning]="isLoading" nzTip="A carregar detalhes...">
     <ng-container *ngIf="carload; else emptyState">
 
-      <!-- ===== Top summary row ===== -->
-      <div class="top-summary">
-        <div class="summary-item">
-          <div class="icon box-blue">
-            <nz-icon nzTheme="outline" nzType="user"></nz-icon>
+      <div #pdfContent class="pdf-export-area">
+        <div class="pdf-header">
+          <div class="pdf-brand">
+            <span class="pdf-title">Detalhes da Carrada</span>
+            <span class="pdf-subtitle">Transportes Chiziane</span>
           </div>
-          <div class="meta">
-            <span class="label">Cliente</span>
-            <span class="value">{{ carload.customerName }}</span>
-            <span class="sub">{{ carload.customerPhoneNumber }}</span>
-          </div>
-        </div>
 
-        <div class="summary-item">
-          <div class="icon box-orange">
-            <nz-icon nzTheme="outline" nzType="environment"></nz-icon>
-          </div>
-          <div class="meta">
-            <span class="label">Destino</span>
-            <span class="value">{{ carload.deliveryDestination }}</span>
-            <span class="sub">{{ carload.transportedMaterial }}</span>
+          <div class="pdf-status">
+            <span class="pdf-status-label">Estado</span>
+            <span class="pdf-status-value">{{ statusLabel }}</span>
           </div>
         </div>
 
-        <div class="summary-item">
-          <div class="icon box-green">
-            <nz-icon nzTheme="outline" nzType="wallet"></nz-icon>
-          </div>
-          <div class="meta">
-            <span class="label">Financeiro</span>
-            <span class="value">{{ money(carload.totalEarnings) }}</span>
-            <span class="sub">Gastos: {{ money(carload.totalSpent) }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== Grid sections ===== -->
-      <div class="sections-grid">
-
-        <!-- ===== Motorista ===== -->
-        <div class="section-card">
-          <div class="section-head">
-            <div class="section-title">
-              <nz-icon nzTheme="outline" nzType="car"></nz-icon>
-              <span>Motorista</span>
+        <div class="top-summary">
+          <div class="summary-item">
+            <div class="icon box-blue">
+              <nz-icon nzTheme="outline" nzType="user"></nz-icon>
             </div>
-
-            <nz-tag [nzColor]="driver?.status === 'ACTIVO' || driver?.status === 'ATIVO' ? 'green' : 'red'">
-              {{ driver?.status || 'N/D' }}
-            </nz-tag>
+            <div class="meta">
+              <span class="label">Cliente</span>
+              <span class="value">{{ carload.customerName }}</span>
+              <span class="sub">{{ carload.customerPhoneNumber }}</span>
+            </div>
           </div>
 
-          <div class="section-body">
-            <div class="kv">
-              <span class="k">Nome</span>
-              <span class="v">{{ driver?.Name || carload?.assignedDriverName || 'N/D' }}</span>
+          <div class="summary-item">
+            <div class="icon box-orange">
+              <nz-icon nzTheme="outline" nzType="environment"></nz-icon>
             </div>
-
-            <div class="kv">
-              <span class="k">Telefone</span>
-              <span class="v">{{ driver?.Phone || 'N/D' }}</span>
+            <div class="meta">
+              <span class="label">Destino</span>
+              <span class="value">{{ carload.deliveryDestination }}</span>
+              <span class="sub">{{ carload.transportedMaterial }}</span>
             </div>
+          </div>
 
-            <div class="kv">
-              <span class="k">Carro</span>
-              <span class="v">{{ driver?.CarDescription || 'N/D' }}</span>
+          <div class="summary-item">
+            <div class="icon box-green">
+              <nz-icon nzTheme="outline" nzType="wallet"></nz-icon>
+            </div>
+            <div class="meta">
+              <span class="label">Financeiro</span>
+              <span class="value">{{ money(carload.totalEarnings) }}</span>
+              <span class="sub">Gastos: {{ money(carload.totalSpent) }}</span>
             </div>
           </div>
         </div>
 
-        <!-- ===== Gestor ===== -->
-        <div class="section-card">
-          <div class="section-head">
-            <div class="section-title">
-              <nz-icon nzTheme="outline" nzType="solution"></nz-icon>
-              <span>Gestor</span>
+        <div class="sections-grid">
+          <div class="section-card">
+            <div class="section-head">
+              <div class="section-title">
+                <nz-icon nzTheme="outline" nzType="car"></nz-icon>
+                <span>Motorista</span>
+              </div>
+
+              <nz-tag [nzColor]="driver?.status === 'ACTIVO' || driver?.status === 'ATIVO' ? 'green' : 'red'">
+                {{ driver?.status || 'N/D' }}
+              </nz-tag>
             </div>
 
-            <nz-tag [nzColor]="manager?.status === 'ACTIVO' || manager?.status === 'ATIVO' ? 'green' : 'red'">
-              {{ manager?.status || 'N/D' }}
-            </nz-tag>
+            <div class="section-body">
+              <div class="kv">
+                <span class="k">Nome</span>
+                <span class="v">{{ driver?.Name || carload?.assignedDriverName || 'N/D' }}</span>
+              </div>
+
+              <div class="kv">
+                <span class="k">Telefone</span>
+                <span class="v">{{ driver?.Phone || 'N/D' }}</span>
+              </div>
+
+              <div class="kv">
+                <span class="k">Carro</span>
+                <span class="v">{{ driver?.CarDescription || 'N/D' }}</span>
+              </div>
+            </div>
           </div>
 
-          <div class="section-body">
-            <div class="kv">
-              <span class="k">Nome</span>
-              <span class="v">{{ manager?.name || carload?.logisticsManagerName || 'N/D' }}</span>
+          <div class="section-card">
+            <div class="section-head">
+              <div class="section-title">
+                <nz-icon nzTheme="outline" nzType="solution"></nz-icon>
+                <span>Gestor</span>
+              </div>
+
+              <nz-tag [nzColor]="manager?.status === 'ACTIVO' || manager?.status === 'ATIVO' ? 'green' : 'red'">
+                {{ manager?.status || 'N/D' }}
+              </nz-tag>
             </div>
 
-            <div class="kv">
-              <span class="k">Contacto</span>
-              <span class="v">{{ manager?.contact || 'N/D' }}</span>
+            <div class="section-body">
+              <div class="kv">
+                <span class="k">Nome</span>
+                <span class="v">{{ manager?.name || carload?.logisticsManagerName || 'N/D' }}</span>
+              </div>
+
+              <div class="kv">
+                <span class="k">Contacto</span>
+                <span class="v">{{ manager?.contact || 'N/D' }}</span>
+              </div>
+
+              <div class="kv">
+                <span class="k">Endereço</span>
+                <span class="v">{{ manager?.address || 'N/D' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-head">
+              <div class="section-title">
+                <nz-icon nzTheme="outline" nzType="flag"></nz-icon>
+                <span>Sprint</span>
+              </div>
+
+              <nz-tag [nzColor]="sprint?.status === 'ACTIVO' || sprint?.status === 'ATIVO' ? 'green' : 'red'">
+                {{ sprint?.status || 'N/D' }}
+              </nz-tag>
             </div>
 
-            <div class="kv">
-              <span class="k">Endereço</span>
-              <span class="v">{{ manager?.address || 'N/D' }}</span>
+            <div class="section-body">
+              <div class="kv">
+                <span class="k">Nome</span>
+                <span class="v">{{ sprint?.name || carload?.carloadBatchName || 'N/D' }}</span>
+              </div>
+
+              <div class="kv">
+                <span class="k">Código</span>
+                <span class="v">{{ sprint?.code || 'N/D' }}</span>
+              </div>
+
+              <div class="kv">
+                <span class="k">Descrição</span>
+                <span class="v truncate">{{ sprint?.description || 'N/D' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-head">
+              <div class="section-title">
+                <nz-icon nzTheme="outline" nzType="file-done"></nz-icon>
+                <span>Dados da Carrada</span>
+              </div>
+
+              <nz-tag [nzColor]="statusColor">{{ statusLabel }}</nz-tag>
+            </div>
+
+            <div class="section-body">
+              <div class="kv">
+                <span class="k">Agendado</span>
+                <span class="v">{{ carload?.deliveryScheduledDate ? (carload.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+              </div>
+
+              <div class="kv">
+                <span class="k">Entregue</span>
+                <span class="v">{{ carload?.deliveryDate ? (carload.deliveryDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+              </div>
+
+              <div class="kv">
+                <span class="k">Criado em</span>
+                <span class="v">{{ carload?.createdAt ? (carload.createdAt | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+              </div>
+
+              <div class="kv">
+                <span class="k">Material</span>
+                <span class="v">{{ carload?.transportedMaterial }}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- ===== Sprint ===== -->
-        <div class="section-card">
-          <div class="section-head">
-            <div class="section-title">
-              <nz-icon nzTheme="outline" nzType="flag"></nz-icon>
-              <span>Sprint</span>
-            </div>
-
-            <nz-tag [nzColor]="sprint?.status === 'ACTIVO' || sprint?.status === 'ATIVO' ? 'green' : 'red'">
-              {{ sprint?.status || 'N/D' }}
-            </nz-tag>
-          </div>
-
-          <div class="section-body">
-            <div class="kv">
-              <span class="k">Nome</span>
-              <span class="v">{{ sprint?.name || carload?.carloadBatchName || 'N/D' }}</span>
-            </div>
-
-            <div class="kv">
-              <span class="k">Código</span>
-              <span class="v">{{ sprint?.code || 'N/D' }}</span>
-            </div>
-
-            <div class="kv">
-              <span class="k">Descrição</span>
-              <span class="v truncate">{{ sprint?.description || 'N/D' }}</span>
-            </div>
-          </div>
+        <div class="pdf-footer">
+          <span>Transportes Chiziane</span>
+          <span>Documento gerado pelo sistema</span>
         </div>
-
-        <!-- ===== Carrada (datas + info técnica) ===== -->
-        <div class="section-card">
-          <div class="section-head">
-            <div class="section-title">
-              <nz-icon nzTheme="outline" nzType="file-done"></nz-icon>
-              <span>Dados da Carrada</span>
-            </div>
-
-            <nz-tag [nzColor]="statusColor">{{ statusLabel }}</nz-tag>
-          </div>
-
-          <div class="section-body">
-            <div class="kv">
-              <span class="k">Agendado</span>
-              <span
-                class="v">{{ carload?.deliveryScheduledDate ? (carload.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
-            </div>
-
-            <div class="kv">
-              <span class="k">Entregue</span>
-              <span
-                class="v">{{ carload?.deliveryDate ? (carload.deliveryDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
-            </div>
-
-            <div class="kv">
-              <span class="k">Criado em</span>
-              <span class="v">{{ carload?.createdAt | date:'yyyy-MM-dd HH:mm' }}</span>
-            </div>
-
-            <div class="kv">
-              <span class="k">Material</span>
-              <span class="v">{{ carload?.transportedMaterial }}</span>
-            </div>
-          </div>
-        </div>
-
       </div>
     </ng-container>
 
