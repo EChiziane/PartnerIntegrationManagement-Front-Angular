@@ -4,7 +4,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { CarLoad, CarLoadStatus } from '../../models/CSM/carlaod';
 import { CarloadService } from '../../services/carload.service';
 
-type FilterMode = 'NONE' | 'TODAY' | 'RANGE';
+type FilterMode = 'ALL' | 'TODAY' | 'RANGE';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   changingStatusId: string | null = null;
 
   searchValue = '';
-  filterMode: FilterMode = 'NONE';
+  filterMode: FilterMode = 'ALL';
   rangeStart: Date | null = null;
   rangeEnd: Date | null = null;
 
@@ -30,7 +30,6 @@ export class DashboardComponent implements OnInit {
   scheduledCount = 0;
   doneCount = 0;
 
-  // Entregues escondido por padrão
   showDoneCard = false;
 
   constructor(
@@ -51,6 +50,13 @@ export class DashboardComponent implements OnInit {
     this.showDoneCard = !this.showDoneCard;
   }
 
+  filterAll(): void {
+    this.filterMode = 'ALL';
+    this.rangeStart = null;
+    this.rangeEnd = null;
+    this.applyFilters();
+  }
+
   filterToday(): void {
     this.filterMode = 'TODAY';
     this.rangeStart = null;
@@ -60,7 +66,7 @@ export class DashboardComponent implements OnInit {
 
   toggleRange(): void {
     if (this.filterMode === 'RANGE') {
-      this.filterMode = 'NONE';
+      this.filterMode = 'ALL';
       this.rangeStart = null;
       this.rangeEnd = null;
     } else {
@@ -71,7 +77,7 @@ export class DashboardComponent implements OnInit {
 
   resetFilters(): void {
     this.searchValue = '';
-    this.filterMode = 'NONE';
+    this.filterMode = 'ALL';
     this.rangeStart = null;
     this.rangeEnd = null;
     this.applyFilters();
@@ -149,9 +155,12 @@ export class DashboardComponent implements OnInit {
         this.parseDate(b.deliveryScheduledDate).getTime()
       );
 
-    this.scheduledList = this.buildFreshScheduledList(
-      filteredData.filter(carload => this.isScheduled(carload.deliveryStatus))
-    );
+    this.scheduledList = filteredData
+      .filter(carload => this.isScheduled(carload.deliveryStatus))
+      .sort((a, b) =>
+        this.parseDate(a.deliveryScheduledDate).getTime() -
+        this.parseDate(b.deliveryScheduledDate).getTime()
+      );
 
     this.doneList = filteredData
       .filter(carload => this.isDone(carload.deliveryStatus))
@@ -264,44 +273,6 @@ export class DashboardComponent implements OnInit {
         this.isLoading = false;
       }
     });
-  }
-
-  private buildFreshScheduledList(list: CarLoad[]): CarLoad[] {
-    if (!list.length) {
-      return [];
-    }
-
-    const sortedList = [...list].sort(
-      (a, b) =>
-        this.parseDate(a.deliveryScheduledDate).getTime() -
-        this.parseDate(b.deliveryScheduledDate).getTime()
-    );
-
-    const today = new Date();
-
-    const todayScheduled = sortedList.filter(item =>
-      this.isSameDay(this.parseDate(item.deliveryScheduledDate), today)
-    );
-
-    if (todayScheduled.length) {
-      return todayScheduled;
-    }
-
-    const futureScheduled = sortedList.filter(item =>
-      this.parseDate(item.deliveryScheduledDate).getTime() >= this.startOfDay(today).getTime()
-    );
-
-    if (!futureScheduled.length) {
-      return [];
-    }
-
-    const nearestFutureDate = this.startOfDay(
-      this.parseDate(futureScheduled[0].deliveryScheduledDate)
-    ).getTime();
-
-    return futureScheduled.filter(item =>
-      this.startOfDay(this.parseDate(item.deliveryScheduledDate)).getTime() === nearestFutureDate
-    );
   }
 
   private isDone(status: CarLoadStatus): boolean {

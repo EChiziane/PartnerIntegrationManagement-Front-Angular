@@ -66,7 +66,22 @@
       />
 
       <div class="quick-filters">
-        <button (click)="filterToday()" nz-button nzType="default">
+        <button
+          (click)="filterAll()"
+          [class.active]="filterMode === 'ALL'"
+          nz-button
+          nzType="default"
+        >
+          <nz-icon nzTheme="outline" nzType="unordered-list"></nz-icon>
+          Todos
+        </button>
+
+        <button
+          (click)="filterToday()"
+          [class.active]="filterMode === 'TODAY'"
+          nz-button
+          nzType="default"
+        >
           <nz-icon nzTheme="outline" nzType="clock-circle"></nz-icon>
           Hoje
         </button>
