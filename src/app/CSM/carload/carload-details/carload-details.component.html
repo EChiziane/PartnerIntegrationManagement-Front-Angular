@@ -179,12 +179,14 @@
             <div class="section-body">
               <div class="kv">
                 <span class="k">Agendado</span>
-                <span class="v">{{ carload?.deliveryScheduledDate ? (carload.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+                <span
+                  class="v">{{ carload?.deliveryScheduledDate ? (carload.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
               </div>
 
               <div class="kv">
                 <span class="k">Entregue</span>
-                <span class="v">{{ carload?.deliveryDate ? (carload.deliveryDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+                <span
+                  class="v">{{ carload?.deliveryDate ? (carload.deliveryDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
               </div>
 
               <div class="kv">

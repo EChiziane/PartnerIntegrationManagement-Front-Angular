@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { CarLoad, CarLoadStatus } from '../../models/CSM/carlaod';
-import { CarloadService } from '../../services/carload.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {CarLoad, CarLoadStatus} from '../../models/CSM/carlaod';
+import {CarloadService} from '../../services/carload.service';
 
 type FilterMode = 'ALL' | 'TODAY' | 'RANGE';
 
@@ -36,7 +36,8 @@ export class DashboardComponent implements OnInit {
     private carloadService: CarloadService,
     private message: NzMessageService,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.load();

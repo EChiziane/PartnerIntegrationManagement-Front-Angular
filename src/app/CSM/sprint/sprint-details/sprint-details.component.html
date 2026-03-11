@@ -88,16 +88,20 @@
       <button (click)="setFilterMode('ALL')" [class.active]="filterMode === 'ALL'" nz-button nzType="default">
         Todas
       </button>
-      <button (click)="setFilterMode('SCHEDULED')" [class.active]="filterMode === 'SCHEDULED'" nz-button nzType="default">
+      <button (click)="setFilterMode('SCHEDULED')" [class.active]="filterMode === 'SCHEDULED'" nz-button
+              nzType="default">
         Agendadas
       </button>
-      <button (click)="setFilterMode('IN_PROGRESS')" [class.active]="filterMode === 'IN_PROGRESS'" nz-button nzType="default">
+      <button (click)="setFilterMode('IN_PROGRESS')" [class.active]="filterMode === 'IN_PROGRESS'" nz-button
+              nzType="default">
         Em execução
       </button>
-      <button (click)="setFilterMode('DELIVERED')" [class.active]="filterMode === 'DELIVERED'" nz-button nzType="default">
+      <button (click)="setFilterMode('DELIVERED')" [class.active]="filterMode === 'DELIVERED'" nz-button
+              nzType="default">
         Entregues
       </button>
-      <button (click)="setFilterMode('CANCELLED')" [class.active]="filterMode === 'CANCELLED'" nz-button nzType="default">
+      <button (click)="setFilterMode('CANCELLED')" [class.active]="filterMode === 'CANCELLED'" nz-button
+              nzType="default">
         Canceladas
       </button>
     </div>
@@ -220,7 +224,7 @@
             <nz-form-item>
               <nz-form-label>Cliente</nz-form-label>
               <nz-form-control>
-                <input formControlName="customerName" nz-input placeholder="Nome do cliente" />
+                <input formControlName="customerName" nz-input placeholder="Nome do cliente"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -230,7 +234,7 @@
               <nz-form-label>Contacto</nz-form-label>
               <nz-form-control>
                 <nz-input-group nzAddOnBefore="+258">
-                  <input formControlName="customerPhoneNumber" nz-input placeholder="Contacto" />
+                  <input formControlName="customerPhoneNumber" nz-input placeholder="Contacto"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -242,7 +246,7 @@
             <nz-form-item>
               <nz-form-label>Destino</nz-form-label>
               <nz-form-control>
-                <input formControlName="deliveryDestination" nz-input placeholder="Destino de entrega" />
+                <input formControlName="deliveryDestination" nz-input placeholder="Destino de entrega"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -251,7 +255,8 @@
             <nz-form-item>
               <nz-form-label>Material</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="transportedMaterial" nzAllowClear nzPlaceHolder="Selecione o material" nzShowSearch>
+                <nz-select formControlName="transportedMaterial" nzAllowClear nzPlaceHolder="Selecione o material"
+                           nzShowSearch>
                   <nz-option *ngFor="let m of materials" [nzLabel]="m" [nzValue]="m"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -264,7 +269,8 @@
             <nz-form-item>
               <nz-form-label>Motorista</nz-form-label>
               <nz-form-control>
-                <nz-select [nzLoading]="isLoadingLookups" formControlName="assignedDriverId" nzAllowClear nzPlaceHolder="Selecione o motorista" nzShowSearch>
+                <nz-select [nzLoading]="isLoadingLookups" formControlName="assignedDriverId" nzAllowClear
+                           nzPlaceHolder="Selecione o motorista" nzShowSearch>
                   <nz-option *ngFor="let d of dataDrivers" [nzLabel]="d.Name" [nzValue]="d.id"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -275,7 +281,8 @@
             <nz-form-item>
               <nz-form-label>Gestor</nz-form-label>
               <nz-form-control>
-                <nz-select [nzLoading]="isLoadingLookups" formControlName="logisticsManagerId" nzAllowClear nzPlaceHolder="Selecione o gestor" nzShowSearch>
+                <nz-select [nzLoading]="isLoadingLookups" formControlName="logisticsManagerId" nzAllowClear
+                           nzPlaceHolder="Selecione o gestor" nzShowSearch>
                   <nz-option *ngFor="let m of dataManagers" [nzLabel]="m.name" [nzValue]="m.id"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -288,7 +295,7 @@
             <nz-form-item>
               <nz-form-label>Sprint</nz-form-label>
               <nz-form-control>
-                <input [value]="sprintName" disabled nz-input />
+                <input [value]="sprintName" disabled nz-input/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -297,7 +304,7 @@
             <nz-form-item>
               <nz-form-label>Data/Hora Agendada</nz-form-label>
               <nz-form-control nzErrorTip="Informe a data agendada">
-                <input formControlName="deliveryScheduledDate" nz-input type="datetime-local" />
+                <input formControlName="deliveryScheduledDate" nz-input type="datetime-local"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -306,7 +313,7 @@
             <nz-form-item>
               <nz-form-label>Data/Hora de Entrega</nz-form-label>
               <nz-form-control nzErrorTip="Informe a data de entrega">
-                <input formControlName="deliveryDate" nz-input type="datetime-local" />
+                <input formControlName="deliveryDate" nz-input type="datetime-local"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -317,7 +324,7 @@
             <nz-form-item>
               <nz-form-label>Gastos</nz-form-label>
               <nz-form-control>
-                <input formControlName="totalSpent" nz-input type="number" />
+                <input formControlName="totalSpent" nz-input type="number"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -326,7 +333,7 @@
             <nz-form-item>
               <nz-form-label>Ganhos</nz-form-label>
               <nz-form-control>
-                <input formControlName="totalEarnings" nz-input type="number" />
+                <input formControlName="totalEarnings" nz-input type="number"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -357,7 +364,8 @@
         Cancelar
       </button>
 
-      <button (click)="submitCarload()" [disabled]="carloadForm.invalid || isSaving" class="btn-save" nz-button nzType="primary">
+      <button (click)="submitCarload()" [disabled]="carloadForm.invalid || isSaving" class="btn-save" nz-button
+              nzType="primary">
         <ng-container *ngIf="!isSaving; else savingTpl">
           {{ isEditMode ? 'Salvar' : (isCopyMode ? 'Criar Cópia' : 'Criar') }}
         </ng-container>

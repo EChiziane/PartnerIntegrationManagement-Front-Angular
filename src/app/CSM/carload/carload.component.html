@@ -1,5 +1,4 @@
 <div class="content-wrapper">
-
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
     <nz-breadcrumb-item>Lista de Carradas</nz-breadcrumb-item>
@@ -14,7 +13,6 @@
 
   <div class="summary-section">
     <div [nzGutter]="8" nz-row>
-
       <div [nzSpan]="8" nz-col>
         <nz-card nzSize="small">
           <div class="summary-card">
@@ -56,7 +54,6 @@
           </div>
         </nz-card>
       </div>
-
     </div>
   </div>
 
@@ -69,7 +66,8 @@
       Agendadas
     </button>
 
-    <button (click)="setFilterMode('IN_PROGRESS')" [class.active]="filterMode==='IN_PROGRESS'" nz-button nzType="default">
+    <button (click)="setFilterMode('IN_PROGRESS')" [class.active]="filterMode==='IN_PROGRESS'" nz-button
+            nzType="default">
       Em execução
     </button>
 
@@ -167,13 +165,12 @@
                 <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
               </button>
 
-              <button (click)="deleteCarLoad(data)" nz-button nzSize="small" nzType="link" nzDanger>
+              <button (click)="deleteCarLoad(data)" nz-button nzDanger nzSize="small" nzType="link">
                 <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
               </button>
             </td>
           </tr>
           </tbody>
-
         </nz-table>
       </nz-spin>
     </div>
@@ -191,17 +188,66 @@
   [nzWidth]="drawerWidth">
 
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar carrada...">
-
     <form [formGroup]="carLoadForm" class="drawer-form" nz-form>
       <div class="drawer-section">
         <h3 class="section-title">Dados da Carrada</h3>
+
+        <div [nzGutter]="16" nz-row>
+          <div nz-col nzSpan="24">
+            <div class="customer-mode-switch">
+              <button
+                (click)="setCustomerMode('NEW')"
+                [class.active]="customerMode === 'NEW'"
+                nz-button
+                nzType="default"
+                type="button">
+                Novo cliente
+              </button>
+
+              <button
+                (click)="setCustomerMode('EXISTING')"
+                [class.active]="customerMode === 'EXISTING'"
+                nz-button
+                nzType="default"
+                type="button">
+                Cliente existente
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="customerMode === 'EXISTING'" [nzGutter]="16" nz-row>
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label>Cliente existente</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  [nzLoading]="isLoadingLookups"
+                  formControlName="customerId"
+                  nzAllowClear
+                  nzPlaceHolder="Selecione o cliente"
+                  nzShowSearch>
+                  <nz-option
+                    *ngFor="let c of customers"
+                    [nzLabel]="c.name + ' - ' + c.phoneNumber"
+                    [nzValue]="c.id">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
 
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>Cliente</nz-form-label>
               <nz-form-control>
-                <input formControlName="customerName" nz-input placeholder="Nome do cliente"/>
+                <input
+                  [readonly]="customerMode === 'EXISTING'"
+                  formControlName="customerName"
+                  nz-input
+                  placeholder="Nome do cliente"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -211,7 +257,11 @@
               <nz-form-label>Contacto</nz-form-label>
               <nz-form-control>
                 <nz-input-group nzAddOnBefore="+258">
-                  <input formControlName="customerPhoneNumber" nz-input placeholder="Contacto"/>
+                  <input
+                    [readonly]="customerMode === 'EXISTING'"
+                    formControlName="customerPhoneNumber"
+                    nz-input
+                    placeholder="Contacto"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -356,7 +406,6 @@
             </nz-form-item>
           </div>
         </div>
-
       </div>
     </form>
   </nz-spin>
@@ -380,5 +429,4 @@
       </button>
     </div>
   </ng-template>
-
 </nz-drawer>

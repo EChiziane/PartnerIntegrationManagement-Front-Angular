@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
-import { CarLoad, CarLoadStatus, CarloadType } from '../../models/CSM/carlaod';
-import { CarloadService } from '../../services/carload.service';
+import {CarLoad, CarLoadStatus, CarloadType} from '../../models/CSM/carlaod';
+import {CarloadService} from '../../services/carload.service';
 
-import { Driver } from '../../models/CSM/driver';
-import { Manager } from '../../models/CSM/manager';
-import { Sprint } from '../../models/CSM/sprint';
+import {Driver} from '../../models/CSM/driver';
+import {Manager} from '../../models/CSM/manager';
+import {Sprint} from '../../models/CSM/sprint';
+import {CarloadCustomer} from '../../models/CarloadCustomer';
 
-import { DriverService } from '../../services/driver.service';
-import { ManagerService } from '../../services/manager.service';
-import { SprintService } from '../../services/sprint.service';
+import {DriverService} from '../../services/driver.service';
+import {ManagerService} from '../../services/manager.service';
+import {SprintService} from '../../services/sprint.service';
+import {CarloadCustomerService} from '../../services/carload-customer.service';
 
 type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
+type CustomerMode = 'NEW' | 'EXISTING';
 
 @Component({
   selector: 'app-carload',
@@ -37,6 +40,7 @@ export class CarLoadComponent implements OnInit {
   drivers: Driver[] = [];
   managers: Manager[] = [];
   sprints: Sprint[] = [];
+  customers: CarloadCustomer[] = [];
   isLoadingLookups = false;
 
   searchValue = '';
@@ -53,6 +57,8 @@ export class CarLoadComponent implements OnInit {
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
+  customerMode: CustomerMode = 'NEW';
+
   materials: string[] = [
     'Areia grossa',
     'Areia vermelha',
@@ -63,8 +69,10 @@ export class CarLoadComponent implements OnInit {
   ];
 
   carLoadForm = new FormGroup({
+    customerId: new FormControl<string | null>(null),
     customerName: new FormControl('', Validators.required),
     customerPhoneNumber: new FormControl('', [Validators.required, Validators.pattern('^[+0-9 ]+$')]),
+
     deliveryDestination: new FormControl('', Validators.required),
     transportedMaterial: new FormControl('', Validators.required),
 
@@ -87,9 +95,11 @@ export class CarLoadComponent implements OnInit {
     private driverService: DriverService,
     private managerService: ManagerService,
     private sprintService: SprintService,
+    private customerService: CarloadCustomerService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   get selectedStatusUpper(): string {
     return (this.carLoadForm.get('deliveryStatus')?.value || 'SCHEDULED').toString().toUpperCase();
@@ -124,14 +134,21 @@ export class CarLoadComponent implements OnInit {
 
     this.carLoadForm.get('carloadType')!.valueChanges.subscribe(() => {
       if (this.shouldDisableManager) {
-        this.carLoadForm.patchValue({ logisticsManagerId: null }, { emitEvent: false });
+        this.carLoadForm.patchValue({logisticsManagerId: null}, {emitEvent: false});
+      }
+    });
+
+    this.carLoadForm.get('customerId')!.valueChanges.subscribe(value => {
+      if (this.customerMode === 'EXISTING' && value) {
+        this.fillCustomerFromSelection(value);
       }
     });
 
     this.applyDateRulesByStatus();
+    this.applyCustomerModeRules();
   }
 
-  updateDrawer() {
+  updateDrawer(): void {
     if (window.innerWidth <= 768) {
       this.drawerWidth = '100%';
       this.drawerPlacement = 'bottom';
@@ -139,6 +156,24 @@ export class CarLoadComponent implements OnInit {
       this.drawerWidth = 720;
       this.drawerPlacement = 'right';
     }
+  }
+
+  setCustomerMode(mode: CustomerMode): void {
+    this.customerMode = mode;
+
+    if (mode === 'EXISTING') {
+      this.carLoadForm.patchValue({
+        customerId: null,
+        customerName: '',
+        customerPhoneNumber: ''
+      });
+    } else {
+      this.carLoadForm.patchValue({
+        customerId: null
+      });
+    }
+
+    this.applyCustomerModeRules();
   }
 
   getStatusLabel(status: CarLoadStatus): string {
@@ -160,33 +195,38 @@ export class CarLoadComponent implements OnInit {
     return (status || '').toUpperCase() === 'DELIVERED';
   }
 
-  loadLookups() {
+  loadLookups(): void {
     this.isLoadingLookups = true;
 
     this.driverService.getDrivers().subscribe({
-      next: (data) => (this.drivers = data || []),
+      next: data => (this.drivers = data || []),
       error: () => this.message.error('Erro ao carregar motoristas.')
     });
 
     this.managerService.getManagers().subscribe({
-      next: (data) => (this.managers = data || []),
+      next: data => (this.managers = data || []),
       error: () => this.message.error('Erro ao carregar gestores.')
     });
 
     this.sprintService.getSprints().subscribe({
-      next: (data) => (this.sprints = data || []),
+      next: data => (this.sprints = data || []),
       error: () => this.message.error('Erro ao carregar sprints.')
+    });
+
+    this.customerService.getCustomers().subscribe({
+      next: data => (this.customers = data || []),
+      error: () => this.message.error('Erro ao carregar clientes.')
     });
 
     setTimeout(() => (this.isLoadingLookups = false), 500);
   }
 
-  getCarLoads() {
+  getCarLoads(): void {
     this.isLoading = true;
     this.carLoadService.getCarLoads().subscribe({
-      next: (data) => {
-        this.dataSource = data;
-        this.listOfDisplayData = [...data];
+      next: data => {
+        this.dataSource = data || [];
+        this.listOfDisplayData = [...this.dataSource];
         this.calculateStats();
         this.applyFilters();
         this.isLoading = false;
@@ -198,7 +238,7 @@ export class CarLoadComponent implements OnInit {
     });
   }
 
-  calculateStats() {
+  calculateStats(): void {
     this.totalCarLoads = this.dataSource.length;
     this.scheduled = this.dataSource.filter(c => c.deliveryStatus === 'SCHEDULED').length;
     this.inProgress = this.dataSource.filter(c => c.deliveryStatus === 'IN_PROGRESS').length;
@@ -210,7 +250,7 @@ export class CarLoadComponent implements OnInit {
     this.applyFilters();
   }
 
-  applyFilters() {
+  applyFilters(): void {
     let data = [...this.dataSource];
 
     if (this.filterMode !== 'ALL') {
@@ -234,24 +274,26 @@ export class CarLoadComponent implements OnInit {
     this.listOfDisplayData = data;
   }
 
-  search() {
+  search(): void {
     this.visible = false;
     this.applyFilters();
   }
 
-  reset() {
+  reset(): void {
     this.searchValue = '';
     this.filterMode = 'ALL';
     this.search();
   }
 
-  openCarLoadDrawer() {
+  openCarLoadDrawer(): void {
     this.isEditMode = false;
     this.isCopyMode = false;
     this.selectedCarLoadId = null;
     this.carLoadDrawerTitle = 'Criar Carrada';
+    this.customerMode = 'NEW';
 
     this.carLoadForm.reset({
+      customerId: null,
       customerName: '',
       customerPhoneNumber: '',
       deliveryDestination: '',
@@ -267,46 +309,53 @@ export class CarLoadComponent implements OnInit {
       deliveryDate: ''
     });
 
-    if (!this.drivers.length || !this.managers.length || !this.sprints.length) {
+    if (!this.drivers.length || !this.managers.length || !this.sprints.length || !this.customers.length) {
       this.loadLookups();
     }
 
     this.isCarLoadDrawerVisible = true;
     this.applyDateRulesByStatus();
+    this.applyCustomerModeRules();
   }
 
-  closeCarLoadDrawer() {
+  closeCarLoadDrawer(): void {
     this.isCarLoadDrawerVisible = false;
     this.carLoadForm.reset();
     this.selectedCarLoadId = null;
     this.isEditMode = false;
     this.isCopyMode = false;
+    this.customerMode = 'NEW';
   }
 
-  editCarLoad(carload: CarLoad) {
+  editCarLoad(carload: CarLoad): void {
     this.isEditMode = true;
     this.isCopyMode = false;
     this.carLoadDrawerTitle = 'Editar Carrada';
     this.selectedCarLoadId = carload.id;
 
-    if (!this.drivers.length || !this.managers.length || !this.sprints.length) {
+    if (!this.drivers.length || !this.managers.length || !this.sprints.length || !this.customers.length) {
       this.loadLookups();
     }
+
+    this.customerMode = carload.customerId ? 'EXISTING' : 'NEW';
 
     this.isCarLoadDrawerVisible = true;
     this.carLoadForm.patchValue(this.mapCarloadToForm(carload));
     this.applyDateRulesByStatus();
+    this.applyCustomerModeRules();
   }
 
-  copyCarLoad(carload: CarLoad) {
+  copyCarLoad(carload: CarLoad): void {
     this.isEditMode = false;
     this.isCopyMode = true;
     this.selectedCarLoadId = null;
     this.carLoadDrawerTitle = 'Copiar Carrada';
 
-    if (!this.drivers.length || !this.managers.length || !this.sprints.length) {
+    if (!this.drivers.length || !this.managers.length || !this.sprints.length || !this.customers.length) {
       this.loadLookups();
     }
+
+    this.customerMode = carload.customerId ? 'EXISTING' : 'NEW';
 
     this.isCarLoadDrawerVisible = true;
     this.carLoadForm.patchValue(this.mapCarloadToForm(carload));
@@ -317,10 +366,12 @@ export class CarLoadComponent implements OnInit {
     });
 
     this.applyDateRulesByStatus();
+    this.applyCustomerModeRules();
   }
 
-  saveCarLoad() {
+  saveCarLoad(): void {
     this.applyDateRulesByStatus();
+    this.applyCustomerModeRules();
 
     if (this.carLoadForm.invalid) {
       this.message.warning('Preencha todos os campos obrigatórios!');
@@ -329,13 +380,25 @@ export class CarLoadComponent implements OnInit {
 
     this.isSaving = true;
 
-    const formData: any = { ...this.carLoadForm.value };
+    const formData: any = {...this.carLoadForm.value};
 
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
-    formData.customerPhoneNumber = rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`;
+    formData.customerPhoneNumber = rawPhone
+      ? (rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`)
+      : null;
 
     formData.deliveryStatus = (formData.deliveryStatus || 'SCHEDULED').toString().toUpperCase();
     formData.carloadType = formData.carloadType || 'Produced';
+
+    if (this.customerMode === 'EXISTING') {
+      const selectedCustomer = this.customers.find(c => c.id === formData.customerId);
+      if (selectedCustomer) {
+        formData.customerName = selectedCustomer.name;
+        formData.customerPhoneNumber = selectedCustomer.phoneNumber;
+      }
+    } else {
+      formData.customerId = null;
+    }
 
     if (formData.carloadType === 'Sold') {
       formData.logisticsManagerId = null;
@@ -386,7 +449,7 @@ export class CarLoadComponent implements OnInit {
     });
   }
 
-  deleteCarLoad(data: CarLoad) {
+  deleteCarLoad(data: CarLoad): void {
     this.modal.confirm({
       nzTitle: 'Tens certeza que quer eliminar esta Carrada?',
       nzContent: `Cliente: <strong>${data.customerName}</strong> — Destino: <strong>${data.deliveryDestination}</strong>`,
@@ -404,8 +467,38 @@ export class CarLoadComponent implements OnInit {
     });
   }
 
-  onBack() {
+  onBack(): void {
     window.history.back();
+  }
+
+  private applyCustomerModeRules(): void {
+    const customerNameCtrl = this.carLoadForm.get('customerName')!;
+    const customerPhoneCtrl = this.carLoadForm.get('customerPhoneNumber')!;
+    const customerIdCtrl = this.carLoadForm.get('customerId')!;
+
+    if (this.customerMode === 'EXISTING') {
+      customerIdCtrl.setValidators([Validators.required]);
+      customerNameCtrl.clearValidators();
+      customerPhoneCtrl.clearValidators();
+    } else {
+      customerIdCtrl.clearValidators();
+      customerNameCtrl.setValidators([Validators.required]);
+      customerPhoneCtrl.setValidators([Validators.required, Validators.pattern('^[+0-9 ]+$')]);
+    }
+
+    customerIdCtrl.updateValueAndValidity({emitEvent: false});
+    customerNameCtrl.updateValueAndValidity({emitEvent: false});
+    customerPhoneCtrl.updateValueAndValidity({emitEvent: false});
+  }
+
+  private fillCustomerFromSelection(customerId: string): void {
+    const customer = this.customers.find(c => c.id === customerId);
+    if (!customer) return;
+
+    this.carLoadForm.patchValue({
+      customerName: customer.name,
+      customerPhoneNumber: customer.phoneNumber?.replace('+258', '').trim() || customer.phoneNumber
+    }, {emitEvent: false});
   }
 
   private applyDateRulesByStatus(): void {
@@ -419,15 +512,15 @@ export class CarLoadComponent implements OnInit {
 
     if (status === 'SCHEDULED') {
       scheduledCtrl.setValidators([Validators.required]);
-      deliveredCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', {emitEvent: false});
     } else if (status === 'DELIVERED') {
       deliveredCtrl.setValidators([Validators.required]);
     } else if (status === 'CANCELLED') {
-      deliveredCtrl.setValue('', { emitEvent: false });
+      deliveredCtrl.setValue('', {emitEvent: false});
     }
 
-    scheduledCtrl.updateValueAndValidity({ emitEvent: false });
-    deliveredCtrl.updateValueAndValidity({ emitEvent: false });
+    scheduledCtrl.updateValueAndValidity({emitEvent: false});
+    deliveredCtrl.updateValueAndValidity({emitEvent: false});
   }
 
   private normalizeDateTimeLocal(v: string | null | undefined): string | null {
@@ -447,6 +540,7 @@ export class CarLoadComponent implements OnInit {
 
   private mapCarloadToForm(carload: CarLoad) {
     return {
+      customerId: carload.customerId || null,
       customerName: carload.customerName,
       customerPhoneNumber: carload.customerPhoneNumber?.replace('+258', '').trim() || carload.customerPhoneNumber,
       deliveryDestination: carload.deliveryDestination,
