@@ -1,28 +1,19 @@
-/* dashboard.component.scss */
-
-/* =========================================================
-   LAYOUT BASE
-========================================================= */
 .content-wrapper {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 0; // ✅ importante para scroll interno
+  min-height: 0;
   padding: 18px;
   background: #f5f5f5;
-  overflow: hidden; // ✅ desktop: sem scroll global (scroll fica nas colunas)
+  overflow: hidden;
 }
 
-/* ✅ wrapper que “segura” a altura do board */
 .board-wrapper {
   flex: 1;
   min-height: 0;
-  overflow: hidden; // ✅ garante que o grid não cria scroll estranho
+  overflow: hidden;
 }
 
-/* =========================================================
-   PAGE HEADER
-========================================================= */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -37,9 +28,6 @@
   }
 }
 
-/* =========================================================
-   SUMMARY SECTION
-========================================================= */
 .summary-section {
   margin-bottom: 12px;
   padding: 4px 0;
@@ -125,9 +113,6 @@
   }
 }
 
-/* =========================================================
-   FILTERS PANEL
-========================================================= */
 .filters-panel {
   display: flex;
   align-items: center;
@@ -140,7 +125,8 @@
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
 
-  .left-filters, .right-actions {
+  .left-filters,
+  .right-actions {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -195,14 +181,11 @@
   }
 }
 
-/* =========================================================
-   BOARD + SCROLL POR COLUNA (DESKTOP)
-========================================================= */
 .board {
   display: grid;
   grid-template-columns: repeat(3, minmax(260px, 1fr));
   gap: 14px;
-  height: 100%; // ✅ agora o grid tem altura real
+  height: 100%;
   min-height: 0;
   overflow: hidden;
 }
@@ -221,7 +204,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 12px;
+  padding: 12px;
   border-bottom: 1px solid #f0f0f0;
   flex-shrink: 0;
 }
@@ -255,9 +238,9 @@
 .col-body {
   flex: 1;
   min-height: 0;
-  overflow-y: auto; // ✅ scroll aqui
+  overflow-y: auto;
   padding: 10px;
-  max-height: calc((110px * 4) + (10px * 3) + 20px);
+  max-height: calc((140px * 4) + (10px * 3) + 20px);
 
   scrollbar-width: thin;
   scrollbar-color: #ccc transparent;
@@ -276,9 +259,6 @@
   }
 }
 
-/* =========================================================
-   CARLOAD CARD (COMPACTO)
-========================================================= */
 .carload-card {
   border-radius: 12px;
   margin-bottom: 10px;
@@ -346,7 +326,7 @@
   font-size: 12px;
   color: #333;
   font-weight: 500;
-  max-width: 68%;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -360,9 +340,59 @@
   white-space: nowrap;
 }
 
-.row-3 {
+.row-date-highlight {
   display: flex;
   align-items: center;
+  margin-bottom: 6px;
+}
+
+.schedule-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.date-today {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+  border-color: rgba(59, 130, 246, 0.24);
+}
+
+.date-tomorrow {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border-color: rgba(245, 158, 11, 0.24);
+}
+
+.date-overdue {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.24);
+}
+
+.date-upcoming {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+  border-color: rgba(34, 197, 94, 0.24);
+}
+
+.date-neutral {
+  background: rgba(107, 114, 128, 0.10);
+  color: #6b7280;
+  border-color: rgba(107, 114, 128, 0.18);
+}
+
+.row-3,
+.row-4 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
 }
 
 .phone {
@@ -371,10 +401,20 @@
   white-space: nowrap;
 }
 
+.staff {
+  font-size: 12px;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .card-footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 4px;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
 
   button[nz-button] {
     padding: 0;
@@ -383,9 +423,6 @@
   }
 }
 
-/* =========================================================
-   EMPTY STATE
-========================================================= */
 .empty-state {
   text-align: center;
   padding: 28px 10px;
@@ -402,21 +439,18 @@
   }
 }
 
-/* =========================================================
-   MOBILE: permitir scroll GLOBAL (não por coluna)
-========================================================= */
 @media (max-width: 1100px) {
   .content-wrapper {
-    overflow: auto; // ✅ agora o ecrã pequeno volta a ter scroll
+    overflow: auto;
   }
 
   .board-wrapper {
-    overflow: visible; // ✅ deixa o conteúdo crescer
+    overflow: visible;
   }
 
   .board {
     grid-template-columns: 1fr;
-    height: auto; // ✅ sem altura fixa no mobile
+    height: auto;
     overflow: visible;
   }
 
@@ -426,7 +460,7 @@
   }
 
   .col-body {
-    overflow: visible; // ✅ no mobile, scroll é do ecrã, não da coluna
+    overflow: visible;
     max-height: none;
   }
 
@@ -434,7 +468,8 @@
     align-items: flex-start;
     flex-direction: column;
 
-    .left-filters, .right-actions {
+    .left-filters,
+    .right-actions {
       width: 100%;
       justify-content: flex-start;
     }
@@ -443,59 +478,5 @@
       width: 100%;
       max-width: 520px;
     }
-  }
-}
-.row-4 {
-  display: flex;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.staff {
-  font-size: 12px;
-  color: #555;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  margin-top: 6px;
-  flex-wrap: wrap;
-
-  button[nz-button] {
-    padding: 0;
-    height: 22px;
-    line-height: 22px;
-  }
-}
-.row-4 {
-  display: flex;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.staff {
-  font-size: 12px;
-  color: #555;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  margin-top: 6px;
-  flex-wrap: wrap;
-
-  button[nz-button] {
-    padding: 0;
-    height: 22px;
-    line-height: 22px;
   }
 }

@@ -1,5 +1,4 @@
 <div class="content-wrapper">
-
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
     <nz-breadcrumb-item>Dashboard</nz-breadcrumb-item>
@@ -57,7 +56,6 @@
 
   <div class="filters-panel dashboard-filters">
     <div class="left-filters">
-
       <input
         (ngModelChange)="applyFilters()"
         [(ngModel)]="searchValue"
@@ -142,8 +140,6 @@
   <div class="board-wrapper">
     <nz-spin [nzSpinning]="isLoading" nzTip="A carregar dashboard...">
       <div class="board">
-
-        <!-- EM EXECUÇÃO -->
         <div class="board-col">
           <div class="col-header">
             <div class="col-title">
@@ -227,7 +223,6 @@
           </div>
         </div>
 
-        <!-- AGENDADAS -->
         <div class="board-col">
           <div class="col-header">
             <div class="col-title">
@@ -257,7 +252,12 @@
 
                 <div class="row-2">
                   <span class="destination">{{ c.deliveryDestination }}</span>
-                  <span class="scheduled">{{ formatDateTime(c.deliveryScheduledDate) }}</span>
+                </div>
+
+                <div class="row-date-highlight">
+                  <span class="schedule-badge" [ngClass]="getScheduledBadgeClass(c.deliveryScheduledDate)">
+                    {{ getScheduledBadgeLabel(c.deliveryScheduledDate) }}
+                  </span>
                 </div>
 
                 <div class="row-3">
@@ -311,7 +311,6 @@
           </div>
         </div>
 
-        <!-- ENTREGUES -->
         <div *ngIf="showDoneCard" class="board-col">
           <div class="col-header">
             <div class="col-title">
@@ -373,9 +372,7 @@
             </ng-template>
           </div>
         </div>
-
       </div>
     </nz-spin>
   </div>
-
 </div>

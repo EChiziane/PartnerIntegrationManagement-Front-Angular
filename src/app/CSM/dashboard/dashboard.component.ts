@@ -109,6 +109,49 @@ export class DashboardComponent implements OnInit {
     return 'default';
   }
 
+  getScheduledBadgeLabel(value: string | null | undefined): string {
+    const date = this.parseDate(value);
+    if (date.getTime() === 0) return 'Sem data';
+
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const yyyy = date.getFullYear();
+    const formattedDate = `${dd}/${mm}/${yyyy}`;
+
+    if (this.isSameDay(date, today)) {
+      return `Hoje · ${formattedDate}`;
+    }
+
+    if (this.isSameDay(date, tomorrow)) {
+      return `Amanhã · ${formattedDate}`;
+    }
+
+    if (date.getTime() < this.startOfDay(today).getTime()) {
+      return `Atrasada · ${formattedDate}`;
+    }
+
+    return formattedDate;
+  }
+
+  getScheduledBadgeClass(value: string | null | undefined): string {
+    const date = this.parseDate(value);
+    if (date.getTime() === 0) return 'date-neutral';
+
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+
+    if (this.isSameDay(date, today)) return 'date-today';
+    if (this.isSameDay(date, tomorrow)) return 'date-tomorrow';
+    if (date.getTime() < this.startOfDay(today).getTime()) return 'date-overdue';
+
+    return 'date-upcoming';
+  }
+
   applyFilters(): void {
     let filteredData = [...this.dataSource];
 
@@ -140,10 +183,8 @@ export class DashboardComponent implements OnInit {
 
       filteredData = filteredData.filter(carload => {
         const date = this.parseDate(getRelevantDate(carload));
-
         if (start && date < start) return false;
         if (end && date > end) return false;
-
         return true;
       });
     }
