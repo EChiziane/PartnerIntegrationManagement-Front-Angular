@@ -1,23 +1,31 @@
+export type CarLoadStatus = 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
+export type CarloadType = 'Produced' | 'Sold';
+
 export interface CarLoad {
-  deliveryDestination: string;
-  customerName: string;
-  logisticsManagerName: string;
-  assignedDriverName: string;
-  transportedMaterial: string;
-  carloadBatchName: string;
-  customerPhoneNumber: string;
-  totalSpent: number;
-  totalEarnings: number;
-  deliveryStatus: string;
   id: string;
 
-  createdAt: string;
-  logisticsManagerId: string;
+  deliveryDestination: string;
+  customerName: string;
+  customerPhoneNumber: string;
+
+  logisticsManagerName: string | null;
+  logisticsManagerId: string | null;
+
+  assignedDriverName: string;
   assignedDriverId: string;
+
+  transportedMaterial: string;
+
+  carloadBatchName: string;
   carloadBatchId: string;
 
-  deliveryScheduledDate: string;
+  totalSpent: number;
+  totalEarnings: number;
 
-  // ✅ NOVO: data real de entrega (para "Feitas")
-  deliveredDate?: string | null;
+  deliveryDate: string | null;
+  deliveryScheduledDate: string | null;
+
+  deliveryStatus: CarLoadStatus;
+  carloadType: CarloadType;
+  createdAt: string; // ISO 8601
 }

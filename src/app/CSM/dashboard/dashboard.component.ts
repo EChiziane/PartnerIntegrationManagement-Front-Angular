@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit {
 
     // ✅ filtros por data: Feitas usam deliveredDate; outras usam deliveryScheduledDate
     const getDateForFilter = (c: CarLoad): string | null | undefined =>
-      this.isDone(c.deliveryStatus) ? c.deliveredDate : c.deliveryScheduledDate;
+      this.isDone(c.deliveryStatus) ? c.deliveryDate : c.deliveryScheduledDate;
 
     if (this.filterMode === 'TODAY') {
       const today = new Date();
@@ -145,7 +145,7 @@ export class DashboardComponent implements OnInit {
     // ✅ Feitas ordenam por deliveredDate
     this.doneList = data
       .filter(c => this.isDone(c.deliveryStatus))
-      .sort((a, b) => this.parseDate(b.deliveredDate).getTime() - this.parseDate(a.deliveredDate).getTime());
+      .sort((a, b) => this.parseDate(b.deliveryDate).getTime() - this.parseDate(a.deliveryDate).getTime());
 
     this.inProgressCount = this.inProgressList.length;
     this.scheduledCount = this.scheduledList.length;
