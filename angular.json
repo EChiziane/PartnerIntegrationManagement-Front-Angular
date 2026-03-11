@@ -21,17 +21,27 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
+
         "build": {
           "builder": "@angular-devkit/build-angular:application",
+
           "options": {
             "outputPath": "dist/customer-dashboar-angular-ng-zorro",
             "index": "src/index.html",
             "browser": "src/main.ts",
+
             "polyfills": [
               "zone.js"
             ],
+
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+
+            "allowedCommonJsDependencies": [
+              "html2canvas",
+              "canvg"
+            ],
+
             "assets": [
               {
                 "glob": "**/*",
@@ -43,23 +53,28 @@
                 "output": "/assets/"
               }
             ],
+
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/theme.less",
               "src/styles.scss"
             ],
+
             "scripts": []
           },
+
           "configurations": {
+
             "production": {
               "optimization": true,
               "extractLicenses": true,
               "outputHashing": "all",
+
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2MB",
-                  "maximumError": "3MB"
+                  "maximumWarning": "3MB",
+                  "maximumError": "4MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -68,54 +83,70 @@
                 }
               ]
             },
+
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
             }
+
           },
+
           "defaultConfiguration": "production"
         },
+
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+
           "configurations": {
             "production": {
               "buildTarget": "CustomerDashboarAngularNgZorro:build:production"
             },
+
             "development": {
               "buildTarget": "CustomerDashboarAngularNgZorro:build:development"
             }
           },
+
           "defaultConfiguration": "development"
         },
+
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
+
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
+
           "options": {
             "polyfills": [
               "zone.js",
               "zone.js/testing"
             ],
+
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
+
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
+
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
+
             "scripts": []
           }
         }
+
       }
     }
   },
+
   "cli": {
     "analytics": "355434b0-a9e2-42e3-ae9b-cd1dd8e9c9ee"
   }
