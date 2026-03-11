@@ -1,11 +1,9 @@
-// dashboard.component.ts
-import {Component, OnInit} from '@angular/core';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {CarLoad} from '../../models/CSM/carlaod';
-import {CarloadService} from '../../services/carload.service';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { CarLoad, CarLoadStatus } from '../../models/CSM/carlaod';
+import { CarloadService } from '../../services/carload.service';
 
-
-type CarLoadStatus = 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'CANCELLED' | 'ENTREGUE' | string;
 type FilterMode = 'NONE' | 'TODAY' | 'RANGE';
 
 @Component({
@@ -17,6 +15,7 @@ type FilterMode = 'NONE' | 'TODAY' | 'RANGE';
 export class DashboardComponent implements OnInit {
   dataSource: CarLoad[] = [];
   isLoading = false;
+  changingStatusId: string | null = null;
 
   searchValue = '';
   filterMode: FilterMode = 'NONE';
@@ -31,11 +30,14 @@ export class DashboardComponent implements OnInit {
   scheduledCount = 0;
   doneCount = 0;
 
+  // Entregues escondido por padrão
+  showDoneCard = false;
+
   constructor(
     private carloadService: CarloadService,
-    private message: NzMessageService
-  ) {
-  }
+    private message: NzMessageService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.load();
@@ -43,6 +45,10 @@ export class DashboardComponent implements OnInit {
 
   reload(): void {
     this.load();
+  }
+
+  toggleDoneCard(): void {
+    this.showDoneCard = !this.showDoneCard;
   }
 
   filterToday(): void {
@@ -75,11 +81,10 @@ export class DashboardComponent implements OnInit {
     switch ((status || '').toUpperCase()) {
       case 'SCHEDULED':
         return 'Agendada';
-      case 'PENDING':
+      case 'IN_PROGRESS':
         return 'Em execução';
       case 'DELIVERED':
-      case 'ENTREGUE':
-        return 'Feita';
+        return 'Entregue';
       case 'CANCELLED':
         return 'Cancelada';
       default:
@@ -88,97 +93,166 @@ export class DashboardComponent implements OnInit {
   }
 
   statusColor(status: CarLoadStatus): string {
-    const s = (status || '').toUpperCase();
-    if (s === 'DELIVERED' || s === 'ENTREGUE') return 'green';
-    if (s === 'SCHEDULED') return 'orange';
-    if (s === 'PENDING') return 'blue';
-    if (s === 'CANCELLED') return 'red';
+    const normalizedStatus = (status || '').toUpperCase();
+
+    if (normalizedStatus === 'DELIVERED') return 'green';
+    if (normalizedStatus === 'SCHEDULED') return 'orange';
+    if (normalizedStatus === 'IN_PROGRESS') return 'blue';
+    if (normalizedStatus === 'CANCELLED') return 'red';
+
     return 'default';
   }
 
   applyFilters(): void {
-    let data = [...this.dataSource];
+    let filteredData = [...this.dataSource];
 
-    // search
     if (this.searchValue?.trim()) {
-      const v = this.searchValue.toLowerCase();
-      data = data.filter(item =>
-        (item.customerName || '').toLowerCase().includes(v) ||
-        (item.customerPhoneNumber || '').toLowerCase().includes(v) ||
-        (item.deliveryDestination || '').toLowerCase().includes(v) ||
-        (item.transportedMaterial || '').toLowerCase().includes(v)
+      const search = this.searchValue.toLowerCase();
+      filteredData = filteredData.filter(item =>
+        (item.customerName || '').toLowerCase().includes(search) ||
+        (item.customerPhoneNumber || '').toLowerCase().includes(search) ||
+        (item.deliveryDestination || '').toLowerCase().includes(search) ||
+        (item.transportedMaterial || '').toLowerCase().includes(search) ||
+        (item.assignedDriverName || '').toLowerCase().includes(search) ||
+        (item.logisticsManagerName || '').toLowerCase().includes(search)
       );
     }
 
-    // ✅ filtros por data: Feitas usam deliveredDate; outras usam deliveryScheduledDate
-    const getDateForFilter = (c: CarLoad): string | null | undefined =>
-      this.isDone(c.deliveryStatus) ? c.deliveryDate : c.deliveryScheduledDate;
+    const getRelevantDate = (carload: CarLoad): string | null =>
+      this.isDone(carload.deliveryStatus) ? carload.deliveryDate : carload.deliveryScheduledDate;
 
     if (this.filterMode === 'TODAY') {
       const today = new Date();
-      data = data.filter(c => this.isSameDay(this.parseDate(getDateForFilter(c)), today));
+      filteredData = filteredData.filter(carload =>
+        this.isSameDay(this.parseDate(getRelevantDate(carload)), today)
+      );
     }
 
-    if (this.filterMode === 'RANGE') {
-      if (this.rangeStart || this.rangeEnd) {
-        const start = this.rangeStart ? this.startOfDay(this.rangeStart) : null;
-        const end = this.rangeEnd ? this.endOfDay(this.rangeEnd) : null;
+    if (this.filterMode === 'RANGE' && (this.rangeStart || this.rangeEnd)) {
+      const start = this.rangeStart ? this.startOfDay(this.rangeStart) : null;
+      const end = this.rangeEnd ? this.endOfDay(this.rangeEnd) : null;
 
-        data = data.filter(c => {
-          const d = this.parseDate(getDateForFilter(c));
-          if (start && d < start) return false;
-          if (end && d > end) return false;
-          return true;
-        });
-      }
+      filteredData = filteredData.filter(carload => {
+        const date = this.parseDate(getRelevantDate(carload));
+
+        if (start && date < start) return false;
+        if (end && date > end) return false;
+
+        return true;
+      });
     }
 
-    // lists + sort
-    this.inProgressList = data
-      .filter(c => this.isInProgress(c.deliveryStatus))
-      .sort((a, b) => this.parseDate(a.deliveryScheduledDate).getTime() - this.parseDate(b.deliveryScheduledDate).getTime());
+    this.inProgressList = filteredData
+      .filter(carload => this.isInProgress(carload.deliveryStatus))
+      .sort((a, b) =>
+        this.parseDate(a.deliveryScheduledDate).getTime() -
+        this.parseDate(b.deliveryScheduledDate).getTime()
+      );
 
-    this.scheduledList = data
-      .filter(c => this.isScheduled(c.deliveryStatus))
-      .sort((a, b) => this.parseDate(a.deliveryScheduledDate).getTime() - this.parseDate(b.deliveryScheduledDate).getTime());
+    this.scheduledList = this.buildFreshScheduledList(
+      filteredData.filter(carload => this.isScheduled(carload.deliveryStatus))
+    );
 
-    // ✅ Feitas ordenam por deliveredDate
-    this.doneList = data
-      .filter(c => this.isDone(c.deliveryStatus))
-      .sort((a, b) => this.parseDate(b.deliveryDate).getTime() - this.parseDate(a.deliveryDate).getTime());
+    this.doneList = filteredData
+      .filter(carload => this.isDone(carload.deliveryStatus))
+      .sort((a, b) =>
+        this.parseDate(b.deliveryDate).getTime() -
+        this.parseDate(a.deliveryDate).getTime()
+      );
 
     this.inProgressCount = this.inProgressList.length;
     this.scheduledCount = this.scheduledList.length;
     this.doneCount = this.doneList.length;
   }
 
-  openInCarradas(_: CarLoad): void {
-    window.location.href = '/app/carload';
+  goToCarloadDetails(carload: CarLoad): void {
+    this.router.navigate(['/app/carload-details', carload.id]);
   }
 
   trackById(_: number, item: CarLoad): string {
     return item.id;
   }
 
-  // ✅ mantém o format original (yyyy-MM-dd HH:mm)
-  formatDateTime(v: string | null | undefined): string {
-    const d = this.parseDate(v);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mi = String(d.getMinutes()).padStart(2, '0');
+  formatDateTime(value: string | null | undefined): string {
+    const date = this.parseDate(value);
+
+    if (date.getTime() === 0) {
+      return '—';
+    }
+
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const hh = String(date.getHours()).padStart(2, '0');
+    const mi = String(date.getMinutes()).padStart(2, '0');
+
     return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
   }
 
-  // ✅ novo helper: quando não tem deliveredDate
-  formatDateTimeOrDash(v: string | null | undefined): string {
-    if (!v) return '—';
-    return this.formatDateTime(v);
+  formatDateTimeOrDash(value: string | null | undefined): string {
+    if (!value) return '—';
+    return this.formatDateTime(value);
+  }
+
+  startExecution(carload: CarLoad): void {
+    this.changeStatus(carload, 'IN_PROGRESS');
+  }
+
+  markAsDelivered(carload: CarLoad): void {
+    this.changeStatus(carload, 'DELIVERED');
+  }
+
+  cancelCarload(carload: CarLoad): void {
+    this.changeStatus(carload, 'CANCELLED');
+  }
+
+  private changeStatus(carload: CarLoad, newStatus: CarLoadStatus): void {
+    this.changingStatusId = carload.id;
+
+    const payload = {
+      deliveryDestination: carload.deliveryDestination,
+      customerName: carload.customerName,
+      logisticsManagerId: carload.logisticsManagerId,
+      assignedDriverId: carload.assignedDriverId,
+      transportedMaterial: carload.transportedMaterial,
+      carloadBatchId: carload.carloadBatchId,
+      customerPhoneNumber: carload.customerPhoneNumber,
+      totalSpent: carload.totalSpent,
+      totalEarnings: carload.totalEarnings,
+      deliveryDate:
+        newStatus === 'DELIVERED'
+          ? new Date().toISOString().slice(0, 19)
+          : newStatus === 'CANCELLED'
+            ? null
+            : carload.deliveryDate,
+      deliveryScheduledDate: carload.deliveryScheduledDate,
+      deliveryStatus: newStatus,
+      carloadType: carload.carloadType
+    };
+
+    this.carloadService.updateCarLoad(carload.id, payload).subscribe({
+      next: () => {
+        const messageMap: Record<CarLoadStatus, string> = {
+          SCHEDULED: 'Carrada actualizada para Agendada.',
+          IN_PROGRESS: 'Carrada marcada como Em execução.',
+          DELIVERED: 'Carrada marcada como Entregue.',
+          CANCELLED: 'Carrada cancelada com sucesso.'
+        };
+
+        this.message.success(messageMap[newStatus]);
+        this.changingStatusId = null;
+        this.load();
+      },
+      error: () => {
+        this.message.error('Erro ao actualizar o estado da carrada.');
+        this.changingStatusId = null;
+      }
+    });
   }
 
   private load(): void {
     this.isLoading = true;
+
     this.carloadService.getCarLoads().subscribe({
       next: (data) => {
         this.dataSource = data || [];
@@ -186,15 +260,52 @@ export class DashboardComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.message.error('Erro ao carregar dashboard. 🚫');
+        this.message.error('Erro ao carregar dashboard.');
         this.isLoading = false;
       }
     });
   }
 
+  private buildFreshScheduledList(list: CarLoad[]): CarLoad[] {
+    if (!list.length) {
+      return [];
+    }
+
+    const sortedList = [...list].sort(
+      (a, b) =>
+        this.parseDate(a.deliveryScheduledDate).getTime() -
+        this.parseDate(b.deliveryScheduledDate).getTime()
+    );
+
+    const today = new Date();
+
+    const todayScheduled = sortedList.filter(item =>
+      this.isSameDay(this.parseDate(item.deliveryScheduledDate), today)
+    );
+
+    if (todayScheduled.length) {
+      return todayScheduled;
+    }
+
+    const futureScheduled = sortedList.filter(item =>
+      this.parseDate(item.deliveryScheduledDate).getTime() >= this.startOfDay(today).getTime()
+    );
+
+    if (!futureScheduled.length) {
+      return [];
+    }
+
+    const nearestFutureDate = this.startOfDay(
+      this.parseDate(futureScheduled[0].deliveryScheduledDate)
+    ).getTime();
+
+    return futureScheduled.filter(item =>
+      this.startOfDay(this.parseDate(item.deliveryScheduledDate)).getTime() === nearestFutureDate
+    );
+  }
+
   private isDone(status: CarLoadStatus): boolean {
-    const s = (status || '').toUpperCase();
-    return s === 'DELIVERED' || s === 'ENTREGUE';
+    return (status || '').toUpperCase() === 'DELIVERED';
   }
 
   private isScheduled(status: CarLoadStatus): boolean {
@@ -202,18 +313,23 @@ export class DashboardComponent implements OnInit {
   }
 
   private isInProgress(status: CarLoadStatus): boolean {
-    return (status || '').toUpperCase() === 'PENDING';
+    return (status || '').toUpperCase() === 'IN_PROGRESS';
   }
 
-  private parseDate(v: string | null | undefined): Date {
-    if (!v) return new Date(0);
+  private parseDate(value: string | null | undefined): Date {
+    if (!value) {
+      return new Date(0);
+    }
 
-    const d = new Date(v);
-    if (!isNaN(d.getTime())) return d;
+    const date = new Date(value);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
 
-    const safe = v.replace(' ', 'T');
-    const d2 = new Date(safe);
-    return isNaN(d2.getTime()) ? new Date(0) : d2;
+    const safeValue = value.replace(' ', 'T');
+    const fallbackDate = new Date(safeValue);
+
+    return isNaN(fallbackDate.getTime()) ? new Date(0) : fallbackDate;
   }
 
   private isSameDay(a: Date, b: Date): boolean {
@@ -222,15 +338,15 @@ export class DashboardComponent implements OnInit {
       && a.getDate() === b.getDate();
   }
 
-  private startOfDay(d: Date): Date {
-    const x = new Date(d);
-    x.setHours(0, 0, 0, 0);
-    return x;
+  private startOfDay(date: Date): Date {
+    const value = new Date(date);
+    value.setHours(0, 0, 0, 0);
+    return value;
   }
 
-  private endOfDay(d: Date): Date {
-    const x = new Date(d);
-    x.setHours(23, 59, 59, 999);
-    return x;
+  private endOfDay(date: Date): Date {
+    const value = new Date(date);
+    value.setHours(23, 59, 59, 999);
+    return value;
   }
 }

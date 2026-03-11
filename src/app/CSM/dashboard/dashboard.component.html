@@ -1,4 +1,3 @@
-<!-- dashboard.component.html ✅ atualizado -->
 <div class="content-wrapper">
 
   <nz-breadcrumb class="page-breadcrumb">
@@ -10,10 +9,9 @@
     <p>Dashboard</p>
   </div>
 
-  <!-- ===== Summary ===== -->
   <div class="summary-section">
     <div [nzGutter]="8" nz-row>
-      <div [nzSpan]="8" nz-col>
+      <div [nzSpan]="showDoneCard ? 8 : 12" nz-col>
         <nz-card nzSize="small">
           <div class="summary-card">
             <div class="icon-wrapper total">
@@ -27,7 +25,7 @@
         </nz-card>
       </div>
 
-      <div [nzSpan]="8" nz-col>
+      <div [nzSpan]="showDoneCard ? 8 : 12" nz-col>
         <nz-card nzSize="small">
           <div class="summary-card">
             <div class="icon-wrapper active">
@@ -41,14 +39,14 @@
         </nz-card>
       </div>
 
-      <div [nzSpan]="8" nz-col>
+      <div *ngIf="showDoneCard" [nzSpan]="8" nz-col>
         <nz-card nzSize="small">
           <div class="summary-card">
             <div class="icon-wrapper inactive">
               <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
             </div>
             <div class="summary-content">
-              <span class="title">Feitas</span>
+              <span class="title">Entregues</span>
               <p>{{ doneCount }}</p>
             </div>
           </div>
@@ -57,7 +55,6 @@
     </div>
   </div>
 
-  <!-- ===== Filters ===== -->
   <div class="filters-panel dashboard-filters">
     <div class="left-filters">
 
@@ -107,6 +104,14 @@
     </div>
 
     <div class="right-actions">
+      <button (click)="toggleDoneCard()" nz-button nzType="default">
+        <nz-icon
+          nzTheme="outline"
+          [nzType]="showDoneCard ? 'eye-invisible' : 'eye'">
+        </nz-icon>
+        {{ showDoneCard ? 'Ocultar Entregues' : 'Mostrar Entregues' }}
+      </button>
+
       <button nz-button nzType="primary" routerLink="/app/carload">
         <nz-icon nzTheme="outline" nzType="unordered-list"></nz-icon>
         Ver Carradas
@@ -119,12 +124,11 @@
     </div>
   </div>
 
-  <!-- ✅ Wrapper que controla altura/scroll do board -->
   <div class="board-wrapper">
     <nz-spin [nzSpinning]="isLoading" nzTip="A carregar dashboard...">
       <div class="board">
 
-        <!-- Em Execução (PENDING) ✅ sem data -->
+        <!-- EM EXECUÇÃO -->
         <div class="board-col">
           <div class="col-header">
             <div class="col-title">
@@ -152,19 +156,48 @@
                   </nz-tag>
                 </div>
 
-                <!-- ✅ aqui removemos a data -->
                 <div class="row-2">
                   <span class="destination">{{ c.deliveryDestination }}</span>
+                  <span class="scheduled">{{ formatDateTimeOrDash(c.deliveryScheduledDate) }}</span>
                 </div>
 
                 <div class="row-3">
                   <span class="phone">{{ c.customerPhoneNumber }}</span>
                 </div>
 
+                <div class="row-4">
+                  <span class="staff">Motorista: {{ c.assignedDriverName }}</span>
+                </div>
+
+                <div class="row-4" *ngIf="c.logisticsManagerName">
+                  <span class="staff">Gestor: {{ c.logisticsManagerName }}</span>
+                </div>
+
                 <div class="card-footer">
-                  <button (click)="openInCarradas(c)" nz-button nzSize="small" nzType="link">
+                  <button (click)="goToCarloadDetails(c)" nz-button nzSize="small" nzType="link">
                     <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
                     Ver
+                  </button>
+
+                  <button
+                    (click)="markAsDelivered(c)"
+                    [disabled]="changingStatusId === c.id"
+                    nz-button
+                    nzSize="small"
+                    nzType="link">
+                    <nz-icon nzTheme="outline" nzType="check"></nz-icon>
+                    Entregar
+                  </button>
+
+                  <button
+                    (click)="cancelCarload(c)"
+                    [disabled]="changingStatusId === c.id"
+                    nz-button
+                    nzDanger
+                    nzSize="small"
+                    nzType="link">
+                    <nz-icon nzTheme="outline" nzType="stop"></nz-icon>
+                    Cancelar
                   </button>
                 </div>
               </nz-card>
@@ -179,7 +212,7 @@
           </div>
         </div>
 
-        <!-- Agendadas (SCHEDULED) ✅ mostra data agendada -->
+        <!-- AGENDADAS -->
         <div class="board-col">
           <div class="col-header">
             <div class="col-title">
@@ -209,7 +242,6 @@
 
                 <div class="row-2">
                   <span class="destination">{{ c.deliveryDestination }}</span>
-                  <!-- ✅ data agendada -->
                   <span class="scheduled">{{ formatDateTime(c.deliveryScheduledDate) }}</span>
                 </div>
 
@@ -217,10 +249,39 @@
                   <span class="phone">{{ c.customerPhoneNumber }}</span>
                 </div>
 
+                <div class="row-4">
+                  <span class="staff">Motorista: {{ c.assignedDriverName }}</span>
+                </div>
+
+                <div class="row-4" *ngIf="c.logisticsManagerName">
+                  <span class="staff">Gestor: {{ c.logisticsManagerName }}</span>
+                </div>
+
                 <div class="card-footer">
-                  <button (click)="openInCarradas(c)" nz-button nzSize="small" nzType="link">
+                  <button (click)="goToCarloadDetails(c)" nz-button nzSize="small" nzType="link">
                     <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
                     Ver
+                  </button>
+
+                  <button
+                    (click)="startExecution(c)"
+                    [disabled]="changingStatusId === c.id"
+                    nz-button
+                    nzSize="small"
+                    nzType="link">
+                    <nz-icon nzTheme="outline" nzType="play-circle"></nz-icon>
+                    Iniciar
+                  </button>
+
+                  <button
+                    (click)="cancelCarload(c)"
+                    [disabled]="changingStatusId === c.id"
+                    nz-button
+                    nzDanger
+                    nzSize="small"
+                    nzType="link">
+                    <nz-icon nzTheme="outline" nzType="stop"></nz-icon>
+                    Cancelar
                   </button>
                 </div>
               </nz-card>
@@ -235,12 +296,12 @@
           </div>
         </div>
 
-        <!-- Feitas (DELIVERED/ENTREGUE) ✅ mostra deliveredDate -->
-        <div class="board-col">
+        <!-- ENTREGUES -->
+        <div *ngIf="showDoneCard" class="board-col">
           <div class="col-header">
             <div class="col-title">
               <span class="dot dot-done"></span>
-              Feitas
+              Entregues
             </div>
             <nz-tag nzColor="green">{{ doneList.length }}</nz-tag>
           </div>
@@ -265,7 +326,6 @@
 
                 <div class="row-2">
                   <span class="destination">{{ c.deliveryDestination }}</span>
-                  <!-- ✅ data de entrega -->
                   <span class="scheduled">{{ formatDateTimeOrDash(c.deliveryDate) }}</span>
                 </div>
 
@@ -273,8 +333,16 @@
                   <span class="phone">{{ c.customerPhoneNumber }}</span>
                 </div>
 
+                <div class="row-4">
+                  <span class="staff">Motorista: {{ c.assignedDriverName }}</span>
+                </div>
+
+                <div class="row-4" *ngIf="c.logisticsManagerName">
+                  <span class="staff">Gestor: {{ c.logisticsManagerName }}</span>
+                </div>
+
                 <div class="card-footer">
-                  <button (click)="openInCarradas(c)" nz-button nzSize="small" nzType="link">
+                  <button (click)="goToCarloadDetails(c)" nz-button nzSize="small" nzType="link">
                     <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
                     Ver
                   </button>
@@ -285,7 +353,7 @@
             <ng-template #emptyDone>
               <div class="empty-state">
                 <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
-                <p>Sem carradas feitas.</p>
+                <p>Sem carradas entregues.</p>
               </div>
             </ng-template>
           </div>
