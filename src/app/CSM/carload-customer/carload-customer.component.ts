@@ -1,51 +1,38 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {CarloadCustomer} from '../../models/CarloadCustomer';
-import {CarloadCustomerService} from '../../services/carload-customer.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { CarloadCustomer } from '../../models/CarloadCustomer';
+import { CarloadCustomerService } from '../../services/carload-customer.service';
 
 @Component({
   selector: 'app-carload-customer',
   standalone: false,
   templateUrl: './carload-customer.component.html',
-  styleUrl: './carload-customer.component.scss'
+  styleUrls: ['./carload-customer.component.scss']
 })
 export class CarloadCustomerComponent implements OnInit {
-
   customers: CarloadCustomer[] = [];
+  filteredCustomers: CarloadCustomer[] = [];
+
   isLoading = false;
   isSaving = false;
 
-  // Summary
   totalCustomers = 0;
   customersWithEmail = 0;
   customersWithoutEmail = 0;
 
-  // UI
   isDrawerVisible = false;
   searchValue = '';
   currentEditingCustomerId: string | null = null;
 
-  // Drawer responsive
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
-  // Inline edit
   editingCustomer?: CarloadCustomer | null = null;
   editingField?: string | null = null;
 
   customerForm!: FormGroup;
-
-  // Default fictitious data (sem "Ex.")
-  private defaultCustomerData = {
-    customerCode: 'CUST001',
-    nuitNumber: '123456789',
-    streetAddress: 'Rua Principal',
-    city: 'Maputo Cidade',
-    zipCode: '12345',
-    emailAddress: 'customer@gmail.com',
-  };
 
   constructor(
     private customerService: CarloadCustomerService,
@@ -80,7 +67,6 @@ export class CarloadCustomerComponent implements OnInit {
     window.history.back();
   }
 
-  /* ===================== Drawer ===================== */
   openDrawer(): void {
     this.isDrawerVisible = true;
     this.currentEditingCustomerId = null;
@@ -88,7 +74,6 @@ export class CarloadCustomerComponent implements OnInit {
   }
 
   closeDrawer(): void {
-    // ✅ NÃO bloquear o fecho aqui. O botão Cancelar já está desativado no HTML.
     this.isDrawerVisible = false;
     this.customerForm.reset();
     this.currentEditingCustomerId = null;
@@ -97,11 +82,10 @@ export class CarloadCustomerComponent implements OnInit {
 
   editCustomer(customer: CarloadCustomer): void {
     this.currentEditingCustomerId = customer.id;
-    this.customerForm.patchValue({...customer});
+    this.customerForm.patchValue({ ...customer });
     this.isDrawerVisible = true;
   }
 
-  /* ===================== Delete ===================== */
   deleteCustomer(customer: CarloadCustomer): void {
     this.modal.confirm({
       nzTitle: 'Tens certeza que quer eliminar este Cliente?',
@@ -114,78 +98,71 @@ export class CarloadCustomerComponent implements OnInit {
         this.customerService.deleteCustomer(customer.id).subscribe({
           next: () => {
             this.loadCustomers();
-            this.message.success('Cliente eliminado com sucesso! 🗑️');
+            this.message.success('Cliente eliminado com sucesso!');
           },
-          error: () => this.message.error('Erro ao eliminar cliente 🚫'),
+          error: () => this.message.error('Erro ao eliminar cliente')
         });
-      },
+      }
     });
   }
 
-  /* ===================== Inline Edit ===================== */
   startInlineEdit(customer: CarloadCustomer, field: string): void {
-    this.editingCustomer = {...customer};
+    this.editingCustomer = { ...customer };
     this.editingField = field;
   }
 
   saveInlineEdit(original: CarloadCustomer, field: string): void {
     if (!this.editingCustomer) return;
 
-    const updated = {...original, [field]: (this.editingCustomer as any)[field]};
+    const updated = { ...original, [field]: (this.editingCustomer as any)[field] };
 
     this.customerService.updateCustomer(original.id, updated).subscribe({
       next: () => {
         Object.assign(original, updated);
-        this.message.success(`Campo ${field} atualizado! ✅`);
-        this.resetInlineEdit();
+        this.applySearch();
         this.refreshTotals();
+        this.message.success(`Campo ${field} actualizado com sucesso!`);
+        this.resetInlineEdit();
       },
       error: () => {
-        this.message.error('Erro ao atualizar campo 🚫');
+        this.message.error('Erro ao actualizar campo');
         this.resetInlineEdit();
-      },
+      }
     });
   }
 
-  /* ===================== Search ===================== */
   search(): void {
-    const val = this.searchValue.toLowerCase().trim();
+    this.applySearch();
+  }
 
-    if (!val) {
-      this.loadCustomers();
+  private applySearch(): void {
+    const value = this.searchValue.toLowerCase().trim();
+
+    if (!value) {
+      this.filteredCustomers = [...this.customers];
       return;
     }
 
-    this.customers = this.customers.filter(c =>
-      (c.name || '').toLowerCase().includes(val) ||
-      (c.customerCode || '').toLowerCase().includes(val) ||
-      (c.emailAddress || '').toLowerCase().includes(val) ||
-      (c.phoneNumber || '').toLowerCase().includes(val)
+    this.filteredCustomers = this.customers.filter(customer =>
+      (customer.name || '').toLowerCase().includes(value) ||
+      (customer.customerCode || '').toLowerCase().includes(value) ||
+      (customer.emailAddress || '').toLowerCase().includes(value) ||
+      (customer.phoneNumber || '').toLowerCase().includes(value)
     );
   }
 
-  /* ===================== Submit ===================== */
   submitCustomer(): void {
-    if (this.customerForm.get('name')?.invalid || this.customerForm.get('phoneNumber')?.invalid) {
+    if (this.customerForm.invalid) {
       this.message.warning('Preencha Nome e Telefone (obrigatórios).');
       return;
     }
 
     this.isSaving = true;
 
-    // Copia valores
-    const customerData: any = {...this.customerForm.value};
+    const customerData: any = { ...this.customerForm.value };
 
-    // Normalizar telefone para +258
     const rawPhone = (customerData.phoneNumber || '').toString().trim();
     customerData.phoneNumber = rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`;
-
-    // Preenche fictícios nos campos vazios
-    const keys = Object.keys(this.defaultCustomerData) as Array<keyof typeof this.defaultCustomerData>;
-    for (const key of keys) {
-      const v = (customerData[key] ?? '').toString().trim();
-      if (!v) customerData[key] = this.defaultCustomerData[key];
-    }
 
     const request$ = this.currentEditingCustomerId
       ? this.customerService.updateCustomer(this.currentEditingCustomerId, customerData)
@@ -193,22 +170,23 @@ export class CarloadCustomerComponent implements OnInit {
 
     request$.subscribe({
       next: () => {
-        // ✅ MUITO IMPORTANTE: desligar isSaving ANTES de fechar
         this.isSaving = false;
-
-        // Atualiza lista e fecha drawer
         this.loadCustomers();
         this.closeDrawer();
 
         this.message.success(
           this.currentEditingCustomerId
-            ? 'Cliente atualizado com sucesso! ✅'
-            : 'Cliente criado com sucesso! 🎉'
+            ? 'Cliente actualizado com sucesso!'
+            : 'Cliente criado com sucesso!'
         );
       },
       error: () => {
         this.isSaving = false;
-        this.message.error(this.currentEditingCustomerId ? 'Erro ao atualizar cliente 🚫' : 'Erro ao criar cliente 🚫');
+        this.message.error(
+          this.currentEditingCustomerId
+            ? 'Erro ao actualizar cliente'
+            : 'Erro ao criar cliente'
+        );
       }
     });
   }
@@ -218,31 +196,26 @@ export class CarloadCustomerComponent implements OnInit {
     this.editingField = null;
   }
 
-  /* ===================== Load ===================== */
   private loadCustomers(): void {
     this.isLoading = true;
 
     this.customerService.getCustomers().subscribe({
       next: (customers) => {
-        this.customers = customers;
+        this.customers = customers || [];
+        this.filteredCustomers = [...this.customers];
         this.refreshTotals();
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
-        this.message.error('Erro ao carregar clientes 🚫');
-      },
+        this.message.error('Erro ao carregar clientes');
+      }
     });
   }
 
   private refreshTotals(): void {
     this.totalCustomers = this.customers.length;
-
-    this.customersWithEmail = this.customers.filter(c => {
-      const e = (c.emailAddress || '').toString().trim();
-      return !!e;
-    }).length;
-
+    this.customersWithEmail = this.customers.filter(c => !!(c.emailAddress || '').trim()).length;
     this.customersWithoutEmail = this.totalCustomers - this.customersWithEmail;
   }
 
@@ -255,7 +228,7 @@ export class CarloadCustomerComponent implements OnInit {
       streetAddress: [''],
       city: [''],
       zipCode: [''],
-      emailAddress: [''],
+      emailAddress: ['']
     });
   }
 }
