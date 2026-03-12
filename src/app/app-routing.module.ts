@@ -19,6 +19,7 @@ import {InvoiceComponent} from './CSM/invoice/invoice.component';
 import {QuatationComponent} from './CSM/quatation/quatation.component';
 import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.component';
 import {CarloadDetailsComponent} from './CSM/carload/carload-details/carload-details.component';
+import {QuoteComponent} from './CSM/quote/quote.component';
 
 
 const routes: Routes = [
@@ -40,6 +41,7 @@ const routes: Routes = [
       {path: 'quotation', component: QuatationComponent},
       {path: 'carload-customer', component: CarloadCustomerComponent},
       {path: 'invoice', component: InvoiceComponent},
+      {path: 'quote', component: QuoteComponent},
       {path: 'manager', component: ManagerComponent},
       {path: 'sprint', component: SprintComponent},
       {path: 'sprint-detail/:id', component: SprintDetailsComponent},

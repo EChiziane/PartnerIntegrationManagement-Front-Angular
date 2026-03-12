@@ -1,6 +1,5 @@
 <div class="content-wrapper">
 
-  <!-- ===== Breadcrumb ===== -->
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
       <a routerLink="/app">Home</a>
@@ -8,7 +7,6 @@
     <nz-breadcrumb-item>Carload Invoices</nz-breadcrumb-item>
   </nz-breadcrumb>
 
-  <!-- ===== Page Header ===== -->
   <div class="page-header">
     <p>Carload Invoices</p>
 
@@ -17,7 +15,6 @@
     </span>
   </div>
 
-  <!-- ===== Summary Section ===== -->
   <div class="summary-section">
     <div class="summary-background">
       <div [nzGutter]="8" nz-row>
@@ -68,14 +65,13 @@
     </div>
   </div>
 
-  <!-- ===== Filters Panel ===== -->
   <div class="filters-panel">
 
     <input
       (ngModelChange)="search()"
       [(ngModel)]="searchValue"
       nz-input
-      placeholder="Pesquisar invoice/item..."
+      placeholder="Pesquisar fatura/item..."
       type="text"
     />
 
@@ -113,7 +109,6 @@
 
   </div>
 
-  <!-- ===== Table ===== -->
   <div class="table-wrapper">
     <div class="table-scroll">
 
@@ -134,7 +129,7 @@
             <th>Invoice Code</th>
             <th class="file-name-column">File</th>
             <th>Criado em</th>
-            <th>Ações</th>
+            <th class="actions-column">Ações</th>
           </tr>
           </thead>
 
@@ -149,39 +144,31 @@
               </a>
             </td>
 
-            <td>{{ invoice.createdAt | date:'dd/MM/yyyy - HH:mm' }}</td>
+            <td>{{ invoice.createdAt | date:'dd/MM/yyyy' }}</td>
 
-            <td class="action-buttons">
-              <button
-                (click)="downloadInvoice(invoice)"
-                nz-button
-                nz-tooltip="Download"
-                nzSize="small"
-                nzType="link"
-              >
-                <nz-icon nzTheme="outline" nzType="printer"></nz-icon>
-              </button>
+            <td class="actions-cell">
+              <div class="actions-group">
+                <button
+                  (click)="downloadInvoice(invoice)"
+                  nz-button
+                  nz-tooltip="Download"
+                  nzSize="small"
+                  nzType="link"
+                >
+                  <nz-icon nzTheme="outline" nzType="download"></nz-icon>
+                </button>
 
-              <button
-                (click)="editInvoice(invoice)"
-                nz-button
-                nz-tooltip="Editar"
-                nzSize="small"
-                nzType="link"
-              >
-                <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
-              </button>
-
-              <button
-                (click)="deleteInvoice(invoice)"
-                nz-button
-                nz-tooltip="Eliminar"
-                nzDanger
-                nzSize="small"
-                nzType="link"
-              >
-                <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
-              </button>
+                <button
+                  (click)="deleteInvoice(invoice)"
+                  nz-button
+                  nz-tooltip="Eliminar"
+                  nzDanger
+                  nzSize="small"
+                  nzType="link"
+                >
+                  <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+                </button>
+              </div>
             </td>
           </tr>
           </tbody>
@@ -193,21 +180,19 @@
   </div>
 </div>
 
-<!-- ===== Drawer (padrão moderno) ===== -->
 <nz-drawer
   (nzOnClose)="closeDrawer()"
   [nzBodyStyle]="{ overflow: 'auto' }"
   [nzFooter]="drawerFooter"
   [nzMaskClosable]="false"
   [nzPlacement]="drawerPlacement"
-  [nzTitle]="currentInvoiceId ? 'Edit Invoice' : 'New Invoice'"
+  [nzTitle]="'New Invoice'"
   [nzVisible]="isDrawerVisible"
   [nzWidth]="drawerWidth"
 >
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar invoice...">
     <form [formGroup]="invoiceForm" class="drawer-form" nz-form>
 
-      <!-- ===== Customer Info ===== -->
       <div class="drawer-section">
         <h3 class="section-title">Customer Information</h3>
 
@@ -236,7 +221,7 @@
             <nz-form-item>
               <nz-form-label nzRequired>Invoice Code</nz-form-label>
               <nz-form-control>
-                <input formControlName="invoiceCode" nz-input readonly/>
+                <input formControlName="invoiceCode" nz-input readonly />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -244,7 +229,6 @@
         </div>
       </div>
 
-      <!-- ===== Items ===== -->
       <div class="drawer-section">
         <h3 class="section-title">Invoice Items</h3>
 
@@ -274,21 +258,21 @@
               <nz-form-item>
                 <nz-form-label nzRequired>Qtd</nz-form-label>
                 <nz-form-control>
-                  <input [disabled]="isSaving" formControlName="quantity" nz-input type="number"/>
+                  <input [disabled]="isSaving" formControlName="quantity" nz-input type="number" />
                 </nz-form-control>
               </nz-form-item>
 
               <nz-form-item>
                 <nz-form-label nzRequired>Preço Unit.</nz-form-label>
                 <nz-form-control>
-                  <input [disabled]="isSaving" formControlName="unitPrice" nz-input type="number"/>
+                  <input [disabled]="isSaving" formControlName="unitPrice" nz-input type="number" />
                 </nz-form-control>
               </nz-form-item>
 
               <nz-form-item>
                 <nz-form-label>Subtotal</nz-form-label>
                 <nz-form-control>
-                  <input formControlName="amount" nz-input readonly/>
+                  <input formControlName="amount" nz-input readonly />
                 </nz-form-control>
               </nz-form-item>
 
@@ -323,7 +307,6 @@
 
       </div>
 
-      <!-- ===== Totals ===== -->
       <div class="drawer-section totals-section">
         <h3 class="section-title">Totals</h3>
 
@@ -332,28 +315,28 @@
           <nz-form-item>
             <nz-form-label nzRequired>Taxa (decimal)</nz-form-label>
             <nz-form-control nzExtra="Ex: 0.16 = 16%">
-              <input [disabled]="isSaving" formControlName="taxRate" nz-input type="number"/>
+              <input [disabled]="isSaving" formControlName="taxRate" nz-input type="number" />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>Subtotal</nz-form-label>
             <nz-form-control>
-              <input formControlName="subtotal" nz-input readonly/>
+              <input formControlName="subtotal" nz-input readonly />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>Tax</nz-form-label>
             <nz-form-control>
-              <input formControlName="tax" nz-input readonly/>
+              <input formControlName="tax" nz-input readonly />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>Total</nz-form-label>
             <nz-form-control>
-              <input formControlName="total" nz-input readonly/>
+              <input formControlName="total" nz-input readonly />
             </nz-form-control>
           </nz-form-item>
 
@@ -383,7 +366,7 @@
         nzType="primary"
       >
         <ng-container *ngIf="!isSaving; else savingTpl">
-          {{ currentInvoiceId ? 'Salvar' : 'Criar' }}
+          Criar
         </ng-container>
 
         <ng-template #savingTpl>

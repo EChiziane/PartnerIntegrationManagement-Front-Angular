@@ -71,18 +71,8 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
-    ::ng-deep {
-      .ant-card-head {
-        padding: 6px 12px !important;
-        border-bottom: none;
-        font-size: 13px;
-        font-weight: 600;
-        color: #333;
-      }
-
-      .ant-card-body {
-        padding: 6px 12px !important;
-      }
+    ::ng-deep .ant-card-body {
+      padding: 6px 12px !important;
     }
   }
 }
@@ -157,14 +147,6 @@
     }
   }
 
-  .filter-select {
-    width: 240px;
-  }
-
-  .filter-date {
-    width: 270px;
-  }
-
   button[nz-button] {
     font-weight: 500;
     border-radius: 8px;
@@ -203,45 +185,7 @@
   }
 }
 
-.file-name-column {
-  min-width: 420px;
-  width: 45%;
-}
-
-.file-name-cell {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.file-link {
-  text-decoration: underline;
-  color: #007bff;
-  cursor: pointer;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: #0056b3;
-  }
-}
-
-.actions-column {
-  width: 110px;
-  min-width: 110px;
-  text-align: center;
-}
-
-.actions-cell {
-  width: 110px;
-  min-width: 110px;
-}
-
-.actions-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  flex-wrap: nowrap;
+.action-buttons {
   white-space: nowrap;
 }
 
@@ -273,10 +217,6 @@ nz-select {
   border-radius: 8px;
 }
 
-textarea[nz-input] {
-  resize: none;
-}
-
 .items-list {
   display: flex;
   flex-direction: column;
@@ -298,7 +238,6 @@ textarea[nz-input] {
 
 .remove-btn {
   margin-top: 8px;
-  color: #ff4d4f;
   border-radius: 8px;
 }
 
@@ -306,12 +245,6 @@ textarea[nz-input] {
   width: 100%;
   border-radius: 10px;
   font-weight: 500;
-}
-
-.totals-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
 }
 
 .drawer-footer {
@@ -349,8 +282,7 @@ textarea[nz-input] {
     align-items: stretch;
 
     input[nz-input],
-    .filter-select,
-    .filter-date,
+    nz-range-picker,
     button {
       width: 100%;
     }

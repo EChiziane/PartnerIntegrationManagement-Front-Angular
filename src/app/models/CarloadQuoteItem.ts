@@ -1,4 +1,4 @@
-export interface CarloadInvoiceItem {
+export interface CarloadQuoteItem {
   description: string;
   quantity: number;
   unitPrice: number;
