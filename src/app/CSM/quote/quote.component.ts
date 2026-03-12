@@ -277,24 +277,62 @@ export class QuoteComponent implements OnInit {
 
   downloadQuote(quote: CarloadQuote): void {
     const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
 
+    const createdDate = new Date(quote.createdAt);
+    const validUntilDate = new Date(createdDate);
+    validUntilDate.setDate(validUntilDate.getDate() + 7);
+
+    const createdAtFormatted = this.formatDateOnly(createdDate.toISOString());
+    const validUntilFormatted = this.formatDateOnly(validUntilDate.toISOString());
+
+    doc.setDrawColor(220, 220, 220);
+    doc.setTextColor(40, 40, 40);
+
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(18);
-    doc.text('Transportes Chiziane', 14, 18);
-
-    doc.setFontSize(14);
-    doc.text('COTAÇÃO', 14, 28);
+    doc.text('COTAÇÃO', 14, 18);
 
     doc.setFontSize(10);
-    doc.text(`Código: ${quote.quoteCode}`, 14, 36);
-    doc.text(`Data: ${this.formatDateOnly(quote.createdAt)}`, 14, 42);
-    doc.text(`Validade: ${quote.validUntil ? this.formatDateOnly(quote.validUntil) : '—'}`, 14, 48);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Transportes Chiziane', pageWidth - 14, 14, { align: 'right' });
 
-    doc.text(`Cliente: ${quote.customerName}`, 14, 58);
-    doc.text(`Contacto: ${quote.customerPhoneNumber}`, 14, 64);
-    doc.text(`Destino: ${quote.destination || '—'}`, 14, 70);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Bairro Cumbeza km16', pageWidth - 14, 20, { align: 'right' });
+    doc.text('Av. de Moçambique 2063', pageWidth - 14, 25, { align: 'right' });
+    doc.text('Tel: 845098583 / 879098583', pageWidth - 14, 30, { align: 'right' });
+
+    doc.setDrawColor(200, 200, 200);
+    doc.line(14, 36, pageWidth - 14, 36);
+
+    doc.setDrawColor(220, 220, 220);
+    doc.roundedRect(14, 42, pageWidth - 28, 30, 3, 3);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text(`Código:`, 18, 50);
+    doc.text(`Data de criação:`, 18, 57);
+    doc.text(`Validade:`, 18, 64);
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${quote.quoteCode}`, 52, 50);
+    doc.text(`${createdAtFormatted}`, 52, 57);
+    doc.text(`${createdAtFormatted} até ${validUntilFormatted}`, 52, 64);
+
+    doc.roundedRect(14, 78, pageWidth - 28, 34, 3, 3);
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Cliente:', 18, 87);
+    doc.text('Contacto:', 18, 95);
+    doc.text('Destino:', 18, 103);
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(quote.customerName || '—', 45, 87);
+    doc.text(quote.customerPhoneNumber || '—', 45, 95);
+    doc.text(quote.destination || '—', 45, 103);
 
     autoTable(doc, {
-      startY: 78,
+      startY: 120,
       head: [['Item', 'Qtd', 'Preço Unit.', 'Subtotal']],
       body: quote.items.map(item => [
         item.description,
@@ -302,30 +340,70 @@ export class QuoteComponent implements OnInit {
         `${this.formatMoney(item.unitPrice)} Mts`,
         `${this.formatMoney(item.amount)} Mts`
       ]),
+      theme: 'grid',
       styles: {
-        fontSize: 10
+        fontSize: 10,
+        cellPadding: 3,
+        textColor: [40, 40, 40],
+        lineColor: [220, 220, 220],
+        lineWidth: 0.2
       },
       headStyles: {
-        fillColor: [0, 123, 255]
-      }
+        fillColor: [0, 123, 255],
+        textColor: [255, 255, 255],
+        fontStyle: 'bold'
+      },
+      columnStyles: {
+        1: { halign: 'center', cellWidth: 20 },
+        2: { halign: 'right', cellWidth: 38 },
+        3: { halign: 'right', cellWidth: 38 }
+      },
+      margin: { left: 14, right: 14 }
     });
 
-    const finalY = (doc as any).lastAutoTable.finalY || 120;
+    const finalY = (doc as any).lastAutoTable.finalY || 160;
 
-    doc.text(`Subtotal: ${this.formatMoney(quote.subtotal)} Mts`, 14, finalY + 12);
-    doc.text(`Desconto: ${this.formatMoney(quote.discount)} Mts`, 14, finalY + 18);
-    doc.text(`Total: ${this.formatMoney(quote.total)} Mts`, 14, finalY + 24);
+    const totalsBoxWidth = 72;
+    const totalsBoxX = pageWidth - totalsBoxWidth - 14;
+    const totalsBoxY = finalY + 10;
+    const totalsBoxHeight = 28;
+
+    doc.roundedRect(totalsBoxX, totalsBoxY, totalsBoxWidth, totalsBoxHeight, 3, 3);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text('Subtotal:', totalsBoxX + 4, totalsBoxY + 8);
+    doc.text('Desconto:', totalsBoxX + 4, totalsBoxY + 16);
+    doc.text('Total:', totalsBoxX + 4, totalsBoxY + 24);
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${this.formatMoney(quote.subtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 8, { align: 'right' });
+    doc.text(`${this.formatMoney(quote.discount)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 16, { align: 'right' });
+
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${this.formatMoney(quote.total)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 24, { align: 'right' });
+
+    let notesY = totalsBoxY + totalsBoxHeight + 12;
 
     if (quote.notes) {
-      doc.text('Observações:', 14, finalY + 36);
-      const splitNotes = doc.splitTextToSize(quote.notes, 180);
-      doc.text(splitNotes, 14, finalY + 42);
+      doc.roundedRect(14, notesY, pageWidth - 28, 28, 3, 3);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text('Observações:', 18, notesY + 8);
+
+      doc.setFont('helvetica', 'normal');
+      const splitNotes = doc.splitTextToSize(quote.notes, pageWidth - 40);
+      doc.text(splitNotes, 18, notesY + 16);
+      notesY += 36;
     }
 
+    doc.setDrawColor(200, 200, 200);
+    doc.line(14, 275, pageWidth - 14, 275);
+
     doc.setFontSize(9);
-    doc.text('Transportes Chiziane', 14, 280);
-    doc.text('Av. de Moçambique, nº 534, Marginal', 14, 285);
-    doc.text('Cell: 845098583 / 875598583', 14, 290);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Documento gerado por Transportes Chiziane', 14, 282);
+    doc.text(`Validade da cotação: 7 dias (${createdAtFormatted} até ${validUntilFormatted})`, 14, 287);
 
     doc.save(`${quote.quoteCode}_${quote.customerName.replace(/\s+/g, '_')}.pdf`);
   }
