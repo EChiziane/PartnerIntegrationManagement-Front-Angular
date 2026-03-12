@@ -208,6 +208,26 @@
   }
 }
 
+.actions-column {
+  width: 150px;
+  min-width: 150px;
+  text-align: center;
+}
+
+.actions-cell {
+  width: 150px;
+  min-width: 150px;
+}
+
+.actions-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
 ::ng-deep .ant-spin-text {
   font-size: 14px;
   white-space: nowrap;

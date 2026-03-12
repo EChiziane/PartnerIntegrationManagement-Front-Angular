@@ -66,8 +66,7 @@
       Agendadas
     </button>
 
-    <button (click)="setFilterMode('IN_PROGRESS')" [class.active]="filterMode==='IN_PROGRESS'" nz-button
-            nzType="default">
+    <button (click)="setFilterMode('IN_PROGRESS')" [class.active]="filterMode==='IN_PROGRESS'" nz-button nzType="default">
       Em execução
     </button>
 
@@ -100,7 +99,7 @@
         <nz-table
           #nzTable
           [nzData]="listOfDisplayData"
-          [nzScroll]="{ x: '1400px', y: '440px' }"
+          [nzScroll]="{ x: '1450px', y: '440px' }"
           nzTableLayout="fixed">
 
           <thead>
@@ -116,7 +115,7 @@
             <th>Entregue em</th>
             <th>Ganhos</th>
             <th>Gastos</th>
-            <th>Ações</th>
+            <th class="actions-column">Ações</th>
           </tr>
           </thead>
 
@@ -135,39 +134,41 @@
               </nz-tag>
             </td>
 
-            <td>{{ data.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ data.deliveryDate | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ data.deliveryScheduledDate | date:'yyyy-MM-dd' }}</td>
+            <td>{{ data.deliveryDate | date:'yyyy-MM-dd' }}</td>
             <td>{{ data.totalEarnings | number:'1.2-2' }} Mts</td>
             <td>{{ data.totalSpent | number:'1.2-2' }} Mts</td>
 
-            <td>
-              <button
-                [routerLink]="['/app/carload-details', data.id]"
-                nz-button
-                nz-tooltip
-                nzSize="small"
-                nzTooltipTitle="Ver detalhes"
-                nzType="link">
-                <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
-              </button>
+            <td class="actions-cell">
+              <div class="actions-group">
+                <button
+                  [routerLink]="['/app/carload-details', data.id]"
+                  nz-button
+                  nz-tooltip
+                  nzSize="small"
+                  nzTooltipTitle="Ver detalhes"
+                  nzType="link">
+                  <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+                </button>
 
-              <button
-                (click)="copyCarLoad(data)"
-                nz-button
-                nz-tooltip
-                nzSize="small"
-                nzTooltipTitle="Copiar carrada"
-                nzType="link">
-                <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
-              </button>
+                <button
+                  (click)="copyCarLoad(data)"
+                  nz-button
+                  nz-tooltip
+                  nzSize="small"
+                  nzTooltipTitle="Copiar carrada"
+                  nzType="link">
+                  <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
+                </button>
 
-              <button (click)="editCarLoad(data)" nz-button nzSize="small" nzType="link">
-                <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
-              </button>
+                <button (click)="editCarLoad(data)" nz-button nzSize="small" nzType="link">
+                  <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+                </button>
 
-              <button (click)="deleteCarLoad(data)" nz-button nzDanger nzSize="small" nzType="link">
-                <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
-              </button>
+                <button (click)="deleteCarLoad(data)" nz-button nzDanger nzSize="small" nzType="link">
+                  <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+                </button>
+              </div>
             </td>
           </tr>
           </tbody>
