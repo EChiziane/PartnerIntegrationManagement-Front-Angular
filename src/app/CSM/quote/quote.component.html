@@ -131,10 +131,10 @@
               <button
                 (click)="downloadQuote(quote)"
                 nz-button
-                nzSize="small"
-                nzType="link"
                 nz-tooltip
+                nzSize="small"
                 nzTooltipTitle="Baixar PDF"
+                nzType="link"
               >
                 <nz-icon nzTheme="outline" nzType="download"></nz-icon>
               </button>
@@ -142,10 +142,10 @@
               <button
                 (click)="editQuote(quote)"
                 nz-button
-                nzSize="small"
-                nzType="link"
                 nz-tooltip
+                nzSize="small"
                 nzTooltipTitle="Editar"
+                nzType="link"
               >
                 <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
               </button>
@@ -153,10 +153,10 @@
               <button
                 (click)="duplicateQuote(quote)"
                 nz-button
-                nzSize="small"
-                nzType="link"
                 nz-tooltip
+                nzSize="small"
                 nzTooltipTitle="Duplicar"
+                nzType="link"
               >
                 <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
               </button>
@@ -164,11 +164,11 @@
               <button
                 (click)="deleteQuote(quote)"
                 nz-button
+                nz-tooltip
                 nzDanger
                 nzSize="small"
-                nzType="link"
-                nz-tooltip
                 nzTooltipTitle="Eliminar"
+                nzType="link"
               >
                 <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
               </button>
@@ -204,7 +204,7 @@
             <nz-form-item>
               <nz-form-label nzRequired>Cliente</nz-form-label>
               <nz-form-control>
-                <input formControlName="customerName" nz-input placeholder="Nome do cliente" />
+                <input formControlName="customerName" nz-input placeholder="Nome do cliente"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -214,7 +214,7 @@
               <nz-form-label nzRequired>Telefone</nz-form-label>
               <nz-form-control>
                 <nz-input-group nzAddOnBefore="+258">
-                  <input formControlName="customerPhoneNumber" nz-input placeholder="Número" />
+                  <input formControlName="customerPhoneNumber" nz-input placeholder="Número"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -226,7 +226,7 @@
             <nz-form-item>
               <nz-form-label>Destino</nz-form-label>
               <nz-form-control>
-                <input formControlName="destination" nz-input placeholder="Destino" />
+                <input formControlName="destination" nz-input placeholder="Destino"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -235,7 +235,7 @@
             <nz-form-item>
               <nz-form-label nzRequired>Código</nz-form-label>
               <nz-form-control>
-                <input formControlName="quoteCode" nz-input readonly />
+                <input formControlName="quoteCode" nz-input readonly/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -269,21 +269,21 @@
               <nz-form-item>
                 <nz-form-label nzRequired>Qtd</nz-form-label>
                 <nz-form-control>
-                  <input formControlName="quantity" nz-input type="number" />
+                  <input formControlName="quantity" nz-input type="number"/>
                 </nz-form-control>
               </nz-form-item>
 
               <nz-form-item>
                 <nz-form-label nzRequired>Preço Unit.</nz-form-label>
                 <nz-form-control>
-                  <input formControlName="unitPrice" nz-input type="number" />
+                  <input formControlName="unitPrice" nz-input type="number"/>
                 </nz-form-control>
               </nz-form-item>
 
               <nz-form-item>
                 <nz-form-label>Subtotal</nz-form-label>
                 <nz-form-control>
-                  <input formControlName="amount" nz-input readonly />
+                  <input formControlName="amount" nz-input readonly/>
                 </nz-form-control>
               </nz-form-item>
 
@@ -323,42 +323,42 @@
           <nz-form-item>
             <nz-form-label>Subtotal</nz-form-label>
             <nz-form-control>
-              <input formControlName="subtotal" nz-input readonly />
+              <input formControlName="subtotal" nz-input readonly/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>Desconto</nz-form-label>
             <nz-form-control>
-              <input formControlName="discount" nz-input type="number" />
+              <input formControlName="discount" nz-input type="number"/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label nzRequired>Taxa (decimal)</nz-form-label>
             <nz-form-control nzExtra="Ex: 0.16 = 16%">
-              <input formControlName="taxRate" nz-input type="number" />
+              <input formControlName="taxRate" nz-input type="number"/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>IVA</nz-form-label>
             <nz-form-control>
-              <input formControlName="tax" nz-input readonly />
+              <input formControlName="tax" nz-input readonly/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>Total</nz-form-label>
             <nz-form-control>
-              <input formControlName="total" nz-input readonly />
+              <input formControlName="total" nz-input readonly/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>Validade</nz-form-label>
             <nz-form-control nzExtra="Automática: 7 dias após criação">
-              <input formControlName="validUntil" nz-input type="date" readonly />
+              <input formControlName="validUntil" nz-input readonly type="date"/>
             </nz-form-control>
           </nz-form-item>
 
@@ -367,7 +367,7 @@
         <nz-form-item>
           <nz-form-label>Observações</nz-form-label>
           <nz-form-control>
-            <textarea formControlName="notes" nz-input rows="4" placeholder="Observações da cotação"></textarea>
+            <textarea formControlName="notes" nz-input placeholder="Observações da cotação" rows="4"></textarea>
           </nz-form-control>
         </nz-form-item>
       </div>

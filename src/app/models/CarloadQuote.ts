@@ -1,4 +1,4 @@
-import { CarloadQuoteItem } from './CarloadQuoteItem';
+import {CarloadQuoteItem} from './CarloadQuoteItem';
 
 export interface CarloadQuote {
   id: string;

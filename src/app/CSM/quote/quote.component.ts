@@ -1,13 +1,13 @@
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-import { CarloadQuote } from '../../models/CarloadQuote';
-import { CarloadQuoteItem } from '../../models/CarloadQuoteItem';
-import { CarloadQuoteService } from '../../services/carload-quote.service';
-import { Component, OnInit } from '@angular/core';
+import {CarloadQuote} from '../../models/CarloadQuote';
+import {CarloadQuoteItem} from '../../models/CarloadQuoteItem';
+import {CarloadQuoteService} from '../../services/carload-quote.service';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-quote',
@@ -86,7 +86,8 @@ export class QuoteComponent implements OnInit {
     private quoteService: CarloadQuoteService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   get items(): FormArray {
     return this.quoteForm.get('items') as FormArray;
@@ -149,7 +150,7 @@ export class QuoteComponent implements OnInit {
       description: ['', Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
-      amount: [{ value: 0, disabled: true }]
+      amount: [{value: 0, disabled: true}]
     });
 
     itemGroup.get('quantity')?.valueChanges.subscribe(() => this.updateItemAmount(itemGroup));
@@ -173,7 +174,7 @@ export class QuoteComponent implements OnInit {
         unitPrice: price,
         quantity: 1
       },
-      { emitEvent: false }
+      {emitEvent: false}
     );
 
     this.updateItemAmount(itemGroup);
@@ -241,7 +242,7 @@ export class QuoteComponent implements OnInit {
         description: [item.description, Validators.required],
         quantity: [item.quantity, [Validators.required, Validators.min(1)]],
         unitPrice: [item.unitPrice, [Validators.required, Validators.min(0)]],
-        amount: [{ value: item.amount, disabled: true }]
+        amount: [{value: item.amount, disabled: true}]
       });
 
       group.get('quantity')?.valueChanges.subscribe(() => this.updateItemAmount(group));
@@ -315,12 +316,12 @@ export class QuoteComponent implements OnInit {
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('Transportes Chiziane', pageWidth - 14, 14, { align: 'right' });
+    doc.text('Transportes Chiziane', pageWidth - 14, 14, {align: 'right'});
 
     doc.setFont('helvetica', 'normal');
-    doc.text('Bairro Cumbe km16', pageWidth - 14, 20, { align: 'right' });
-    doc.text('Av. de Moçambique 2063', pageWidth - 14, 25, { align: 'right' });
-    doc.text('Tel: 845098583 / 879985279', pageWidth - 14, 30, { align: 'right' });
+    doc.text('Bairro Cumbe km16', pageWidth - 14, 20, {align: 'right'});
+    doc.text('Av. de Moçambique 2063', pageWidth - 14, 25, {align: 'right'});
+    doc.text('Tel: 845098583 / 879985279', pageWidth - 14, 30, {align: 'right'});
 
     doc.setDrawColor(200, 200, 200);
     doc.line(14, 36, pageWidth - 14, 36);
@@ -374,11 +375,11 @@ export class QuoteComponent implements OnInit {
         fontStyle: 'bold'
       },
       columnStyles: {
-        1: { halign: 'center', cellWidth: 20 },
-        2: { halign: 'right', cellWidth: 38 },
-        3: { halign: 'right', cellWidth: 38 }
+        1: {halign: 'center', cellWidth: 20},
+        2: {halign: 'right', cellWidth: 38},
+        3: {halign: 'right', cellWidth: 38}
       },
-      margin: { left: 14, right: 14 }
+      margin: {left: 14, right: 14}
     });
 
     const finalY = (doc as any).lastAutoTable.finalY || 160;
@@ -400,14 +401,14 @@ export class QuoteComponent implements OnInit {
     doc.text('Total:', totalsBoxX + 4, totalsBoxY + 48);
 
     doc.setFont('helvetica', 'normal');
-    doc.text(`${this.formatMoney(grossSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 8, { align: 'right' });
-    doc.text(`${this.formatMoney(discount)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 16, { align: 'right' });
-    doc.text(`${this.formatMoney(netSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 24, { align: 'right' });
-    doc.text(`${(taxRate * 100).toFixed(0)}%`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 32, { align: 'right' });
-    doc.text(`${this.formatMoney(tax)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 40, { align: 'right' });
+    doc.text(`${this.formatMoney(grossSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 8, {align: 'right'});
+    doc.text(`${this.formatMoney(discount)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 16, {align: 'right'});
+    doc.text(`${this.formatMoney(netSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 24, {align: 'right'});
+    doc.text(`${(taxRate * 100).toFixed(0)}%`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 32, {align: 'right'});
+    doc.text(`${this.formatMoney(tax)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 40, {align: 'right'});
 
     doc.setFont('helvetica', 'bold');
-    doc.text(`${this.formatMoney(total)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 48, { align: 'right' });
+    doc.text(`${this.formatMoney(total)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 48, {align: 'right'});
 
     let notesY = totalsBoxY + totalsBoxHeight + 12;
 
@@ -459,9 +460,9 @@ export class QuoteComponent implements OnInit {
       taxRate: [0.16, [Validators.required, Validators.min(0)]],
       notes: [''],
       validUntil: [null],
-      subtotal: [{ value: 0, disabled: true }],
-      tax: [{ value: 0, disabled: true }],
-      total: [{ value: 0, disabled: true }]
+      subtotal: [{value: 0, disabled: true}],
+      tax: [{value: 0, disabled: true}],
+      total: [{value: 0, disabled: true}]
     });
 
     this.quoteForm.get('discount')?.valueChanges.subscribe(() => this.calculateTotals());
@@ -511,7 +512,7 @@ export class QuoteComponent implements OnInit {
     const unitPrice = Number(itemGroup.get('unitPrice')?.value || 0);
     const amount = quantity * unitPrice;
 
-    itemGroup.patchValue({ amount }, { emitEvent: false });
+    itemGroup.patchValue({amount}, {emitEvent: false});
     this.calculateTotals();
   }
 
@@ -535,7 +536,7 @@ export class QuoteComponent implements OnInit {
         tax,
         total
       },
-      { emitEvent: false }
+      {emitEvent: false}
     );
   }
 

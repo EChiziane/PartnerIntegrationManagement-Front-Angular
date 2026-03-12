@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import {Component, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
-import { CarloadInvoice } from '../../models/CarloadInvoice';
-import { CarloadCustomer } from '../../models/CarloadCustomer';
+import {CarloadInvoice} from '../../models/CarloadInvoice';
+import {CarloadCustomer} from '../../models/CarloadCustomer';
 
-import { CarloadInvoiceService } from '../../services/carload-invoice.service';
-import { CarloadCustomerService } from '../../services/carload-customer.service';
+import {CarloadInvoiceService} from '../../services/carload-invoice.service';
+import {CarloadCustomerService} from '../../services/carload-customer.service';
 
 @Component({
   selector: 'app-invoice',
@@ -88,7 +88,8 @@ export class InvoiceComponent implements OnInit {
     private customerService: CarloadCustomerService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {}
+  ) {
+  }
 
   get items(): FormArray {
     return this.invoiceForm.get('items') as FormArray;
@@ -152,8 +153,8 @@ export class InvoiceComponent implements OnInit {
     this.addItem();
 
     const nextCode = this.generateNextInvoiceCode();
-    this.invoiceForm.patchValue({ invoiceCode: nextCode.toString() });
-    this.invoiceForm.get('invoiceCode')?.disable({ emitEvent: false });
+    this.invoiceForm.patchValue({invoiceCode: nextCode.toString()});
+    this.invoiceForm.get('invoiceCode')?.disable({emitEvent: false});
   }
 
   closeDrawer(): void {
@@ -176,7 +177,7 @@ export class InvoiceComponent implements OnInit {
       description: ['', Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
-      amount: [{ value: 0, disabled: true }]
+      amount: [{value: 0, disabled: true}]
     });
 
     itemGroup.get('quantity')?.valueChanges.subscribe(() => this.updateItemAmount(itemGroup));
@@ -200,7 +201,7 @@ export class InvoiceComponent implements OnInit {
         unitPrice: price,
         quantity: 1
       },
-      { emitEvent: false }
+      {emitEvent: false}
     );
 
     this.updateItemAmount(itemGroup);
@@ -214,9 +215,9 @@ export class InvoiceComponent implements OnInit {
 
     this.isSaving = true;
 
-    this.invoiceForm.get('invoiceCode')?.enable({ emitEvent: false });
+    this.invoiceForm.get('invoiceCode')?.enable({emitEvent: false});
     const invoiceData = this.invoiceForm.getRawValue();
-    this.invoiceForm.get('invoiceCode')?.disable({ emitEvent: false });
+    this.invoiceForm.get('invoiceCode')?.disable({emitEvent: false});
 
     this.invoiceService.addInvoice(invoiceData).subscribe({
       next: () => {
@@ -297,7 +298,7 @@ export class InvoiceComponent implements OnInit {
     const unitPrice = Number(itemGroup.get('unitPrice')?.value || 0);
     const amount = quantity * unitPrice;
 
-    itemGroup.patchValue({ amount }, { emitEvent: false });
+    itemGroup.patchValue({amount}, {emitEvent: false});
     this.calculateTotals();
   }
 
@@ -317,7 +318,7 @@ export class InvoiceComponent implements OnInit {
         tax,
         total
       },
-      { emitEvent: false }
+      {emitEvent: false}
     );
   }
 
@@ -327,9 +328,9 @@ export class InvoiceComponent implements OnInit {
       invoiceCode: ['', Validators.required],
       items: this.fb.array([]),
       taxRate: [0.16, Validators.required],
-      subtotal: [{ value: 0, disabled: true }],
-      tax: [{ value: 0, disabled: true }],
-      total: [{ value: 0, disabled: true }]
+      subtotal: [{value: 0, disabled: true}],
+      tax: [{value: 0, disabled: true}],
+      total: [{value: 0, disabled: true}]
     });
 
     this.invoiceForm.get('taxRate')?.valueChanges.subscribe(() => this.calculateTotals());

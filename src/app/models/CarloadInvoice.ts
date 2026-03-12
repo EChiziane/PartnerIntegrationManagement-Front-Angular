@@ -1,4 +1,4 @@
-import { CarloadInvoiceItem } from './CarloadInvoiceItem';
+import {CarloadInvoiceItem} from './CarloadInvoiceItem';
 
 export interface CarloadInvoice {
   id: string;

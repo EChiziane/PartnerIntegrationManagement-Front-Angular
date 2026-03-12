@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { CarloadQuote } from '../models/CarloadQuote';
+import {Injectable} from '@angular/core';
+import {CarloadQuote} from '../models/CarloadQuote';
 
 @Injectable({
   providedIn: 'root'
