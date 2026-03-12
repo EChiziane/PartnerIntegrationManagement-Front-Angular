@@ -1,4 +1,4 @@
-import {CarloadQuoteItem} from './CarloadQuoteItem';
+import { CarloadQuoteItem } from './CarloadQuoteItem';
 
 export interface CarloadQuote {
   id: string;
@@ -9,8 +9,10 @@ export interface CarloadQuote {
   items: CarloadQuoteItem[];
   subtotal: number;
   discount: number;
+  taxRate: number;
+  tax: number;
   total: number;
-  notes: string;
+  notes?: string;
   validUntil: string | null;
   createdAt: string;
 }

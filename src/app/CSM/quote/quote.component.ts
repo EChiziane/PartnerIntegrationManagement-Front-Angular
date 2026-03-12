@@ -1,4 +1,3 @@
-
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -8,7 +7,7 @@ import autoTable from 'jspdf-autotable';
 import { CarloadQuote } from '../../models/CarloadQuote';
 import { CarloadQuoteItem } from '../../models/CarloadQuoteItem';
 import { CarloadQuoteService } from '../../services/carload-quote.service';
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-quote',
@@ -124,9 +123,11 @@ export class QuoteComponent implements OnInit {
       customerPhoneNumber: '',
       destination: '',
       discount: 0,
+      taxRate: 0.16,
       notes: '',
       validUntil: null,
       subtotal: 0,
+      tax: 0,
       total: 0
     });
 
@@ -167,10 +168,13 @@ export class QuoteComponent implements OnInit {
     const itemGroup = this.items.at(index) as FormGroup;
     const price = this.itemsPrices[itemName] || 0;
 
-    itemGroup.patchValue({
-      unitPrice: price,
-      quantity: 1
-    }, { emitEvent: false });
+    itemGroup.patchValue(
+      {
+        unitPrice: price,
+        quantity: 1
+      },
+      { emitEvent: false }
+    );
 
     this.updateItemAmount(itemGroup);
   }
@@ -186,6 +190,13 @@ export class QuoteComponent implements OnInit {
     const raw = this.quoteForm.getRawValue();
     const normalizedPhone = this.normalizePhone(raw.customerPhoneNumber);
 
+    const createdAt = this.currentQuoteId
+      ? this.quoteService.getQuoteById(this.currentQuoteId)?.createdAt || new Date().toISOString()
+      : new Date().toISOString();
+
+    const validUntilDate = new Date(createdAt);
+    validUntilDate.setDate(validUntilDate.getDate() + 7);
+
     const quote: CarloadQuote = {
       id: this.currentQuoteId || this.quoteService.generateId(),
       quoteCode: raw.quoteCode,
@@ -198,12 +209,12 @@ export class QuoteComponent implements OnInit {
       })),
       subtotal: Number(raw.subtotal || 0),
       discount: Number(raw.discount || 0),
+      taxRate: Number(raw.taxRate || 0),
+      tax: Number(raw.tax || 0),
       total: Number(raw.total || 0),
       notes: raw.notes || '',
-      validUntil: raw.validUntil ? new Date(raw.validUntil).toISOString() : null,
-      createdAt: this.currentQuoteId
-        ? this.quoteService.getQuoteById(this.currentQuoteId)?.createdAt || new Date().toISOString()
-        : new Date().toISOString()
+      validUntil: validUntilDate.toISOString(),
+      createdAt
     };
 
     if (this.currentQuoteId) {
@@ -245,9 +256,11 @@ export class QuoteComponent implements OnInit {
       customerPhoneNumber: quote.customerPhoneNumber.replace('+258', '').trim(),
       destination: quote.destination,
       discount: quote.discount,
+      taxRate: quote.taxRate ?? 0.16,
       notes: quote.notes,
       validUntil: quote.validUntil ? this.toDateInput(quote.validUntil) : null,
       subtotal: quote.subtotal,
+      tax: quote.tax ?? 0,
       total: quote.total
     });
 
@@ -286,6 +299,13 @@ export class QuoteComponent implements OnInit {
     const createdAtFormatted = this.formatDateOnly(createdDate.toISOString());
     const validUntilFormatted = this.formatDateOnly(validUntilDate.toISOString());
 
+    const grossSubtotal = this.getGrossSubtotal(quote);
+    const discount = Number(quote.discount || 0);
+    const netSubtotal = Math.max(grossSubtotal - discount, 0);
+    const taxRate = Number(quote.taxRate || 0);
+    const tax = Number(quote.tax || 0);
+    const total = Number(quote.total || 0);
+
     doc.setDrawColor(220, 220, 220);
     doc.setTextColor(40, 40, 40);
 
@@ -298,9 +318,9 @@ export class QuoteComponent implements OnInit {
     doc.text('Transportes Chiziane', pageWidth - 14, 14, { align: 'right' });
 
     doc.setFont('helvetica', 'normal');
-    doc.text('Bairro Cumbeza km16', pageWidth - 14, 20, { align: 'right' });
+    doc.text('Bairro Cumbe km16', pageWidth - 14, 20, { align: 'right' });
     doc.text('Av. de Moçambique 2063', pageWidth - 14, 25, { align: 'right' });
-    doc.text('Tel: 845098583 / 879098583', pageWidth - 14, 30, { align: 'right' });
+    doc.text('Tel: 845098583 / 879985279', pageWidth - 14, 30, { align: 'right' });
 
     doc.setDrawColor(200, 200, 200);
     doc.line(14, 36, pageWidth - 14, 36);
@@ -310,9 +330,9 @@ export class QuoteComponent implements OnInit {
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
-    doc.text(`Código:`, 18, 50);
-    doc.text(`Data de criação:`, 18, 57);
-    doc.text(`Validade:`, 18, 64);
+    doc.text('Código:', 18, 50);
+    doc.text('Data de criação:', 18, 57);
+    doc.text('Validade:', 18, 64);
 
     doc.setFont('helvetica', 'normal');
     doc.text(`${quote.quoteCode}`, 52, 50);
@@ -363,10 +383,10 @@ export class QuoteComponent implements OnInit {
 
     const finalY = (doc as any).lastAutoTable.finalY || 160;
 
-    const totalsBoxWidth = 72;
+    const totalsBoxWidth = 84;
     const totalsBoxX = pageWidth - totalsBoxWidth - 14;
     const totalsBoxY = finalY + 10;
-    const totalsBoxHeight = 28;
+    const totalsBoxHeight = 48;
 
     doc.roundedRect(totalsBoxX, totalsBoxY, totalsBoxWidth, totalsBoxHeight, 3, 3);
 
@@ -374,14 +394,20 @@ export class QuoteComponent implements OnInit {
     doc.setFontSize(10);
     doc.text('Subtotal:', totalsBoxX + 4, totalsBoxY + 8);
     doc.text('Desconto:', totalsBoxX + 4, totalsBoxY + 16);
-    doc.text('Total:', totalsBoxX + 4, totalsBoxY + 24);
+    doc.text('Subtotal líq.:', totalsBoxX + 4, totalsBoxY + 24);
+    doc.text('IVA:', totalsBoxX + 4, totalsBoxY + 32);
+    doc.text('Valor IVA:', totalsBoxX + 4, totalsBoxY + 40);
+    doc.text('Total:', totalsBoxX + 4, totalsBoxY + 48);
 
     doc.setFont('helvetica', 'normal');
-    doc.text(`${this.formatMoney(quote.subtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 8, { align: 'right' });
-    doc.text(`${this.formatMoney(quote.discount)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 16, { align: 'right' });
+    doc.text(`${this.formatMoney(grossSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 8, { align: 'right' });
+    doc.text(`${this.formatMoney(discount)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 16, { align: 'right' });
+    doc.text(`${this.formatMoney(netSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 24, { align: 'right' });
+    doc.text(`${(taxRate * 100).toFixed(0)}%`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 32, { align: 'right' });
+    doc.text(`${this.formatMoney(tax)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 40, { align: 'right' });
 
     doc.setFont('helvetica', 'bold');
-    doc.text(`${this.formatMoney(quote.total)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 24, { align: 'right' });
+    doc.text(`${this.formatMoney(total)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 48, { align: 'right' });
 
     let notesY = totalsBoxY + totalsBoxHeight + 12;
 
@@ -430,13 +456,16 @@ export class QuoteComponent implements OnInit {
       destination: [''],
       items: this.fb.array([]),
       discount: [0, [Validators.min(0)]],
+      taxRate: [0.16, [Validators.required, Validators.min(0)]],
       notes: [''],
       validUntil: [null],
       subtotal: [{ value: 0, disabled: true }],
+      tax: [{ value: 0, disabled: true }],
       total: [{ value: 0, disabled: true }]
     });
 
     this.quoteForm.get('discount')?.valueChanges.subscribe(() => this.calculateTotals());
+    this.quoteForm.get('taxRate')?.valueChanges.subscribe(() => this.calculateTotals());
   }
 
   private loadQuotes(): void {
@@ -487,19 +516,33 @@ export class QuoteComponent implements OnInit {
   }
 
   private calculateTotals(): void {
-    const subtotal = this.items.controls.reduce((sum, item) => {
+    const grossSubtotal = this.items.controls.reduce((sum, item) => {
       const quantity = Number(item.get('quantity')?.value || 0);
       const unitPrice = Number(item.get('unitPrice')?.value || 0);
       return sum + (quantity * unitPrice);
     }, 0);
 
     const discount = Number(this.quoteForm.get('discount')?.value || 0);
-    const total = subtotal - discount;
+    const taxRate = Number(this.quoteForm.get('taxRate')?.value || 0);
 
-    this.quoteForm.patchValue({
-      subtotal,
-      total: total < 0 ? 0 : total
-    }, { emitEvent: false });
+    const netSubtotal = Math.max(grossSubtotal - discount, 0);
+    const tax = netSubtotal * taxRate;
+    const total = netSubtotal + tax;
+
+    this.quoteForm.patchValue(
+      {
+        subtotal: netSubtotal,
+        tax,
+        total
+      },
+      { emitEvent: false }
+    );
+  }
+
+  private getGrossSubtotal(quote: CarloadQuote): number {
+    return (quote.items || []).reduce((sum, item) => {
+      return sum + (Number(item.quantity || 0) * Number(item.unitPrice || 0));
+    }, 0);
   }
 
   private normalizePhone(phone: string): string {
