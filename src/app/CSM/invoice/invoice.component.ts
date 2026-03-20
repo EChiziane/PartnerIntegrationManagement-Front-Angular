@@ -38,48 +38,129 @@ export class InvoiceComponent implements OnInit {
   invoiceForm!: FormGroup;
 
   itemsOptions: string[] = [
-    'M4_AREIA_GROSSA', 'M4_AREIA_VERMELHA', 'M4_PEDRA_3_4', 'M4_PEDRA_SARRISCA', 'M4_PO_DE_PEDRA', 'M4_AREIA_FINA',
-    'M7_AREIA_GROSSA', 'M7_AREIA_VERMELHA', 'M7_PEDRA_3_4', 'M7_PEDRA_SARRISCA', 'M7_PO_DE_PEDRA', 'M7_AREIA_FINA',
-    'M18_AREIA_GROSSA', 'M18_AREIA_VERMELHA', 'M18_PEDRA_3_4', 'M18_PEDRA_SARRISCA', 'M18_PO_DE_PEDRA', 'M18_AREIA_FINA',
-    'M20_AREIA_GROSSA', 'M20_AREIA_VERMELHA', 'M20_PEDRA_3_4', 'M20_PEDRA_SARRISCA', 'M20_PO_DE_PEDRA', 'M20_AREIA_FINA',
-    'M22_AREIA_GROSSA', 'M22_AREIA_VERMELHA', 'M22_PEDRA_3_4', 'M22_PEDRA_SARRISCA', 'M22_PO_DE_PEDRA', 'M22_AREIA_FINA'
+    'M4_AREIA_GROSSA',
+    'M4_AREIA_VERMELHA',
+    'M4_AREIA_FINA',
+    'M4_PEDRA_3_4',
+    'M4_PO_DE_PEDRA',
+    'M4_PEDRA_ENROCAMENTO',
+    'M4_PEDRA_SARRISCA',
+
+    'M7_AREIA_GROSSA',
+    'M7_AREIA_VERMELHA',
+    'M7_AREIA_FINA',
+    'M7_PEDRA_3_4',
+    'M7_PO_DE_PEDRA',
+    'M7_PEDRA_ENROCAMENTO',
+    'M7_PEDRA_SARRISCA',
+
+    'M18_AREIA_GROSSA',
+    'M18_AREIA_VERMELHA',
+    'M18_AREIA_FINA',
+    'M18_PEDRA_3_4',
+    'M18_PO_DE_PEDRA',
+    'M18_PEDRA_ENROCAMENTO',
+    'M18_PEDRA_SARRISCA',
+
+    'M22_AREIA_GROSSA',
+    'M22_AREIA_VERMELHA',
+    'M22_AREIA_FINA',
+    'M22_PEDRA_3_4',
+    'M22_PO_DE_PEDRA',
+    'M22_PEDRA_ENROCAMENTO',
+    'M22_PEDRA_SARRISCA',
+
+    'M24_AREIA_GROSSA',
+    'M24_AREIA_VERMELHA',
+    'M24_AREIA_FINA',
+    'M24_PEDRA_3_4',
+    'M24_PO_DE_PEDRA',
+    'M24_PEDRA_ENROCAMENTO',
+    'M24_PEDRA_SARRISCA'
   ];
 
+  itemLabels: { [key: string]: string } = {
+    M4_AREIA_GROSSA: '4m³ Areia Grossa',
+    M4_AREIA_VERMELHA: '4m³ Areia Vermelha',
+    M4_AREIA_FINA: '4m³ Areia Fina',
+    M4_PEDRA_3_4: '4m³ Pedra 3/4',
+    M4_PO_DE_PEDRA: '4m³ Pó de Pedra',
+    M4_PEDRA_ENROCAMENTO: '4m³ Pedra Enrocamento',
+    M4_PEDRA_SARRISCA: '4m³ Pedra Sarrisca',
+
+    M7_AREIA_GROSSA: '7m³ Areia Grossa',
+    M7_AREIA_VERMELHA: '7m³ Areia Vermelha',
+    M7_AREIA_FINA: '7m³ Areia Fina',
+    M7_PEDRA_3_4: '7m³ Pedra 3/4',
+    M7_PO_DE_PEDRA: '7m³ Pó de Pedra',
+    M7_PEDRA_ENROCAMENTO: '7m³ Pedra Enrocamento',
+    M7_PEDRA_SARRISCA: '7m³ Pedra Sarrisca',
+
+    M18_AREIA_GROSSA: '18m³ Areia Grossa',
+    M18_AREIA_VERMELHA: '18m³ Areia Vermelha',
+    M18_AREIA_FINA: '18m³ Areia Fina',
+    M18_PEDRA_3_4: '18m³ Pedra 3/4',
+    M18_PO_DE_PEDRA: '18m³ Pó de Pedra',
+    M18_PEDRA_ENROCAMENTO: '18m³ Pedra Enrocamento',
+    M18_PEDRA_SARRISCA: '18m³ Pedra Sarrisca',
+
+    M22_AREIA_GROSSA: '22m³ Areia Grossa',
+    M22_AREIA_VERMELHA: '22m³ Areia Vermelha',
+    M22_AREIA_FINA: '22m³ Areia Fina',
+    M22_PEDRA_3_4: '22m³ Pedra 3/4',
+    M22_PO_DE_PEDRA: '22m³ Pó de Pedra',
+    M22_PEDRA_ENROCAMENTO: '22m³ Pedra Enrocamento',
+    M22_PEDRA_SARRISCA: '22m³ Pedra Sarrisca',
+
+    M24_AREIA_GROSSA: '24m³ Areia Grossa',
+    M24_AREIA_VERMELHA: '24m³ Areia Vermelha',
+    M24_AREIA_FINA: '24m³ Areia Fina',
+    M24_PEDRA_3_4: '24m³ Pedra 3/4',
+    M24_PO_DE_PEDRA: '24m³ Pó de Pedra',
+    M24_PEDRA_ENROCAMENTO: '24m³ Pedra Enrocamento',
+    M24_PEDRA_SARRISCA: '24m³ Pedra Sarrisca'
+  };
+
   itemsPrices: { [key: string]: number } = {
-    M4_AREIA_GROSSA: 5000,
-    M4_AREIA_VERMELHA: 3000,
+    M4_AREIA_GROSSA: 6000,
+    M4_AREIA_VERMELHA: 3500,
+    M4_AREIA_FINA: 5000,
     M4_PEDRA_3_4: 5500,
-    M4_PEDRA_SARRISCA: 5500,
-    M4_PO_DE_PEDRA: 4500,
-    M4_AREIA_FINA: 4500,
+    M4_PO_DE_PEDRA: 5000,
+    M4_PEDRA_ENROCAMENTO: 5500,
+    M4_PEDRA_SARRISCA: 25000,
 
-    M7_AREIA_GROSSA: 7500,
-    M7_AREIA_VERMELHA: 4000,
-    M7_PEDRA_3_4: 8000,
-    M7_PEDRA_SARRISCA: 800,
-    M7_PO_DE_PEDRA: 7500,
+    M7_AREIA_GROSSA: 9000,
+    M7_AREIA_VERMELHA: 4500,
     M7_AREIA_FINA: 6500,
+    M7_PEDRA_3_4: 8000,
+    M7_PO_DE_PEDRA: 7500,
+    M7_PEDRA_ENROCAMENTO: 8000,
+    M7_PEDRA_SARRISCA: 8000,
 
-    M18_AREIA_GROSSA: 17000,
+    M18_AREIA_GROSSA: 19000,
     M18_AREIA_VERMELHA: 8000,
+    M18_AREIA_FINA: 13000,
     M18_PEDRA_3_4: 18000,
+    M18_PO_DE_PEDRA: 17000,
+    M18_PEDRA_ENROCAMENTO: 18000,
     M18_PEDRA_SARRISCA: 18000,
-    M18_PO_DE_PEDRA: 16000,
-    M18_AREIA_FINA: 12000,
 
-    M20_AREIA_GROSSA: 20000,
-    M20_AREIA_VERMELHA: 9000,
-    M20_PEDRA_3_4: 22000,
-    M20_PEDRA_SARRISCA: 22000,
-    M20_PO_DE_PEDRA: 19000,
-    M20_AREIA_FINA: 14000,
+    M22_AREIA_GROSSA: 20000,
+    M22_AREIA_VERMELHA: 9000,
+    M22_AREIA_FINA: 15000,
+    M22_PEDRA_3_4: 22000,
+    M22_PO_DE_PEDRA: 19000,
+    M22_PEDRA_ENROCAMENTO: 22000,
+    M22_PEDRA_SARRISCA: 22000,
 
-    M22_AREIA_VERMELHA: 11000,
-    M22_AREIA_GROSSA: 22000,
-    M22_PEDRA_3_4: 25000,
-    M22_PEDRA_SARRISCA: 25000,
-    M22_PO_DE_PEDRA: 22000,
-    M22_AREIA_FINA: 16000
+    M24_AREIA_GROSSA: 23000,
+    M24_AREIA_VERMELHA: 11000,
+    M24_AREIA_FINA: 16000,
+    M24_PEDRA_3_4: 25000,
+    M24_PO_DE_PEDRA: 22000,
+    M24_PEDRA_ENROCAMENTO: 25000,
+    M24_PEDRA_SARRISCA: 25000
   };
 
   constructor(
@@ -205,6 +286,10 @@ export class InvoiceComponent implements OnInit {
     );
 
     this.updateItemAmount(itemGroup);
+  }
+
+  getItemLabel(itemKey: string): string {
+    return this.itemLabels[itemKey] || itemKey;
   }
 
   submitInvoice(): void {

@@ -250,7 +250,11 @@
                     formControlName="description"
                     nzPlaceHolder="Selecione o item"
                   >
-                    <nz-option *ngFor="let it of itemsOptions" [nzLabel]="it" [nzValue]="it"></nz-option>
+                    <nz-option
+                      *ngFor="let it of itemsOptions"
+                      [nzLabel]="getItemLabel(it)"
+                      [nzValue]="it">
+                    </nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
