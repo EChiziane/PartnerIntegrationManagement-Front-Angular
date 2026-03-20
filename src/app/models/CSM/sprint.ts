@@ -3,6 +3,6 @@ export interface Sprint {
   code: string;
   name: string;
   description: string;
-  status: 'ACTIVO' | 'INACTIVO' | string;
-  createdAt: string; // ISO 8601
+  status: 'EM_EXECUCAO' | 'ENCERRADO' | string;
+  createdAt: string;
 }

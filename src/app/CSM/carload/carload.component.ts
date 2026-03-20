@@ -121,6 +121,17 @@ export class CarLoadComponent implements OnInit {
     return this.selectedCarloadType === 'Sold';
   }
 
+  get availableSprints(): Sprint[] {
+    const selectedSprintId = this.carLoadForm.get('carloadBatchId')?.value;
+
+    return (this.sprints || []).filter(sprint => {
+      return this.isSprintInProgress(sprint) || sprint.id === selectedSprintId;
+    });
+  }
+  private isSprintInProgress(sprint: Sprint): boolean {
+    return (sprint.status || '').toUpperCase() === 'EM_EXECUCAO';
+  }
+
   ngOnInit(): void {
     this.getCarLoads();
     this.loadLookups();

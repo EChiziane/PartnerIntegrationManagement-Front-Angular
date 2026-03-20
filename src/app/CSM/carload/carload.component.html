@@ -344,9 +344,17 @@
             <nz-form-item>
               <nz-form-label>Sprint</nz-form-label>
               <nz-form-control>
-                <nz-select [nzLoading]="isLoadingLookups" formControlName="carloadBatchId" nzAllowClear
-                           nzPlaceHolder="Selecione a sprint" nzShowSearch>
-                  <nz-option *ngFor="let s of sprints" [nzLabel]="s.name" [nzValue]="s.id"></nz-option>
+                <nz-select
+                  [nzLoading]="isLoadingLookups"
+                  formControlName="carloadBatchId"
+                  nzAllowClear
+                  nzPlaceHolder="Selecione a sprint"
+                  nzShowSearch>
+                  <nz-option
+                    *ngFor="let s of availableSprints"
+                    [nzLabel]="s.name + ((s.status || '').toUpperCase() === 'ENCERRADO' ? ' (Encerrada)' : '')"
+                    [nzValue]="s.id">
+                  </nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
