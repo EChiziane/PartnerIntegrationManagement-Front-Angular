@@ -37,48 +37,44 @@ export class QuoteComponent implements OnInit {
 
   quoteForm!: FormGroup;
 
-  itemsOptions: string[] = [
-    '4m Areia grossa',
-    '4m Areia vermelha',
-    '4m Areia fina',
-    '4m Pedra 3/4',
-    '7m Areia grossa',
-    '7m Areia vermelha',
-    '7m Areia fina',
-    '7m Pedra 3/4',
-    '18m Areia grossa',
-    '18m Areia vermelha',
-    '18m Areia fina',
-    '18m Pedra 3/4',
-    '22m Areia grossa',
-    '22m Areia vermelha',
-    '22m Areia fina',
-    '22m Pedra 3/4',
-    'Enrocamento'
-  ];
+
+  itemsOptions: string[] = [];
 
   itemsPrices: { [key: string]: number } = {
-    '4m Areia grossa': 5000,
-    '4m Areia vermelha': 3000,
-    '4m Areia fina': 4500,
+    '4m Areia grossa': 6000,
+    '4m Areia vermelha': 3500,
+    '4m Areia fina': 5000,
     '4m Pedra 3/4': 5500,
+    '4m Pedra Enrocamento': 5500,
+    '4m Pedra Sarrisca': 25000,
 
-    '7m Areia grossa': 7500,
+    '7m Areia grossa': 9000,
     '7m Areia vermelha': 4500,
     '7m Areia fina': 6500,
     '7m Pedra 3/4': 8000,
+    '7m Pedra Enrocamento': 8000,
+    '7m Pedra Sarrisca': 8000,
 
-    '18m Areia grossa': 17000,
+    '18m Areia grossa': 19000,
     '18m Areia vermelha': 8000,
-    '18m Areia fina': 12000,
+    '18m Areia fina': 13000,
     '18m Pedra 3/4': 18000,
+    '18m Pedra Enrocamento': 18000,
+    '18m Pedra Sarrisca': 18000,
 
-    '22m Areia grossa': 22000,
-    '22m Areia vermelha': 11000,
-    '22m Areia fina': 16000,
-    '22m Pedra 3/4': 25000,
+    '22m Areia grossa': 20000,
+    '22m Areia vermelha': 9000,
+    '22m Areia fina': 15000,
+    '22m Pedra 3/4': 22000,
+    '22m Pedra Enrocamento': 22000,
+    '22m Pedra Sarrisca': 22000,
 
-    'Enrocamento': 25000
+    '24m Areia grossa': 23000,
+    '24m Areia vermelha': 11000,
+    '24m Areia fina': 16000,
+    '24m Pedra 3/4': 25000,
+    '24m Pedra Enrocamento': 25000,
+    '24m Pedra Sarrisca': 25000,
   };
 
   constructor(
@@ -98,6 +94,7 @@ export class QuoteComponent implements OnInit {
     this.loadQuotes();
     this.updateDrawer();
     window.addEventListener('resize', () => this.updateDrawer());
+    this.itemsOptions = Object.keys(this.itemsPrices);
   }
 
   updateDrawer(): void {
