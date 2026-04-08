@@ -1,13 +1,13 @@
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-import {CarloadQuote} from '../../models/CarloadQuote';
-import {CarloadQuoteItem} from '../../models/CarloadQuoteItem';
-import {CarloadQuoteService} from '../../services/carload-quote.service';
-import {Component, OnInit} from '@angular/core';
+import { CarloadQuote } from '../../models/CarloadQuote';
+import { CarloadQuoteItem } from '../../models/CarloadQuoteItem';
+import { CarloadQuoteService } from '../../services/carload-quote.service';
 
 @Component({
   selector: 'app-quote',
@@ -24,6 +24,7 @@ export class QuoteComponent implements OnInit {
 
   isDrawerVisible = false;
   currentQuoteId: string | null = null;
+  currentQuoteCode: string | null = null;
 
   searchValue = '';
   dateRange: Date[] | null = null;
@@ -36,7 +37,6 @@ export class QuoteComponent implements OnInit {
   drawerPlacement: 'right' | 'bottom' = 'right';
 
   quoteForm!: FormGroup;
-
 
   itemsOptions: string[] = [];
 
@@ -82,8 +82,7 @@ export class QuoteComponent implements OnInit {
     private quoteService: CarloadQuoteService,
     private message: NzMessageService,
     private modal: NzModalService
-  ) {
-  }
+  ) {}
 
   get items(): FormArray {
     return this.quoteForm.get('items') as FormArray;
@@ -113,10 +112,11 @@ export class QuoteComponent implements OnInit {
 
   openDrawer(): void {
     this.currentQuoteId = null;
+    this.currentQuoteCode = null;
     this.isDrawerVisible = true;
 
     this.quoteForm.reset({
-      quoteCode: this.quoteService.generateNextQuoteCode(),
+      quoteCode: this.generateNextQuoteCode(),
       customerName: '',
       customerPhoneNumber: '',
       destination: '',
@@ -138,6 +138,7 @@ export class QuoteComponent implements OnInit {
 
     this.isDrawerVisible = false;
     this.currentQuoteId = null;
+    this.currentQuoteCode = null;
     this.quoteForm.reset();
     this.items.clear();
   }
@@ -147,7 +148,7 @@ export class QuoteComponent implements OnInit {
       description: ['', Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
-      amount: [{value: 0, disabled: true}]
+      amount: [{ value: 0, disabled: true }]
     });
 
     itemGroup.get('quantity')?.valueChanges.subscribe(() => this.updateItemAmount(itemGroup));
@@ -171,7 +172,7 @@ export class QuoteComponent implements OnInit {
         unitPrice: price,
         quantity: 1
       },
-      {emitEvent: false}
+      { emitEvent: false }
     );
 
     this.updateItemAmount(itemGroup);
@@ -188,21 +189,17 @@ export class QuoteComponent implements OnInit {
     const raw = this.quoteForm.getRawValue();
     const normalizedPhone = this.normalizePhone(raw.customerPhoneNumber);
 
-    const createdAt = this.currentQuoteId
-      ? this.quoteService.getQuoteById(this.currentQuoteId)?.createdAt || new Date().toISOString()
-      : new Date().toISOString();
-
-    const validUntilDate = new Date(createdAt);
-    validUntilDate.setDate(validUntilDate.getDate() + 7);
-
-    const quote: CarloadQuote = {
-      id: this.currentQuoteId || this.quoteService.generateId(),
-      quoteCode: raw.quoteCode,
+    const payload: CarloadQuote = {
+      quoteCode: this.currentQuoteId
+        ? (this.currentQuoteCode || raw.quoteCode)
+        : raw.quoteCode,
       customerName: raw.customerName,
       customerPhoneNumber: normalizedPhone,
       destination: raw.destination || '',
       items: this.items.getRawValue().map((item: CarloadQuoteItem) => ({
-        ...item,
+        description: item.description,
+        quantity: Number(item.quantity),
+        unitPrice: Number(item.unitPrice),
         amount: Number(item.quantity) * Number(item.unitPrice)
       })),
       subtotal: Number(raw.subtotal || 0),
@@ -211,25 +208,41 @@ export class QuoteComponent implements OnInit {
       tax: Number(raw.tax || 0),
       total: Number(raw.total || 0),
       notes: raw.notes || '',
-      validUntil: validUntilDate.toISOString(),
-      createdAt
+      validUntil: raw.validUntil || null
     };
 
     if (this.currentQuoteId) {
-      this.quoteService.updateQuote(this.currentQuoteId, quote);
-      this.message.success('Cotação actualizada com sucesso!');
+      this.quoteService.updateQuote(this.currentQuoteId, payload).subscribe({
+        next: () => {
+          this.message.success('Nova versão da cotação criada com sucesso!');
+          this.isSaving = false;
+          this.loadQuotes();
+          this.closeDrawer();
+        },
+        error: () => {
+          this.isSaving = false;
+          this.message.error('Erro ao actualizar a cotação.');
+        }
+      });
     } else {
-      this.quoteService.saveQuote(quote);
-      this.message.success('Cotação criada com sucesso!');
+      this.quoteService.addQuote(payload).subscribe({
+        next: () => {
+          this.message.success('Cotação criada com sucesso!');
+          this.isSaving = false;
+          this.loadQuotes();
+          this.closeDrawer();
+        },
+        error: () => {
+          this.isSaving = false;
+          this.message.error('Erro ao criar a cotação.');
+        }
+      });
     }
-
-    this.isSaving = false;
-    this.loadQuotes();
-    this.closeDrawer();
   }
 
   editQuote(quote: CarloadQuote): void {
-    this.currentQuoteId = quote.id;
+    this.currentQuoteId = quote.id || null;
+    this.currentQuoteCode = this.generateNextQuoteCode(),
     this.isDrawerVisible = true;
 
     this.items.clear();
@@ -239,7 +252,7 @@ export class QuoteComponent implements OnInit {
         description: [item.description, Validators.required],
         quantity: [item.quantity, [Validators.required, Validators.min(1)]],
         unitPrice: [item.unitPrice, [Validators.required, Validators.min(0)]],
-        amount: [{value: item.amount, disabled: true}]
+        amount: [{ value: item.amount, disabled: true }]
       });
 
       group.get('quantity')?.valueChanges.subscribe(() => this.updateItemAmount(group));
@@ -251,7 +264,7 @@ export class QuoteComponent implements OnInit {
     this.quoteForm.patchValue({
       quoteCode: quote.quoteCode,
       customerName: quote.customerName,
-      customerPhoneNumber: quote.customerPhoneNumber.replace('+258', '').trim(),
+      customerPhoneNumber: (quote.customerPhoneNumber || '').replace('+258', '').trim(),
       destination: quote.destination,
       discount: quote.discount,
       taxRate: quote.taxRate ?? 0.16,
@@ -266,9 +279,35 @@ export class QuoteComponent implements OnInit {
   }
 
   duplicateQuote(quote: CarloadQuote): void {
-    this.quoteService.duplicateQuote(quote.id);
-    this.loadQuotes();
-    this.message.success('Cotação duplicada com sucesso!');
+    const payload: CarloadQuote = {
+      quoteCode: this.generateNextQuoteCode(),
+      customerName: quote.customerName,
+      customerPhoneNumber: quote.customerPhoneNumber,
+      destination: quote.destination || '',
+      items: (quote.items || []).map(item => ({
+        description: item.description,
+        quantity: Number(item.quantity),
+        unitPrice: Number(item.unitPrice),
+        amount: Number(item.amount)
+      })),
+      subtotal: Number(quote.subtotal || 0),
+      discount: Number(quote.discount || 0),
+      taxRate: Number(quote.taxRate || 0),
+      tax: Number(quote.tax || 0),
+      total: Number(quote.total || 0),
+      notes: quote.notes || '',
+      validUntil: quote.validUntil || null
+    };
+
+    this.quoteService.addQuote(payload).subscribe({
+      next: () => {
+        this.loadQuotes();
+        this.message.success('Cotação duplicada com sucesso!');
+      },
+      error: () => {
+        this.message.error('Erro ao duplicar a cotação.');
+      }
+    });
   }
 
   deleteQuote(quote: CarloadQuote): void {
@@ -279,9 +318,17 @@ export class QuoteComponent implements OnInit {
       nzOkText: 'Sim',
       nzCancelText: 'Não',
       nzOnOk: () => {
-        this.quoteService.deleteQuote(quote.id);
-        this.loadQuotes();
-        this.message.success('Cotação eliminada com sucesso!');
+        if (!quote.id) return;
+
+        this.quoteService.deleteQuote(quote.id).subscribe({
+          next: () => {
+            this.loadQuotes();
+            this.message.success('Cotação eliminada com sucesso!');
+          },
+          error: () => {
+            this.message.error('Erro ao eliminar a cotação.');
+          }
+        });
       }
     });
   }
@@ -290,9 +337,14 @@ export class QuoteComponent implements OnInit {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
 
-    const createdDate = new Date(quote.createdAt);
-    const validUntilDate = new Date(createdDate);
-    validUntilDate.setDate(validUntilDate.getDate() + 7);
+    const createdDate = new Date(quote.createdAt || new Date().toISOString());
+    const validUntilDate = quote.validUntil
+      ? new Date(quote.validUntil)
+      : new Date(createdDate);
+
+    if (!quote.validUntil) {
+      validUntilDate.setDate(validUntilDate.getDate() + 7);
+    }
 
     const createdAtFormatted = this.formatDateOnly(createdDate.toISOString());
     const validUntilFormatted = this.formatDateOnly(validUntilDate.toISOString());
@@ -313,12 +365,12 @@ export class QuoteComponent implements OnInit {
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('Transportes Chiziane', pageWidth - 14, 14, {align: 'right'});
+    doc.text('Transportes Chiziane', pageWidth - 14, 14, { align: 'right' });
 
     doc.setFont('helvetica', 'normal');
-    doc.text('Bairro Cumbe km16', pageWidth - 14, 20, {align: 'right'});
-    doc.text('Av. de Moçambique 2063', pageWidth - 14, 25, {align: 'right'});
-    doc.text('Tel: 845098583 / 879985279', pageWidth - 14, 30, {align: 'right'});
+    doc.text('Bairro Cumbe km16', pageWidth - 14, 20, { align: 'right' });
+    doc.text('Av. de Moçambique 2063', pageWidth - 14, 25, { align: 'right' });
+    doc.text('Tel: 845098583 / 879985279', pageWidth - 14, 30, { align: 'right' });
 
     doc.setDrawColor(200, 200, 200);
     doc.line(14, 36, pageWidth - 14, 36);
@@ -372,11 +424,11 @@ export class QuoteComponent implements OnInit {
         fontStyle: 'bold'
       },
       columnStyles: {
-        1: {halign: 'center', cellWidth: 20},
-        2: {halign: 'right', cellWidth: 38},
-        3: {halign: 'right', cellWidth: 38}
+        1: { halign: 'center', cellWidth: 20 },
+        2: { halign: 'right', cellWidth: 38 },
+        3: { halign: 'right', cellWidth: 38 }
       },
-      margin: {left: 14, right: 14}
+      margin: { left: 14, right: 14 }
     });
 
     const finalY = (doc as any).lastAutoTable.finalY || 160;
@@ -398,14 +450,14 @@ export class QuoteComponent implements OnInit {
     doc.text('Total:', totalsBoxX + 4, totalsBoxY + 48);
 
     doc.setFont('helvetica', 'normal');
-    doc.text(`${this.formatMoney(grossSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 8, {align: 'right'});
-    doc.text(`${this.formatMoney(discount)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 16, {align: 'right'});
-    doc.text(`${this.formatMoney(netSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 24, {align: 'right'});
-    doc.text(`${(taxRate * 100).toFixed(0)}%`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 32, {align: 'right'});
-    doc.text(`${this.formatMoney(tax)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 40, {align: 'right'});
+    doc.text(`${this.formatMoney(grossSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 8, { align: 'right' });
+    doc.text(`${this.formatMoney(discount)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 16, { align: 'right' });
+    doc.text(`${this.formatMoney(netSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 24, { align: 'right' });
+    doc.text(`${(taxRate * 100).toFixed(0)}%`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 32, { align: 'right' });
+    doc.text(`${this.formatMoney(tax)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 40, { align: 'right' });
 
     doc.setFont('helvetica', 'bold');
-    doc.text(`${this.formatMoney(total)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 48, {align: 'right'});
+    doc.text(`${this.formatMoney(total)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 48, { align: 'right' });
 
     let notesY = totalsBoxY + totalsBoxHeight + 12;
 
@@ -418,7 +470,6 @@ export class QuoteComponent implements OnInit {
       doc.setFont('helvetica', 'normal');
       const splitNotes = doc.splitTextToSize(quote.notes, pageWidth - 40);
       doc.text(splitNotes, 18, notesY + 16);
-      notesY += 36;
     }
 
     doc.setDrawColor(200, 200, 200);
@@ -429,7 +480,7 @@ export class QuoteComponent implements OnInit {
     doc.text('Documento gerado por Transportes Chiziane', 14, 282);
     doc.text(`Validade da cotação: 7 dias (${createdAtFormatted} até ${validUntilFormatted})`, 14, 287);
 
-    doc.save(`${quote.quoteCode}_${quote.customerName.replace(/\s+/g, '_')}.pdf`);
+    doc.save(`${quote.quoteCode}_${(quote.customerName || 'cliente').replace(/\s+/g, '_')}.pdf`);
   }
 
   search(): void {
@@ -457,9 +508,9 @@ export class QuoteComponent implements OnInit {
       taxRate: [0.16, [Validators.required, Validators.min(0)]],
       notes: [''],
       validUntil: [null],
-      subtotal: [{value: 0, disabled: true}],
-      tax: [{value: 0, disabled: true}],
-      total: [{value: 0, disabled: true}]
+      subtotal: [{ value: 0, disabled: true }],
+      tax: [{ value: 0, disabled: true }],
+      total: [{ value: 0, disabled: true }]
     });
 
     this.quoteForm.get('discount')?.valueChanges.subscribe(() => this.calculateTotals());
@@ -468,10 +519,19 @@ export class QuoteComponent implements OnInit {
 
   private loadQuotes(): void {
     this.isLoading = true;
-    this.allQuotes = this.quoteService.getQuotes();
-    this.totalQuotes = this.allQuotes.length;
-    this.applyFilters();
-    this.isLoading = false;
+
+    this.quoteService.getQuotes().subscribe({
+      next: (quotes) => {
+        this.allQuotes = quotes || [];
+        this.totalQuotes = this.allQuotes.length;
+        this.applyFilters();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.message.error('Erro ao carregar cotações.');
+      }
+    });
   }
 
   private applyFilters(): void {
@@ -494,7 +554,7 @@ export class QuoteComponent implements OnInit {
       const endDate = new Date(end).setHours(23, 59, 59, 999);
 
       filtered = filtered.filter(quote => {
-        const createdAt = new Date(quote.createdAt).getTime();
+        const createdAt = new Date(quote.createdAt || '').getTime();
         return createdAt >= startDate && createdAt <= endDate;
       });
     }
@@ -509,7 +569,7 @@ export class QuoteComponent implements OnInit {
     const unitPrice = Number(itemGroup.get('unitPrice')?.value || 0);
     const amount = quantity * unitPrice;
 
-    itemGroup.patchValue({amount}, {emitEvent: false});
+    itemGroup.patchValue({ amount }, { emitEvent: false });
     this.calculateTotals();
   }
 
@@ -533,7 +593,7 @@ export class QuoteComponent implements OnInit {
         tax,
         total
       },
-      {emitEvent: false}
+      { emitEvent: false }
     );
   }
 
@@ -566,5 +626,18 @@ export class QuoteComponent implements OnInit {
 
   private formatMoney(value: number): string {
     return Number(value || 0).toFixed(2);
+  }
+
+  private generateNextQuoteCode(): string {
+    if (!this.allQuotes.length) return 'COT-1001';
+
+    const max = Math.max(
+      ...this.allQuotes.map(q => {
+        const numeric = Number((q.quoteCode || '').replace(/\D/g, ''));
+        return isNaN(numeric) ? 1000 : numeric;
+      })
+    );
+
+    return `COT-${max + 1}`;
   }
 }

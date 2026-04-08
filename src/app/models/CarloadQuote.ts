@@ -1,7 +1,7 @@
-import {CarloadQuoteItem} from './CarloadQuoteItem';
+import { CarloadQuoteItem } from './CarloadQuoteItem';
 
 export interface CarloadQuote {
-  id: string;
+  id?: string;
   quoteCode: string;
   customerName: string;
   customerPhoneNumber: string;
@@ -14,5 +14,5 @@ export interface CarloadQuote {
   total: number;
   notes?: string;
   validUntil: string | null;
-  createdAt: string;
+  createdAt?: string;
 }

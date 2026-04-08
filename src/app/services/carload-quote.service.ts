@@ -1,67 +1,35 @@
-import {Injectable} from '@angular/core';
-import {CarloadQuote} from '../models/CarloadQuote';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, take } from 'rxjs';
+import { environment } from '../../environments/environments';
+import { CarloadQuote } from '../models/CarloadQuote';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarloadQuoteService {
-  private readonly storageKey = 'carload_quotes';
+  private baseURL = environment.baseURL + '/carload-quotes';
 
-  getQuotes(): CarloadQuote[] {
-    const data = localStorage.getItem(this.storageKey);
-    return data ? JSON.parse(data) : [];
+  constructor(private http: HttpClient) {}
+
+  public getQuotes(): Observable<CarloadQuote[]> {
+    return this.http.get<CarloadQuote[]>(this.baseURL);
   }
 
-  getQuoteById(id: string): CarloadQuote | null {
-    return this.getQuotes().find(q => q.id === id) || null;
+  public getQuoteById(id: string): Observable<CarloadQuote> {
+    return this.http.get<CarloadQuote>(`${this.baseURL}/${id}`);
   }
 
-  saveQuote(quote: CarloadQuote): void {
-    const quotes = this.getQuotes();
-    quotes.unshift(quote);
-    localStorage.setItem(this.storageKey, JSON.stringify(quotes));
+  public addQuote(quote: any): Observable<CarloadQuote> {
+    console.log(quote)
+    return this.http.post<CarloadQuote>(this.baseURL, quote).pipe(take(1));
   }
 
-  updateQuote(id: string, updatedQuote: CarloadQuote): void {
-    const quotes = this.getQuotes().map(q => q.id === id ? updatedQuote : q);
-    localStorage.setItem(this.storageKey, JSON.stringify(quotes));
+  public updateQuote(id: string, quote: any): Observable<CarloadQuote> {
+    return this.http.put<CarloadQuote>(`${this.baseURL}/${id}`, quote).pipe(take(1));
   }
 
-  deleteQuote(id: string): void {
-    const quotes = this.getQuotes().filter(q => q.id !== id);
-    localStorage.setItem(this.storageKey, JSON.stringify(quotes));
-  }
-
-  duplicateQuote(id: string): CarloadQuote | null {
-    const quote = this.getQuoteById(id);
-    if (!quote) return null;
-
-    const newQuote: CarloadQuote = {
-      ...quote,
-      id: this.generateId(),
-      quoteCode: this.generateNextQuoteCode(),
-      createdAt: new Date().toISOString()
-    };
-
-    this.saveQuote(newQuote);
-    return newQuote;
-  }
-
-  generateNextQuoteCode(): string {
-    const quotes = this.getQuotes();
-    if (!quotes.length) return 'COT-1001';
-
-    const max = Math.max(
-      ...quotes.map(q => {
-        const numeric = Number((q.quoteCode || '').replace(/\D/g, ''));
-        return isNaN(numeric) ? 1000 : numeric;
-      })
-    );
-
-    return `COT-${max + 1}`;
-  }
-
-  generateId(): string {
-    return crypto.randomUUID();
+  public deleteQuote(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseURL}/${id}`).pipe(take(1));
   }
 }
