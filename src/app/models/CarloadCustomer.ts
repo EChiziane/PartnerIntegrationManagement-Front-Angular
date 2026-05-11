@@ -9,4 +9,6 @@ export interface CarloadCustomer {
   phoneNumber: string;
   emailAddress: string;
   createdAt: string;
+  createdBy?: string | null;
+  createdByName?: string | null;
 }

@@ -30,4 +30,6 @@ export interface CarLoad {
   deliveryStatus: CarLoadStatus;
   carloadType: CarloadType;
   createdAt: string;
+  createdBy?: string | null;
+  createdByName?: string | null;
 }

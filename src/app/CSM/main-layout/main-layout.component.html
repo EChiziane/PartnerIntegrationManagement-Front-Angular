@@ -1,22 +1,32 @@
-<nz-layout class="app-layout">
+<nz-layout class="app-shell">
   <nz-sider
     [(nzCollapsed)]="isCollapsed"
     [nzTrigger]="null"
-    class="menu-sidebar"
-    nzBreakpoint="md"
+    class="app-sidebar"
+    nzBreakpoint="lg"
     nzCollapsible
-    nzWidth="256px"
-  >
-    <div class="sidebar-logo">
-      <a>
-        <img alt="logo" src="https://ng.ant.design/assets/img/logo.svg"/>
-        <h1>TRANSPORTES Chiziane</h1>
-      </a>
+    nzWidth="280px">
+
+    <div class="brand">
+      <div class="brand-mark">
+        <span>TC</span>
+      </div>
+
+      <div class="brand-copy">
+        <strong>Transportes Chiziane</strong>
+        <span>Carload Management</span>
+      </div>
     </div>
 
-    <ul [nzInlineCollapsed]="isCollapsed" nz-menu nzMode="inline" nzTheme="dark">
+    <div class="sidebar-section">Operação</div>
 
-      <!-- ===== INÍCIO ===== -->
+    <ul
+      [nzInlineCollapsed]="isCollapsed"
+      class="nav-menu"
+      nz-menu
+      nzMode="inline"
+      nzTheme="dark">
+
       <li nz-menu-item nzMatchRouter>
         <a routerLink="/app/dashboard">
           <span nz-icon nzType="dashboard"></span>
@@ -24,12 +34,8 @@
         </a>
       </li>
 
-      <li nz-menu-divider></li>
-
-      <!-- ===== OPERAÇÕES (Carradas) ===== -->
-      <li nz-submenu nzIcon="car" nzOpen nzTitle="Operações">
+      <li nz-submenu nzIcon="car" nzOpen nzTitle="Carradas">
         <ul>
-
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/carload">
               <span nz-icon nzType="unordered-list"></span>
@@ -50,14 +56,11 @@
               <span>Clientes</span>
             </a>
           </li>
-
         </ul>
       </li>
 
-      <!-- ===== EQUIPA & FROTA ===== -->
-      <li nz-submenu nzIcon="solution" nzTitle="Equipa & Frota">
+      <li nz-submenu nzIcon="solution" nzTitle="Equipa">
         <ul>
-
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/driver">
               <span nz-icon nzType="idcard"></span>
@@ -71,14 +74,11 @@
               <span>Gestores</span>
             </a>
           </li>
-
         </ul>
       </li>
 
-      <!-- ===== FINANCEIRO ===== -->
       <li nz-submenu nzIcon="wallet" nzTitle="Financeiro">
         <ul>
-
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/quote">
               <span nz-icon nzType="file-text"></span>
@@ -89,72 +89,92 @@
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/invoice">
               <span nz-icon nzType="file-done"></span>
-              <span>Facturas</span>
+              <span>Faturas</span>
             </a>
           </li>
-
         </ul>
       </li>
 
-      <li nz-menu-divider></li>
-
-      <!-- ===== CONTA & SEGURANÇA ===== -->
-      <li nz-submenu nzIcon="setting" nzTitle="Conta & Segurança">
-        <ul>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/profile">
-              <span nz-icon nzType="profile"></span>
-              <span>Perfil</span>
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/users">
-              <span nz-icon nzType="user"></span>
-              <span>Utilizadores</span>
-            </a>
-          </li>
-
-        </ul>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/app/users">
+          <span nz-icon nzType="usergroup-add"></span>
+          <span>Utilizadores</span>
+        </a>
       </li>
-
     </ul>
 
+    <div class="sidebar-footer">
+      <span class="status-dot"></span>
+      <div>
+        <strong>Sistema ativo</strong>
+        <span>Frota, facturação e entregas</span>
+      </div>
+    </div>
   </nz-sider>
 
-  <nz-layout>
-    <nz-header>
-      <div class="app-header">
-        <span (click)="isCollapsed = !isCollapsed" class="header-trigger">
-          <span
-            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-            class="trigger"
-            nz-icon
-          ></span>
-        </span>
+  <nz-layout class="main-area">
+    <nz-header class="topbar">
+      <button
+        (click)="isCollapsed = !isCollapsed"
+        aria-label="Alternar menu"
+        class="nav-toggle"
+        type="button">
+        <span [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" nz-icon></span>
+      </button>
 
-        <div [nzDropdownMenu]="userMenu" class="user-menu" nz-dropdown>
-          <span class="user-icon" nz-icon nzType="user"></span>
-          <span class="username">{{ username }}</span>
-          <nz-icon nzType="down"></nz-icon>
+      <div class="topbar-title">
+        <span>Painel de gestão</span>
+        <strong>Carradas, equipa e documentos</strong>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="operator-chip">
+          <span nz-icon nzType="safety-certificate"></span>
+          <span>Ambiente seguro</span>
         </div>
 
-        <nz-dropdown-menu #userMenu="nzDropdownMenu">
-          <ul nz-menu>
-            <li nz-menu-item>
-              <a routerLink="/profile">Perfil</a>
-            </li>
-            <li (click)="logout()" nz-menu-item>Logout</li>
-          </ul>
-        </nz-dropdown-menu>
+        <div [nzDropdownMenu]="userMenu" class="user-menu" nz-dropdown>
+          <div class="user-avatar">
+            {{ userInitials }}
+          </div>
+
+          <div class="user-copy">
+            <span>{{ username }}</span>
+            <small>{{ userRole }}</small>
+          </div>
+
+          <span class="user-arrow" nz-icon nzType="down"></span>
+        </div>
       </div>
+
+      <nz-dropdown-menu #userMenu="nzDropdownMenu">
+        <ul nz-menu class="account-menu">
+          <li nz-menu-item>
+            <a [routerLink]="profileRoute()">
+              <span nz-icon nzType="user"></span>
+              Perfil
+            </a>
+          </li>
+
+          <li nz-menu-item>
+            <a routerLink="/app/users">
+              <span nz-icon nzType="setting"></span>
+              Utilizadores
+            </a>
+          </li>
+
+          <li (click)="logout()" nz-menu-item>
+            <span nz-icon nzType="logout"></span>
+            Logout
+          </li>
+        </ul>
+      </nz-dropdown-menu>
     </nz-header>
 
-    <nz-content>
-      <div class="inner-content">
+    <nz-content class="content-area">
+      <main class="inner-content">
         <router-outlet></router-outlet>
-      </div>
+      </main>
     </nz-content>
   </nz-layout>
 </nz-layout>

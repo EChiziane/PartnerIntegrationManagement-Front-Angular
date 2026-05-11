@@ -139,32 +139,33 @@
         <nz-table
           #nzTable
           [nzData]="listOfDisplayData"
-          [nzScroll]="{ x: '1400px', y: '440px' }"
+          [nzScroll]="{ y: '440px' }"
+          class="compact-sprint-carload-table"
           nzTableLayout="fixed"
         >
           <thead>
           <tr>
-            <th>Cliente</th>
-            <th>Contacto</th>
-            <th>Destino</th>
-            <th>Material</th>
-            <th>Motorista</th>
-            <th>Status</th>
-            <th>Agendado</th>
-            <th>Entregue</th>
-            <th>Ganhos</th>
-            <th>Gastos</th>
+            <th class="col-customer">Cliente</th>
+            <th class="col-phone">Contacto</th>
+            <th class="col-destination">Destino</th>
+            <th class="col-material">Material</th>
+            <th class="col-driver">Motorista</th>
+            <th class="col-status">Status</th>
+            <th class="col-date">Agendado</th>
+            <th class="col-date">Entregue</th>
+            <th class="col-money">Ganhos</th>
+            <th class="col-money">Gastos</th>
             <th>Ações</th>
           </tr>
           </thead>
 
           <tbody>
           <tr *ngFor="let data of nzTable.data">
-            <td>{{ data.customerName }}</td>
-            <td>{{ data.customerPhoneNumber }}</td>
-            <td>{{ data.deliveryDestination }}</td>
-            <td>{{ data.transportedMaterial }}</td>
-            <td>{{ data.assignedDriverName }}</td>
+            <td class="cell-ellipsis" [title]="data.customerName">{{ data.customerName }}</td>
+            <td class="cell-ellipsis" [title]="data.customerPhoneNumber">{{ data.customerPhoneNumber }}</td>
+            <td class="cell-ellipsis" [title]="data.deliveryDestination">{{ data.deliveryDestination }}</td>
+            <td class="cell-ellipsis" [title]="data.transportedMaterial">{{ data.transportedMaterial }}</td>
+            <td class="cell-ellipsis" [title]="data.assignedDriverName">{{ data.assignedDriverName }}</td>
 
             <td>
               <nz-tag [nzColor]="getTagColor(data.deliveryStatus)">
@@ -172,8 +173,8 @@
               </nz-tag>
             </td>
 
-            <td>{{ data.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ data.deliveryDate | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ data.deliveryScheduledDate | date:'dd/MM HH:mm' }}</td>
+            <td>{{ data.deliveryDate | date:'dd/MM HH:mm' }}</td>
             <td>{{ data.totalEarnings | number:'1.2-2' }} Mts</td>
             <td>{{ data.totalSpent | number:'1.2-2' }} Mts</td>
 

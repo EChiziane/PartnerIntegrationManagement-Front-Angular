@@ -1,246 +1,256 @@
-<nz-layout class="layout">
-
-  <nz-header class="header fixed-header">
+<nz-layout class="landing-shell">
+  <nz-header class="site-header">
     <div class="header-content">
-      <div (click)="scrollTo('inicio')" class="logo">
-        <span class="logo-dot"></span>
-        {{ companyName }}
+      <a (click)="scrollTo('inicio')" class="brand" aria-label="Transportes Chiziane">
+        <span class="brand-mark">TC</span>
+        <span>{{ companyName }}</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Navegacao principal">
+        <a (click)="scrollTo('materiais')">Materiais</a>
+        <a (click)="scrollTo('como-funciona')">Como funciona</a>
+        <a (click)="scrollTo('contactos')">Contactos</a>
+        <a (click)="scrollTo('localizacao')">Onde estamos</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="whatsapp-link" (click)="quickWhatsAppDirect()">WhatsApp</a>
+
+        <button (click)="goToLogin()" class="login-button" nz-button nzType="primary">
+          Area do Sistema
+        </button>
+
+        <button
+          (click)="menuVisible = true"
+          class="mobile-menu-btn"
+          nz-button
+          nzType="text"
+          aria-label="Abrir menu">
+          <span nz-icon nzType="menu"></span>
+        </button>
       </div>
-
-      <ul class="desktop-menu" nz-menu nzMode="horizontal">
-        <li nz-menu-item><a (click)="scrollTo('inicio')">Início</a></li>
-        <li nz-menu-item><a (click)="scrollTo('materiais')">Materiais</a></li>
-        <li nz-menu-item><a (click)="scrollTo('como-funciona')">Como funciona</a></li>
-        <li nz-menu-item><a (click)="scrollTo('contactos')">Contactos</a></li>
-        <li nz-menu-item><a (click)="scrollTo('localizacao')">Onde estamos</a></li>
-        <li nz-menu-item>
-          <button (click)="goToLogin()" nz-button nzSize="small" nzType="primary">
-            Área do Sistema
-          </button>
-        </li>
-      </ul>
-
-      <button (click)="menuVisible = true" class="mobile-menu-btn" nz-button nzType="text">
-        <span nz-icon nzType="menu"></span>
-      </button>
     </div>
   </nz-header>
 
-  <nz-drawer (nzOnClose)="menuVisible = false" [nzVisible]="menuVisible" nzPlacement="right" nzTitle="Menu">
-    <ul *nzDrawerContent nz-menu nzMode="vertical">
-      <li (click)="menuVisible=false; scrollTo('inicio')" nz-menu-item>Início</li>
-      <li (click)="menuVisible=false; scrollTo('materiais')" nz-menu-item>Materiais</li>
-      <li (click)="menuVisible=false; scrollTo('como-funciona')" nz-menu-item>Como funciona</li>
-      <li (click)="menuVisible=false; scrollTo('contactos')" nz-menu-item>Contactos</li>
-      <li (click)="menuVisible=false; scrollTo('localizacao')" nz-menu-item>Onde estamos</li>
-      <li nz-menu-item>
-        <button (click)="goToLogin(); menuVisible=false" nz-button nzBlock nzType="primary">
-          Área do Sistema
-        </button>
-      </li>
-    </ul>
+  <nz-drawer
+    (nzOnClose)="menuVisible = false"
+    [nzVisible]="menuVisible"
+    nzPlacement="right"
+    nzTitle="Transportes Chiziane">
+    <nav *nzDrawerContent class="mobile-nav" aria-label="Navegacao movel">
+      <a (click)="menuVisible = false; scrollTo('materiais')">Materiais</a>
+      <a (click)="menuVisible = false; scrollTo('como-funciona')">Como funciona</a>
+      <a (click)="menuVisible = false; scrollTo('contactos')">Contactos</a>
+      <a (click)="menuVisible = false; scrollTo('localizacao')">Onde estamos</a>
+      <button (click)="showQuoteModal(); menuVisible = false" nz-button nzBlock nzType="primary">
+        Pedir cotacao
+      </button>
+      <button (click)="goToLogin(); menuVisible = false" nz-button nzBlock>
+        Area do Sistema
+      </button>
+    </nav>
   </nz-drawer>
 
   <nz-content>
+    <section id="inicio" class="hero-section">
+      <div class="hero-overlay"></div>
 
-    <!-- ✅ HERO FULL SCREEN -->
-    <section class="hero-full" id="inicio">
-      <nz-carousel [nzAutoPlay]="false" class="hero-carousel">
-        <div
-          *ngFor="let slide of heroSlides"
-          [style.backgroundImage]="'url(' + slide.image + ')'"
-          class="hero-slide"
-          nz-carousel-content>
+      <div class="hero-content">
+        <p class="hero-kicker">Materiais de construcao com entrega local</p>
+        <h1>{{ companyName }}</h1>
+        <p class="hero-copy">
+          Fornecimento de areia, pedra e po de pedra com cotacao rapida, frota preparada e entrega em Maputo e arredores.
+        </p>
 
-          <div class="hero-overlay"></div>
+        <div class="hero-actions">
+          <button (click)="showQuoteModal()" class="primary-cta" nz-button nzType="primary">
+            Pedir cotacao
+            <span nz-icon nzType="arrow-right"></span>
+          </button>
 
-          <div class="hero-content">
-            <div class="hero-badge">
-              <span nz-icon nzType="truck"></span>
-              Entrega rápida · Pagamento na entrega
-            </div>
-
-            <h1>{{ slide.title }}</h1>
-            <p>{{ slide.subtitle }}</p>
-
-            <div class="hero-actions">
-              <button (click)="showQuoteModal()" nz-button nzSize="large" nzType="primary">
-                Pedir cotação no WhatsApp
-              </button>
-
-              <button (click)="scrollTo('materiais')" nz-button nzSize="large" nzType="default">
-                Ver catálogo
-              </button>
-            </div>
-
-            <div class="hero-meta">
-              <div class="hero-meta-item">
-                <span nz-icon nzType="phone"></span>
-                <span>{{ phoneDisplay }}</span>
-              </div>
-              <div class="hero-meta-item">
-                <span nz-icon nzType="environment"></span>
-                <span>Maputo e arredores</span>
-              </div>
-            </div>
-          </div>
-
+          <button (click)="scrollTo('materiais')" class="secondary-cta" nz-button>
+            Ver materiais
+          </button>
         </div>
-      </nz-carousel>
+      </div>
 
-      <div (click)="scrollTo('materiais')" class="scroll-hint" title="Descer">
-        <span nz-icon nzType="down"></span>
+      <div class="hero-metrics" aria-label="Indicadores do servico">
+        <div>
+          <strong>5</strong>
+          <span>Materiais principais</span>
+        </div>
+        <div>
+          <strong>24m3</strong>
+          <span>Capacidade maxima</span>
+        </div>
+        <div>
+          <strong>+258</strong>
+          <span>Suporte local</span>
+        </div>
       </div>
     </section>
 
-    <!-- ===== MATERIAIS ===== -->
-    <section class="section" id="materiais">
-      <div class="section-head">
-        <h2>Catálogo de Materiais</h2>
-        <p class="section-text">
-          Escolhe o material e pede já pelo WhatsApp. Quantidades: <strong>{{ capacities.join(', ') }}</strong>.
+    <section class="intro-band">
+      <div class="section-grid">
+        <div>
+          <span class="section-label">Operacao</span>
+          <h2>Entrega coordenada para obras que nao podem ficar paradas.</h2>
+        </div>
+
+        <p>
+          A {{ companyName }} ajuda clientes particulares, empreiteiros e equipas de obra a comprar materiais com menos friccao: pedido claro, confirmacao rapida, entrega combinada e pagamento no acto.
         </p>
       </div>
+    </section>
 
-      <div nz-row nzGutter="16">
-        <div *ngFor="let item of materials" nz-col nzMd="8" nzSm="12" nzXs="24">
-          <nz-card class="material-card" nzHoverable>
-            <div class="material-top">
-              <div class="material-icon">
-                <span [nzType]="item.icon" nz-icon></span>
-              </div>
+    <section id="materiais" class="materials-band">
+      <div class="section-heading">
+        <span class="section-label">Materiais</span>
+        <h2>Catalogo directo para cotacao e encomenda.</h2>
+      </div>
 
-              <div class="material-title">
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.subtitle }}</p>
-              </div>
-            </div>
+      <div class="material-grid">
+        <article *ngFor="let item of materials" class="material-card">
+          <span class="material-icon" [nzType]="item.icon" nz-icon></span>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.subtitle }}</p>
 
-            <ul class="material-list">
-              <li *ngFor="let h of item.highlights">
-                <span nz-icon nzType="check-circle"></span>
-                {{ h }}
-              </li>
-            </ul>
+          <ul>
+            <li *ngFor="let highlight of item.highlights">
+              <span nz-icon nzType="check-circle"></span>
+              {{ highlight }}
+            </li>
+          </ul>
 
-            <div class="material-footer">
-              <div class="chips">
-                <span *ngFor="let c of capacities" class="chip">{{ c }}</span>
-              </div>
+          <div class="capacity-row">
+            <span *ngFor="let capacity of capacities">{{ capacity }}</span>
+          </div>
 
-              <button (click)="ctaMaterial(item)" nz-button nzBlock nzType="primary">
-                Pedir este material
-              </button>
-            </div>
-          </nz-card>
-        </div>
+          <button (click)="ctaMaterial(item)" nz-button nzBlock nzType="primary">
+            Pedir este material
+          </button>
+        </article>
       </div>
     </section>
 
-    <!-- ===== COMO FUNCIONA ===== -->
-    <section class="section light" id="como-funciona">
-      <div class="section-head">
-        <h2>Como funciona</h2>
-        <p class="section-text">Pedido → agendamento → entrega → pagamento na entrega.</p>
+    <section id="como-funciona" class="process-band">
+      <div class="section-heading">
+        <span class="section-label">Como funciona</span>
+        <h2>Do pedido a entrega, tudo simples e rastreavel.</h2>
       </div>
 
-      <div class="steps">
-        <div class="step">
-          <div class="step-icon"><span nz-icon nzType="message"></span></div>
-          <h3>1) Faz o pedido</h3>
-          <p>Escolhe o material, a quantidade e diz o local.</p>
-        </div>
-        <div class="step">
-          <div class="step-icon"><span nz-icon nzType="calendar"></span></div>
-          <h3>2) Agendamos</h3>
-          <p>Confirmamos disponibilidade e combinamos dia/hora.</p>
-        </div>
-        <div class="step">
-          <div class="step-icon"><span nz-icon nzType="car"></span></div>
-          <h3>3) Entregamos</h3>
-          <p>Entrega rápida no local combinado.</p>
-        </div>
-        <div class="step">
-          <div class="step-icon"><span nz-icon nzType="credit-card"></span></div>
-          <h3>4) Pagas na entrega</h3>
-          <p>Pagamento no acto da entrega.</p>
-        </div>
+      <div class="process-grid">
+        <article>
+          <span nz-icon nzType="message"></span>
+          <h3>Pedido</h3>
+          <p>Escolha material, quantidade e local de entrega.</p>
+        </article>
+        <article>
+          <span nz-icon nzType="calendar"></span>
+          <h3>Agendamento</h3>
+          <p>Confirmamos disponibilidade, custo e horario.</p>
+        </article>
+        <article>
+          <span nz-icon nzType="truck"></span>
+          <h3>Entrega</h3>
+          <p>A frota segue para o local combinado.</p>
+        </article>
+        <article>
+          <span nz-icon nzType="credit-card"></span>
+          <h3>Pagamento</h3>
+          <p>Pagamento no acto da entrega, conforme combinado.</p>
+        </article>
       </div>
     </section>
 
-    <!-- ===== CONTACTOS ===== -->
-    <section class="section" id="contactos">
-      <div class="section-head">
-        <h2>Contactos</h2>
-        <p class="section-text">Fala connosco e pede a tua cotação com entrega.</p>
-      </div>
+    <section id="contactos" class="contact-band">
+      <div class="contact-content">
+        <span class="section-label">Contactos</span>
+        <h2>Peça a sua cotacao e confirme disponibilidade.</h2>
 
-      <div class="contact-grid" nz-row nzGutter="16">
-        <div nz-col nzMd="8" nzXs="24">
-          <nz-card nzHoverable>
+        <div class="contact-list">
+          <a href="tel:+258845098583">
             <span nz-icon nzType="phone"></span>
-            <h3>Telefone / WhatsApp</h3>
-            <p>{{ phoneDisplay }}</p>
-            <a (click)="showQuoteModal()" class="link-action">Pedir cotação</a>
-          </nz-card>
+            {{ phoneDisplay }}
+          </a>
+          <button (click)="quickWhatsAppDirect()" class="text-contact" type="button">
+            <span nz-icon nzType="message"></span>
+            WhatsApp directo
+          </button>
+          <span>
+            <span nz-icon nzType="environment"></span>
+            Maputo e arredores
+          </span>
         </div>
       </div>
+
+      <form class="quote-panel">
+        <label>
+          Nome
+          <input [(ngModel)]="quoteName" name="landingQuoteName" placeholder="O seu nome" type="text">
+        </label>
+        <label>
+          Contacto
+          <input [(ngModel)]="quotePhone" name="landingQuotePhone" placeholder="+258" type="tel">
+        </label>
+        <label>
+          Local de entrega
+          <input [(ngModel)]="quoteLocation" name="landingQuoteLocation" placeholder="Ex: Matola" type="text">
+        </label>
+        <button (click)="showQuoteModal()" nz-button nzType="primary" type="button">Continuar cotacao</button>
+      </form>
     </section>
 
-    <!-- ===== LOCALIZAÇÃO ===== -->
-    <section class="section light" id="localizacao">
-      <div class="section-head">
-        <h2>Onde estamos</h2>
-        <p class="section-text">Av. de Moçambique, nº 534 · Cumbeza · Maputo – Moçambique</p>
+    <section id="localizacao" class="location-band">
+      <div class="location-copy">
+        <span class="section-label">Onde estamos</span>
+        <h2>Cumbeza, Maputo</h2>
+        <p>Av. de Mocambique, no 534, Maputo, Mocambique.</p>
       </div>
 
-      <nz-card class="map-card">
-        <div class="map-container">
-          <iframe
-            loading="lazy"
-            src="https://maps.google.com/maps?q=Av.%20de%20Mo%C3%A7ambique%20534%20Maputo&t=&z=15&ie=UTF8&iwloc=&output=embed">
-          </iframe>
-        </div>
-      </nz-card>
+      <div class="map-frame">
+        <iframe
+          title="Localizacao da Transportes Chiziane"
+          loading="lazy"
+          src="https://maps.google.com/maps?q=Av.%20de%20Mo%C3%A7ambique%20534%20Maputo&t=&z=15&ie=UTF8&iwloc=&output=embed">
+        </iframe>
+      </div>
     </section>
-
   </nz-content>
 
-  <!-- ===== MODAL ===== -->
+  <nz-footer class="footer">
+    <span>© 2026 {{ companyName }}. Todos os direitos reservados.</span>
+    <button (click)="goToLogin()" nz-button nzType="default">Area do Sistema</button>
+  </nz-footer>
+
   <nz-modal
     (nzOnCancel)="closeQuoteModal()"
     [(nzVisible)]="isQuoteModalVisible"
     [nzFooter]="null"
     [nzMaskClosable]="true"
-    nzTitle="Cotação rápida"
-  >
+    nzCentered
+    nzClassName="quote-modal-shell"
+    nzTitle="Cotacao rapida">
     <ng-container *nzModalContent>
       <div class="quote-modal">
         <div class="quote-modal-head">
-          <div class="quote-badge">
-            <span nz-icon nzType="info-circle"></span>
-            Preenche (opcional) e enviamos no WhatsApp
-          </div>
-
-          <button (click)="quickWhatsAppDirect()" nz-button nzType="default">
-            WhatsApp directo
-          </button>
+          <span class="section-label">WhatsApp</span>
+          <p>Preencha os detalhes e envie o pedido para confirmarmos disponibilidade e valor.</p>
         </div>
 
         <div class="quote-form">
           <input [(ngModel)]="quoteName" name="quoteName" placeholder="Seu nome (opcional)" type="text">
           <input [(ngModel)]="quotePhone" name="quotePhone" placeholder="Seu contacto (opcional)" type="text">
-          <input [(ngModel)]="quoteLocation" name="quoteLocation" placeholder="Local de entrega (ex: Matola)"
-                 type="text">
+          <input [(ngModel)]="quoteLocation" name="quoteLocation" placeholder="Local de entrega" type="text">
 
           <label class="mini-label">Material</label>
           <nz-select [(ngModel)]="quoteMaterial" name="quoteMaterial">
-            <nz-option *ngFor="let m of materials" [nzLabel]="m.title" [nzValue]="m.key"></nz-option>
+            <nz-option *ngFor="let material of materials" [nzLabel]="material.title" [nzValue]="material.key"></nz-option>
           </nz-select>
 
           <label class="mini-label">Quantidade</label>
           <nz-select [(ngModel)]="quoteCapacity" name="quoteCapacity">
-            <nz-option *ngFor="let c of capacities" [nzLabel]="c" [nzValue]="c"></nz-option>
+            <nz-option *ngFor="let capacity of capacities" [nzLabel]="capacity" [nzValue]="capacity"></nz-option>
           </nz-select>
 
           <button (click)="submitQuickQuote()" nz-button nzBlock nzType="primary">
@@ -250,5 +260,4 @@
       </div>
     </ng-container>
   </nz-modal>
-
 </nz-layout>

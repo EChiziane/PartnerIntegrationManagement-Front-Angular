@@ -20,6 +20,10 @@ import {QuatationComponent} from './CSM/quatation/quatation.component';
 import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.component';
 import {CarloadDetailsComponent} from './CSM/carload/carload-details/carload-details.component';
 import {QuoteComponent} from './CSM/quote/quote.component';
+import {UserDetailComponent} from './UASM/user-detail/user-detail.component';
+import {
+  CarloadCustomerDetailComponent
+} from './CSM/carload-customer/carload-customer-detail/carload-customer-detail.component';
 
 
 const routes: Routes = [
@@ -47,6 +51,8 @@ const routes: Routes = [
       {path: 'sprint-detail/:id', component: SprintDetailsComponent},
       {path: 'driver', component: DriverComponent},
       {path: 'carload-details/:id', component: CarloadDetailsComponent},
+      {path: 'user-detail/:id', component: UserDetailComponent},
+      {path: 'carload-customer-detail/:id', component: CarloadCustomerDetailComponent},
 
 
       {path: 'users', component: ListuserComponent},

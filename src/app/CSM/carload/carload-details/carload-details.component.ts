@@ -1,16 +1,16 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {NzMessageService} from 'ng-zorro-antd/message';
+
 import {CarloadService} from '../../../services/carload.service';
 import {DriverService} from '../../../services/driver.service';
 import {ManagerService} from '../../../services/manager.service';
 import {SprintService} from '../../../services/sprint.service';
-import {NzMessageService} from 'ng-zorro-antd/message';
+import {CarloadDetailPdfService} from '../../../services/carload-detail-pdf.service';
 import {Manager} from '../../../models/CSM/manager';
 import {Driver} from '../../../models/CSM/driver';
 import {CarLoad} from '../../../models/CSM/carlaod';
 import {Sprint} from '../../../models/CSM/sprint';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-carload-details',
@@ -19,8 +19,6 @@ import html2canvas from 'html2canvas';
   styleUrls: ['./carload-details.component.scss']
 })
 export class CarloadDetailsComponent {
-  @ViewChild('pdfContent') pdfContent!: ElementRef<HTMLDivElement>;
-
   isLoading = false;
   isDownloadingPdf = false;
 
@@ -37,14 +35,15 @@ export class CarloadDetailsComponent {
     private carloadService: CarloadService,
     private driverService: DriverService,
     private managerService: ManagerService,
-    private sprintService: SprintService
+    private sprintService: SprintService,
+    private carloadPdfService: CarloadDetailPdfService
   ) {
   }
 
   get statusLabel(): string {
     const status = (this.carload?.deliveryStatus || '').toUpperCase();
     if (status === 'SCHEDULED') return 'Agendada';
-    if (status === 'IN_PROGRESS') return 'Em execução';
+    if (status === 'IN_PROGRESS') return 'Em execucao';
     if (status === 'DELIVERED') return 'Entregue';
     if (status === 'CANCELLED') return 'Cancelada';
     return this.carload?.deliveryStatus || '';
@@ -63,7 +62,7 @@ export class CarloadDetailsComponent {
     const id = this.route.snapshot.paramMap.get('id');
 
     if (!id) {
-      this.message.error('ID da carrada não encontrado.');
+      this.message.error('ID da carrada nao encontrado.');
       this.router.navigate(['/app/carload']);
       return;
     }
@@ -81,49 +80,15 @@ export class CarloadDetailsComponent {
   }
 
   async downloadPdf(): Promise<void> {
-    if (!this.carload || !this.pdfContent) {
-      this.message.warning('Nenhum conteúdo disponível para exportar.');
+    if (!this.carload) {
+      this.message.warning('Nenhum conteudo disponivel para exportar.');
       return;
     }
 
     this.isDownloadingPdf = true;
 
     try {
-      const element = this.pdfContent.nativeElement;
-
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff'
-      });
-
-      const imageData = canvas.toDataURL('image/png');
-
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = 210;
-      const pdfHeight = 297;
-      const margin = 10;
-
-      const usableWidth = pdfWidth - margin * 2;
-      const imageHeight = (canvas.height * usableWidth) / canvas.width;
-
-      let heightLeft = imageHeight;
-      let position = margin;
-
-      pdf.addImage(imageData, 'PNG', margin, position, usableWidth, imageHeight);
-      heightLeft -= (pdfHeight - margin * 2);
-
-      while (heightLeft > 0) {
-        position = -(imageHeight - heightLeft) + margin;
-        pdf.addPage();
-        pdf.addImage(imageData, 'PNG', margin, position, usableWidth, imageHeight);
-        heightLeft -= (pdfHeight - margin * 2);
-      }
-
-      const customer = (this.carload.customerName || 'carload').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_');
-      const fileName = `carload_${customer}_${this.carload.id}.pdf`;
-
-      pdf.save(fileName);
+      this.carloadPdfService.downloadCarloadReport(this.carload, this.driver, this.manager, this.sprint);
       this.message.success('PDF gerado com sucesso!');
     } catch (error) {
       this.message.error('Erro ao gerar o PDF.');
@@ -140,7 +105,7 @@ export class CarloadDetailsComponent {
         const found = (data || []).find(item => item.id === id);
 
         if (!found) {
-          this.message.error('Carrada não encontrada.');
+          this.message.error('Carrada nao encontrada.');
           this.isLoading = false;
           this.router.navigate(['/app/carload']);
           return;

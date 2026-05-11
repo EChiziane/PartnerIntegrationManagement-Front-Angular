@@ -356,12 +356,19 @@ export class QuoteComponent implements OnInit {
     const tax = Number(quote.tax || 0);
     const total = Number(quote.total || 0);
 
-    doc.setDrawColor(220, 220, 220);
-    doc.setTextColor(40, 40, 40);
-
+    doc.setFillColor(16, 33, 43);
+    doc.rect(0, 0, pageWidth, 38, 'F');
+    doc.setFillColor(14, 124, 114);
+    doc.roundedRect(14, 9, 18, 18, 3, 3, 'F');
+    doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text('TC', 23, 21, { align: 'center' });
     doc.setFontSize(18);
-    doc.text('COTAÇÃO', 14, 18);
+    doc.text('COTAÇÃO', 38, 18);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text('Documento comercial', 38, 25);
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
@@ -372,37 +379,39 @@ export class QuoteComponent implements OnInit {
     doc.text('Av. de Moçambique 2063', pageWidth - 14, 25, { align: 'right' });
     doc.text('Tel: 845098583 / 879985279', pageWidth - 14, 30, { align: 'right' });
 
-    doc.setDrawColor(200, 200, 200);
-    doc.line(14, 36, pageWidth - 14, 36);
-
-    doc.setDrawColor(220, 220, 220);
-    doc.roundedRect(14, 42, pageWidth - 28, 30, 3, 3);
+    doc.setTextColor(16, 33, 43);
+    doc.setDrawColor(223, 234, 240);
+    doc.setFillColor(248, 251, 253);
+    doc.roundedRect(14, 44, pageWidth - 28, 32, 3, 3, 'FD');
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
     doc.text('Código:', 18, 50);
     doc.text('Data de criação:', 18, 57);
     doc.text('Validade:', 18, 64);
+    doc.text('Criado por:', 18, 71);
 
     doc.setFont('helvetica', 'normal');
     doc.text(`${quote.quoteCode}`, 52, 50);
     doc.text(`${createdAtFormatted}`, 52, 57);
     doc.text(`${createdAtFormatted} até ${validUntilFormatted}`, 52, 64);
+    doc.text(quote.createdByName || 'Sistema', 52, 71);
 
-    doc.roundedRect(14, 78, pageWidth - 28, 34, 3, 3);
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(14, 84, pageWidth - 28, 34, 3, 3, 'FD');
 
     doc.setFont('helvetica', 'bold');
-    doc.text('Cliente:', 18, 87);
-    doc.text('Contacto:', 18, 95);
-    doc.text('Destino:', 18, 103);
+    doc.text('Cliente:', 18, 93);
+    doc.text('Contacto:', 18, 101);
+    doc.text('Destino:', 18, 109);
 
     doc.setFont('helvetica', 'normal');
-    doc.text(quote.customerName || '—', 45, 87);
-    doc.text(quote.customerPhoneNumber || '—', 45, 95);
-    doc.text(quote.destination || '—', 45, 103);
+    doc.text(quote.customerName || '—', 45, 93);
+    doc.text(quote.customerPhoneNumber || '—', 45, 101);
+    doc.text(quote.destination || '—', 45, 109);
 
     autoTable(doc, {
-      startY: 120,
+      startY: 126,
       head: [['Item', 'Qtd', 'Preço Unit.', 'Subtotal']],
       body: quote.items.map(item => [
         item.description,
@@ -419,9 +428,12 @@ export class QuoteComponent implements OnInit {
         lineWidth: 0.2
       },
       headStyles: {
-        fillColor: [0, 123, 255],
+        fillColor: [14, 124, 114],
         textColor: [255, 255, 255],
         fontStyle: 'bold'
+      },
+      alternateRowStyles: {
+        fillColor: [248, 251, 253]
       },
       columnStyles: {
         1: { halign: 'center', cellWidth: 20 },
@@ -438,7 +450,9 @@ export class QuoteComponent implements OnInit {
     const totalsBoxY = finalY + 10;
     const totalsBoxHeight = 48;
 
-    doc.roundedRect(totalsBoxX, totalsBoxY, totalsBoxWidth, totalsBoxHeight, 3, 3);
+    doc.setDrawColor(223, 234, 240);
+    doc.setFillColor(248, 251, 253);
+    doc.roundedRect(totalsBoxX, totalsBoxY, totalsBoxWidth, totalsBoxHeight, 3, 3, 'FD');
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
@@ -457,12 +471,16 @@ export class QuoteComponent implements OnInit {
     doc.text(`${this.formatMoney(tax)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 40, { align: 'right' });
 
     doc.setFont('helvetica', 'bold');
+    doc.setTextColor(14, 124, 114);
     doc.text(`${this.formatMoney(total)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 48, { align: 'right' });
+    doc.setTextColor(16, 33, 43);
 
     let notesY = totalsBoxY + totalsBoxHeight + 12;
 
     if (quote.notes) {
-      doc.roundedRect(14, notesY, pageWidth - 28, 28, 3, 3);
+      doc.setDrawColor(223, 234, 240);
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(14, notesY, pageWidth - 28, 28, 3, 3, 'FD');
 
       doc.setFont('helvetica', 'bold');
       doc.text('Observações:', 18, notesY + 8);
@@ -472,7 +490,7 @@ export class QuoteComponent implements OnInit {
       doc.text(splitNotes, 18, notesY + 16);
     }
 
-    doc.setDrawColor(200, 200, 200);
+    doc.setDrawColor(223, 234, 240);
     doc.line(14, 275, pageWidth - 14, 275);
 
     doc.setFontSize(9);

@@ -1,0 +1,149 @@
+<div class="detail-page">
+  <nz-breadcrumb class="page-breadcrumb">
+    <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app/carload-customer">Clientes</a></nz-breadcrumb-item>
+    <nz-breadcrumb-item>Detalhe</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <nz-spin [nzSpinning]="isLoading" nzTip="A carregar cliente...">
+    <ng-container *ngIf="customer; else emptyCustomer">
+      <section class="hero-card">
+        <div class="hero-main">
+          <div class="avatar">{{ initials }}</div>
+          <div>
+            <span class="eyebrow">Cliente de transporte</span>
+            <h1>{{ customer.name }}</h1>
+            <p>{{ fullAddress }}</p>
+            <div class="tag-row">
+              <nz-tag nzColor="blue">{{ customer.customerCode || 'Sem codigo' }}</nz-tag>
+              <nz-tag nzColor="purple">NUIT {{ customer.nuitNumber || '-' }}</nz-tag>
+              <nz-tag nzColor="default">Criado por {{ customer.createdByName || 'Sistema' }}</nz-tag>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button (click)="downloadCustomerPdf()" nz-button nzType="primary">
+            <nz-icon nzTheme="outline" nzType="download"></nz-icon>
+            Baixar dados
+          </button>
+          <button (click)="goToCustomers()" nz-button nzType="primary">
+            <nz-icon nzTheme="outline" nzType="unordered-list"></nz-icon>
+            Lista de clientes
+          </button>
+          <button (click)="goBack()" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
+            Voltar
+          </button>
+        </div>
+      </section>
+
+      <section class="summary-grid">
+        <article>
+          <span>Total carradas</span>
+          <strong>{{ totalCarloads }}</strong>
+          <small>{{ scheduledCount }} agendadas, {{ inProgressCount }} em execucao</small>
+        </article>
+
+        <article>
+          <span>Entregues</span>
+          <strong>{{ deliveredCount }}</strong>
+          <small>{{ cancelledCount }} canceladas</small>
+        </article>
+
+        <article>
+          <span>Margem estimada</span>
+          <strong>{{ formatMoney(estimatedMargin) }}</strong>
+          <small>Receitas {{ formatMoney(totalEarnings) }}</small>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="section-card">
+          <header>
+            <span nz-icon nzTheme="outline" nzType="idcard"></span>
+            <h2>Dados do cliente</h2>
+          </header>
+
+          <div class="kv-list">
+            <div><span>Nome</span><strong>{{ customer.name }}</strong></div>
+            <div><span>Codigo</span><strong>{{ customer.customerCode || '-' }}</strong></div>
+            <div><span>NUIT</span><strong>{{ customer.nuitNumber || '-' }}</strong></div>
+            <div><span>Telefone</span><strong>{{ customer.phoneNumber || '-' }}</strong></div>
+            <div><span>Email</span><strong>{{ customer.emailAddress || '-' }}</strong></div>
+            <div><span>Criado em</span><strong>{{ customer.createdAt | date:'dd/MM/yyyy HH:mm' }}</strong></div>
+          </div>
+        </article>
+
+        <article class="section-card">
+          <header>
+            <span nz-icon nzTheme="outline" nzType="environment"></span>
+            <h2>Endereco</h2>
+          </header>
+
+          <div class="kv-list">
+            <div><span>Morada</span><strong>{{ customer.streetAddress || '-' }}</strong></div>
+            <div><span>Cidade</span><strong>{{ customer.city || '-' }}</strong></div>
+            <div><span>Codigo postal</span><strong>{{ customer.zipCode || '-' }}</strong></div>
+            <div><span>Registado por</span><strong>{{ customer.createdByName || 'Sistema' }}</strong></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section-card carloads-card">
+        <header>
+          <span nz-icon nzTheme="outline" nzType="truck"></span>
+          <h2>Carradas do cliente</h2>
+        </header>
+
+        <nz-table
+          #carloadTable
+          [nzData]="carloads"
+          class="compact-customer-carload-table"
+          nzTableLayout="fixed">
+          <thead>
+          <tr>
+            <th class="col-material">Material</th>
+            <th class="col-destination">Destino</th>
+            <th class="col-driver">Motorista</th>
+            <th class="col-status">Estado</th>
+            <th class="col-date">Agendada</th>
+            <th class="col-money">Receita</th>
+            <th class="col-actions">Accoes</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let carload of carloadTable.data">
+            <td class="cell-ellipsis" [title]="carload.transportedMaterial">{{ carload.transportedMaterial }}</td>
+            <td class="cell-ellipsis" [title]="carload.deliveryDestination">{{ carload.deliveryDestination }}</td>
+            <td class="cell-ellipsis" [title]="carload.assignedDriverName || '-'">{{ carload.assignedDriverName || '-' }}</td>
+            <td>
+              <nz-tag [nzColor]="statusColor(carload.deliveryStatus)">
+                {{ statusLabel(carload.deliveryStatus) }}
+              </nz-tag>
+            </td>
+            <td>{{ carload.deliveryScheduledDate | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ formatMoney(carload.totalEarnings) }}</td>
+            <td>
+              <button (click)="goToCarload(carload)" nz-button nzSize="small" nzType="link">
+                <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+                Ver
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </section>
+    </ng-container>
+
+    <ng-template #emptyCustomer>
+      <div class="empty-state">
+        <nz-icon nzTheme="outline" nzType="inbox"></nz-icon>
+        <h2>Cliente nao encontrado</h2>
+        <p>Volte a lista e selecione um cliente valido.</p>
+        <button (click)="goToCustomers()" nz-button nzType="primary">Ir para clientes</button>
+      </div>
+    </ng-template>
+  </nz-spin>
+</div>

@@ -1,11 +1,13 @@
+export type UserRole = 'ADMIN' | 'MANAGER' | 'OPERATOR' | 'USER';
+
 export interface User {
-  id: string; // Opcional, caso uses id no backend
-  name: string;        // Nome completo do usuário
+  id: string;
+  name: string;
   password: string;
-  email: string;       // Email do usuário
+  email: string;
   status: 'CREATED' | 'ACTIVE' | 'INACTIVE';
-  phone: string;       // Número de telefone do usuário
-  login: string;    // Nome de usuário
-  role: 'ADMIN' | 'USER'; // Papel do usuário (pode ser ADMIN ou USER)
-  createdAt: string;   // Data de criação do usuário (em formato ISO 8601)
+  phone: string;
+  login: string;
+  role: UserRole;
+  createdAt: string;
 }

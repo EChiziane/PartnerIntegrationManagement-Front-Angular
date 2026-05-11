@@ -1,17 +1,22 @@
 .details-page {
-  height: 100%;
+  min-height: 100%;
   padding: 18px;
-  background: #f5f5f5;
-  overflow: hidden;
+  background: #f4f8fb;
+  overflow: visible;
   display: flex;
   flex-direction: column;
+  gap: 16px;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0 12px;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid #dfeaf0;
+  border-radius: 8px;
+  background: #ffffff;
   flex-shrink: 0;
 
   .header-left {
@@ -27,21 +32,23 @@
   }
 
   .title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
+    font-size: 24px;
+    font-weight: 850;
+    color: #10212b;
   }
 
   button[nz-button] {
     border-radius: 8px;
-    font-weight: 500;
+    font-weight: 750;
   }
 }
 
 .pdf-export-area {
   background: #ffffff;
-  border-radius: 14px;
-  padding: 18px;
+  border: 1px solid #dfeaf0;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 18px 45px rgba(16, 33, 43, 0.05);
 }
 
 .pdf-header {
@@ -50,7 +57,7 @@
   align-items: flex-start;
   margin-bottom: 14px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid #dfeaf0;
 }
 
 .pdf-brand {
@@ -61,13 +68,13 @@
 
 .pdf-title {
   font-size: 20px;
-  font-weight: 700;
-  color: #1f2937;
+  font-weight: 850;
+  color: #10212b;
 }
 
 .pdf-subtitle {
   font-size: 12px;
-  color: #6b7280;
+  color: #5f7481;
 }
 
 .pdf-status {
@@ -86,7 +93,7 @@
 .pdf-status-value {
   font-size: 14px;
   font-weight: 700;
-  color: #111827;
+  color: #10212b;
 }
 
 .top-summary {
@@ -99,13 +106,13 @@
 
 .summary-item {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  box-shadow: none;
   padding: 12px;
   display: flex;
   gap: 10px;
   align-items: center;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #dfeaf0;
 }
 
 .icon {
@@ -118,18 +125,18 @@
   font-size: 20px;
 
   &.box-blue {
-    background: rgba(59, 130, 246, 0.12);
-    color: #3b82f6;
+    background: #e7faf5;
+    color: #0e7c72;
   }
 
   &.box-orange {
-    background: rgba(251, 146, 60, 0.16);
-    color: #fb923c;
+    background: #fff3e8;
+    color: #c2410c;
   }
 
   &.box-green {
-    background: rgba(34, 197, 94, 0.12);
-    color: #22c55e;
+    background: #e8f6fb;
+    color: #0e7490;
   }
 }
 
@@ -141,13 +148,13 @@
   .label {
     font-size: 12px;
     font-weight: 500;
-    color: #666;
+    color: #5f7481;
   }
 
   .value {
     font-size: 14px;
     font-weight: 700;
-    color: #333;
+    color: #10212b;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -155,7 +162,7 @@
 
   .sub {
     font-size: 12px;
-    color: #666;
+    color: #5f7481;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -172,17 +179,18 @@
 
 .section-card {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #dfeaf0;
 }
 
 .section-head {
   padding: 10px 12px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #dfeaf0;
+  background: #fbfdff;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -193,10 +201,10 @@
   align-items: center;
   gap: 8px;
   font-weight: 700;
-  color: #333;
+  color: #10212b;
 
   nz-icon {
-    color: #007bff;
+    color: #0e7c72;
   }
 }
 
@@ -215,14 +223,14 @@
   .k {
     font-size: 12px;
     font-weight: 500;
-    color: #666;
+    color: #5f7481;
     flex: 0 0 120px;
   }
 
   .v {
     font-size: 13px;
     font-weight: 600;
-    color: #333;
+    color: #10212b;
     text-align: right;
     min-width: 0;
     white-space: nowrap;
@@ -238,11 +246,11 @@
 .pdf-footer {
   margin-top: 14px;
   padding-top: 10px;
-  border-top: 1px solid #ececec;
+  border-top: 1px solid #dfeaf0;
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #6b7280;
+  color: #5f7481;
 }
 
 .empty {

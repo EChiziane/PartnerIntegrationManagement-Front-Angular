@@ -4,11 +4,11 @@
     <nz-breadcrumb-item>
       <a routerLink="/app">Home</a>
     </nz-breadcrumb-item>
-    <nz-breadcrumb-item>Carload Invoices</nz-breadcrumb-item>
+    <nz-breadcrumb-item>Faturas</nz-breadcrumb-item>
   </nz-breadcrumb>
 
   <div class="page-header">
-    <p>Carload Invoices</p>
+    <p>Faturas</p>
 
     <span (click)="onBack()" class="back-arrow">
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
@@ -26,7 +26,7 @@
                 <nz-icon nzTheme="outline" nzType="file-done"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Total Invoices</span>
+                <span class="title">Total Faturas</span>
                 <p>{{ totalInvoices }}</p>
               </div>
             </div>
@@ -99,7 +99,7 @@
 
     <button (click)="openDrawer()" nz-button nzType="primary">
       <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
-      New Invoice
+      Nova Fatura
     </button>
 
     <button (click)="clearFilters()" nz-button nzType="default">
@@ -115,20 +115,21 @@
       <nz-spin
         [nzSpinning]="isLoading"
         nzSize="large"
-        nzTip="A carregar invoices..."
+        nzTip="A carregar faturas..."
       >
         <nz-table
           #nzTable
           [nzData]="invoices"
-          [nzScroll]="{ x: '1250px', y: '340px' }"
+          [nzScroll]="{ x: '1120px', y: '340px' }"
           nzTableLayout="fixed"
         >
           <thead>
           <tr>
             <th>Cliente</th>
-            <th>Invoice Code</th>
-            <th class="file-name-column">File</th>
+            <th>Código</th>
+            <th>Total</th>
             <th>Criado em</th>
+            <th>Criado por</th>
             <th class="actions-column">Ações</th>
           </tr>
           </thead>
@@ -137,14 +138,10 @@
           <tr *ngFor="let invoice of nzTable.data">
             <td>{{ invoice.carloadCustomerName }}</td>
             <td>{{ invoice.invoiceCode }}</td>
-
-            <td class="file-name-cell">
-              <a (click)="downloadInvoice(invoice)" class="file-link">
-                {{ invoice.fileName }}
-              </a>
-            </td>
+            <td>{{ invoice.total | number:'1.2-2' }} Mts</td>
 
             <td>{{ invoice.createdAt | date:'dd/MM/yyyy' }}</td>
+            <td>{{ invoice.createdByName || 'Sistema' }}</td>
 
             <td class="actions-cell">
               <div class="actions-group">
@@ -186,11 +183,11 @@
   [nzFooter]="drawerFooter"
   [nzMaskClosable]="false"
   [nzPlacement]="drawerPlacement"
-  [nzTitle]="'New Invoice'"
+  [nzTitle]="'Nova Fatura'"
   [nzVisible]="isDrawerVisible"
   [nzWidth]="drawerWidth"
 >
-  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar invoice...">
+  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar fatura...">
     <form [formGroup]="invoiceForm" class="drawer-form" nz-form>
 
       <div class="drawer-section">
@@ -219,7 +216,7 @@
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label nzRequired>Invoice Code</nz-form-label>
+              <nz-form-label nzRequired>Código da Fatura</nz-form-label>
               <nz-form-control>
                 <input formControlName="invoiceCode" nz-input readonly/>
               </nz-form-control>
@@ -230,7 +227,7 @@
       </div>
 
       <div class="drawer-section">
-        <h3 class="section-title">Invoice Items</h3>
+        <h3 class="section-title">Itens da Fatura</h3>
 
         <div class="items-list" formArrayName="items">
 

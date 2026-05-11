@@ -5,4 +5,6 @@ export interface Manager {
   address: string;
   status: 'ACTIVO' | 'INACTIVO' | string;
   createdAt: string; // ISO 8601
+  createdBy?: string | null;
+  createdByName?: string | null;
 }

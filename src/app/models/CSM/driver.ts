@@ -5,4 +5,6 @@ export interface Driver {
   CarDescription: string;
   status: string;
   createdAt: string; // ISO 8601
+  createdBy?: string | null;
+  createdByName?: string | null;
 }

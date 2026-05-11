@@ -15,4 +15,6 @@ export interface CarloadQuote {
   notes?: string;
   validUntil: string | null;
   createdAt?: string;
+  createdBy?: string | null;
+  createdByName?: string | null;
 }

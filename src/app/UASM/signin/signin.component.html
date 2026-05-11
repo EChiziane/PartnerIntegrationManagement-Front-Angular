@@ -70,8 +70,9 @@
       <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="role" nzRequired>Função</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Selecione a função.">
         <nz-select formControlName="role" id="role" nzPlaceHolder="Selecione">
-          <nz-option nzLabel="Usuário" nzValue="USER"></nz-option>
           <nz-option nzLabel="Administrador" nzValue="ADMIN"></nz-option>
+          <nz-option nzLabel="Gestor" nzValue="MANAGER"></nz-option>
+          <nz-option nzLabel="Operador" nzValue="OPERATOR"></nz-option>
         </nz-select>
       </nz-form-control>
     </nz-form-item>

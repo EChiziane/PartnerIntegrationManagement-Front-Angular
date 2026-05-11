@@ -8,6 +8,8 @@ import {CarloadCustomer} from '../../models/CarloadCustomer';
 
 import {CarloadInvoiceService} from '../../services/carload-invoice.service';
 import {CarloadCustomerService} from '../../services/carload-customer.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-invoice',
@@ -338,14 +340,159 @@ export class InvoiceComponent implements OnInit {
   }
 
   downloadInvoice(invoice: CarloadInvoice): void {
-    this.invoiceService.downloadInvoice(invoice.id).subscribe((fileBlob: Blob) => {
-      const url = window.URL.createObjectURL(fileBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = invoice.fileName || 'invoice.xlsx';
-      a.click();
-      window.URL.revokeObjectURL(url);
+    const doc = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const createdDate = new Date(invoice.createdAt || new Date().toISOString());
+    const createdAtFormatted = this.formatDateOnly(createdDate.toISOString());
+    const grossSubtotal = this.getGrossSubtotal(invoice);
+    const taxRate = Number(invoice.taxRate || 0);
+    const tax = Number(invoice.tax || 0);
+    const total = Number(invoice.total || 0);
+
+    doc.setFillColor(16, 33, 43);
+    doc.rect(0, 0, pageWidth, 38, 'F');
+    doc.setFillColor(14, 124, 114);
+    doc.roundedRect(14, 9, 18, 18, 3, 3, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text('TC', 23, 21, {align: 'center'});
+    doc.setFontSize(18);
+    doc.text('FATURA', 38, 18);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text('Documento comercial', 38, 25);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Transportes Chiziane', pageWidth - 14, 14, {align: 'right'});
+
+    doc.setFont('helvetica', 'normal');
+    doc.text('Bairro Cumbe km16', pageWidth - 14, 20, {align: 'right'});
+    doc.text('Av. de Moçambique 2063', pageWidth - 14, 25, {align: 'right'});
+    doc.text('Tel: 845098583 / 879985279', pageWidth - 14, 30, {align: 'right'});
+
+    doc.setTextColor(16, 33, 43);
+    doc.setDrawColor(223, 234, 240);
+    doc.setFillColor(248, 251, 253);
+    doc.roundedRect(14, 44, pageWidth - 28, 32, 3, 3, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text('Código:', 18, 52);
+    doc.text('Data de criação:', 18, 60);
+    doc.text('Criado por:', 18, 68);
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${invoice.invoiceCode}`, 52, 52);
+    doc.text(`${createdAtFormatted}`, 52, 60);
+    doc.text(invoice.createdByName || 'Sistema', 52, 68);
+
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(14, 84, pageWidth - 28, 34, 3, 3, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Cliente:', 18, 93);
+    doc.text('Contacto:', 18, 101);
+    doc.text('Código cliente:', 18, 109);
+
+    const customer = this.dataCustomer.find(item => item.id === invoice.carloadCustomerId);
+    doc.setFont('helvetica', 'normal');
+    doc.text(invoice.carloadCustomerName || '-', 50, 93);
+    doc.text(customer?.phoneNumber || '-', 50, 101);
+    doc.text(customer?.customerCode || '-', 50, 109);
+
+    autoTable(doc, {
+      startY: 126,
+      head: [['Item', 'Qtd', 'Preço Unit.', 'Subtotal']],
+      body: invoice.items.map(item => [
+        this.getItemLabel(item.description),
+        item.quantity,
+        `${this.formatMoney(item.unitPrice)} Mts`,
+        `${this.formatMoney(item.amount)} Mts`
+      ]),
+      theme: 'grid',
+      styles: {
+        fontSize: 10,
+        cellPadding: 3,
+        textColor: [40, 40, 40],
+        lineColor: [220, 220, 220],
+        lineWidth: 0.2
+      },
+      headStyles: {
+        fillColor: [14, 124, 114],
+        textColor: [255, 255, 255],
+        fontStyle: 'bold'
+      },
+      alternateRowStyles: {
+        fillColor: [248, 251, 253]
+      },
+      columnStyles: {
+        1: {halign: 'center', cellWidth: 20},
+        2: {halign: 'right', cellWidth: 38},
+        3: {halign: 'right', cellWidth: 38}
+      },
+      margin: {left: 14, right: 14}
     });
+
+    const finalY = (doc as any).lastAutoTable.finalY || 160;
+    const totalsBoxWidth = 84;
+    const totalsBoxX = pageWidth - totalsBoxWidth - 14;
+    const totalsBoxY = finalY + 10;
+    const totalsBoxHeight = 40;
+
+    doc.setDrawColor(223, 234, 240);
+    doc.setFillColor(248, 251, 253);
+    doc.roundedRect(totalsBoxX, totalsBoxY, totalsBoxWidth, totalsBoxHeight, 3, 3, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text('Subtotal:', totalsBoxX + 4, totalsBoxY + 8);
+    doc.text('IVA:', totalsBoxX + 4, totalsBoxY + 16);
+    doc.text('Taxa:', totalsBoxX + 4, totalsBoxY + 24);
+    doc.text('Total:', totalsBoxX + 4, totalsBoxY + 36);
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${this.formatMoney(grossSubtotal)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 8, {align: 'right'});
+    doc.text(`${this.formatMoney(tax)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 16, {align: 'right'});
+    doc.text(`${(taxRate * 100).toFixed(0)}%`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 24, {align: 'right'});
+
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(14, 124, 114);
+    doc.text(`${this.formatMoney(total)} Mts`, totalsBoxX + totalsBoxWidth - 4, totalsBoxY + 36, {align: 'right'});
+
+    doc.setTextColor(16, 33, 43);
+    doc.setDrawColor(223, 234, 240);
+    doc.line(14, 275, pageWidth - 14, 275);
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Documento gerado por Transportes Chiziane', 14, 282);
+    doc.text(`Fatura emitida em ${createdAtFormatted}`, 14, 287);
+
+    doc.save(`fatura_${invoice.invoiceCode}_${(invoice.carloadCustomerName || 'cliente').replace(/\s+/g, '_')}.pdf`);
+  }
+
+  formatMoney(value: number | null | undefined): string {
+    return Number(value || 0).toFixed(2);
+  }
+
+  private formatDateOnly(value: string | null | undefined): string {
+    if (!value) {
+      return '-';
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return '-';
+    }
+
+    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+  }
+
+  private getGrossSubtotal(invoice: CarloadInvoice): number {
+    return (invoice.items || []).reduce((sum, item) => sum + Number(item.amount || 0), 0);
   }
 
   private applyFilters(): void {

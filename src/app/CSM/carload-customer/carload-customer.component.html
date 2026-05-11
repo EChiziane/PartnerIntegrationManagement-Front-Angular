@@ -101,7 +101,7 @@
       >
         <nz-table
           #customerTable
-          [nzData]="customers"
+          [nzData]="filteredCustomers"
           [nzScroll]="{ x: '1100px', y: '340px' }"
           nzTableLayout="fixed"
         >
@@ -174,6 +174,10 @@
 
             <!-- Actions -->
             <td>
+              <button [routerLink]="['/app/carload-customer-detail', customer.id]" nz-button nzSize="small" nzType="link">
+                <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+              </button>
+
               <button (click)="editCustomer(customer)" nz-button nzSize="small" nzType="link">
                 <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
               </button>

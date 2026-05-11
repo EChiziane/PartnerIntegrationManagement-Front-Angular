@@ -26,7 +26,7 @@ export class SigninComponent {
       phone: ['', Validators.required], // aqui guardamos só os dígitos (sem +258)
       login: ['', Validators.required],
       password: ['', Validators.required],
-      role: ['USER', Validators.required]
+      role: ['OPERATOR', Validators.required]
     });
   }
 
@@ -58,7 +58,7 @@ export class SigninComponent {
       next: () => {
         this.isLoading = false;
         this.msg.success('Utilizador registado com sucesso!');
-        this.signinForm.reset({role: 'USER'});
+        this.signinForm.reset({role: 'OPERATOR'});
       },
       error: (err) => {
         this.isLoading = false;

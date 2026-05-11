@@ -208,15 +208,67 @@
   }
 }
 
+.compact-carload-table {
+  ::ng-deep {
+    .ant-table {
+      table-layout: fixed;
+    }
+
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr > td {
+      padding: 10px 8px;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    .cell-ellipsis,
+    .ant-table-cell.cell-ellipsis {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .col-customer {
+      width: 13%;
+    }
+
+    .col-phone {
+      width: 9%;
+    }
+
+    .col-destination {
+      width: 13%;
+    }
+
+    .col-material,
+    .col-driver,
+    .col-sprint {
+      width: 10%;
+    }
+
+    .col-status,
+    .col-date,
+    .col-money {
+      width: 8%;
+    }
+
+    .actions-column,
+    .actions-cell {
+      width: 11%;
+      min-width: 0;
+    }
+  }
+}
+
 .actions-column {
-  width: 150px;
-  min-width: 150px;
+  width: 122px;
+  min-width: 122px;
   text-align: center;
 }
 
 .actions-cell {
-  width: 150px;
-  min-width: 150px;
+  width: 122px;
+  min-width: 122px;
 }
 
 .actions-group {

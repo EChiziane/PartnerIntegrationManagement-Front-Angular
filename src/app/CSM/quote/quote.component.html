@@ -103,7 +103,7 @@
         <nz-table
           #nzTable
           [nzData]="quotes"
-          [nzScroll]="{ x: '1300px', y: '360px' }"
+          [nzScroll]="{ x: '1420px', y: '360px' }"
           nzTableLayout="fixed"
         >
           <thead>
@@ -114,6 +114,7 @@
             <th>Total</th>
             <th>Validade</th>
             <th>Criado em</th>
+            <th>Criado por</th>
             <th>Ações</th>
           </tr>
           </thead>
@@ -126,6 +127,7 @@
             <td>{{ quote.total | number:'1.2-2' }} Mts</td>
             <td>{{ quote.validUntil ? (quote.validUntil | date:'dd/MM/yyyy') : '—' }}</td>
             <td>{{ quote.createdAt | date:'dd/MM/yyyy' }}</td>
+            <td>{{ quote.createdByName || 'Sistema' }}</td>
 
             <td class="action-buttons">
               <button

@@ -8,7 +8,7 @@ import {CarloadInvoice} from '../models/CarloadInvoice';
   providedIn: 'root'
 })
 export class CarloadInvoiceService {
-  private readonly baseURL = `${environment.baseURL}/carload-invoices`;
+  private readonly baseURL = `${environment.baseURL}/faturas`;
 
   constructor(private http: HttpClient) {
   }
@@ -25,9 +25,4 @@ export class CarloadInvoiceService {
     return this.http.delete<void>(`${this.baseURL}/${id}`).pipe(take(1));
   }
 
-  downloadInvoice(id: string): Observable<Blob> {
-    return this.http.get(`${this.baseURL}/download/${id}`, {
-      responseType: 'blob'
-    }).pipe(take(1));
-  }
 }

@@ -114,7 +114,7 @@
           <td>{{ data.name }}</td>
           <td>{{ data.email }}</td>
           <td>{{ data.login }}</td>
-          <td>{{ data.role }}</td>
+          <td>{{ roleLabel(data.role) }}</td>
           <td>{{ data.phone }}</td>
 
           <td>
@@ -127,7 +127,7 @@
 
           <td>
             <button
-              (click)="viewUser(data)" [routerLink]="['/user-detail', data]" nz-button
+              (click)="viewUser(data)" [routerLink]="['/app/user-detail', data.id]" nz-button
               nzSize="small"
               nzType="link">
               <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
@@ -213,8 +213,9 @@
               <nz-form-label nzRequired>Função</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="role">
-                  <nz-option nzLabel="Usuário" nzValue="USER"></nz-option>
                   <nz-option nzLabel="Administrador" nzValue="ADMIN"></nz-option>
+                  <nz-option nzLabel="Gestor" nzValue="MANAGER"></nz-option>
+                  <nz-option nzLabel="Operador" nzValue="OPERATOR"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>

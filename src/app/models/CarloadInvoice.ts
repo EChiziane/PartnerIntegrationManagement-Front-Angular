@@ -10,7 +10,7 @@ export interface CarloadInvoice {
   taxRate: number;
   tax: number;
   total: number;
-  fileName: string;
-  filePath: string;
   createdAt: string;
+  createdBy?: string | null;
+  createdByName?: string | null;
 }

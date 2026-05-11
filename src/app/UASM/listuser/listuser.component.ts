@@ -129,6 +129,17 @@ export class ListuserComponent {
     // Implementar visualização do utilizador
   }
 
+  roleLabel(role: User['role']): string {
+    const labels: Record<User['role'], string> = {
+      ADMIN: 'Administrador',
+      MANAGER: 'Gestor',
+      OPERATOR: 'Operador',
+      USER: 'Operador'
+    };
+
+    return labels[role] ?? role;
+  }
+
   editUser(user: User) {
     this.currentEditingUserId = user.id;
 
@@ -145,13 +156,13 @@ export class ListuserComponent {
   openUserDrawer() {
     this.isUserDrawerVisible = true;
     this.currentEditingUserId = null;
-    this.userForm.reset({status: 'CREATED'});
+    this.userForm.reset({status: 'CREATED', role: 'OPERATOR'});
   }
 
   closeUserDrawer() {
     this.isUserDrawerVisible = false;
     this.currentEditingUserId = null;
-    this.userForm.reset({status: 'CREATED'});
+    this.userForm.reset({status: 'CREATED', role: 'OPERATOR'});
   }
 
 
@@ -183,7 +194,7 @@ export class ListuserComponent {
       password: [''],
       status: [''],
       phone: ['', Validators.required],
-      role: ['USER', Validators.required],
+      role: ['OPERATOR', Validators.required],
     });
   }
 }
