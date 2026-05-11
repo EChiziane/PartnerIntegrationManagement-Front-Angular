@@ -28,17 +28,17 @@ import {NzDividerComponent} from 'ng-zorro-antd/divider';
 import {NzSwitchComponent, NzSwitchModule} from 'ng-zorro-antd/switch';
 
 import {NzTagComponent} from 'ng-zorro-antd/tag';
-import {AuthInterceptor} from './interceptors/auth-interceptor';
-import {LoginComponent} from './UASM/login/login.component';
+import {AuthInterceptor} from '@core/interceptors/auth-interceptor';
+import {LoginComponent} from '@features/auth/login/login.component';
 import {NzAlertComponent} from 'ng-zorro-antd/alert';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
-import {MainLayoutComponent} from './CSM/main-layout/main-layout.component';
+import {MainLayoutComponent} from '@features/shell/main-layout/main-layout.component';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 
-import {ListuserComponent} from './UASM/listuser/listuser.component';
-import {SigninComponent} from './UASM/signin/signin.component';
+import {ListuserComponent} from '@features/users/list/listuser.component';
+import {SigninComponent} from '@features/auth/register/signin.component';
 import {NzStatisticComponent} from 'ng-zorro-antd/statistic';
 
 import {NzPageHeaderComponent, NzPageHeaderContentDirective} from 'ng-zorro-antd/page-header';
@@ -56,25 +56,25 @@ import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {NzTooltipDirective} from "ng-zorro-antd/tooltip";
 
 import {NzCarouselComponent, NzCarouselContentDirective} from 'ng-zorro-antd/carousel';
-import {LandingPageComponent} from './landpage/landingpage.component';
+import {LandingPageComponent} from '@features/public/landing-page/landingpage.component';
 import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from "ng-zorro-antd/breadcrumb";
-import {DriverComponent} from './CSM/driver/driver.component';
-import {ManagerComponent} from './CSM/manager/manager.component';
-import {SprintComponent} from './CSM/sprint/sprint.component';
-import {CarLoadComponent} from './CSM/carload/carload.component';
-import {DashboardComponent} from './CSM/dashboard/dashboard.component';
-import {InvoiceComponent} from './CSM/invoice/invoice.component';
-import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.component';
-import {SprintDetailsComponent} from './CSM/sprint/sprint-details/sprint-details.component';
-import {DriverDetailsComponent} from './CSM/driver/driver-details/driver-details.component';
+import {DriverComponent} from '@features/drivers/driver.component';
+import {ManagerComponent} from '@features/managers/manager.component';
+import {SprintComponent} from '@features/sprints/sprint.component';
+import {CarLoadComponent} from '@features/carloads/carload.component';
+import {DashboardComponent} from '@features/dashboard/dashboard.component';
+import {InvoiceComponent} from '@features/invoices/invoice.component';
+import {CarloadCustomerComponent} from '@features/customers/carload-customer.component';
+import {SprintDetailsComponent} from '@features/sprints/sprint-details/sprint-details.component';
+import {DriverDetailsComponent} from '@features/drivers/driver-details/driver-details.component';
 import {NzEmptyComponent} from 'ng-zorro-antd/empty';
-import {ManagerDetailsComponent} from './CSM/manager/manager-details/manager-details.component';
-import {CarloadDetailsComponent} from './CSM/carload/carload-details/carload-details.component';
-import {QuoteComponent} from './CSM/quote/quote.component';
-import {UserDetailComponent} from './UASM/user-detail/user-detail.component';
+import {ManagerDetailsComponent} from '@features/managers/manager-details/manager-details.component';
+import {CarloadDetailsComponent} from '@features/carloads/carload-details/carload-details.component';
+import {QuoteComponent} from '@features/quotes/quote.component';
+import {UserDetailComponent} from '@features/users/detail/user-detail.component';
 import {
   CarloadCustomerDetailComponent
-} from './CSM/carload-customer/carload-customer-detail/carload-customer-detail.component';
+} from '@features/customers/carload-customer-detail/carload-customer-detail.component';
 
 
 registerLocaleData(en);

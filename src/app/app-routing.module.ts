@@ -1,29 +1,29 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {LoginComponent} from './UASM/login/login.component';
-import {SigninComponent} from './UASM/signin/signin.component';
-import {ListuserComponent} from './UASM/listuser/listuser.component';
+import {LoginComponent} from '@features/auth/login/login.component';
+import {SigninComponent} from '@features/auth/register/signin.component';
+import {ListuserComponent} from '@features/users/list/listuser.component';
 
 
-import {LandingPageComponent} from './landpage/landingpage.component';
-import {MainLayoutComponent} from './CSM/main-layout/main-layout.component';
-import {AuthGuard} from './services/auth.guard';
-import {DriverComponent} from './CSM/driver/driver.component';
-import {SprintComponent} from './CSM/sprint/sprint.component';
-import {ManagerComponent} from './CSM/manager/manager.component';
+import {LandingPageComponent} from '@features/public/landing-page/landingpage.component';
+import {MainLayoutComponent} from '@features/shell/main-layout/main-layout.component';
+import {AuthGuard} from '@core/guards/auth.guard';
+import {DriverComponent} from '@features/drivers/driver.component';
+import {SprintComponent} from '@features/sprints/sprint.component';
+import {ManagerComponent} from '@features/managers/manager.component';
 
-import {SprintDetailsComponent} from './CSM/sprint/sprint-details/sprint-details.component';
-import {CarLoadComponent} from './CSM/carload/carload.component';
-import {DashboardComponent} from './CSM/dashboard/dashboard.component';
-import {InvoiceComponent} from './CSM/invoice/invoice.component';
-import {QuatationComponent} from './CSM/quatation/quatation.component';
-import {CarloadCustomerComponent} from './CSM/carload-customer/carload-customer.component';
-import {CarloadDetailsComponent} from './CSM/carload/carload-details/carload-details.component';
-import {QuoteComponent} from './CSM/quote/quote.component';
-import {UserDetailComponent} from './UASM/user-detail/user-detail.component';
+import {SprintDetailsComponent} from '@features/sprints/sprint-details/sprint-details.component';
+import {CarLoadComponent} from '@features/carloads/carload.component';
+import {DashboardComponent} from '@features/dashboard/dashboard.component';
+import {InvoiceComponent} from '@features/invoices/invoice.component';
+import {QuatationComponent} from '@features/quotations/quatation.component';
+import {CarloadCustomerComponent} from '@features/customers/carload-customer.component';
+import {CarloadDetailsComponent} from '@features/carloads/carload-details/carload-details.component';
+import {QuoteComponent} from '@features/quotes/quote.component';
+import {UserDetailComponent} from '@features/users/detail/user-detail.component';
 import {
   CarloadCustomerDetailComponent
-} from './CSM/carload-customer/carload-customer-detail/carload-customer-detail.component';
+} from '@features/customers/carload-customer-detail/carload-customer-detail.component';
 
 
 const routes: Routes = [
@@ -58,7 +58,7 @@ const routes: Routes = [
       {path: 'users', component: ListuserComponent},
 
       // rota default do sistema
-      {path: '', redirectTo: 'customer', pathMatch: 'full'}
+      {path: '', redirectTo: 'dashboard', pathMatch: 'full'}
     ]
   },
 
