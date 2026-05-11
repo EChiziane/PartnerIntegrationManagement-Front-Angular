@@ -34,14 +34,13 @@ export class SprintComponent implements OnInit {
 
   // ========= Edit =========
   isEditMode = false;
-  sprintDrawerTitle = 'Criar Sprint';
+  sprintDrawerTitle = 'Criar Campanha';
   selectedSprintId: string | null = null;
   // Drawer responsive
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
   // ========= Form =========
   sprintForm = new FormGroup({
-    code: new FormControl('', Validators.required),
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
     status: new FormControl<'PLANEADA' | 'EM_EXECUCAO' | 'PAUSADA' | 'ENCERRADO' | 'CANCELADA'>('EM_EXECUCAO', Validators.required),
@@ -133,7 +132,7 @@ export class SprintComponent implements OnInit {
   // ========= Drawer =========
   openSprintDrawer(): void {
     this.isEditMode = false;
-    this.sprintDrawerTitle = 'Criar Sprint';
+    this.sprintDrawerTitle = 'Criar Campanha';
 
     this.selectedSprintId = null;
     this.selectedSprint = null;
@@ -160,7 +159,7 @@ export class SprintComponent implements OnInit {
 
   editSprint(sprint: Sprint): void {
     this.isEditMode = true;
-    this.sprintDrawerTitle = 'Editar Sprint';
+    this.sprintDrawerTitle = 'Editar Campanha';
 
     this.selectedSprintId = sprint.id;
     this.selectedSprint = sprint;
@@ -168,7 +167,6 @@ export class SprintComponent implements OnInit {
     this.isSprintDrawerVisible = true;
 
     this.sprintForm.patchValue({
-      code: sprint.code,
       name: sprint.name,
       description: sprint.description,
       status: (sprint.status as any) || 'EM_EXECUCAO',
@@ -199,13 +197,9 @@ export class SprintComponent implements OnInit {
     formData.campaignProducts = formData.volumesPromoted;
 
     // Preservar campos fora do form (id/createdAt), se necessário
-    const payload = (this.isEditMode && this.selectedSprint)
-      ? {...this.selectedSprint, ...formData}
-      : formData;
-
     const request$ = (this.isEditMode && this.selectedSprintId)
-      ? this.sprintService.updateSprint(this.selectedSprintId, payload)
-      : this.sprintService.addSprint(payload);
+      ? this.sprintService.updateSprint(this.selectedSprintId, formData)
+      : this.sprintService.addSprint(formData);
 
     request$.subscribe({
       next: () => {

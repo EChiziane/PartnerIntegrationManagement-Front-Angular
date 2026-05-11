@@ -50,6 +50,25 @@
     </div>
   </div>
 
+  <div class="audit-panel" *ngIf="sprint">
+    <div>
+      <span class="panel-label">Criada por</span>
+      <strong>{{ sprint.createdByName || 'Sistema' }}</strong>
+    </div>
+    <div>
+      <span class="panel-label">Criada em</span>
+      <strong>{{ sprint.createdAt ? (sprint.createdAt | date:'dd/MM/yyyy HH:mm') : '-' }}</strong>
+    </div>
+    <div>
+      <span class="panel-label">Encerrada por</span>
+      <strong>{{ sprint.closedByName || '-' }}</strong>
+    </div>
+    <div>
+      <span class="panel-label">Encerrada em</span>
+      <strong>{{ sprint.closedAt ? (sprint.closedAt | date:'dd/MM/yyyy HH:mm') : '-' }}</strong>
+    </div>
+  </div>
+
   <div class="summary-section">
     <div [nzGutter]="8" nz-row>
       <div [nzSpan]="6" nz-col>
@@ -247,7 +266,6 @@
         <nz-table
           #nzTable
           [nzData]="listOfDisplayData"
-          [nzScroll]="{ y: '440px' }"
           class="compact-sprint-carload-table"
           nzTableLayout="fixed"
         >
@@ -263,7 +281,7 @@
             <th class="col-date">Entregue</th>
             <th class="col-money">Ganhos</th>
             <th class="col-money">Gastos</th>
-            <th>Ações</th>
+            <th class="col-actions">Ações</th>
           </tr>
           </thead>
 
@@ -286,7 +304,7 @@
             <td>{{ data.totalEarnings | number:'1.2-2' }} Mts</td>
             <td>{{ data.totalSpent | number:'1.2-2' }} Mts</td>
 
-            <td>
+            <td class="actions-cell">
               <button
                 (click)="copyCarLoad(data)"
                 nz-button

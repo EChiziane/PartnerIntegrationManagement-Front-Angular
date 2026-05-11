@@ -13,9 +13,7 @@ import {CarloadService} from '@core/services/carload.service';
 import {DriverService} from '@core/services/driver.service';
 import {ManagerService} from '@core/services/manager.service';
 import {SprintService} from '@core/services/sprint.service';
-
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import {SprintDetailPdfService} from '@core/services/sprint-detail-pdf.service';
 
 type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
 
@@ -102,6 +100,7 @@ export class SprintDetailsComponent implements OnInit {
     private driverService: DriverService,
     private managerService: ManagerService,
     private sprintService: SprintService,
+    private sprintDetailPdfService: SprintDetailPdfService,
     private modal: NzModalService,
     private message: NzMessageService
   ) {
@@ -382,109 +381,20 @@ export class SprintDetailsComponent implements OnInit {
   }
 
   downloadSprintPdf(): void {
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const generatedAt = new Date();
-
-    const formatDate = (value: string | null | undefined): string => {
-      if (!value) return '—';
-
-      const date = new Date(value);
-      if (isNaN(date.getTime())) return '—';
-
-      const yyyy = date.getFullYear();
-      const mm = String(date.getMonth() + 1).padStart(2, '0');
-      const dd = String(date.getDate()).padStart(2, '0');
-      const hh = String(date.getHours()).padStart(2, '0');
-      const mi = String(date.getMinutes()).padStart(2, '0');
-
-      return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
-    };
-
-    const formatMoney = (value: number | null | undefined): string => {
-      return `${Number(value || 0).toFixed(2)} Mts`;
-    };
-
-    pdf.setFontSize(18);
-    pdf.setTextColor(40, 40, 40);
-    pdf.text('Relatorio da Campanha', 14, 18);
-
-    pdf.setFontSize(11);
-    pdf.setTextColor(100, 100, 100);
-    pdf.text(`Campanha: ${this.sprintName || 'N/D'}`, 14, 26);
-    pdf.text(`Gerado em: ${formatDate(generatedAt.toISOString())}`, pageWidth - 70, 26);
-
-    pdf.setDrawColor(230, 230, 230);
-    pdf.line(14, 30, pageWidth - 14, 30);
-
-    pdf.setFontSize(11);
-    pdf.setTextColor(60, 60, 60);
-    pdf.text(`Total: ${this.totalCarloads}`, 14, 38);
-    pdf.text(`Agendadas: ${this.totalAgendados}`, 44, 38);
-    pdf.text(`Em execução: ${this.totalEmExecucao}`, 86, 38);
-    pdf.text(`Entregues: ${this.totalEntregue}`, 138, 38);
-    pdf.text(`Canceladas: ${this.totalCanceladas}`, 14, 45);
-    pdf.text(`Investimento: ${formatMoney(this.marketingBudget)}`, 58, 45);
-    pdf.text(`Receita: ${formatMoney(this.totalRevenue)}`, 118, 45);
-    pdf.text(`Lucro liquido: ${formatMoney(this.netProfit)}`, 14, 52);
-
-    const rows = this.listOfDisplayData.map(item => [
-      item.customerName || '—',
-      item.customerPhoneNumber || '—',
-      item.deliveryDestination || '—',
-      item.transportedMaterial || '—',
-      item.assignedDriverName || '—',
-      this.getStatusLabel(item.deliveryStatus),
-      formatDate(item.deliveryScheduledDate),
-      formatDate(item.deliveryDate),
-      formatMoney(item.totalEarnings),
-      formatMoney(item.totalSpent)
-    ]);
-
-    autoTable(pdf, {
-      startY: 62,
-      head: [[
-        'Cliente',
-        'Contacto',
-        'Destino',
-        'Material',
-        'Motorista',
-        'Estado',
-        'Agendado',
-        'Entregue',
-        'Ganhos',
-        'Gastos'
-      ]],
-      body: rows,
-      styles: {
-        fontSize: 8,
-        cellPadding: 2.5,
-        valign: 'middle',
-        textColor: [50, 50, 50]
-      },
-      headStyles: {
-        fillColor: [0, 123, 255],
-        textColor: [255, 255, 255],
-        fontStyle: 'bold'
-      },
-      alternateRowStyles: {
-        fillColor: [248, 249, 250]
-      },
-      margin: {left: 10, right: 10},
-      didDrawPage: () => {
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        pdf.setFontSize(9);
-        pdf.setTextColor(120, 120, 120);
-        pdf.text('Transportes Chiziane · Documento gerado pelo sistema', 14, pageHeight - 8);
-      }
+    this.sprintDetailPdfService.downloadSprintReport(this.sprint, this.sprintName, this.listOfDisplayData, {
+      totalCarloads: this.totalCarloads,
+      totalAgendados: this.totalAgendados,
+      totalEntregue: this.totalEntregue,
+      totalRevenue: this.totalRevenue,
+      totalSpent: this.totalSpent,
+      netProfit: this.netProfit,
+      roi: this.roi,
+      targetCarloads: this.targetCarloads,
+      targetRevenue: this.targetRevenue,
+      targetCarloadProgress: this.targetCarloadProgress,
+      targetRevenueProgress: this.targetRevenueProgress,
+      topVolume: this.topVolume
     });
-
-    const safeSprintName = (this.sprintName || 'sprint')
-      .replace(/[^\w\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '_');
-
-    pdf.save(`sprint_${safeSprintName}.pdf`);
   }
 
   private loadSprintName(): void {

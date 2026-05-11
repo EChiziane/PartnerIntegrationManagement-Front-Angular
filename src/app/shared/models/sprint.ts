@@ -17,4 +17,6 @@ export interface Sprint {
   createdAt: string;
   createdBy?: string | null;
   createdByName?: string | null;
+  closedBy?: string | null;
+  closedByName?: string | null;
 }
