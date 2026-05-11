@@ -8,6 +8,7 @@ import autoTable from 'jspdf-autotable';
 import { CarloadQuote } from '@shared/models/carload-quote';
 import { CarloadQuoteItem } from '@shared/models/carload-quote-item';
 import { CarloadQuoteService } from '@core/services/carload-quote.service';
+import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
 
 @Component({
   selector: 'app-quote',
@@ -37,6 +38,7 @@ export class QuoteComponent implements OnInit {
   drawerPlacement: 'right' | 'bottom' = 'right';
 
   quoteForm!: FormGroup;
+  destinationSuggestions: LocationSuggestion[] = [];
 
   itemsOptions: string[] = [];
 
@@ -80,6 +82,7 @@ export class QuoteComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private quoteService: CarloadQuoteService,
+    private locationSuggestionService: LocationSuggestionService,
     private message: NzMessageService,
     private modal: NzModalService
   ) {}
@@ -178,6 +181,14 @@ export class QuoteComponent implements OnInit {
     this.updateItemAmount(itemGroup);
   }
 
+  onDestinationSearch(value: string): void {
+    this.destinationSuggestions = this.locationSuggestionService.search(value);
+  }
+
+  rememberDestination(): void {
+    this.locationSuggestionService.remember(this.quoteForm.get('destination')?.value);
+  }
+
   submitQuote(): void {
     if (this.quoteForm.invalid || this.items.length === 0) {
       this.message.warning('Preencha os campos obrigatórios.');
@@ -187,6 +198,7 @@ export class QuoteComponent implements OnInit {
     this.isSaving = true;
 
     const raw = this.quoteForm.getRawValue();
+    this.locationSuggestionService.remember(raw.destination);
     const normalizedPhone = this.normalizePhone(raw.customerPhoneNumber);
 
     const payload: CarloadQuote = {

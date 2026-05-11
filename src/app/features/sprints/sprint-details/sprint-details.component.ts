@@ -7,6 +7,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {CarLoad, CarLoadStatus} from '@shared/models/carload';
 import {Driver} from '@shared/models/driver';
 import {Manager} from '@shared/models/manager';
+import {Sprint} from '@shared/models/sprint';
 
 import {CarloadService} from '@core/services/carload.service';
 import {DriverService} from '@core/services/driver.service';
@@ -27,6 +28,7 @@ type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED
 export class SprintDetailsComponent implements OnInit {
   sprintId!: string;
   sprintName = '';
+  sprint: Sprint | null = null;
 
   allCarloads: CarLoad[] = [];
   listOfDisplayData: CarLoad[] = [];
@@ -39,6 +41,16 @@ export class SprintDetailsComponent implements OnInit {
   totalEntregue = 0;
   totalEmExecucao = 0;
   totalCanceladas = 0;
+  totalRevenue = 0;
+  totalSpent = 0;
+  grossProfit = 0;
+  netProfit = 0;
+  roi = 0;
+  targetCarloadProgress = 0;
+  targetRevenueProgress = 0;
+  topMaterial = '-';
+  topVolume = '-';
+  volumeDistribution: Array<{ volume: string; count: number; revenue: number }> = [];
 
   dataDrivers: Driver[] = [];
   dataManagers: Manager[] = [];
@@ -105,6 +117,18 @@ export class SprintDetailsComponent implements OnInit {
 
   get shouldShowDeliveredDate(): boolean {
     return this.selectedStatusUpper === 'DELIVERED';
+  }
+
+  get marketingBudget(): number {
+    return Number(this.sprint?.marketingBudget || 0);
+  }
+
+  get targetCarloads(): number {
+    return Number(this.sprint?.targetCarloads || 0);
+  }
+
+  get targetRevenue(): number {
+    return Number(this.sprint?.targetRevenue || 0);
   }
 
   ngOnInit(): void {
@@ -383,11 +407,11 @@ export class SprintDetailsComponent implements OnInit {
 
     pdf.setFontSize(18);
     pdf.setTextColor(40, 40, 40);
-    pdf.text('Relatório da Sprint', 14, 18);
+    pdf.text('Relatorio da Campanha', 14, 18);
 
     pdf.setFontSize(11);
     pdf.setTextColor(100, 100, 100);
-    pdf.text(`Sprint: ${this.sprintName || 'N/D'}`, 14, 26);
+    pdf.text(`Campanha: ${this.sprintName || 'N/D'}`, 14, 26);
     pdf.text(`Gerado em: ${formatDate(generatedAt.toISOString())}`, pageWidth - 70, 26);
 
     pdf.setDrawColor(230, 230, 230);
@@ -400,6 +424,9 @@ export class SprintDetailsComponent implements OnInit {
     pdf.text(`Em execução: ${this.totalEmExecucao}`, 86, 38);
     pdf.text(`Entregues: ${this.totalEntregue}`, 138, 38);
     pdf.text(`Canceladas: ${this.totalCanceladas}`, 14, 45);
+    pdf.text(`Investimento: ${formatMoney(this.marketingBudget)}`, 58, 45);
+    pdf.text(`Receita: ${formatMoney(this.totalRevenue)}`, 118, 45);
+    pdf.text(`Lucro liquido: ${formatMoney(this.netProfit)}`, 14, 52);
 
     const rows = this.listOfDisplayData.map(item => [
       item.customerName || '—',
@@ -415,7 +442,7 @@ export class SprintDetailsComponent implements OnInit {
     ]);
 
     autoTable(pdf, {
-      startY: 52,
+      startY: 62,
       head: [[
         'Cliente',
         'Contacto',
@@ -462,8 +489,15 @@ export class SprintDetailsComponent implements OnInit {
 
   private loadSprintName(): void {
     this.sprintService.getSprintById(this.sprintId).subscribe({
-      next: sprint => (this.sprintName = sprint?.name || ''),
-      error: () => (this.sprintName = '')
+      next: sprint => {
+        this.sprint = sprint || null;
+        this.sprintName = sprint?.name || '';
+        this.calculateStats();
+      },
+      error: () => {
+        this.sprint = null;
+        this.sprintName = '';
+      }
     });
   }
 
@@ -476,6 +510,56 @@ export class SprintDetailsComponent implements OnInit {
     this.totalEntregue = this.allCarloads.filter(c => up(c.deliveryStatus) === 'DELIVERED').length;
     this.totalEmExecucao = this.allCarloads.filter(c => up(c.deliveryStatus) === 'IN_PROGRESS').length;
     this.totalCanceladas = this.allCarloads.filter(c => up(c.deliveryStatus) === 'CANCELLED').length;
+    this.totalRevenue = this.allCarloads.reduce((sum, item) => sum + Number(item.totalEarnings || 0), 0);
+    this.totalSpent = this.allCarloads.reduce((sum, item) => sum + Number(item.totalSpent || 0), 0);
+    this.grossProfit = this.totalRevenue - this.totalSpent;
+    this.netProfit = this.grossProfit - this.marketingBudget;
+    this.roi = this.marketingBudget > 0 ? (this.netProfit / this.marketingBudget) * 100 : 0;
+    this.targetCarloadProgress = this.targetCarloads > 0 ? Math.min((this.totalEntregue / this.targetCarloads) * 100, 100) : 0;
+    this.targetRevenueProgress = this.targetRevenue > 0 ? Math.min((this.totalRevenue / this.targetRevenue) * 100, 100) : 0;
+    this.topMaterial = this.sprint?.materialFocus || this.calculateTopMaterial();
+    this.volumeDistribution = this.calculateVolumeDistribution();
+    this.topVolume = this.volumeDistribution.length
+      ? `${this.volumeDistribution[0].volume} (${this.volumeDistribution[0].count})`
+      : '-';
+  }
+
+  private calculateTopMaterial(): string {
+    const counts = new Map<string, number>();
+
+    this.allCarloads
+      .filter(item => (item.deliveryStatus || '').toString().toUpperCase() !== 'CANCELLED')
+      .forEach(item => {
+        const material = item.transportedMaterial || 'Sem material';
+        counts.set(material, (counts.get(material) || 0) + 1);
+      });
+
+    const [top] = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+    return top ? `${top[0]} (${top[1]})` : '-';
+  }
+
+  private calculateVolumeDistribution(): Array<{ volume: string; count: number; revenue: number }> {
+    const volumes = new Map<string, { count: number; revenue: number }>();
+
+    this.allCarloads
+      .filter(item => (item.deliveryStatus || '').toString().toUpperCase() !== 'CANCELLED')
+      .forEach(item => {
+        const volume = this.extractVolume(item.transportedMaterial || '');
+        const current = volumes.get(volume) || {count: 0, revenue: 0};
+        volumes.set(volume, {
+          count: current.count + 1,
+          revenue: current.revenue + Number(item.totalEarnings || 0)
+        });
+      });
+
+    return [...volumes.entries()]
+      .map(([volume, data]) => ({volume, ...data}))
+      .sort((a, b) => b.count - a.count || b.revenue - a.revenue);
+  }
+
+  private extractVolume(material: string): string {
+    const match = material.match(/(\d+)\s*m/i);
+    return match ? `${match[1]}m` : 'Sem volume';
   }
 
   private applyFilter(): void {

@@ -1,27 +1,22 @@
 <div class="content-wrapper">
-
-  <!-- ===== Breadcrumb ===== -->
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
       <a routerLink="/app">Home</a>
     </nz-breadcrumb-item>
-    <nz-breadcrumb-item>Lista de Sprints</nz-breadcrumb-item>
+    <nz-breadcrumb-item>Campanhas</nz-breadcrumb-item>
   </nz-breadcrumb>
 
-  <!-- ===== Page Header ===== -->
   <div class="page-header">
-    <p>Lista de Sprints</p>
+    <p>Campanhas / Sprints</p>
 
     <span (click)="onBack()" class="back-arrow">
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
     </span>
   </div>
 
-  <!-- ===== Summary ===== -->
   <div class="summary-section">
     <div class="summary-background">
       <div [nzGutter]="8" nz-row>
-
         <div [nzSpan]="8" nz-col>
           <nz-card nzSize="small">
             <div class="summary-card">
@@ -29,7 +24,7 @@
                 <nz-icon nzTheme="outline" nzType="project"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Total</span>
+                <span class="title">Campanhas</span>
                 <p>{{ totalSprints }}</p>
               </div>
             </div>
@@ -40,7 +35,7 @@
           <nz-card nzSize="small">
             <div class="summary-card">
               <div class="icon-wrapper active">
-                <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
+                <nz-icon nzTheme="outline" nzType="play-circle"></nz-icon>
               </div>
               <div class="summary-content">
                 <span class="title">Em execução</span>
@@ -54,52 +49,52 @@
           <nz-card nzSize="small">
             <div class="summary-card">
               <div class="icon-wrapper inactive">
-                <nz-icon nzTheme="outline" nzType="warning"></nz-icon>
+                <nz-icon nzTheme="outline" nzType="wallet"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Encerradas</span>
-                <p>{{ inactiveSprints }}</p>
+                <span class="title">Investimento</span>
+                <p>{{ totalMarketingBudget | number:'1.2-2' }} Mts</p>
               </div>
             </div>
           </nz-card>
         </div>
-
       </div>
     </div>
   </div>
 
-  <!-- ===== Filters ===== -->
   <div class="filters-panel">
     <input
       (ngModelChange)="search()"
       [(ngModel)]="searchValue"
       nz-input
-      placeholder="Pesquisar código, nome ou descrição"
+      placeholder="Pesquisar campanha, canal, material..."
       type="text"
     />
 
     <button (click)="openSprintDrawer()" nz-button nzType="primary">
       <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
-      Nova Sprint
+      Nova Campanha
     </button>
   </div>
 
-  <!-- ===== Table ===== -->
   <div class="table-wrapper">
     <div class="table-scroll">
-
-      <nz-spin [nzSpinning]="isLoading" nzSize="large" nzTip="A carregar sprints...">
+      <nz-spin [nzSpinning]="isLoading" nzSize="large" nzTip="A carregar campanhas...">
         <nz-table
           #nzTable
           [nzData]="listOfDisplayData"
-          [nzScroll]="{ x: '1150px', y: '340px' }"
+          [nzScroll]="{ x: '1320px', y: '340px' }"
           nzTableLayout="fixed">
 
           <thead>
           <tr>
             <th>Código</th>
-            <th>Nome</th>
-            <th>Descrição</th>
+            <th>Campanha</th>
+            <th>Canal</th>
+            <th>Material</th>
+            <th>Volumes promovidos</th>
+            <th>Meta</th>
+            <th>Investimento</th>
             <th>Status</th>
             <th>Criado em</th>
             <th>Ações</th>
@@ -110,45 +105,40 @@
           <tr *ngFor="let data of nzTable.data">
             <td>{{ data.code }}</td>
             <td>{{ data.name }}</td>
-            <td>{{ data.description }}</td>
-
+            <td>{{ data.campaignChannel || '-' }}</td>
+            <td>{{ data.materialFocus || '-' }}</td>
+            <td>{{ data.volumesPromoted || data.campaignProducts || '-' }}</td>
             <td>
-              <nz-tag [nzColor]="data.status === 'EM_EXECUCAO' ? 'green' : 'red'">
-                {{ data.status }}
+              <span *ngIf="data.targetCarloads">{{ data.targetCarloads }} carradas</span>
+              <span *ngIf="data.targetRevenue"> / {{ data.targetRevenue | number:'1.2-2' }} Mts</span>
+              <span *ngIf="!data.targetCarloads && !data.targetRevenue">-</span>
+            </td>
+            <td>{{ data.marketingBudget || 0 | number:'1.2-2' }} Mts</td>
+            <td>
+              <nz-tag [nzColor]="getStatusColor(data.status)">
+                {{ getStatusLabel(data.status) }}
               </nz-tag>
             </td>
-
             <td>{{ data.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
-
             <td>
-              <button
-                [routerLink]="['/app/sprint-detail', data.id]"
-                nz-button
-                nzSize="small"
-                nzType="link"
-              >
+              <button [routerLink]="['/app/sprint-detail', data.id]" nz-button nzSize="small" nzType="link">
                 <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
               </button>
               <button (click)="editSprint(data)" nz-button nzSize="small" nzType="link">
                 <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
               </button>
-
               <button (click)="deleteSprint(data)" nz-button nzDanger nzSize="small" nzType="link">
                 <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
               </button>
             </td>
           </tr>
           </tbody>
-
         </nz-table>
       </nz-spin>
-
     </div>
   </div>
-
 </div>
 
-<!-- ===== Drawer ===== -->
 <nz-drawer
   (nzOnClose)="closeSprintDrawer()"
   [nzBodyStyle]="{ overflow: 'auto' }"
@@ -159,43 +149,42 @@
   [nzVisible]="isSprintDrawerVisible"
   [nzWidth]="drawerWidth">
 
-  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar sprint...">
+  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar campanha...">
     <form [formGroup]="sprintForm" class="drawer-form" nz-form>
-
       <div class="drawer-section">
-        <h3 class="section-title">Informação da Sprint</h3>
+        <h3 class="section-title">Informação da Campanha</h3>
 
         <div [nzGutter]="16" nz-row>
-
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label nzRequired>Código</nz-form-label>
               <nz-form-control>
-                <input formControlName="code" nz-input placeholder="Ex: SPR-001"/>
+                <input formControlName="code" nz-input placeholder="Ex: TC-CAMP-001"/>
               </nz-form-control>
             </nz-form-item>
           </div>
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label nzRequired>Nome</nz-form-label>
+              <nz-form-label nzRequired>Nome da campanha</nz-form-label>
               <nz-form-control>
-                <input formControlName="name" nz-input placeholder="Nome da sprint"/>
+                <input formControlName="name" nz-input placeholder="Ex: Facebook Areia Vermelha 18m - Maio"/>
               </nz-form-control>
             </nz-form-item>
           </div>
-
         </div>
 
         <div [nzGutter]="16" nz-row>
-
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label nzRequired>Status</nz-form-label>
               <nz-form-control>
                 <nz-select [nzDisabled]="isSaving" formControlName="status" nzPlaceHolder="Selecione o status">
-                  <nz-option nzLabel="EM_EXECUCAO" nzValue="EM_EXECUCAO"></nz-option>
-                  <nz-option nzLabel="ENCERRADO" nzValue="ENCERRADO"></nz-option>
+                  <nz-option nzLabel="Planeada" nzValue="PLANEADA"></nz-option>
+                  <nz-option nzLabel="Em execução" nzValue="EM_EXECUCAO"></nz-option>
+                  <nz-option nzLabel="Pausada" nzValue="PAUSADA"></nz-option>
+                  <nz-option nzLabel="Encerrada" nzValue="ENCERRADO"></nz-option>
+                  <nz-option nzLabel="Cancelada" nzValue="CANCELADA"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -203,17 +192,118 @@
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label nzRequired>Descrição</nz-form-label>
+              <nz-form-label nzRequired>Canal</nz-form-label>
               <nz-form-control>
-                <textarea formControlName="description" nz-input placeholder="Breve descrição..." rows="3"></textarea>
+                <nz-select formControlName="campaignChannel" nzPlaceHolder="Canal da campanha">
+                  <nz-option nzLabel="Facebook" nzValue="FACEBOOK"></nz-option>
+                  <nz-option nzLabel="Instagram" nzValue="INSTAGRAM"></nz-option>
+                  <nz-option nzLabel="WhatsApp" nzValue="WHATSAPP"></nz-option>
+                  <nz-option nzLabel="Referência" nzValue="REFERENCIA"></nz-option>
+                  <nz-option nzLabel="Orgânico" nzValue="ORGANICO"></nz-option>
+                  <nz-option nzLabel="Outro" nzValue="OUTRO"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div [nzGutter]="16" nz-row>
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Material foco</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="materialFocus" nzPlaceHolder="Material da campanha" nzShowSearch>
+                  <nz-option nzLabel="Areia grossa" nzValue="Areia grossa"></nz-option>
+                  <nz-option nzLabel="Areia vermelha" nzValue="Areia vermelha"></nz-option>
+                  <nz-option nzLabel="Areia fina" nzValue="Areia fina"></nz-option>
+                  <nz-option nzLabel="Pedra 3/4" nzValue="Pedra 3/4"></nz-option>
+                  <nz-option nzLabel="Pó de pedra" nzValue="Pó de pedra"></nz-option>
+                  <nz-option nzLabel="Pedra enrocamento" nzValue="Pedra enrocamento"></nz-option>
+                  <nz-option nzLabel="Pedra sarrisca" nzValue="Pedra sarrisca"></nz-option>
+                </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
 
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Volumes promovidos</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="volumesPromoted"
+                  nzMode="multiple"
+                  nzPlaceHolder="Ex: 4m, 7m, 18m">
+                  <nz-option nzLabel="4m" nzValue="4m"></nz-option>
+                  <nz-option nzLabel="7m" nzValue="7m"></nz-option>
+                  <nz-option nzLabel="18m" nzValue="18m"></nz-option>
+                  <nz-option nzLabel="22m" nzValue="22m"></nz-option>
+                  <nz-option nzLabel="24m" nzValue="24m"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
         </div>
 
-      </div>
+        <div [nzGutter]="16" nz-row>
+          <div nz-col nzMd="8" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Investimento</nz-form-label>
+              <nz-form-control>
+                <input formControlName="marketingBudget" nz-input type="number"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
 
+          <div nz-col nzMd="8" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Meta carradas</nz-form-label>
+              <nz-form-control>
+                <input formControlName="targetCarloads" nz-input type="number"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzMd="8" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Meta receita</nz-form-label>
+              <nz-form-control>
+                <input formControlName="targetRevenue" nz-input type="number"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div [nzGutter]="16" nz-row>
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Início</nz-form-label>
+              <nz-form-control>
+                <input formControlName="startDate" nz-input type="date"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Fim previsto</nz-form-label>
+              <nz-form-control>
+                <input formControlName="expectedEndDate" nz-input type="date"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div [nzGutter]="16" nz-row>
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Descrição</nz-form-label>
+              <nz-form-control>
+                <textarea formControlName="description" nz-input placeholder="Objetivo, público ou observações..." rows="3"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
     </form>
   </nz-spin>
 
@@ -229,7 +319,6 @@
         class="btn-save"
         nz-button
         nzType="primary">
-
         <ng-container *ngIf="!isSaving; else savingTpl">
           {{ isEditMode ? 'Salvar' : 'Criar' }}
         </ng-container>
@@ -238,9 +327,7 @@
           <nz-spin nzSize="small"></nz-spin>
           A gravar...
         </ng-template>
-
       </button>
     </div>
   </ng-template>
-
 </nz-drawer>

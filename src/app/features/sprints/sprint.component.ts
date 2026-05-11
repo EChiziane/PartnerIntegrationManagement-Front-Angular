@@ -25,6 +25,7 @@ export class SprintComponent implements OnInit {
   totalSprints = 0;
   activeSprints = 0;   // EM_EXECUCAO
   inactiveSprints = 0; // ENCERRADO
+  totalMarketingBudget = 0;
 
   // ========= UI =========
   searchValue = '';
@@ -43,7 +44,16 @@ export class SprintComponent implements OnInit {
     code: new FormControl('', Validators.required),
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    status: new FormControl<'EM_EXECUCAO' | 'ENCERRADO'>('EM_EXECUCAO', Validators.required)
+    status: new FormControl<'PLANEADA' | 'EM_EXECUCAO' | 'PAUSADA' | 'ENCERRADO' | 'CANCELADA'>('EM_EXECUCAO', Validators.required),
+    campaignChannel: new FormControl('FACEBOOK', Validators.required),
+    materialFocus: new FormControl('', Validators.required),
+    volumesPromoted: new FormControl<string[]>([]),
+    campaignProducts: new FormControl(''),
+    marketingBudget: new FormControl(0, [Validators.min(0)]),
+    targetCarloads: new FormControl(0, [Validators.min(0)]),
+    targetRevenue: new FormControl(0, [Validators.min(0)]),
+    startDate: new FormControl<string | null>(null),
+    expectedEndDate: new FormControl<string | null>(null)
   });
   // Guardar sprint original (id/createdAt etc.)
   private selectedSprint: Sprint | null = null;
@@ -93,6 +103,27 @@ export class SprintComponent implements OnInit {
     this.totalSprints = this.dataSource.length;
     this.activeSprints = this.dataSource.filter(s => s.status === 'EM_EXECUCAO').length;
     this.inactiveSprints = this.dataSource.filter(s => s.status === 'ENCERRADO').length;
+    this.totalMarketingBudget = this.dataSource.reduce((sum, sprint) => sum + Number(sprint.marketingBudget || 0), 0);
+  }
+
+  getStatusLabel(status: string): string {
+    const labels: Record<string, string> = {
+      PLANEADA: 'Planeada',
+      EM_EXECUCAO: 'Em execução',
+      PAUSADA: 'Pausada',
+      ENCERRADO: 'Encerrada',
+      CANCELADA: 'Cancelada'
+    };
+    return labels[(status || '').toUpperCase()] || status;
+  }
+
+  getStatusColor(status: string): string {
+    const value = (status || '').toUpperCase();
+    if (value === 'EM_EXECUCAO') return 'green';
+    if (value === 'PLANEADA') return 'blue';
+    if (value === 'PAUSADA') return 'orange';
+    if (value === 'CANCELADA') return 'red';
+    return 'default';
   }
 
   search(): void {
@@ -107,7 +138,14 @@ export class SprintComponent implements OnInit {
     this.selectedSprintId = null;
     this.selectedSprint = null;
 
-    this.sprintForm.reset({status: 'EM_EXECUCAO'});
+    this.sprintForm.reset({
+      status: 'EM_EXECUCAO',
+      campaignChannel: 'FACEBOOK',
+      volumesPromoted: [],
+      marketingBudget: 0,
+      targetCarloads: 0,
+      targetRevenue: 0
+    });
     this.isSprintDrawerVisible = true;
   }
 
@@ -133,7 +171,16 @@ export class SprintComponent implements OnInit {
       code: sprint.code,
       name: sprint.name,
       description: sprint.description,
-      status: (sprint.status as any) || 'EM_EXECUCAO'
+      status: (sprint.status as any) || 'EM_EXECUCAO',
+      campaignChannel: sprint.campaignChannel || 'FACEBOOK',
+      materialFocus: sprint.materialFocus || '',
+      volumesPromoted: this.parseVolumes(sprint.volumesPromoted || sprint.campaignProducts || ''),
+      campaignProducts: sprint.campaignProducts || '',
+      marketingBudget: Number(sprint.marketingBudget || 0),
+      targetCarloads: Number(sprint.targetCarloads || 0),
+      targetRevenue: Number(sprint.targetRevenue || 0),
+      startDate: sprint.startDate || null,
+      expectedEndDate: sprint.expectedEndDate || null
     });
   }
 
@@ -146,6 +193,10 @@ export class SprintComponent implements OnInit {
     this.isSaving = true;
 
     const formData: any = {...this.sprintForm.value};
+    formData.volumesPromoted = Array.isArray(formData.volumesPromoted)
+      ? formData.volumesPromoted.join(', ')
+      : (formData.volumesPromoted || '');
+    formData.campaignProducts = formData.volumesPromoted;
 
     // Preservar campos fora do form (id/createdAt), se necessário
     const payload = (this.isEditMode && this.selectedSprint)
@@ -208,10 +259,21 @@ export class SprintComponent implements OnInit {
         (s.name || '').toLowerCase().includes(v) ||
         (s.code || '').toLowerCase().includes(v) ||
         (s.description || '').toLowerCase().includes(v) ||
-        (s.status || '').toLowerCase().includes(v)
+        (s.status || '').toLowerCase().includes(v) ||
+        (s.campaignChannel || '').toLowerCase().includes(v) ||
+        (s.materialFocus || '').toLowerCase().includes(v) ||
+        (s.volumesPromoted || '').toLowerCase().includes(v) ||
+        (s.campaignProducts || '').toLowerCase().includes(v)
       );
     }
 
     this.listOfDisplayData = data;
+  }
+
+  private parseVolumes(value: string): string[] {
+    return (value || '')
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean);
   }
 }

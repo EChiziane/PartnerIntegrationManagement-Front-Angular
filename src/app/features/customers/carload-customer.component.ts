@@ -4,6 +4,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {CarloadCustomer} from '@shared/models/carload-customer';
 import {CarloadCustomerService} from '@core/services/carload-customer.service';
+import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
 
 @Component({
   selector: 'app-carload-customer',
@@ -33,10 +34,13 @@ export class CarloadCustomerComponent implements OnInit {
   editingField?: string | null = null;
 
   customerForm!: FormGroup;
+  addressSuggestions: LocationSuggestion[] = [];
+  citySuggestions: LocationSuggestion[] = [];
 
   constructor(
     private customerService: CarloadCustomerService,
     private fb: FormBuilder,
+    private locationSuggestionService: LocationSuggestionService,
     private message: NzMessageService,
     private modal: NzModalService
   ) {
@@ -107,6 +111,10 @@ export class CarloadCustomerComponent implements OnInit {
   }
 
   startInlineEdit(customer: CarloadCustomer, field: string): void {
+    if (field === 'customerCode') {
+      return;
+    }
+
     this.editingCustomer = {...customer};
     this.editingField = field;
   }
@@ -135,6 +143,19 @@ export class CarloadCustomerComponent implements OnInit {
     this.applySearch();
   }
 
+  onAddressSearch(value: string): void {
+    this.addressSuggestions = this.locationSuggestionService.search(value);
+  }
+
+  onCitySearch(value: string): void {
+    this.citySuggestions = this.locationSuggestionService.searchRegions(value);
+  }
+
+  rememberCustomerLocation(): void {
+    this.locationSuggestionService.remember(this.customerForm.get('streetAddress')?.value);
+    this.locationSuggestionService.remember(this.customerForm.get('city')?.value);
+  }
+
   submitCustomer(): void {
     if (this.customerForm.invalid) {
       this.message.warning('Preencha Nome e Telefone (obrigatórios).');
@@ -143,7 +164,8 @@ export class CarloadCustomerComponent implements OnInit {
 
     this.isSaving = true;
 
-    const customerData: any = {...this.customerForm.value};
+    const {customerCode, ...customerData}: any = {...this.customerForm.value};
+    this.rememberCustomerLocation();
 
     const rawPhone = (customerData.phoneNumber || '').toString().trim();
     customerData.phoneNumber = rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`;
@@ -223,7 +245,6 @@ export class CarloadCustomerComponent implements OnInit {
     this.customerForm = this.fb.group({
       name: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      customerCode: [''],
       nuitNumber: [''],
       streetAddress: [''],
       city: [''],

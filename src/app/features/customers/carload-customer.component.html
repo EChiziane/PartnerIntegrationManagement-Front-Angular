@@ -140,24 +140,8 @@
               </ng-template>
             </td>
 
-            <!-- Editable Code -->
             <td>
-              <ng-container
-                *ngIf="editingCustomer?.id === customer.id && editingField === 'customerCode'; else viewCode"
-              >
-                <input
-                  (blur)="saveInlineEdit(customer, 'customerCode')"
-                  (keyup.enter)="saveInlineEdit(customer, 'customerCode')"
-                  [(ngModel)]="editingCustomer!.customerCode"
-                  nz-input
-                />
-              </ng-container>
-
-              <ng-template #viewCode>
-                <span (click)="startInlineEdit(customer, 'customerCode')" class="editable-cell">
-                  {{ customer.customerCode }}
-                </span>
-              </ng-template>
+              <span>{{ customer.customerCode || '-' }}</span>
             </td>
 
             <!-- Phone -->
@@ -241,16 +225,6 @@
 
         <div [nzGutter]="16" nz-row>
 
-          <!-- Code -->
-          <div nz-col nzMd="12" nzSm="24" nzXs="24">
-            <nz-form-item>
-              <nz-form-label>Código</nz-form-label>
-              <nz-form-control>
-                <input formControlName="customerCode" nz-input placeholder="Ex. CUST001"/>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
           <!-- NUIT -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
@@ -270,7 +244,22 @@
             <nz-form-item>
               <nz-form-label>Morada</nz-form-label>
               <nz-form-control>
-                <input formControlName="streetAddress" nz-input placeholder="Ex. Rua Principal"/>
+                <input
+                  (blur)="rememberCustomerLocation()"
+                  (input)="onAddressSearch($any($event.target).value)"
+                  [nzAutocomplete]="customerAddressAuto"
+                  formControlName="streetAddress"
+                  nz-input
+                  placeholder="Ex. Muhalaze"/>
+                <nz-autocomplete #customerAddressAuto>
+                  <nz-auto-option
+                    *ngFor="let suggestion of addressSuggestions"
+                    [nzLabel]="suggestion.label"
+                    [nzValue]="suggestion.value">
+                    <div>{{ suggestion.label }}</div>
+                    <small>{{ suggestion.hint }}</small>
+                  </nz-auto-option>
+                </nz-autocomplete>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -280,7 +269,22 @@
             <nz-form-item>
               <nz-form-label>Cidade</nz-form-label>
               <nz-form-control>
-                <input formControlName="city" nz-input placeholder="Ex. Maputo Cidade"/>
+                <input
+                  (blur)="rememberCustomerLocation()"
+                  (input)="onCitySearch($any($event.target).value)"
+                  [nzAutocomplete]="customerCityAuto"
+                  formControlName="city"
+                  nz-input
+                  placeholder="Ex. Matola"/>
+                <nz-autocomplete #customerCityAuto>
+                  <nz-auto-option
+                    *ngFor="let suggestion of citySuggestions"
+                    [nzLabel]="suggestion.label"
+                    [nzValue]="suggestion.value">
+                    <div>{{ suggestion.label }}</div>
+                    <small>{{ suggestion.hint }}</small>
+                  </nz-auto-option>
+                </nz-autocomplete>
               </nz-form-control>
             </nz-form-item>
           </div>

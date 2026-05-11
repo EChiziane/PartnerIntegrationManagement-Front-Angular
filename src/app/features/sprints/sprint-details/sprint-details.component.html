@@ -2,14 +2,14 @@
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
     <nz-breadcrumb-item>
-      <a routerLink="/app/sprint">Lista de Sprints</a>
+      <a routerLink="/app/sprint">Campanhas</a>
     </nz-breadcrumb-item>
-    <nz-breadcrumb-item>Detalhes da Sprint</nz-breadcrumb-item>
+    <nz-breadcrumb-item>Detalhes da Campanha</nz-breadcrumb-item>
   </nz-breadcrumb>
 
   <div class="page-header">
     <div class="header-left">
-      <p>Detalhes da Sprint</p>
+      <p>Detalhes da Campanha</p>
       <span *ngIf="sprintName" class="sprint-name">— {{ sprintName }}</span>
     </div>
 
@@ -22,6 +22,31 @@
       <span (click)="onBack()" class="back-arrow">
         <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
       </span>
+    </div>
+  </div>
+
+  <div class="campaign-panel" *ngIf="sprint">
+    <div>
+      <span class="panel-label">Canal</span>
+      <strong>{{ sprint.campaignChannel || '-' }}</strong>
+    </div>
+    <div>
+      <span class="panel-label">Material foco</span>
+      <strong>{{ sprint.materialFocus || '-' }}</strong>
+    </div>
+    <div>
+      <span class="panel-label">Período</span>
+      <strong>
+        {{ sprint.startDate ? (sprint.startDate | date:'dd/MM/yyyy') : '-' }}
+        até
+        {{ sprint.expectedEndDate ? (sprint.expectedEndDate | date:'dd/MM/yyyy') : '-' }}
+      </strong>
+    </div>
+    <div>
+      <span class="panel-label">Volumes promovidos</span>
+      <strong>
+        {{ sprint.volumesPromoted || sprint.campaignProducts || '-' }}
+      </strong>
     </div>
   </div>
 
@@ -81,6 +106,89 @@
             </div>
           </div>
         </nz-card>
+      </div>
+    </div>
+
+    <div [nzGutter]="8" nz-row class="finance-row">
+      <div [nzSpan]="6" nz-col>
+        <nz-card nzSize="small">
+          <div class="summary-card">
+            <div class="icon-wrapper total">
+              <nz-icon nzTheme="outline" nzType="wallet"></nz-icon>
+            </div>
+            <div class="summary-content">
+              <span class="title">Investimento</span>
+              <p>{{ marketingBudget | number:'1.2-2' }} Mts</p>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+
+      <div [nzSpan]="6" nz-col>
+        <nz-card nzSize="small">
+          <div class="summary-card">
+            <div class="icon-wrapper active">
+              <nz-icon nzTheme="outline" nzType="rise"></nz-icon>
+            </div>
+            <div class="summary-content">
+              <span class="title">Receita</span>
+              <p>{{ totalRevenue | number:'1.2-2' }} Mts</p>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+
+      <div [nzSpan]="6" nz-col>
+        <nz-card nzSize="small">
+          <div class="summary-card">
+            <div class="icon-wrapper scheduled">
+              <nz-icon nzTheme="outline" nzType="calculator"></nz-icon>
+            </div>
+            <div class="summary-content">
+              <span class="title">Lucro líquido</span>
+              <p>{{ netProfit | number:'1.2-2' }} Mts</p>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+
+      <div [nzSpan]="6" nz-col>
+        <nz-card nzSize="small">
+          <div class="summary-card">
+            <div class="icon-wrapper inactive">
+              <nz-icon nzTheme="outline" nzType="percentage"></nz-icon>
+            </div>
+            <div class="summary-content">
+              <span class="title">ROI</span>
+              <p>{{ roi | number:'1.0-1' }}%</p>
+            </div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+
+    <div class="goal-panel">
+      <div>
+        <span>Meta carradas</span>
+        <strong>{{ totalEntregue }}/{{ targetCarloads || 0 }}</strong>
+        <div class="progress-track"><div [style.width.%]="targetCarloadProgress"></div></div>
+      </div>
+      <div>
+        <span>Meta receita</span>
+        <strong>{{ totalRevenue | number:'1.2-2' }} / {{ (targetRevenue || 0) | number:'1.2-2' }} Mts</strong>
+        <div class="progress-track"><div [style.width.%]="targetRevenueProgress"></div></div>
+      </div>
+      <div>
+        <span>Volume mais vendido</span>
+        <strong>{{ topVolume }}</strong>
+      </div>
+    </div>
+
+    <div class="volume-panel" *ngIf="volumeDistribution.length">
+      <div *ngFor="let item of volumeDistribution">
+        <span>{{ item.volume }}</span>
+        <strong>{{ item.count }} carradas</strong>
+        <small>{{ item.revenue | number:'1.2-2' }} Mts</small>
       </div>
     </div>
 

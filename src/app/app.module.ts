@@ -31,6 +31,7 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {AuthInterceptor} from '@core/interceptors/auth-interceptor';
 import {LoginComponent} from '@features/auth/login/login.component';
 import {NzAlertComponent} from 'ng-zorro-antd/alert';
+import {NzAutocompleteModule} from 'ng-zorro-antd/auto-complete';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {MainLayoutComponent} from '@features/shell/main-layout/main-layout.component';
@@ -148,6 +149,7 @@ registerLocaleData(en);
     NzSwitchComponent,
     NzTagComponent,
     NzAlertComponent,
+    NzAutocompleteModule,
     NzCheckboxComponent,
     NzModalModule,
     NzAvatarModule,
@@ -177,6 +179,7 @@ registerLocaleData(en);
     NzSwitchComponent,
     NzTagComponent,
     NzAlertComponent,
+    NzAutocompleteModule,
     NzCheckboxComponent,
     NzModalModule,
     NzAvatarModule,

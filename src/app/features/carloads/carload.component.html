@@ -273,7 +273,22 @@
             <nz-form-item>
               <nz-form-label>Destino</nz-form-label>
               <nz-form-control>
-                <input formControlName="deliveryDestination" nz-input placeholder="Destino de entrega"/>
+                <input
+                  (blur)="rememberDeliveryDestination()"
+                  (input)="onDeliveryDestinationSearch($any($event.target).value)"
+                  [nzAutocomplete]="deliveryDestinationAuto"
+                  formControlName="deliveryDestination"
+                  nz-input
+                  placeholder="Destino de entrega"/>
+                <nz-autocomplete #deliveryDestinationAuto>
+                  <nz-auto-option
+                    *ngFor="let suggestion of destinationSuggestions"
+                    [nzLabel]="suggestion.label"
+                    [nzValue]="suggestion.value">
+                    <div>{{ suggestion.label }}</div>
+                    <small>{{ suggestion.hint }}</small>
+                  </nz-auto-option>
+                </nz-autocomplete>
               </nz-form-control>
             </nz-form-item>
           </div>

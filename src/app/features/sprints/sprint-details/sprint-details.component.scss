@@ -55,6 +55,90 @@
   font-weight: 500;
 }
 
+.campaign-panel,
+.goal-panel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+
+  div {
+    min-width: 0;
+  }
+
+  .panel-label,
+  span {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    color: #667085;
+  }
+
+  strong {
+    display: block;
+    overflow: hidden;
+    color: #1f2937;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.finance-row {
+  margin-top: 10px;
+}
+
+.goal-panel {
+  grid-template-columns: 1fr 1fr 1fr;
+
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    overflow: hidden;
+    background: #e5e7eb;
+    border-radius: 999px;
+
+    div {
+      height: 100%;
+      background: #0e7c72;
+      border-radius: inherit;
+    }
+  }
+}
+
+.volume-panel {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+
+  div {
+    min-width: 130px;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+  }
+
+  span,
+  small {
+    display: block;
+    color: #667085;
+    font-size: 11px;
+  }
+
+  strong {
+    display: block;
+    margin: 3px 0;
+    color: #1f2937;
+    font-size: 14px;
+  }
+}
+
 .summary-section {
   margin-bottom: 12px;
   padding: 4px 0;

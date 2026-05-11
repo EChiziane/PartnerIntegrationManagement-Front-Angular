@@ -15,6 +15,7 @@ import {DriverService} from '@core/services/driver.service';
 import {ManagerService} from '@core/services/manager.service';
 import {SprintService} from '@core/services/sprint.service';
 import {CarloadCustomerService} from '@core/services/carload-customer.service';
+import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
 
 type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
 type CustomerMode = 'NEW' | 'EXISTING';
@@ -41,6 +42,7 @@ export class CarLoadComponent implements OnInit {
   managers: Manager[] = [];
   sprints: Sprint[] = [];
   customers: CarloadCustomer[] = [];
+  destinationSuggestions: LocationSuggestion[] = [];
   isLoadingLookups = false;
 
   searchValue = '';
@@ -96,6 +98,7 @@ export class CarLoadComponent implements OnInit {
     private managerService: ManagerService,
     private sprintService: SprintService,
     private customerService: CarloadCustomerService,
+    private locationSuggestionService: LocationSuggestionService,
     private message: NzMessageService,
     private modal: NzModalService
   ) {
@@ -290,6 +293,14 @@ export class CarLoadComponent implements OnInit {
     this.applyFilters();
   }
 
+  onDeliveryDestinationSearch(value: string): void {
+    this.destinationSuggestions = this.locationSuggestionService.search(value);
+  }
+
+  rememberDeliveryDestination(): void {
+    this.locationSuggestionService.remember(this.carLoadForm.get('deliveryDestination')?.value);
+  }
+
   reset(): void {
     this.searchValue = '';
     this.filterMode = 'ALL';
@@ -392,6 +403,7 @@ export class CarLoadComponent implements OnInit {
     this.isSaving = true;
 
     const formData: any = {...this.carLoadForm.value};
+    this.locationSuggestionService.remember(formData.deliveryDestination);
 
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
     formData.customerPhoneNumber = rawPhone
