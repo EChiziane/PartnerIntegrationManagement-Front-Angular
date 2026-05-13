@@ -92,6 +92,11 @@
       <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
       Nova Carrada
     </button>
+
+    <button (click)="openReportDrawer()" nz-button nzType="default">
+      <nz-icon nzTheme="outline" nzType="printer"></nz-icon>
+      Relatório
+    </button>
   </div>
 
   <div class="table-wrapper">
@@ -176,6 +181,95 @@
     </div>
   </div>
 </div>
+
+<nz-drawer
+  (nzOnClose)="closeReportDrawer()"
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzFooter]="reportDrawerFooter"
+  [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
+  [nzTitle]="'Relatório de Carradas'"
+  [nzVisible]="isReportDrawerVisible"
+  [nzWidth]="420">
+
+  <form *nzDrawerContent [formGroup]="reportForm" class="drawer-form report-form" nz-form>
+    <div class="drawer-section">
+      <h3 class="section-title">Dados do relatório</h3>
+
+      <nz-form-item>
+        <nz-form-label>Tipo</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="mode">
+            <nz-option nzLabel="Últimas carradas" nzValue="LATEST"></nz-option>
+            <nz-option nzLabel="Periodo rapido" nzValue="PRESET"></nz-option>
+            <nz-option nzLabel="Por período" nzValue="PERIOD"></nz-option>
+            <nz-option nzLabel="Todas" nzValue="ALL"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="reportForm.value.mode === 'LATEST'">
+        <nz-form-label>Quantidade</nz-form-label>
+        <nz-form-control>
+          <input formControlName="limit" min="1" nz-input type="number"/>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="reportForm.value.mode === 'PRESET'">
+        <nz-form-label>Periodo</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="preset">
+            <nz-option nzLabel="Hoje" nzValue="TODAY"></nz-option>
+            <nz-option nzLabel="Esta semana" nzValue="THIS_WEEK"></nz-option>
+            <nz-option nzLabel="Este mes" nzValue="THIS_MONTH"></nz-option>
+            <nz-option nzLabel="Ultimo mes" nzValue="LAST_MONTH"></nz-option>
+            <nz-option nzLabel="Ultimos 30 dias" nzValue="LAST_30_DAYS"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div *ngIf="reportForm.value.mode === 'PERIOD'" [nzGutter]="12" nz-row>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>Início</nz-form-label>
+            <nz-form-control>
+              <input formControlName="startDate" nz-input type="date"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>Fim</nz-form-label>
+            <nz-form-control>
+              <input formControlName="endDate" nz-input type="date"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div class="report-hint">
+        <strong>{{ reportForm.value.mode === 'LATEST' ? 'Padrão recomendado' : 'Escopo do relatório' }}</strong>
+        <span *ngIf="reportForm.value.mode === 'LATEST'">Imprime as carradas mais recentes, por data de entrega, agendamento ou criação.</span>
+        <span *ngIf="reportForm.value.mode === 'PRESET'">Usa um periodo rapido para relatorios comuns do dia, semana ou mes.</span>
+        <span *ngIf="reportForm.value.mode === 'PERIOD'">Filtra pela data operacional da carrada: entrega, agendamento ou criação.</span>
+        <span *ngIf="reportForm.value.mode === 'ALL'">Inclui todas as carradas carregadas no sistema.</span>
+      </div>
+    </div>
+  </form>
+
+  <ng-template #reportDrawerFooter>
+    <div class="drawer-footer">
+      <button (click)="closeReportDrawer()" class="btn-cancel" nz-button nzType="default">
+        Cancelar
+      </button>
+
+      <button (click)="generateCarloadReport()" [disabled]="reportForm.invalid" class="btn-save" nz-button nzType="primary">
+        Gerar PDF
+      </button>
+    </div>
+  </ng-template>
+</nz-drawer>
 
 <nz-drawer
   (nzOnClose)="closeCarLoadDrawer()"

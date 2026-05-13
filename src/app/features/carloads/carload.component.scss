@@ -374,3 +374,22 @@ textarea[nz-input] {
     background: rgba(0, 123, 255, 0.08);
   }
 }
+
+.report-form {
+  .report-hint {
+    display: grid;
+    gap: 4px;
+    margin-top: 4px;
+    padding: 12px;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #344054;
+    font-size: 12px;
+
+    strong {
+      color: #1d4ed8;
+      font-size: 12px;
+    }
+  }
+}

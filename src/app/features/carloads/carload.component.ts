@@ -16,9 +16,12 @@ import {ManagerService} from '@core/services/manager.service';
 import {SprintService} from '@core/services/sprint.service';
 import {CarloadCustomerService} from '@core/services/carload-customer.service';
 import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
+import {CarloadListPdfService} from '@core/services/carload-list-pdf.service';
 
 type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
 type CustomerMode = 'NEW' | 'EXISTING';
+type CarloadReportMode = 'LATEST' | 'PRESET' | 'PERIOD' | 'ALL';
+type CarloadReportPreset = 'TODAY' | 'THIS_WEEK' | 'THIS_MONTH' | 'LAST_MONTH' | 'LAST_30_DAYS';
 
 @Component({
   selector: 'app-carload',
@@ -48,6 +51,7 @@ export class CarLoadComponent implements OnInit {
   searchValue = '';
   visible = false;
   isCarLoadDrawerVisible = false;
+  isReportDrawerVisible = false;
 
   filterMode: FilterMode = 'ALL';
 
@@ -60,6 +64,14 @@ export class CarLoadComponent implements OnInit {
   drawerPlacement: 'right' | 'bottom' = 'right';
 
   customerMode: CustomerMode = 'NEW';
+
+  reportForm = new FormGroup({
+    mode: new FormControl<CarloadReportMode>('LATEST', Validators.required),
+    preset: new FormControl<CarloadReportPreset>('THIS_MONTH'),
+    limit: new FormControl(30, [Validators.required, Validators.min(1)]),
+    startDate: new FormControl<string | null>(null),
+    endDate: new FormControl<string | null>(null)
+  });
 
   materials: string[] = [
     'Areia grossa',
@@ -99,6 +111,7 @@ export class CarLoadComponent implements OnInit {
     private sprintService: SprintService,
     private customerService: CarloadCustomerService,
     private locationSuggestionService: LocationSuggestionService,
+    private carloadListPdfService: CarloadListPdfService,
     private message: NzMessageService,
     private modal: NzModalService
   ) {
@@ -305,6 +318,34 @@ export class CarLoadComponent implements OnInit {
     this.searchValue = '';
     this.filterMode = 'ALL';
     this.search();
+  }
+
+  openReportDrawer(): void {
+    this.reportForm.reset({
+      mode: 'LATEST',
+      preset: 'THIS_MONTH',
+      limit: 30,
+      startDate: null,
+      endDate: null
+    });
+    this.isReportDrawerVisible = true;
+  }
+
+  closeReportDrawer(): void {
+    this.isReportDrawerVisible = false;
+  }
+
+  generateCarloadReport(): void {
+    const mode = this.reportForm.value.mode || 'LATEST';
+    const carloads = this.getReportCarloads(mode);
+
+    if (!carloads.length) {
+      this.message.warning('Nao ha carradas para gerar neste relatorio.');
+      return;
+    }
+
+    this.carloadListPdfService.downloadCarloadListReport(carloads, this.getReportScopeLabel(mode));
+    this.closeReportDrawer();
   }
 
   openCarLoadDrawer(): void {
@@ -551,6 +592,123 @@ export class CarLoadComponent implements OnInit {
     if (!v.includes('T')) return `${v}T00:00:00`;
     if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)) return `${v}:00`;
     return v;
+  }
+
+  private getReportCarloads(mode: CarloadReportMode): CarLoad[] {
+    const sorted = [...this.dataSource].sort((a, b) => this.reportDateTime(b) - this.reportDateTime(a));
+
+    if (mode === 'ALL') {
+      return sorted;
+    }
+
+    if (mode === 'PRESET') {
+      const {start, end} = this.getPresetRange(this.reportForm.value.preset || 'THIS_MONTH');
+      return sorted.filter(item => {
+        const time = this.reportDateTime(item);
+        return time >= start.getTime() && time <= end.getTime();
+      });
+    }
+
+    if (mode === 'PERIOD') {
+      const startValue = this.reportForm.value.startDate;
+      const endValue = this.reportForm.value.endDate;
+
+      if (!startValue || !endValue) {
+        this.message.warning('Selecione a data inicial e final.');
+        return [];
+      }
+
+      const start = new Date(startValue);
+      const end = new Date(endValue);
+      start.setHours(0, 0, 0, 0);
+      end.setHours(23, 59, 59, 999);
+
+      return sorted.filter(item => {
+        const time = this.reportDateTime(item);
+        return time >= start.getTime() && time <= end.getTime();
+      });
+    }
+
+    const limit = Number(this.reportForm.value.limit || 30);
+    return sorted.slice(0, Math.max(limit, 1));
+  }
+
+  private getReportScopeLabel(mode: CarloadReportMode): string {
+    if (mode === 'ALL') {
+      return 'Todas as carradas';
+    }
+
+    if (mode === 'PRESET') {
+      const preset = this.reportForm.value.preset || 'THIS_MONTH';
+      const {start, end} = this.getPresetRange(preset);
+      return `${this.getPresetLabel(preset)} (${this.formatDateLabel(start)} ate ${this.formatDateLabel(end)})`;
+    }
+
+    if (mode === 'PERIOD') {
+      return `Carradas de ${this.formatDateLabel(this.reportForm.value.startDate)} ate ${this.formatDateLabel(this.reportForm.value.endDate)}`;
+    }
+
+    return `Ultimas ${Number(this.reportForm.value.limit || 30)} carradas`;
+  }
+
+  private getPresetRange(preset: CarloadReportPreset): { start: Date; end: Date } {
+    const today = new Date();
+    const start = new Date(today);
+    const end = new Date(today);
+
+    start.setHours(0, 0, 0, 0);
+    end.setHours(23, 59, 59, 999);
+
+    if (preset === 'TODAY') {
+      return {start, end};
+    }
+
+    if (preset === 'THIS_WEEK') {
+      const day = start.getDay();
+      const diffToMonday = day === 0 ? -6 : 1 - day;
+      start.setDate(start.getDate() + diffToMonday);
+      return {start, end};
+    }
+
+    if (preset === 'THIS_MONTH') {
+      start.setDate(1);
+      return {start, end};
+    }
+
+    if (preset === 'LAST_MONTH') {
+      start.setMonth(start.getMonth() - 1, 1);
+      end.setFullYear(start.getFullYear(), start.getMonth() + 1, 0);
+      end.setHours(23, 59, 59, 999);
+      return {start, end};
+    }
+
+    start.setDate(start.getDate() - 29);
+    return {start, end};
+  }
+
+  private getPresetLabel(preset: CarloadReportPreset): string {
+    const labels: Record<CarloadReportPreset, string> = {
+      TODAY: 'Hoje',
+      THIS_WEEK: 'Esta semana',
+      THIS_MONTH: 'Este mes',
+      LAST_MONTH: 'Ultimo mes',
+      LAST_30_DAYS: 'Ultimos 30 dias'
+    };
+
+    return labels[preset];
+  }
+
+  private reportDateTime(carload: CarLoad): number {
+    const value = carload.deliveryDate || carload.deliveryScheduledDate || carload.createdAt;
+    const date = new Date(value || '');
+    return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+  }
+
+  private formatDateLabel(value: string | Date | null | undefined): string {
+    if (!value) return '-';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '-';
+    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
   }
 
   private toDatetimeLocalInput(iso: string | null | undefined): string {
