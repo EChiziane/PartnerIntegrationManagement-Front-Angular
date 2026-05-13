@@ -4,6 +4,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {Manager} from '@shared/models/manager';
+import {TranslationService} from '@core/services/translation.service';
 import {ManagerService} from '@core/services/manager.service';
 
 @Component({
@@ -33,7 +34,7 @@ export class ManagerComponent implements OnInit {
 
   // ========= Edit State =========
   isEditMode = false;
-  managerDrawerTitle = 'Criar Gestor';
+  managerDrawerTitle = '';
   selectedManagerId: any | null = null;
 
   drawerWidth: string | number = 720;
@@ -56,7 +57,8 @@ export class ManagerComponent implements OnInit {
   constructor(
     private managerService: ManagerService,
     private message: NzMessageService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private translationService: TranslationService
   ) {
   }
 
@@ -93,7 +95,7 @@ export class ManagerComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.message.error('Erro ao carregar gestores. 🚫');
+        this.message.error(this.t('managers.messages.loadError'));
         this.isLoading = false;
       }
     });
@@ -133,7 +135,7 @@ export class ManagerComponent implements OnInit {
   // ========= Drawer Controls =========
   openManagerDrawer() {
     this.isEditMode = false;
-    this.managerDrawerTitle = 'Criar Gestor';
+    this.managerDrawerTitle = this.t('managers.drawer.createTitle');
     this.selectedManagerId = null;
 
     this.managerForm.reset({status: 'ACTIVO'});
@@ -151,7 +153,7 @@ export class ManagerComponent implements OnInit {
   // ========= Edit/Create =========
   editManager(manager: Manager) {
     this.isEditMode = true;
-    this.managerDrawerTitle = 'Editar Gestor';
+    this.managerDrawerTitle = this.t('managers.drawer.editTitle');
     this.selectedManagerId = manager.id;
     this.isManagerDrawerVisible = true;
 
@@ -190,26 +192,26 @@ export class ManagerComponent implements OnInit {
       },
       error: () => {
         this.isSaving = false;
-        this.message.error('Erro ao gravar gestor. 🚫');
+        this.message.error(this.t('managers.messages.saveError'));
       }
     });
   }
 
   deleteManager(data: Manager) {
     this.modal.confirm({
-      nzTitle: 'Tens certeza que quer eliminar este Gestor?',
+      nzTitle: this.t('managers.messages.deleteTitle'),
       nzContent: `Gestor: <strong>${data.name}</strong>`,
-      nzOkText: 'Sim',
+      nzOkText: this.t('common.yes'),
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'Não',
+      nzCancelText: this.t('common.no'),
       nzOnOk: () =>
         this.managerService.deleteManager(data.id).subscribe({
           next: () => {
             this.getManagers();
-            this.message.success('Gestor deletado com sucesso! 🗑️');
+            this.message.success(this.t('managers.messages.deleted'));
           },
-          error: () => this.message.error('Erro ao deletar gestor. 🚫')
+          error: () => this.message.error(this.t('managers.messages.deleteError'))
         })
     });
   }
@@ -237,5 +239,9 @@ export class ManagerComponent implements OnInit {
 
   onBack() {
     window.history.back();
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

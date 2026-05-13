@@ -1,7 +1,7 @@
 <div class="dashboard-page">
   <div class="dashboard-hero">
     <div class="hero-copy">
-      <span class="eyebrow">Centro de operacao</span>
+      <span class="eyebrow">{{ 'dashboard.hero.kicker' | translate }}</span>
       <h1>{{ operationHeadline }}</h1>
       <p>{{ operationSubline }}</p>
     </div>
@@ -9,50 +9,50 @@
     <div class="hero-actions">
       <button (click)="goToCarloads()" nz-button nzType="primary">
         <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
-        Nova carrada
+        {{ 'dashboard.actions.newCarload' | translate }}
       </button>
 
       <button (click)="filterToday()" [class.active]="filterMode === 'TODAY'" nz-button nzType="default">
         <nz-icon nzTheme="outline" nzType="clock-circle"></nz-icon>
-        Ver hoje
+        {{ 'dashboard.actions.today' | translate }}
       </button>
 
       <button (click)="reload()" nz-button nzType="default">
         <nz-icon nzTheme="outline" nzType="reload"></nz-icon>
-        Actualizar
+        {{ 'dashboard.actions.refresh' | translate }}
       </button>
     </div>
   </div>
 
   <div class="metric-grid">
     <article class="metric-card active">
-      <span class="metric-label">Carradas activas</span>
+      <span class="metric-label">{{ 'dashboard.metrics.active' | translate }}</span>
       <strong>{{ activeCount }}</strong>
-      <small>{{ scheduledCount }} agendadas, {{ inProgressCount }} em execucao</small>
+      <small>{{ 'dashboard.metrics.activeSummary' | translate: {scheduled: scheduledCount, progress: inProgressCount} }}</small>
     </article>
 
     <article class="metric-card today">
-      <span class="metric-label">Hoje</span>
+      <span class="metric-label">{{ 'dashboard.metrics.today' | translate }}</span>
       <strong>{{ todayCount }}</strong>
-      <small>Agenda e entregas do dia</small>
+      <small>{{ 'dashboard.metrics.todaySummary' | translate }}</small>
     </article>
 
     <article class="metric-card danger">
-      <span class="metric-label">Atrasadas</span>
+      <span class="metric-label">{{ 'dashboard.metrics.overdue' | translate }}</span>
       <strong>{{ overdueCount }}</strong>
-      <small>Precisam de decisao</small>
+      <small>{{ 'dashboard.metrics.overdueSummary' | translate }}</small>
     </article>
 
     <article class="metric-card cancelled">
-      <span class="metric-label">Canceladas</span>
+      <span class="metric-label">{{ 'dashboard.metrics.cancelled' | translate }}</span>
       <strong>{{ cancelledCount }}</strong>
-      <small>Registo operacional</small>
+      <small>{{ 'dashboard.metrics.cancelledSummary' | translate }}</small>
     </article>
 
     <article class="metric-card money" [ngClass]="marginTone">
-      <span class="metric-label">Margem estimada</span>
+      <span class="metric-label">{{ 'dashboard.metrics.margin' | translate }}</span>
       <strong>{{ formatMoney(estimatedMargin) }}</strong>
-      <small>Receitas {{ formatMoney(totalEarnings) }} / custos {{ formatMoney(totalSpent) }}</small>
+      <small>{{ 'dashboard.metrics.marginSummary' | translate: {earnings: formatMoney(totalEarnings), spent: formatMoney(totalSpent)} }}</small>
     </article>
   </div>
 
@@ -62,24 +62,24 @@
         (ngModelChange)="applyFilters()"
         [(ngModel)]="searchValue"
         nz-input
-        placeholder="Pesquisar cliente, destino, material, motorista, gestor..."
+        [placeholder]="'dashboard.filters.search' | translate"
       />
     </div>
 
     <div class="quick-filters">
       <button (click)="filterAll()" [class.active]="filterMode === 'ALL'" nz-button nzType="default">
         <nz-icon nzTheme="outline" nzType="unordered-list"></nz-icon>
-        Tudo
+        {{ 'dashboard.actions.all' | translate }}
       </button>
 
       <button (click)="filterToday()" [class.active]="filterMode === 'TODAY'" nz-button nzType="default">
         <nz-icon nzTheme="outline" nzType="clock-circle"></nz-icon>
-        Hoje
+        {{ 'dashboard.metrics.today' | translate }}
       </button>
 
       <button (click)="toggleRange()" [class.active]="filterMode === 'RANGE'" nz-button nzType="default">
         <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
-        Intervalo
+        {{ 'dashboard.actions.range' | translate }}
       </button>
     </div>
 
@@ -88,39 +88,39 @@
         (ngModelChange)="applyFilters()"
         [(ngModel)]="rangeStart"
         nzFormat="yyyy-MM-dd"
-        nzPlaceHolder="Inicio">
+        [nzPlaceHolder]="'dashboard.filters.start' | translate">
       </nz-date-picker>
 
       <nz-date-picker
         (ngModelChange)="applyFilters()"
         [(ngModel)]="rangeEnd"
         nzFormat="yyyy-MM-dd"
-        nzPlaceHolder="Fim">
+        [nzPlaceHolder]="'dashboard.filters.end' | translate">
       </nz-date-picker>
     </div>
 
     <div class="toolbar-actions">
       <button (click)="toggleCancelledCard()" nz-button nzType="default">
         <nz-icon [nzType]="showCancelledCard ? 'eye-invisible' : 'eye'" nzTheme="outline"></nz-icon>
-        {{ showCancelledCard ? 'Ocultar canceladas' : 'Mostrar canceladas' }}
+        {{ (showCancelledCard ? 'dashboard.actions.hideCancelled' : 'dashboard.actions.showCancelled') | translate }}
       </button>
 
       <button (click)="toggleDoneCard()" nz-button nzType="default">
         <nz-icon [nzType]="showDoneCard ? 'eye-invisible' : 'eye'" nzTheme="outline"></nz-icon>
-        {{ showDoneCard ? 'Ocultar entregues' : 'Mostrar entregues' }}
+        {{ (showDoneCard ? 'dashboard.actions.hideDelivered' : 'dashboard.actions.showDelivered') | translate }}
       </button>
 
-      <button (click)="resetFilters()" nz-button nzType="default">Limpar</button>
+      <button (click)="resetFilters()" nz-button nzType="default">{{ 'common.actions.clear' | translate }}</button>
     </div>
   </div>
 
-  <nz-spin [nzSpinning]="isLoading" nzTip="A carregar dashboard...">
+  <nz-spin [nzSpinning]="isLoading" [nzTip]="'dashboard.loading' | translate">
     <div class="operations-grid">
       <section class="operation-panel priority-panel">
         <header>
           <div>
-            <span class="panel-kicker">Prioridade</span>
-            <h2>Fazer agora</h2>
+            <span class="panel-kicker">{{ 'dashboard.panels.priorityKicker' | translate }}</span>
+            <h2>{{ 'dashboard.panels.priorityTitle' | translate }}</h2>
           </div>
           <nz-tag nzColor="red">{{ priorityList.length }}</nz-tag>
         </header>
@@ -134,12 +134,12 @@
               <div class="priority-main">
                 <span>{{ priorityReason(c) }}</span>
                 <strong>{{ c.customerName }}</strong>
-                <small>{{ c.transportedMaterial }} para {{ c.deliveryDestination }}</small>
+                <small>{{ c.transportedMaterial }} {{ 'dashboard.card.to' | translate }} {{ c.deliveryDestination }}</small>
               </div>
 
               <div class="priority-actions">
                 <button (click)="goToCarloadDetails(c)" nz-button nzSize="small" nzType="default">
-                  Ver
+                  {{ 'common.actions.view' | translate }}
                 </button>
 
                 <button
@@ -149,7 +149,7 @@
                   nz-button
                   nzSize="small"
                   nzType="primary">
-                  Iniciar
+                  {{ 'common.actions.start' | translate }}
                 </button>
 
                 <button
@@ -159,7 +159,7 @@
                   nz-button
                   nzSize="small"
                   nzType="primary">
-                  Entregar
+                  {{ 'common.actions.deliver' | translate }}
                 </button>
               </div>
             </article>
@@ -168,7 +168,7 @@
           <ng-template #emptyPriority>
             <div class="empty-state">
               <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
-              <p>Nenhuma accao urgente agora.</p>
+              <p>{{ 'dashboard.empty.priority' | translate }}</p>
             </div>
           </ng-template>
         </div>
@@ -177,8 +177,8 @@
       <section class="operation-panel">
         <header>
           <div>
-            <span class="panel-kicker">Ao vivo</span>
-            <h2>Em execucao</h2>
+            <span class="panel-kicker">{{ 'dashboard.panels.liveKicker' | translate }}</span>
+            <h2>{{ 'dashboard.panels.liveTitle' | translate }}</h2>
           </div>
           <nz-tag nzColor="blue">{{ inProgressList.length }}</nz-tag>
         </header>
@@ -193,7 +193,7 @@
           <ng-template #emptyProgress>
             <div class="empty-state">
               <nz-icon nzTheme="outline" nzType="sync"></nz-icon>
-              <p>Sem carradas em execucao.</p>
+              <p>{{ 'dashboard.empty.progress' | translate }}</p>
             </div>
           </ng-template>
         </div>
@@ -202,8 +202,8 @@
       <section class="operation-panel">
         <header>
           <div>
-            <span class="panel-kicker">Agenda</span>
-            <h2>Agendadas</h2>
+            <span class="panel-kicker">{{ 'dashboard.panels.scheduleKicker' | translate }}</span>
+            <h2>{{ 'dashboard.panels.scheduleTitle' | translate }}</h2>
           </div>
           <nz-tag nzColor="orange">{{ scheduledList.length }}</nz-tag>
         </header>
@@ -218,7 +218,7 @@
           <ng-template #emptyScheduled>
             <div class="empty-state">
               <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
-              <p>Sem carradas agendadas.</p>
+              <p>{{ 'dashboard.empty.scheduled' | translate }}</p>
             </div>
           </ng-template>
         </div>
@@ -227,8 +227,8 @@
       <section *ngIf="showCancelledCard" class="operation-panel muted-panel">
         <header>
           <div>
-            <span class="panel-kicker">Interrompidas</span>
-            <h2>Canceladas</h2>
+            <span class="panel-kicker">{{ 'dashboard.panels.cancelledKicker' | translate }}</span>
+            <h2>{{ 'dashboard.panels.cancelledTitle' | translate }}</h2>
           </div>
           <nz-tag nzColor="red">{{ cancelledList.length }}</nz-tag>
         </header>
@@ -243,7 +243,7 @@
           <ng-template #emptyCancelled>
             <div class="empty-state">
               <nz-icon nzTheme="outline" nzType="stop"></nz-icon>
-              <p>Sem carradas canceladas.</p>
+              <p>{{ 'dashboard.empty.cancelled' | translate }}</p>
             </div>
           </ng-template>
         </div>
@@ -252,8 +252,8 @@
       <section *ngIf="showDoneCard" class="operation-panel delivered-panel">
         <header>
           <div>
-            <span class="panel-kicker">Fechadas</span>
-            <h2>Entregues</h2>
+            <span class="panel-kicker">{{ 'dashboard.panels.closedKicker' | translate }}</span>
+            <h2>{{ 'dashboard.panels.closedTitle' | translate }}</h2>
           </div>
           <nz-tag nzColor="green">{{ doneList.length }}</nz-tag>
         </header>
@@ -268,7 +268,7 @@
           <ng-template #emptyDone>
             <div class="empty-state">
               <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
-              <p>Sem carradas entregues.</p>
+              <p>{{ 'dashboard.empty.delivered' | translate }}</p>
             </div>
           </ng-template>
         </div>
@@ -298,21 +298,21 @@
       </div>
 
       <div class="card-meta">
-        <span>Motorista: {{ c.assignedDriverName || 'N/D' }}</span>
-        <span *ngIf="c.logisticsManagerName">Gestor: {{ c.logisticsManagerName }}</span>
-        <span>Contacto: {{ c.customerPhoneNumber || 'N/D' }}</span>
-        <span>Criado por: {{ c.createdByName || 'Sistema' }}</span>
+        <span>{{ 'common.fields.driver' | translate }}: {{ c.assignedDriverName || ('common.notAvailable' | translate) }}</span>
+        <span *ngIf="c.logisticsManagerName">{{ 'common.fields.manager' | translate }}: {{ c.logisticsManagerName }}</span>
+        <span>{{ 'common.fields.contact' | translate }}: {{ c.customerPhoneNumber || ('common.notAvailable' | translate) }}</span>
+        <span>{{ 'common.fields.createdBy' | translate }}: {{ c.createdByName || ('common.system' | translate) }}</span>
       </div>
 
       <div class="card-money">
-        <span>Receita {{ formatMoney(c.totalEarnings) }}</span>
-        <span>Margem {{ formatMoney(carloadProfit(c)) }}</span>
+        <span>{{ 'dashboard.card.revenue' | translate: {value: formatMoney(c.totalEarnings)} }}</span>
+        <span>{{ 'dashboard.card.margin' | translate: {value: formatMoney(carloadProfit(c))} }}</span>
       </div>
 
       <div class="card-actions">
         <button (click)="goToCarloadDetails(c)" nz-button nzSize="small" nzType="link">
           <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
-          Ver
+          {{ 'common.actions.view' | translate }}
         </button>
 
         <button
@@ -323,7 +323,7 @@
           nzSize="small"
           nzType="link">
           <nz-icon nzTheme="outline" nzType="play-circle"></nz-icon>
-          Iniciar
+          {{ 'common.actions.start' | translate }}
         </button>
 
         <button
@@ -334,7 +334,7 @@
           nzSize="small"
           nzType="link">
           <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
-          Entregar
+          {{ 'common.actions.deliver' | translate }}
         </button>
 
         <button
@@ -346,7 +346,7 @@
           nzSize="small"
           nzType="link">
           <nz-icon nzTheme="outline" nzType="stop"></nz-icon>
-          Cancelar
+          {{ 'common.actions.cancel' | translate }}
         </button>
 
         <button
@@ -357,7 +357,7 @@
           nzSize="small"
           nzType="link">
           <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
-          Reagendar
+          {{ 'common.actions.reschedule' | translate }}
         </button>
       </div>
     </article>

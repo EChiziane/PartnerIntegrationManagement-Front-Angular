@@ -5,6 +5,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {CarloadCustomer} from '@shared/models/carload-customer';
 import {CarloadCustomerService} from '@core/services/carload-customer.service';
 import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
+import {TranslationService} from '@core/services/translation.service';
 
 @Component({
   selector: 'app-carload-customer',
@@ -42,13 +43,14 @@ export class CarloadCustomerComponent implements OnInit {
     private fb: FormBuilder,
     private locationSuggestionService: LocationSuggestionService,
     private message: NzMessageService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private translationService: TranslationService
   ) {
     this.initForm();
   }
 
   get drawerTitle(): string {
-    return this.currentEditingCustomerId ? 'Editar Cliente' : 'Novo Cliente';
+    return this.currentEditingCustomerId ? this.t('customers.drawer.editTitle') : this.t('customers.drawer.createTitle');
   }
 
   ngOnInit(): void {
@@ -92,19 +94,19 @@ export class CarloadCustomerComponent implements OnInit {
 
   deleteCustomer(customer: CarloadCustomer): void {
     this.modal.confirm({
-      nzTitle: 'Tens certeza que quer eliminar este Cliente?',
+      nzTitle: this.t('customers.messages.deleteTitle'),
       nzContent: `Cliente: <strong>${customer.name}</strong>`,
-      nzOkText: 'Sim',
+      nzOkText: this.t('common.yes'),
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'Não',
+      nzCancelText: this.t('common.no'),
       nzOnOk: () => {
         this.customerService.deleteCustomer(customer.id).subscribe({
           next: () => {
             this.loadCustomers();
-            this.message.success('Cliente eliminado com sucesso!');
+            this.message.success(this.t('customers.messages.deleted'));
           },
-          error: () => this.message.error('Erro ao eliminar cliente')
+          error: () => this.message.error(this.t('customers.messages.deleteError'))
         });
       }
     });
@@ -129,11 +131,11 @@ export class CarloadCustomerComponent implements OnInit {
         Object.assign(original, updated);
         this.applySearch();
         this.refreshTotals();
-        this.message.success(`Campo ${field} actualizado com sucesso!`);
+        this.message.success(this.t('customers.messages.fieldUpdated', {field}));
         this.resetInlineEdit();
       },
       error: () => {
-        this.message.error('Erro ao actualizar campo');
+        this.message.error(this.t('customers.messages.fieldError'));
         this.resetInlineEdit();
       }
     });
@@ -158,7 +160,7 @@ export class CarloadCustomerComponent implements OnInit {
 
   submitCustomer(): void {
     if (this.customerForm.invalid) {
-      this.message.warning('Preencha Nome e Telefone (obrigatórios).');
+      this.message.warning(this.t('customers.messages.required'));
       return;
     }
 
@@ -182,16 +184,16 @@ export class CarloadCustomerComponent implements OnInit {
 
         this.message.success(
           this.currentEditingCustomerId
-            ? 'Cliente actualizado com sucesso!'
-            : 'Cliente criado com sucesso!'
+            ? this.t('customers.messages.updated')
+            : this.t('customers.messages.created')
         );
       },
       error: () => {
         this.isSaving = false;
         this.message.error(
           this.currentEditingCustomerId
-            ? 'Erro ao actualizar cliente'
-            : 'Erro ao criar cliente'
+            ? this.t('customers.messages.saveError')
+            : this.t('customers.messages.saveError')
         );
       }
     });
@@ -230,7 +232,7 @@ export class CarloadCustomerComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        this.message.error('Erro ao carregar clientes');
+        this.message.error(this.t('customers.messages.loadError'));
       }
     });
   }
@@ -251,5 +253,9 @@ export class CarloadCustomerComponent implements OnInit {
       zipCode: [''],
       emailAddress: ['']
     });
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

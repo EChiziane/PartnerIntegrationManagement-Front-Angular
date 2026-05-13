@@ -1,64 +1,64 @@
 <div class="login-page">
   <section class="brand-panel" aria-label="Transportes Chiziane">
-    <a class="brand" routerLink="/landing-page" aria-label="Voltar para Transportes Chiziane">
+    <a class="brand" routerLink="/landing-page" [attr.aria-label]="'Voltar para Transportes Chiziane'">
       <span class="brand-mark">TC</span>
       <span>Transportes Chiziane</span>
     </a>
 
     <div class="brand-copy">
-      <p class="eyebrow">Gestao de cargas e entregas</p>
-      <h1>Entre no painel e continue a operacao com clareza.</h1>
+      <p class="eyebrow">{{ 'auth.login.brandKicker' | translate }}</p>
+      <h1>{{ 'auth.login.brandTitle' | translate }}</h1>
       <p>
-        Acompanhe clientes, motoristas, cargas, cotacoes e faturas num ambiente organizado para o trabalho diario.
+        {{ 'auth.login.brandText' | translate }}
       </p>
     </div>
 
     <div class="brand-metrics">
       <div>
         <strong>24/7</strong>
-        <span>Dados organizados</span>
+        <span>{{ 'auth.login.organizedData' | translate }}</span>
       </div>
       <div>
         <strong>Seguro</strong>
-        <span>Acesso autenticado</span>
+        <span>{{ 'auth.login.authenticatedAccess' | translate }}</span>
       </div>
     </div>
   </section>
 
-  <section class="auth-panel" aria-label="Area do Sistema">
+  <section class="auth-panel" [attr.aria-label]="'auth.login.area' | translate">
     <nz-card class="login-card">
       <div class="card-heading">
-        <span class="section-label">Area do Sistema</span>
-        <h2>Bem-vindo de volta</h2>
-        <p>Use as suas credenciais para aceder ao painel.</p>
+        <span class="section-label">{{ 'auth.login.area' | translate }}</span>
+        <h2>{{ 'auth.login.welcome' | translate }}</h2>
+        <p>{{ 'auth.login.hint' | translate }}</p>
       </div>
 
       <form (ngSubmit)="login()" [formGroup]="userForm" novalidate>
         <label class="field">
-          <span>Utilizador</span>
+          <span>{{ 'auth.login.user' | translate }}</span>
           <nz-input-group nzAddOnBeforeIcon="user">
             <input
               autocomplete="username"
               formControlName="login"
               nz-input
-              placeholder="Digite o utilizador"
+              [placeholder]="'auth.login.userPlaceholder' | translate"
               type="text"/>
           </nz-input-group>
 
           <small *ngIf="isInvalid('login')" class="field-error">
-            Informe o utilizador.
+            {{ 'auth.login.userRequired' | translate }}
           </small>
         </label>
 
         <label class="field">
-          <span>Senha</span>
+          <span>{{ 'auth.login.password' | translate }}</span>
           <nz-input-group [nzSuffix]="passwordSuffixTpl" nzAddOnBeforeIcon="lock">
             <input
               [type]="isPasswordVisible ? 'text' : 'password'"
               autocomplete="current-password"
               formControlName="password"
               nz-input
-              placeholder="Digite a senha"/>
+              [placeholder]="'auth.login.passwordPlaceholder' | translate"/>
           </nz-input-group>
 
           <ng-template #passwordSuffixTpl>
@@ -72,15 +72,15 @@
           </ng-template>
 
           <small *ngIf="isInvalid('password')" class="field-error">
-            Informe a senha.
+            {{ 'auth.login.passwordRequired' | translate }}
           </small>
         </label>
 
         <div class="options">
-          <label formControlName="rememberMe" nz-checkbox>Lembrar-me</label>
+          <label formControlName="rememberMe" nz-checkbox>{{ 'auth.login.remember' | translate }}</label>
 
           <button (click)="openForgotPasswordModal()" class="text-button" type="button">
-            Esqueceu a senha?
+            {{ 'auth.login.forgot' | translate }}
           </button>
         </div>
 
@@ -91,10 +91,10 @@
           nzBlock
           nzType="primary"
           type="submit">
-          <span *ngIf="!isLoading">Entrar no painel</span>
+          <span *ngIf="!isLoading">{{ 'auth.login.enter' | translate }}</span>
           <span *ngIf="isLoading" class="loading">
             <nz-spin nzSize="small"></nz-spin>
-            A entrar...
+            {{ 'auth.login.entering' | translate }}
           </span>
         </button>
 
@@ -107,8 +107,8 @@
         </nz-alert>
 
         <div class="register-link">
-          <span>Nao tem conta?</span>
-          <button (click)="openRegisterModal()" class="text-button" type="button">Criar conta</button>
+          <span>{{ 'auth.login.noAccount' | translate }}</span>
+          <button (click)="openRegisterModal()" class="text-button" type="button">{{ 'auth.login.createAccount' | translate }}</button>
         </div>
       </form>
     </nz-card>
@@ -121,12 +121,12 @@
     [nzMaskClosable]="false"
     nzCentered
     nzClassName="auth-modal"
-    nzTitle="Criar conta"
+    nzTitle="{{ 'auth.login.createAccount' | translate }}"
     nzWidth="720">
     <ng-container *nzModalContent>
       <div class="modal-intro">
-        <span class="section-label">Novo acesso</span>
-        <p>Registe um utilizador para aceder ao sistema de gestao.</p>
+        <span class="section-label">{{ 'auth.login.newAccess' | translate }}</span>
+        <p>{{ 'auth.login.registerHint' | translate }}</p>
       </div>
       <app-signin></app-signin>
     </ng-container>
@@ -139,26 +139,26 @@
     [nzMaskClosable]="false"
     nzCentered
     nzClassName="auth-modal recovery-modal"
-    nzTitle="Recuperar senha"
+    [nzTitle]="'auth.recovery.title' | translate"
     nzWidth="560">
     <ng-container *nzModalContent>
       <div class="recovery-steps">
-        <span [class.active]="recoveryStep === 0">WhatsApp</span>
-        <span [class.active]="recoveryStep === 1">Confirmar conta</span>
-        <span [class.active]="recoveryStep === 2">Nova senha</span>
+        <span [class.active]="recoveryStep === 0">{{ 'auth.recovery.whatsapp' | translate }}</span>
+        <span [class.active]="recoveryStep === 1">{{ 'auth.recovery.confirmAccount' | translate }}</span>
+        <span [class.active]="recoveryStep === 2">{{ 'auth.recovery.newPassword' | translate }}</span>
       </div>
 
       <div *ngIf="recoveryStep === 0" class="recovery-step">
         <div class="modal-intro">
-          <span class="section-label">Passo 1</span>
-          <h3>Encontre a sua conta</h3>
-          <p>Introduza o WhatsApp associado ao utilizador para iniciarmos a recuperacao.</p>
+          <span class="section-label">{{ 'auth.recovery.step1' | translate }}</span>
+          <h3>{{ 'auth.recovery.findAccount' | translate }}</h3>
+          <p>{{ 'auth.recovery.findHint' | translate }}</p>
         </div>
 
         <form [formGroup]="forgotPasswordForm" class="recovery-form">
           <nz-form-item>
             <nz-form-label nzRequired>WhatsApp</nz-form-label>
-            <nz-form-control nzErrorTip="Informe o numero.">
+            <nz-form-control [nzErrorTip]="'auth.recovery.phoneRequired' | translate">
               <nz-input-group nzAddOnBefore="+258">
                 <input
                   formControlName="phoneWhatsApp"
@@ -175,7 +175,7 @@
             </button>
 
             <button (click)="requestRecovery()" [disabled]="recoveryLoading" nz-button nzType="primary" type="button">
-              <span *ngIf="!recoveryLoading">Continuar</span>
+              <span *ngIf="!recoveryLoading">{{ 'common.actions.continue' | translate }}</span>
               <span *ngIf="recoveryLoading" class="loading"><nz-spin nzSize="small"></nz-spin></span>
             </button>
           </div>
@@ -184,31 +184,31 @@
 
       <div *ngIf="recoveryStep === 1" class="recovery-step">
         <div class="modal-intro">
-          <span class="section-label">Passo 2</span>
-          <h3>Confirme os dados</h3>
-          <p>Verifique se esta e a conta correta antes de enviarmos o codigo.</p>
+          <span class="section-label">{{ 'auth.recovery.step2' | translate }}</span>
+          <h3>{{ 'auth.recovery.confirmData' | translate }}</h3>
+          <p>{{ 'auth.recovery.confirmHint' | translate }}</p>
         </div>
 
         <div *ngIf="recoveryPreview" class="recovery-preview">
           <div>
-            <span>Nome</span>
+            <span>{{ 'common.name' | translate }}</span>
             <strong>{{ recoveryPreview.maskedName }}</strong>
           </div>
           <div>
-            <span>Email</span>
+            <span>{{ 'common.email' | translate }}</span>
             <strong>{{ recoveryPreview.maskedEmail }}</strong>
           </div>
           <div>
-            <span>WhatsApp</span>
+            <span>{{ 'auth.recovery.whatsapp' | translate }}</span>
             <strong>{{ recoveryPreview.maskedPhone }}</strong>
           </div>
         </div>
 
         <div class="recovery-actions">
-          <button (click)="backRecovery()" nz-button nzType="default" type="button">Voltar</button>
+          <button (click)="backRecovery()" nz-button nzType="default" type="button">{{ 'common.actions.back' | translate }}</button>
 
           <button (click)="confirmRecovery()" [disabled]="recoveryLoading" nz-button nzType="primary" type="button">
-            <span *ngIf="!recoveryLoading">Enviar codigo</span>
+            <span *ngIf="!recoveryLoading">{{ 'auth.recovery.sendCode' | translate }}</span>
             <span *ngIf="recoveryLoading" class="loading"><nz-spin nzSize="small"></nz-spin></span>
           </button>
         </div>
@@ -216,28 +216,28 @@
 
       <div *ngIf="recoveryStep === 2" class="recovery-step">
         <div class="modal-intro">
-          <span class="section-label">Passo 3</span>
-          <h3>Defina uma nova senha</h3>
-          <p>Use o codigo recebido e escolha uma senha com pelo menos 6 caracteres.</p>
+          <span class="section-label">{{ 'auth.recovery.step3' | translate }}</span>
+          <h3>{{ 'auth.recovery.definePassword' | translate }}</h3>
+          <p>{{ 'auth.recovery.defineHint' | translate }}</p>
         </div>
 
         <form [formGroup]="resetPasswordForm" class="recovery-form">
           <nz-form-item>
-            <nz-form-label nzRequired>Codigo</nz-form-label>
-            <nz-form-control nzErrorTip="Informe o codigo.">
+            <nz-form-label nzRequired>{{ 'auth.recovery.code' | translate }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'auth.recovery.codeRequired' | translate">
               <input formControlName="otpCode" inputmode="numeric" nz-input placeholder="Ex: 123456"/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label nzRequired>Nova senha</nz-form-label>
-            <nz-form-control nzErrorTip="Minimo 6 caracteres.">
+            <nz-form-label nzRequired>{{ 'auth.recovery.newPassword' | translate }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'auth.recovery.minPassword' | translate">
               <nz-input-group [nzSuffix]="resetPassSuffixTpl">
                 <input
                   [type]="isResetPasswordVisible ? 'text' : 'password'"
                   formControlName="newPassword"
                   nz-input
-                  placeholder="Nova senha"/>
+                  placeholder="{{ 'auth.recovery.newPassword' | translate }}"/>
               </nz-input-group>
 
               <ng-template #resetPassSuffixTpl>
@@ -249,14 +249,14 @@
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label nzRequired>Confirmar senha</nz-form-label>
-            <nz-form-control nzErrorTip="Confirme a senha.">
+            <nz-form-label nzRequired>{{ 'auth.recovery.confirmPassword' | translate }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'auth.recovery.confirmPasswordTip' | translate">
               <nz-input-group [nzSuffix]="resetConfirmSuffixTpl">
                 <input
                   [type]="isResetConfirmVisible ? 'text' : 'password'"
                   formControlName="confirmPassword"
                   nz-input
-                  placeholder="Confirmar senha"/>
+                  [placeholder]="'auth.recovery.confirmPassword' | translate"/>
               </nz-input-group>
 
               <ng-template #resetConfirmSuffixTpl>
@@ -267,10 +267,10 @@
             </nz-form-control>
           </nz-form-item>
 
-          <button (click)="confirmRecovery()" class="text-button resend" type="button">Reenviar codigo</button>
+          <button (click)="confirmRecovery()" class="text-button resend" type="button">{{ 'auth.recovery.resendCode' | translate }}</button>
 
           <div class="recovery-actions">
-            <button (click)="backRecovery()" nz-button nzType="default" type="button">Voltar</button>
+            <button (click)="backRecovery()" nz-button nzType="default" type="button">{{ 'common.actions.back' | translate }}</button>
 
             <button
               (click)="submitResetPassword()"
@@ -278,7 +278,7 @@
               nz-button
               nzType="primary"
               type="button">
-              <span *ngIf="!recoveryLoading">Confirmar</span>
+              <span *ngIf="!recoveryLoading">{{ 'common.actions.confirm' | translate }}</span>
               <span *ngIf="recoveryLoading" class="loading"><nz-spin nzSize="small"></nz-spin></span>
             </button>
           </div>

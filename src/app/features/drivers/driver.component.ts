@@ -4,6 +4,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {DriverService} from '@core/services/driver.service';
 import {Driver} from '@shared/models/driver';
+import {TranslationService} from '@core/services/translation.service';
 
 @Component({
   selector: 'app-driver',
@@ -32,7 +33,7 @@ export class DriverComponent implements OnInit {
 
   // ========= Edit State =========
   isEditMode = false;
-  driverDrawerTitle = 'Criar Motorista';
+  driverDrawerTitle = '';
   selectedDriverId: string | null = null;
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
@@ -66,7 +67,8 @@ export class DriverComponent implements OnInit {
   constructor(
     private driverService: DriverService,
     private message: NzMessageService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private translationService: TranslationService
   ) {
   }
 
@@ -103,7 +105,7 @@ export class DriverComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.message.error('Erro ao carregar motoristas. 🚫');
+        this.message.error(this.t('drivers.messages.loadError'));
         this.isLoading = false;
       }
     });
@@ -143,7 +145,7 @@ export class DriverComponent implements OnInit {
   // ========= Drawer CRUD =========
   openDriverDrawer() {
     this.isEditMode = false;
-    this.driverDrawerTitle = 'Criar Motorista';
+    this.driverDrawerTitle = this.t('drivers.drawer.createTitle');
 
     this.selectedDriverId = null;
     this.selectedDriver = null;
@@ -167,7 +169,7 @@ export class DriverComponent implements OnInit {
 
   editDriver(driver: Driver) {
     this.isEditMode = true;
-    this.driverDrawerTitle = 'Editar Motorista';
+    this.driverDrawerTitle = this.t('drivers.drawer.editTitle');
 
     this.selectedDriverId = driver.id;
     this.selectedDriver = driver;
@@ -184,7 +186,7 @@ export class DriverComponent implements OnInit {
 
   saveDriver() {
     if (this.driverForm.invalid) {
-      this.message.warning('Preencha todos os campos obrigatórios!');
+      this.message.warning(this.t('drivers.messages.required'));
       return;
     }
 
@@ -212,30 +214,30 @@ export class DriverComponent implements OnInit {
         this.getDrivers();
         this.closeDriverDrawer();
 
-        this.message.success(this.isEditMode ? 'Motorista atualizado com sucesso! ✅' : 'Motorista criado com sucesso! 🎉');
+        this.message.success(this.isEditMode ? this.t('drivers.messages.updated') : this.t('drivers.messages.created'));
       },
       error: () => {
         this.isSaving = false;
-        this.message.error('Erro ao gravar motorista. 🚫');
+        this.message.error(this.t('drivers.messages.saveError'));
       }
     });
   }
 
   deleteDriver(data: Driver) {
     this.modal.confirm({
-      nzTitle: 'Tens certeza que quer eliminar este Motorista?',
+      nzTitle: this.t('drivers.messages.deleteTitle'),
       nzContent: `Motorista: <strong>${data.Name}</strong>`,
-      nzOkText: 'Sim',
+      nzOkText: this.t('common.yes'),
       nzOkType: 'primary',
       nzOkDanger: true,
-      nzCancelText: 'Não',
+      nzCancelText: this.t('common.no'),
       nzOnOk: () =>
         this.driverService.deleteDriver(data.id).subscribe({
           next: () => {
             this.getDrivers();
-            this.message.success('Motorista deletado com sucesso! 🗑️');
+            this.message.success(this.t('drivers.messages.deleted'));
           },
-          error: () => this.message.error('Erro ao deletar motorista. 🚫')
+          error: () => this.message.error(this.t('drivers.messages.deleteError'))
         })
     });
   }
@@ -264,5 +266,9 @@ export class DriverComponent implements OnInit {
   // ========= Navigation =========
   onBack() {
     window.history.back();
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

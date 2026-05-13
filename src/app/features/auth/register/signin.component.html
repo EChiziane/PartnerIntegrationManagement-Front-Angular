@@ -2,16 +2,16 @@
   <div class="register-header">
     <nz-avatar nzIcon="user-add" nzSize="large"></nz-avatar>
     <div class="title">
-      <p class="headline">Criar conta</p>
-      <p class="sub">Preencha os dados para registar um utilizador</p>
+      <p class="headline">{{ 'register.title' | translate }}</p>
+      <p class="sub">{{ 'register.subtitle' | translate }}</p>
     </div>
   </div>
 
   <form (ngSubmit)="submitForm()" [formGroup]="signinForm" class="form-container" nz-form>
 
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>Nome</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Informe o nome.">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>{{ 'common.name' | translate }}</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="'register.nameRequired' | translate">
         <input formControlName="name" id="name" nz-input placeholder="Ex: Ednilson Chiziane"/>
       </nz-form-control>
     </nz-form-item>
@@ -24,8 +24,8 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phone" nzRequired>Telefone</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Informe o telefone.">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phone" nzRequired>{{ 'common.phone' | translate }}</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="'register.phoneRequired' | translate">
         <nz-input-group nzAddOnBefore="+258">
           <input
             (blur)="normalizePhone()"
@@ -41,21 +41,21 @@
 
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="login" nzRequired>Login</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Informe o login.">
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="'register.loginRequired' | translate">
         <input formControlName="login" id="login" nz-input placeholder="Ex: ednilson"/>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>Senha</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Informe a senha.">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>{{ 'auth.login.password' | translate }}</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="'register.passwordRequired' | translate">
         <nz-input-group [nzSuffix]="passwordSuffixTpl">
           <input
             [type]="isPasswordVisible ? 'text' : 'password'"
             formControlName="password"
             id="password"
             nz-input
-            placeholder="Crie uma senha"/>
+            [placeholder]="'register.passwordPlaceholder' | translate"/>
         </nz-input-group>
 
         <ng-template #passwordSuffixTpl>
@@ -69,10 +69,10 @@
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="role" nzRequired>Função</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Selecione a função.">
-        <nz-select formControlName="role" id="role" nzPlaceHolder="Selecione">
-          <nz-option nzLabel="Administrador" nzValue="ADMIN"></nz-option>
-          <nz-option nzLabel="Gestor" nzValue="MANAGER"></nz-option>
-          <nz-option nzLabel="Operador" nzValue="OPERATOR"></nz-option>
+        <nz-select formControlName="role" id="role" [nzPlaceHolder]="'register.select' | translate">
+          <nz-option [nzLabel]="'layout.roles.admin' | translate" nzValue="ADMIN"></nz-option>
+          <nz-option [nzLabel]="'layout.roles.manager' | translate" nzValue="MANAGER"></nz-option>
+          <nz-option [nzLabel]="'layout.roles.operator' | translate" nzValue="OPERATOR"></nz-option>
         </nz-select>
       </nz-form-control>
     </nz-form-item>
@@ -80,7 +80,7 @@
     <nz-form-item>
       <nz-form-control [nzOffset]="6" [nzSm]="14" [nzXs]="24">
         <button [disabled]="signinForm.invalid || isLoading" nz-button nzType="primary">
-          <span *ngIf="!isLoading">Registrar</span>
+          <span *ngIf="!isLoading">{{ 'register.submit' | translate }}</span>
           <span *ngIf="isLoading" class="loading">
             <nz-spin nzSize="small"></nz-spin>
             A registar...

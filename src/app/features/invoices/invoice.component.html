@@ -2,13 +2,13 @@
 
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
-      <a routerLink="/app">Home</a>
+      <a routerLink="/app">{{ 'common.home' | translate }}</a>
     </nz-breadcrumb-item>
-    <nz-breadcrumb-item>Faturas</nz-breadcrumb-item>
+    <nz-breadcrumb-item>{{ 'invoice.title' | translate }}</nz-breadcrumb-item>
   </nz-breadcrumb>
 
   <div class="page-header">
-    <p>Faturas</p>
+    <p>{{ 'invoice.title' | translate }}</p>
 
     <span (click)="onBack()" class="back-arrow">
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
@@ -26,7 +26,7 @@
                 <nz-icon nzTheme="outline" nzType="file-done"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Total Faturas</span>
+                <span class="title">{{ 'invoice.totalInvoices' | translate }}</span>
                 <p>{{ totalInvoices }}</p>
               </div>
             </div>
@@ -40,7 +40,7 @@
                 <nz-icon nzTheme="outline" nzType="team"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Customers</span>
+                <span class="title">{{ 'invoice.customers' | translate }}</span>
                 <p>{{ totalCustomers }}</p>
               </div>
             </div>
@@ -54,7 +54,7 @@
                 <nz-icon nzTheme="outline" nzType="filter"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Filtradas</span>
+                <span class="title">{{ 'invoice.filtered' | translate }}</span>
                 <p>{{ invoices.length }}</p>
               </div>
             </div>
@@ -71,7 +71,7 @@
       (ngModelChange)="search()"
       [(ngModel)]="searchValue"
       nz-input
-      placeholder="Pesquisar fatura/item..."
+      [placeholder]="'invoice.search' | translate"
       type="text"
     />
 
@@ -80,7 +80,7 @@
       [(ngModel)]="selectedCustomerId"
       [nzAllowClear]="true"
       class="filter-select"
-      nzPlaceHolder="Selecionar cliente"
+      [nzPlaceHolder]="'invoice.selectCustomer' | translate"
     >
       <nz-option
         *ngFor="let customer of dataCustomer"
@@ -94,7 +94,7 @@
       [(ngModel)]="dateRange"
       class="filter-date"
       nzFormat="dd/MM/yyyy"
-      nzPlaceHolder="Intervalo de datas"
+      [nzPlaceHolder]="'invoice.dateRange' | translate"
     ></nz-range-picker>
 
     <button (click)="openDrawer()" nz-button nzType="primary">
@@ -125,11 +125,11 @@
         >
           <thead>
           <tr>
-            <th>Cliente</th>
+            <th>{{ 'common.table.customer' | translate }}</th>
             <th>Código</th>
             <th>Total</th>
-            <th>Criado em</th>
-            <th>Criado por</th>
+            <th>{{ 'common.createdAt' | translate }}</th>
+            <th>{{ 'common.fields.createdBy' | translate }}</th>
             <th class="actions-column">Ações</th>
           </tr>
           </thead>
@@ -191,18 +191,18 @@
     <form [formGroup]="invoiceForm" class="drawer-form" nz-form>
 
       <div class="drawer-section">
-        <h3 class="section-title">Customer Information</h3>
+        <h3 class="section-title">{{ 'invoice.customerInfo' | translate }}</h3>
 
         <div [nzGutter]="16" nz-row>
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label nzRequired>Cliente</nz-form-label>
+              <nz-form-label nzRequired>{{ 'common.table.customer' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-select
                   [nzDisabled]="isSaving"
                   formControlName="carloadCustomerId"
-                  nzPlaceHolder="Nome do Cliente"
+                  [nzPlaceHolder]="'common.placeholders.selectCustomer' | translate"
                 >
                   <nz-option
                     *ngFor="let customer of dataCustomer"
@@ -227,7 +227,7 @@
       </div>
 
       <div class="drawer-section">
-        <h3 class="section-title">Itens da Fatura</h3>
+        <h3 class="section-title">{{ 'invoice.items' | translate }}</h3>
 
         <div class="items-list" formArrayName="items">
 
@@ -239,13 +239,13 @@
             <div class="item-grid">
 
               <nz-form-item>
-                <nz-form-label nzRequired>Item</nz-form-label>
+                <nz-form-label nzRequired>{{ 'invoice.item' | translate }}</nz-form-label>
                 <nz-form-control>
                   <nz-select
                     (ngModelChange)="onItemChange($event, i)"
                     [nzDisabled]="isSaving"
                     formControlName="description"
-                    nzPlaceHolder="Selecione o item"
+                    [nzPlaceHolder]="'invoice.selectItem' | translate"
                   >
                     <nz-option
                       *ngFor="let it of itemsOptions"
@@ -257,7 +257,7 @@
               </nz-form-item>
 
               <nz-form-item>
-                <nz-form-label nzRequired>Qtd</nz-form-label>
+                <nz-form-label nzRequired>{{ 'invoice.qty' | translate }}</nz-form-label>
                 <nz-form-control>
                   <input [disabled]="isSaving" formControlName="quantity" nz-input type="number"/>
                 </nz-form-control>
@@ -271,7 +271,7 @@
               </nz-form-item>
 
               <nz-form-item>
-                <nz-form-label>Subtotal</nz-form-label>
+                <nz-form-label>{{ 'invoice.subtotal' | translate }}</nz-form-label>
                 <nz-form-control>
                   <input formControlName="amount" nz-input readonly/>
                 </nz-form-control>
@@ -309,26 +309,26 @@
       </div>
 
       <div class="drawer-section totals-section">
-        <h3 class="section-title">Totals</h3>
+        <h3 class="section-title">{{ 'invoice.totals' | translate }}</h3>
 
         <div class="totals-grid">
 
           <nz-form-item>
-            <nz-form-label nzRequired>Taxa (decimal)</nz-form-label>
+            <nz-form-label nzRequired>{{ 'invoice.taxRate' | translate }}</nz-form-label>
             <nz-form-control nzExtra="Ex: 0.16 = 16%">
               <input [disabled]="isSaving" formControlName="taxRate" nz-input type="number"/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>Subtotal</nz-form-label>
+            <nz-form-label>{{ 'invoice.subtotal' | translate }}</nz-form-label>
             <nz-form-control>
               <input formControlName="subtotal" nz-input readonly/>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>Tax</nz-form-label>
+            <nz-form-label>{{ 'invoice.tax' | translate }}</nz-form-label>
             <nz-form-control>
               <input formControlName="tax" nz-input readonly/>
             </nz-form-control>

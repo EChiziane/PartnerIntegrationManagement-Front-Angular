@@ -4,6 +4,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {CarLoad, CarLoadStatus} from '@shared/models/carload';
 import {CarloadService} from '@core/services/carload.service';
+import {TranslationService} from '@core/services/translation.service';
 
 type FilterMode = 'ALL' | 'TODAY' | 'RANGE';
 
@@ -49,7 +50,8 @@ export class DashboardComponent implements OnInit {
     private carloadService: CarloadService,
     private message: NzMessageService,
     private modal: NzModalService,
-    private router: Router
+    private router: Router,
+    private translationService: TranslationService
   ) {
   }
 
@@ -59,32 +61,36 @@ export class DashboardComponent implements OnInit {
 
   get operationHeadline(): string {
     if (this.overdueCount > 0) {
-      return `${this.overdueCount} carrada(s) atrasada(s) precisam de atencao`;
+      return this.t('dashboard.hero.scheduledAttention', {count: this.overdueCount});
     }
 
     if (this.inProgressCount > 0) {
-      return `${this.inProgressCount} carrada(s) em execucao neste momento`;
+      return this.t('dashboard.hero.inProgressNow', {count: this.inProgressCount});
     }
 
     if (this.todayCount > 0) {
-      return `${this.todayCount} carrada(s) marcadas para hoje`;
+      return this.t('dashboard.hero.todayMarked', {count: this.todayCount});
     }
 
     if (this.scheduledCount > 0) {
-      return 'Operacao preparada para as proximas entregas';
+      return this.t('dashboard.hero.ready');
     }
 
-    return 'Sem carradas activas no momento';
+    return this.t('dashboard.hero.empty');
   }
 
   get operationSubline(): string {
     const next = this.nextScheduled();
 
     if (next) {
-      return `Proxima: ${next.customerName} para ${next.deliveryDestination} em ${this.getScheduledBadgeLabel(next.deliveryScheduledDate)}.`;
+      return this.t('dashboard.hero.next', {
+        customer: next.customerName,
+        destination: next.deliveryDestination,
+        date: this.getScheduledBadgeLabel(next.deliveryScheduledDate)
+      });
     }
 
-    return 'Crie ou agende carradas para acompanhar a operacao a partir daqui.';
+    return this.t('dashboard.hero.start');
   }
 
   get marginTone(): string {
@@ -146,20 +152,22 @@ export class DashboardComponent implements OnInit {
   getStatusLabel(status: CarLoadStatus): string {
     switch ((status || '').toUpperCase()) {
       case 'SCHEDULED':
-        return 'Agendada';
+        return this.t('dashboard.status.scheduled');
       case 'IN_PROGRESS':
-        return 'Em execucao';
+        return this.t('dashboard.status.progress');
       case 'DELIVERED':
-        return 'Entregue';
+        return this.t('dashboard.status.delivered');
       case 'CANCELLED':
-        return 'Cancelada';
+        return this.t('dashboard.status.cancelled');
       default:
         return status as string;
     }
   }
 
   getTypeLabel(carload: CarLoad): string {
-    return carload.carloadType === 'Sold' ? 'Vendida' : 'Produzida';
+    return carload.carloadType === 'Sold'
+      ? this.t('dashboard.type.sold')
+      : this.t('dashboard.type.produced');
   }
 
   statusColor(status: CarLoadStatus): string {
@@ -183,7 +191,7 @@ export class DashboardComponent implements OnInit {
 
   getScheduledBadgeLabel(value: string | null | undefined): string {
     const date = this.parseDate(value);
-    if (date.getTime() === 0) return 'Sem data';
+    if (date.getTime() === 0) return this.t('dashboard.schedule.noDate');
 
     const today = new Date();
     const tomorrow = new Date();
@@ -197,15 +205,15 @@ export class DashboardComponent implements OnInit {
     const formattedDate = `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
 
     if (this.isSameDay(date, today)) {
-      return `Hoje - ${formattedDate}`;
+      return this.t('dashboard.schedule.today', {date: formattedDate});
     }
 
     if (this.isSameDay(date, tomorrow)) {
-      return `Amanha - ${formattedDate}`;
+      return this.t('dashboard.schedule.tomorrow', {date: formattedDate});
     }
 
     if (date.getTime() < this.startOfDay(today).getTime()) {
-      return `Atrasada - ${formattedDate}`;
+      return this.t('dashboard.schedule.overdue', {date: formattedDate});
     }
 
     return formattedDate;
@@ -228,18 +236,18 @@ export class DashboardComponent implements OnInit {
 
   priorityReason(carload: CarLoad): string {
     if (this.isInProgress(carload.deliveryStatus)) {
-      return 'Em execucao agora';
+      return this.t('dashboard.priority.progress');
     }
 
     if (this.isOverdue(carload)) {
-      return 'Atrasada';
+      return this.t('dashboard.priority.overdue');
     }
 
     if (this.isToday(carload)) {
-      return 'Agendada para hoje';
+      return this.t('dashboard.priority.today');
     }
 
-    return 'Proxima na fila';
+    return this.t('dashboard.priority.next');
   }
 
   priorityClass(carload: CarLoad): string {
@@ -369,11 +377,14 @@ export class DashboardComponent implements OnInit {
 
   cancelCarload(carload: CarLoad): void {
     this.modal.confirm({
-      nzTitle: 'Cancelar carrada?',
-      nzContent: `Cliente: <strong>${carload.customerName}</strong><br>Destino: <strong>${carload.deliveryDestination}</strong>`,
+      nzTitle: this.t('dashboard.modal.cancelTitle'),
+      nzContent: this.t('dashboard.modal.cancelContent', {
+        customer: carload.customerName,
+        destination: carload.deliveryDestination
+      }),
       nzOkDanger: true,
-      nzOkText: 'Cancelar carrada',
-      nzCancelText: 'Manter',
+      nzOkText: this.t('dashboard.modal.cancelOk'),
+      nzCancelText: this.t('common.actions.keep'),
       nzOnOk: () => this.changeStatus(carload, 'CANCELLED')
     });
   }
@@ -405,10 +416,10 @@ export class DashboardComponent implements OnInit {
     this.carloadService.updateCarLoad(carload.id, payload).subscribe({
       next: () => {
         const messageMap: Record<CarLoadStatus, string> = {
-          SCHEDULED: 'Carrada voltou para Agendada.',
-          IN_PROGRESS: 'Carrada iniciada.',
-          DELIVERED: 'Carrada marcada como Entregue.',
-          CANCELLED: 'Carrada cancelada com sucesso.'
+          SCHEDULED: this.t('dashboard.messages.scheduled'),
+          IN_PROGRESS: this.t('dashboard.messages.progress'),
+          DELIVERED: this.t('dashboard.messages.delivered'),
+          CANCELLED: this.t('dashboard.messages.cancelled')
         };
 
         this.message.success(messageMap[newStatus]);
@@ -416,7 +427,7 @@ export class DashboardComponent implements OnInit {
         this.load();
       },
       error: () => {
-        this.message.error('Erro ao actualizar o estado da carrada.');
+        this.message.error(this.t('dashboard.messages.statusError'));
         this.changingStatusId = null;
       }
     });
@@ -432,7 +443,7 @@ export class DashboardComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.message.error('Erro ao carregar dashboard.');
+        this.message.error(this.t('dashboard.messages.loadError'));
         this.isLoading = false;
       }
     });
@@ -502,5 +513,9 @@ export class DashboardComponent implements OnInit {
     const value = new Date(date);
     value.setHours(23, 59, 59, 999);
     return value;
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

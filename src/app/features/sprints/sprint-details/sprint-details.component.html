@@ -1,15 +1,15 @@
 <div class="content-wrapper">
   <nz-breadcrumb class="page-breadcrumb">
-    <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
+    <nz-breadcrumb-item><a routerLink="/app">{{ 'common.home' | translate }}</a></nz-breadcrumb-item>
     <nz-breadcrumb-item>
-      <a routerLink="/app/sprint">Campanhas</a>
+      <a routerLink="/app/sprint">{{ 'sprints.title' | translate }}</a>
     </nz-breadcrumb-item>
-    <nz-breadcrumb-item>Detalhes da Campanha</nz-breadcrumb-item>
+    <nz-breadcrumb-item>{{ 'sprints.detailsTitle' | translate }}</nz-breadcrumb-item>
   </nz-breadcrumb>
 
   <div class="page-header">
     <div class="header-left">
-      <p>Detalhes da Campanha</p>
+      <p>{{ 'sprints.detailsTitle' | translate }}</p>
       <span *ngIf="sprintName" class="sprint-name">— {{ sprintName }}</span>
     </div>
 
@@ -27,11 +27,11 @@
 
   <div class="campaign-panel" *ngIf="sprint">
     <div>
-      <span class="panel-label">Canal</span>
+      <span class="panel-label">{{ 'sprints.fields.channel' | translate }}</span>
       <strong>{{ sprint.campaignChannel || '-' }}</strong>
     </div>
     <div>
-      <span class="panel-label">Material foco</span>
+      <span class="panel-label">{{ 'sprints.fields.focusMaterial' | translate }}</span>
       <strong>{{ sprint.materialFocus || '-' }}</strong>
     </div>
     <div>
@@ -43,7 +43,7 @@
       </strong>
     </div>
     <div>
-      <span class="panel-label">Volumes promovidos</span>
+      <span class="panel-label">{{ 'sprints.fields.promotedVolumes' | translate }}</span>
       <strong>
         {{ sprint.volumesPromoted || sprint.campaignProducts || '-' }}
       </strong>
@@ -52,19 +52,19 @@
 
   <div class="audit-panel" *ngIf="sprint">
     <div>
-      <span class="panel-label">Criada por</span>
+      <span class="panel-label">{{ 'sprints.fields.createdBy' | translate }}</span>
       <strong>{{ sprint.createdByName || 'Sistema' }}</strong>
     </div>
     <div>
-      <span class="panel-label">Criada em</span>
+      <span class="panel-label">{{ 'common.createdAt' | translate }}</span>
       <strong>{{ sprint.createdAt ? (sprint.createdAt | date:'dd/MM/yyyy HH:mm') : '-' }}</strong>
     </div>
     <div>
-      <span class="panel-label">Encerrada por</span>
+      <span class="panel-label">{{ 'sprints.fields.closedBy' | translate }}</span>
       <strong>{{ sprint.closedByName || '-' }}</strong>
     </div>
     <div>
-      <span class="panel-label">Encerrada em</span>
+      <span class="panel-label">{{ 'sprints.fields.closedAt' | translate }}</span>
       <strong>{{ sprint.closedAt ? (sprint.closedAt | date:'dd/MM/yyyy HH:mm') : '-' }}</strong>
     </div>
   </div>
@@ -78,7 +78,7 @@
               <nz-icon nzTheme="outline" nzType="bars"></nz-icon>
             </div>
             <div class="summary-content">
-              <span class="title">Total Carradas</span>
+              <span class="title">{{ 'sprints.metrics.totalCarloads' | translate }}</span>
               <p>{{ totalCarloads }}</p>
             </div>
           </div>
@@ -92,7 +92,7 @@
               <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
             </div>
             <div class="summary-content">
-              <span class="title">Entregues</span>
+              <span class="title">{{ 'sprints.metrics.delivered' | translate }}</span>
               <p>{{ totalEntregue }}</p>
             </div>
           </div>
@@ -120,7 +120,7 @@
               <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
             </div>
             <div class="summary-content">
-              <span class="title">Agendadas</span>
+              <span class="title">{{ 'sprints.metrics.scheduled' | translate }}</span>
               <p>{{ totalAgendados }}</p>
             </div>
           </div>
@@ -136,7 +136,7 @@
               <nz-icon nzTheme="outline" nzType="wallet"></nz-icon>
             </div>
             <div class="summary-content">
-              <span class="title">Investimento</span>
+              <span class="title">{{ 'sprints.metrics.investment' | translate }}</span>
               <p>{{ marketingBudget | number:'1.2-2' }} Mts</p>
             </div>
           </div>
@@ -150,7 +150,7 @@
               <nz-icon nzTheme="outline" nzType="rise"></nz-icon>
             </div>
             <div class="summary-content">
-              <span class="title">Receita</span>
+              <span class="title">{{ 'sprints.metrics.revenue' | translate }}</span>
               <p>{{ totalRevenue | number:'1.2-2' }} Mts</p>
             </div>
           </div>
@@ -178,7 +178,7 @@
               <nz-icon nzTheme="outline" nzType="percentage"></nz-icon>
             </div>
             <div class="summary-content">
-              <span class="title">ROI</span>
+              <span class="title">{{ 'sprints.metrics.roi' | translate }}</span>
               <p>{{ roi | number:'1.0-1' }}%</p>
             </div>
           </div>
@@ -188,17 +188,17 @@
 
     <div class="goal-panel">
       <div>
-        <span>Meta carradas</span>
+        <span>{{ 'sprints.fields.targetCarloads' | translate }}</span>
         <strong>{{ totalEntregue }}/{{ targetCarloads || 0 }}</strong>
         <div class="progress-track"><div [style.width.%]="targetCarloadProgress"></div></div>
       </div>
       <div>
-        <span>Meta receita</span>
+        <span>{{ 'sprints.fields.targetRevenue' | translate }}</span>
         <strong>{{ totalRevenue | number:'1.2-2' }} / {{ (targetRevenue || 0) | number:'1.2-2' }} Mts</strong>
         <div class="progress-track"><div [style.width.%]="targetRevenueProgress"></div></div>
       </div>
       <div>
-        <span>Volume mais vendido</span>
+        <span>{{ 'sprints.fields.bestVolume' | translate }}</span>
         <strong>{{ topVolume }}</strong>
       </div>
     </div>
@@ -239,14 +239,14 @@
       (ngModelChange)="search()"
       [(ngModel)]="searchValue"
       nz-input
-      placeholder="Pesquisar cliente, destino, material, motorista..."
+      [placeholder]="'carloads.search' | translate"
     />
 
     <nz-range-picker
       (ngModelChange)="onDateRangeChange()"
       [(ngModel)]="dateRange"
       nzFormat="dd/MM/yyyy"
-      nzPlaceHolder="Hoje ou intervalo"
+      [nzPlaceHolder]="'dashboard.actions.range' | translate"
     ></nz-range-picker>
 
     <button (click)="openCarloadDrawer()" nz-button nzType="primary">
@@ -271,16 +271,16 @@
         >
           <thead>
           <tr>
-            <th class="col-customer">Cliente</th>
-            <th class="col-phone">Contacto</th>
-            <th class="col-destination">Destino</th>
-            <th class="col-material">Material</th>
-            <th class="col-driver">Motorista</th>
-            <th class="col-status">Status</th>
-            <th class="col-date">Agendado</th>
-            <th class="col-date">Entregue</th>
-            <th class="col-money">Ganhos</th>
-            <th class="col-money">Gastos</th>
+            <th class="col-customer">{{ 'common.table.customer' | translate }}</th>
+            <th class="col-phone">{{ 'common.table.contact' | translate }}</th>
+            <th class="col-destination">{{ 'common.table.destination' | translate }}</th>
+            <th class="col-material">{{ 'common.table.material' | translate }}</th>
+            <th class="col-driver">{{ 'common.table.driver' | translate }}</th>
+            <th class="col-status">{{ 'common.table.status' | translate }}</th>
+            <th class="col-date">{{ 'common.table.scheduled' | translate }}</th>
+            <th class="col-date">{{ 'common.table.delivered' | translate }}</th>
+            <th class="col-money">{{ 'common.table.earnings' | translate }}</th>
+            <th class="col-money">{{ 'common.table.spent' | translate }}</th>
             <th class="col-actions">Ações</th>
           </tr>
           </thead>
@@ -344,24 +344,24 @@
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar carrada...">
     <form [formGroup]="carloadForm" class="drawer-form" nz-form>
       <div class="drawer-section">
-        <h3 class="section-title">Dados da Carrada (Sprint)</h3>
+        <h3 class="section-title">{{ 'sprints.drawer.carloadSection' | translate }}</h3>
 
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Cliente</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.customer' | translate }}</nz-form-label>
               <nz-form-control>
-                <input formControlName="customerName" nz-input placeholder="Nome do cliente"/>
+                <input formControlName="customerName" nz-input [placeholder]="'common.placeholders.customerName' | translate"/>
               </nz-form-control>
             </nz-form-item>
           </div>
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Contacto</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.contact' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-input-group nzAddOnBefore="+258">
-                  <input formControlName="customerPhoneNumber" nz-input placeholder="Contacto"/>
+                  <input formControlName="customerPhoneNumber" nz-input [placeholder]="'common.placeholders.contact' | translate"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -371,18 +371,18 @@
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Destino</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.destination' | translate }}</nz-form-label>
               <nz-form-control>
-                <input formControlName="deliveryDestination" nz-input placeholder="Destino de entrega"/>
+                <input formControlName="deliveryDestination" nz-input [placeholder]="'common.placeholders.destination' | translate"/>
               </nz-form-control>
             </nz-form-item>
           </div>
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Material</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.material' | translate }}</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="transportedMaterial" nzAllowClear nzPlaceHolder="Selecione o material"
+                <nz-select formControlName="transportedMaterial" nzAllowClear [nzPlaceHolder]="'common.placeholders.selectMaterial' | translate"
                            nzShowSearch>
                   <nz-option *ngFor="let m of materials" [nzLabel]="m" [nzValue]="m"></nz-option>
                 </nz-select>
@@ -394,10 +394,10 @@
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Motorista</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.driver' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-select [nzLoading]="isLoadingLookups" formControlName="assignedDriverId" nzAllowClear
-                           nzPlaceHolder="Selecione o motorista" nzShowSearch>
+                           [nzPlaceHolder]="'common.placeholders.selectDriver' | translate" nzShowSearch>
                   <nz-option *ngFor="let d of dataDrivers" [nzLabel]="d.Name" [nzValue]="d.id"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -406,10 +406,10 @@
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Gestor</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.manager' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-select [nzLoading]="isLoadingLookups" formControlName="logisticsManagerId" nzAllowClear
-                           nzPlaceHolder="Selecione o gestor" nzShowSearch>
+                           [nzPlaceHolder]="'common.placeholders.selectManager' | translate" nzShowSearch>
                   <nz-option *ngFor="let m of dataManagers" [nzLabel]="m.name" [nzValue]="m.id"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -420,7 +420,7 @@
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Sprint</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.sprint' | translate }}</nz-form-label>
               <nz-form-control>
                 <input [value]="sprintName" disabled nz-input/>
               </nz-form-control>
@@ -429,8 +429,8 @@
 
           <div *ngIf="shouldShowScheduledDate" nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Data/Hora Agendada</nz-form-label>
-              <nz-form-control nzErrorTip="Informe a data agendada">
+              <nz-form-label>{{ 'carloads.drawer.scheduledDate' | translate }}</nz-form-label>
+              <nz-form-control [nzErrorTip]="'common.validation.scheduledDate' | translate">
                 <input formControlName="deliveryScheduledDate" nz-input type="datetime-local"/>
               </nz-form-control>
             </nz-form-item>
@@ -438,8 +438,8 @@
 
           <div *ngIf="shouldShowDeliveredDate" nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Data/Hora de Entrega</nz-form-label>
-              <nz-form-control nzErrorTip="Informe a data de entrega">
+              <nz-form-label>{{ 'carloads.drawer.deliveryDate' | translate }}</nz-form-label>
+              <nz-form-control [nzErrorTip]="'common.validation.deliveryDate' | translate">
                 <input formControlName="deliveryDate" nz-input type="datetime-local"/>
               </nz-form-control>
             </nz-form-item>
@@ -449,7 +449,7 @@
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Gastos</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.spent' | translate }}</nz-form-label>
               <nz-form-control>
                 <input formControlName="totalSpent" nz-input type="number"/>
               </nz-form-control>
@@ -458,7 +458,7 @@
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Ganhos</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.earnings' | translate }}</nz-form-label>
               <nz-form-control>
                 <input formControlName="totalEarnings" nz-input type="number"/>
               </nz-form-control>
@@ -469,13 +469,13 @@
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Status</nz-form-label>
+              <nz-form-label>{{ 'carloads.drawer.status' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-select formControlName="deliveryStatus">
-                  <nz-option nzLabel="Agendada" nzValue="SCHEDULED"></nz-option>
+                  <nz-option [nzLabel]="'dashboard.status.scheduled' | translate" nzValue="SCHEDULED"></nz-option>
                   <nz-option nzLabel="Em execução" nzValue="IN_PROGRESS"></nz-option>
-                  <nz-option nzLabel="Entregue" nzValue="DELIVERED"></nz-option>
-                  <nz-option nzLabel="Cancelada" nzValue="CANCELLED"></nz-option>
+                  <nz-option [nzLabel]="'dashboard.status.delivered' | translate" nzValue="DELIVERED"></nz-option>
+                  <nz-option [nzLabel]="'dashboard.status.cancelled' | translate" nzValue="CANCELLED"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>

@@ -11,7 +11,13 @@ import {registerLocaleData} from '@angular/common';
 import en from '@angular/common/locales/en';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch} from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClientModule,
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi
+} from '@angular/common/http';
 
 import {NzAutosizeDirective, NzInputDirective, NzInputGroupComponent, NzInputModule} from 'ng-zorro-antd/input';
 import {NzButtonComponent, NzButtonModule} from 'ng-zorro-antd/button';
@@ -76,6 +82,7 @@ import {UserDetailComponent} from '@features/users/detail/user-detail.component'
 import {
   CarloadCustomerDetailComponent
 } from '@features/customers/carload-customer-detail/carload-customer-detail.component';
+import {TranslatePipe} from '@shared/pipes/translate.pipe';
 
 
 registerLocaleData(en);
@@ -102,7 +109,8 @@ registerLocaleData(en);
     , CarloadDetailsComponent,
     QuoteComponent,
     UserDetailComponent,
-    CarloadCustomerDetailComponent
+    CarloadCustomerDetailComponent,
+    TranslatePipe
 
   ],
   imports: [
@@ -219,7 +227,7 @@ registerLocaleData(en);
     provideClientHydration(withEventReplay()),
     provideNzI18n(en_US),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
 
 
   ],

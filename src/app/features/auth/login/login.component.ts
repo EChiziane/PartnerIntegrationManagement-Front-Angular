@@ -3,6 +3,7 @@ import {AuthService} from '@core/services/auth.service';
 import {Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {TranslationService} from '@core/services/translation.service';
 
 @Component({
   selector: 'app-login',
@@ -50,7 +51,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: object,
-    private msg: NzMessageService
+    private msg: NzMessageService,
+    private translationService: TranslationService
   ) {
   }
 
@@ -97,7 +99,7 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.responseMessage = 'Login inválido';
+        this.responseMessage = this.t('auth.recovery.messages.invalidLogin');
         console.error(err);
       }
     });
@@ -137,7 +139,7 @@ export class LoginComponent implements OnInit {
   requestRecovery(): void {
     if (this.forgotPasswordForm.invalid) {
       Object.values(this.forgotPasswordForm.controls).forEach(c => c.markAsTouched());
-      this.msg.error('Informe o número de WhatsApp.');
+      this.msg.error(this.t('auth.recovery.messages.whatsappRequired'));
       return;
     }
 
@@ -153,7 +155,7 @@ export class LoginComponent implements OnInit {
       error: (err) => {
         this.recoveryLoading = false;
         console.error(err);
-        this.msg.error('Não foi possível localizar a conta com esse WhatsApp.');
+        this.msg.error(this.t('auth.recovery.messages.accountNotFound'));
       }
     });
   }
@@ -166,12 +168,12 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.recoveryLoading = false;
         this.recoveryStep = 2;
-        this.msg.success('Enviámos um código para o WhatsApp e email associados.');
+        this.msg.success(this.t('auth.recovery.messages.codeSent'));
       },
       error: (err) => {
         this.recoveryLoading = false;
         console.error(err);
-        this.msg.error('Não foi possível iniciar o envio do código.');
+        this.msg.error(this.t('auth.recovery.messages.sendError'));
       }
     });
   }
@@ -184,14 +186,14 @@ export class LoginComponent implements OnInit {
   submitResetPassword(): void {
     if (this.resetPasswordForm.invalid) {
       Object.values(this.resetPasswordForm.controls).forEach(c => c.markAsTouched());
-      this.msg.error('Preencha o código e a nova senha.');
+      this.msg.error(this.t('auth.recovery.messages.fillCodePassword'));
       return;
     }
 
     const v = this.resetPasswordForm.value;
 
     if (v.newPassword !== v.confirmPassword) {
-      this.msg.error('As senhas não coincidem.');
+      this.msg.error(this.t('auth.recovery.messages.passwordMismatch'));
       return;
     }
 
@@ -201,13 +203,13 @@ export class LoginComponent implements OnInit {
     this.authService.resetPassword(phone, v.otpCode!, v.newPassword!).subscribe({
       next: () => {
         this.recoveryLoading = false;
-        this.msg.success('Senha alterada com sucesso. Já pode entrar.');
+        this.msg.success(this.t('auth.recovery.messages.passwordChanged'));
         this.closeForgotPasswordModal();
       },
       error: (err) => {
         this.recoveryLoading = false;
         console.error(err);
-        this.msg.error('Código inválido ou expirado.');
+        this.msg.error(this.t('auth.recovery.messages.invalidCode'));
       }
     });
   }
@@ -221,5 +223,9 @@ export class LoginComponent implements OnInit {
     if (!digits) return '';
     if (digits.startsWith('258')) return `+${digits}`;
     return `+258${digits}`;
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

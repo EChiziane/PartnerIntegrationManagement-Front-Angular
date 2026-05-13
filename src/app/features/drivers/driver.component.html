@@ -3,7 +3,7 @@
   <!-- ===== Breadcrumb ===== -->
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
-      <a routerLink="/app">Home</a>
+      <a routerLink="/app">{{ 'common.home' | translate }}</a>
     </nz-breadcrumb-item>
 
     <nz-breadcrumb-item>
@@ -13,7 +13,7 @@
 
   <!-- ===== Page Header ===== -->
   <div class="page-header">
-    <p>Lista de Motoristas</p>
+    <p>{{ 'drivers.title' | translate }}</p>
 
     <span (click)="onBack()" class="back-arrow">
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
@@ -33,7 +33,7 @@
                 <nz-icon nzTheme="outline" nzType="team"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Total Motoristas</span>
+                <span class="title">{{ 'drivers.metrics.total' | translate }}</span>
                 <p>{{ totalDrivers }}</p>
               </div>
             </div>
@@ -48,7 +48,7 @@
                 <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Ativos</span>
+                <span class="title">{{ 'drivers.metrics.active' | translate }}</span>
                 <p>{{ activeDrivers }}</p>
               </div>
             </div>
@@ -63,7 +63,7 @@
                 <nz-icon nzTheme="outline" nzType="warning"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Inativos</span>
+                <span class="title">{{ 'drivers.metrics.inactive' | translate }}</span>
                 <p>{{ inactiveDrivers }}</p>
               </div>
             </div>
@@ -80,7 +80,7 @@
       (ngModelChange)="search()"
       [(ngModel)]="searchValue"
       nz-input
-      placeholder="Pesquisar nome/telefone/carro"
+      [placeholder]="'drivers.search' | translate"
       type="text"
     />
 
@@ -116,10 +116,10 @@
                 <nz-icon nzType="search"></nz-icon>
               </nz-filter-trigger>
             </th>
-            <th>Telefone</th>
-            <th>Carro</th>
-            <th>Status</th>
-            <th>Criado em</th>
+            <th>{{ 'common.phone' | translate }}</th>
+            <th>{{ 'drivers.drawer.car' | translate }}</th>
+            <th>{{ 'common.status' | translate }}</th>
+            <th>{{ 'common.createdAt' | translate }}</th>
             <th>Ações</th>
           </tr>
           </thead>
@@ -165,12 +165,12 @@
               (ngModelChange)="search()"
               [(ngModel)]="searchValue"
               nz-input
-              placeholder="Pesquisar..."
+              [placeholder]="'common.placeholders.search' | translate"
               type="text"
             />
 
-            <button (click)="search()" nz-button nzSize="small" nzType="primary">Search</button>
-            <button (click)="reset()" nz-button nzSize="small">Reset</button>
+            <button (click)="search()" nz-button nzSize="small" nzType="primary">{{ 'common.actions.search' | translate }}</button>
+            <button (click)="reset()" nz-button nzSize="small">{{ 'common.actions.reset' | translate }}</button>
           </div>
         </div>
       </nz-dropdown-menu>
@@ -201,9 +201,9 @@
           <!-- Name -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Nome</nz-form-label>
+              <nz-form-label>{{ 'common.name' | translate }}</nz-form-label>
               <nz-form-control>
-                <input formControlName="Name" nz-input placeholder="Digite o nome"/>
+                <input formControlName="Name" nz-input [placeholder]="'common.placeholders.name' | translate"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -211,10 +211,10 @@
           <!-- Phone -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Telefone</nz-form-label>
+              <nz-form-label>{{ 'common.phone' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-input-group nzAddOnBefore="+258">
-                  <input formControlName="Phone" nz-input placeholder="Digite o telefone"/>
+                  <input formControlName="Phone" nz-input [placeholder]="'common.placeholders.phone' | translate"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -227,12 +227,12 @@
           <!-- CarDescription (SELECT) -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Carro</nz-form-label>
+              <nz-form-label>{{ 'drivers.drawer.car' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-select
                   [nzDisabled]="isSaving"
                   formControlName="CarDescription"
-                  nzPlaceHolder="Selecione o carro"
+                  [nzPlaceHolder]="'drivers.drawer.car' | translate"
                   nzShowSearch>
 
                   <nz-option
@@ -249,11 +249,11 @@
           <!-- Status -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Status</nz-form-label>
+              <nz-form-label>{{ 'common.status' | translate }}</nz-form-label>
               <nz-form-control>
-                <nz-select [nzDisabled]="isSaving" formControlName="status" nzPlaceHolder="Selecione o status">
-                  <nz-option nzLabel="ATIVO" nzValue="ACTIVO"></nz-option>
-                  <nz-option nzLabel="INATIVO" nzValue="INACTIVO"></nz-option>
+                <nz-select [nzDisabled]="isSaving" formControlName="status" [nzPlaceHolder]="'common.placeholders.selectStatus' | translate">
+                  <nz-option [nzLabel]="'drivers.metrics.active' | translate" nzValue="ACTIVO"></nz-option>
+                  <nz-option [nzLabel]="'drivers.metrics.inactive' | translate" nzValue="INACTIVO"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>

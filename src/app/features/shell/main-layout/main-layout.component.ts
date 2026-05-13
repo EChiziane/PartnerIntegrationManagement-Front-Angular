@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {TranslationService} from '@core/services/translation.service';
 
 interface User {
   id: string;
@@ -27,7 +28,10 @@ export class MainLayoutComponent implements OnInit {
   userRole: string = 'Conta autenticada';
   currentUserId: string | null = null;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    public translationService: TranslationService
+  ) {
   }
 
   ngOnInit(): void {
@@ -37,12 +41,12 @@ export class MainLayoutComponent implements OnInit {
     try {
       const user = JSON.parse(userJson) as Partial<User>;
       this.currentUserId = user.id ?? null;
-      this.username = user.name ?? user.login ?? 'Utilizador';
+      this.username = user.name ?? user.login ?? this.translationService.instant('layout.account.defaultUser');
       this.userRole = this.roleLabel(user.role);
     } catch {
       this.currentUserId = null;
-      this.username = 'Utilizador';
-      this.userRole = 'Conta autenticada';
+      this.username = this.translationService.instant('layout.account.defaultUser');
+      this.userRole = this.translationService.instant('layout.account.authenticated');
     }
   }
 
@@ -54,14 +58,39 @@ export class MainLayoutComponent implements OnInit {
 
   private roleLabel(role: User['role'] | undefined): string {
     if (role === 'ADMIN') {
-      return 'Administrador';
+      return this.translationService.instant('layout.roles.admin');
     }
 
     if (role === 'MANAGER') {
-      return 'Gestor';
+      return this.translationService.instant('layout.roles.manager');
     }
 
-    return role ? 'Operador' : 'Conta autenticada';
+    return role
+      ? this.translationService.instant('layout.roles.operator')
+      : this.translationService.instant('layout.account.authenticated');
+  }
+
+  get currentLanguage(): string {
+    return this.translationService.currentLanguage;
+  }
+
+  changeLanguage(language: string): void {
+    this.translationService.use(language).subscribe(() => {
+      const userJson = localStorage.getItem('user');
+
+      if (!userJson) {
+        this.username = this.translationService.instant('layout.account.defaultUser');
+        this.userRole = this.translationService.instant('layout.account.authenticated');
+        return;
+      }
+
+      try {
+        const user = JSON.parse(userJson) as Partial<User>;
+        this.userRole = this.roleLabel(user.role);
+      } catch {
+        this.userRole = this.translationService.instant('layout.account.authenticated');
+      }
+    });
   }
 
   get userInitials(): string {

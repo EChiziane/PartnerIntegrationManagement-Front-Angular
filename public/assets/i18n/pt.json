@@ -1,0 +1,566 @@
+{
+  "common": {
+    "actions": {
+      "cancel": "Cancelar",
+      "clear": "Limpar",
+      "deliver": "Entregar",
+      "keep": "Manter",
+      "logout": "Logout",
+      "reschedule": "Reagendar",
+      "start": "Iniciar",
+      "view": "Ver",
+      "add": "Adicionar",
+      "create": "Criar",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "save": "Guardar",
+      "update": "Atualizar",
+      "download": "Baixar",
+      "print": "Imprimir",
+      "search": "Pesquisar",
+      "reset": "Reset",
+      "confirm": "Confirmar",
+      "continue": "Continuar",
+      "back": "Voltar",
+      "send": "Enviar",
+      "close": "Fechar",
+      "duplicate": "Copiar",
+      "viewDetails": "Ver detalhes"
+    },
+    "fields": {
+      "contact": "Contacto",
+      "createdBy": "Criado por",
+      "driver": "Motorista",
+      "manager": "Gestor"
+    },
+    "notAvailable": "N/D",
+    "system": "Sistema",
+    "home": "Home",
+    "details": "Detalhe",
+    "status": "Status",
+    "code": "C?digo",
+    "name": "Nome",
+    "phone": "Telefone",
+    "email": "Email",
+    "address": "Morada",
+    "city": "Cidade",
+    "zipCode": "Zip Code",
+    "nuit": "NUIT",
+    "createdAt": "Criado em",
+    "table": {
+      "customer": "Cliente",
+      "contact": "Contacto",
+      "destination": "Destino",
+      "material": "Material",
+      "driver": "Motorista",
+      "manager": "Gestor",
+      "sprint": "Sprint",
+      "status": "Status",
+      "scheduled": "Agendado",
+      "delivered": "Entregue",
+      "earnings": "Ganhos",
+      "spent": "Gastos",
+      "actions": "A??es"
+    },
+    "placeholders": {
+      "search": "Pesquisar...",
+      "selectCustomer": "Selecione o cliente",
+      "selectMaterial": "Selecione o material",
+      "selectDriver": "Selecione o motorista",
+      "selectManager": "Selecione o gestor",
+      "selectSprint": "Selecione a sprint",
+      "selectStatus": "Selecione o status",
+      "name": "Digite o nome",
+      "phone": "Digite o telefone",
+      "customerName": "Nome do cliente",
+      "contact": "Contacto",
+      "destination": "Destino de entrega"
+    },
+    "validation": {
+      "required": "Campo obrigat?rio.",
+      "scheduledDate": "Informe a data agendada",
+      "deliveryDate": "Informe a data de entrega"
+    },
+    "yes": "Sim",
+    "no": "N?o"
+  },
+  "layout": {
+    "brandSubtitle": "Carload Management",
+    "sectionOperation": "Operação",
+    "menu": {
+      "dashboard": "Dashboard",
+      "carloadsGroup": "Carradas",
+      "carloads": "Carradas",
+      "sprints": "Sprints",
+      "customers": "Clientes",
+      "team": "Equipa",
+      "drivers": "Motoristas",
+      "managers": "Gestores",
+      "finance": "Financeiro",
+      "quotes": "Cotações",
+      "invoices": "Faturas",
+      "users": "Utilizadores"
+    },
+    "footer": {
+      "title": "Sistema ativo",
+      "subtitle": "Frota, faturação e entregas"
+    },
+    "topbar": {
+      "toggleMenu": "Alternar menu",
+      "title": "Painel de gestão",
+      "subtitle": "Carradas, equipa e documentos",
+      "secure": "Ambiente seguro"
+    },
+    "account": {
+      "profile": "Perfil",
+      "users": "Utilizadores",
+      "authenticated": "Conta autenticada",
+      "defaultUser": "Utilizador"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "manager": "Gestor",
+      "operator": "Operador"
+    },
+    "language": "Idioma"
+  },
+  "dashboard": {
+    "hero": {
+      "kicker": "Centro de operação",
+      "scheduledAttention": "{{ count }} carrada(s) atrasada(s) precisam de atenção",
+      "inProgressNow": "{{ count }} carrada(s) em execução neste momento",
+      "todayMarked": "{{ count }} carrada(s) marcadas para hoje",
+      "ready": "Operação preparada para as próximas entregas",
+      "empty": "Sem carradas ativas no momento",
+      "next": "Próxima: {{ customer }} para {{ destination }} em {{ date }}.",
+      "start": "Crie ou agende carradas para acompanhar a operação a partir daqui."
+    },
+    "actions": {
+      "newCarload": "Nova carrada",
+      "today": "Ver hoje",
+      "refresh": "Atualizar",
+      "hideCancelled": "Ocultar canceladas",
+      "showCancelled": "Mostrar canceladas",
+      "hideDelivered": "Ocultar entregues",
+      "showDelivered": "Mostrar entregues",
+      "all": "Tudo",
+      "range": "Intervalo"
+    },
+    "metrics": {
+      "active": "Carradas ativas",
+      "activeSummary": "{{ scheduled }} agendadas, {{ progress }} em execução",
+      "today": "Hoje",
+      "todaySummary": "Agenda e entregas do dia",
+      "overdue": "Atrasadas",
+      "overdueSummary": "Precisam de decisão",
+      "cancelled": "Canceladas",
+      "cancelledSummary": "Registo operacional",
+      "margin": "Margem estimada",
+      "marginSummary": "Receitas {{ earnings }} / custos {{ spent }}"
+    },
+    "filters": {
+      "search": "Pesquisar cliente, destino, material, motorista, gestor...",
+      "start": "Início",
+      "end": "Fim"
+    },
+    "loading": "A carregar dashboard...",
+    "panels": {
+      "priorityKicker": "Prioridade",
+      "priorityTitle": "Fazer agora",
+      "liveKicker": "Ao vivo",
+      "liveTitle": "Em execução",
+      "scheduleKicker": "Agenda",
+      "scheduleTitle": "Agendadas",
+      "cancelledKicker": "Interrompidas",
+      "cancelledTitle": "Canceladas",
+      "closedKicker": "Fechadas",
+      "closedTitle": "Entregues"
+    },
+    "empty": {
+      "priority": "Nenhuma ação urgente agora.",
+      "progress": "Sem carradas em execução.",
+      "scheduled": "Sem carradas agendadas.",
+      "cancelled": "Sem carradas canceladas.",
+      "delivered": "Sem carradas entregues."
+    },
+    "status": {
+      "scheduled": "Agendada",
+      "progress": "Em execução",
+      "delivered": "Entregue",
+      "cancelled": "Cancelada"
+    },
+    "type": {
+      "sold": "Vendida",
+      "produced": "Produzida"
+    },
+    "schedule": {
+      "noDate": "Sem data",
+      "today": "Hoje - {{ date }}",
+      "tomorrow": "Amanhã - {{ date }}",
+      "overdue": "Atrasada - {{ date }}"
+    },
+    "priority": {
+      "progress": "Em execução agora",
+      "overdue": "Atrasada",
+      "today": "Agendada para hoje",
+      "next": "Próxima na fila"
+    },
+    "card": {
+      "to": "para",
+      "revenue": "Receita {{ value }}",
+      "margin": "Margem {{ value }}"
+    },
+    "modal": {
+      "cancelTitle": "Cancelar carrada?",
+      "cancelContent": "Cliente: <strong>{{ customer }}</strong><br>Destino: <strong>{{ destination }}</strong>",
+      "cancelOk": "Cancelar carrada"
+    },
+    "messages": {
+      "scheduled": "Carrada voltou para Agendada.",
+      "progress": "Carrada iniciada.",
+      "delivered": "Carrada marcada como Entregue.",
+      "cancelled": "Carrada cancelada com sucesso.",
+      "statusError": "Erro ao atualizar o estado da carrada.",
+      "loadError": "Erro ao carregar dashboard."
+    }
+  },
+  "carloads": {
+    "title": "Lista de Carradas",
+    "breadcrumb": "Lista de Carradas",
+    "new": "Nova Carrada",
+    "report": "Relat?rio",
+    "metrics": {
+      "scheduled": "Agendadas",
+      "progress": "Em execu??o",
+      "delivered": "Entregues"
+    },
+    "search": "Pesquisar cliente, destino, material, motorista...",
+    "reportDrawer": {
+      "title": "Relat?rio de Carradas",
+      "section": "Dados do relat?rio",
+      "type": "Tipo",
+      "quantity": "Quantidade",
+      "period": "Per?odo",
+      "start": "In?cio",
+      "end": "Fim",
+      "latest": "?ltimas carradas",
+      "preset": "Per?odo r?pido",
+      "customPeriod": "Por per?odo",
+      "all": "Todas",
+      "today": "Hoje",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este m?s",
+      "lastMonth": "?ltimo m?s",
+      "last30Days": "?ltimos 30 dias",
+      "latestHint": "Imprime as carradas mais recentes, por data de entrega, agendamento ou cria??o.",
+      "presetHint": "Usa um per?odo r?pido para relat?rios comuns do dia, semana ou m?s.",
+      "periodHint": "Filtra pela data operacional da carrada: entrega, agendamento ou cria??o.",
+      "allHint": "Inclui todas as carradas carregadas no sistema."
+    },
+    "drawer": {
+      "createTitle": "Criar Carrada",
+      "editTitle": "Editar Carrada",
+      "copyTitle": "Copiar Carrada",
+      "section": "Dados da Carrada",
+      "existingCustomer": "Cliente existente",
+      "customer": "Cliente",
+      "contact": "Contacto",
+      "destination": "Destino",
+      "material": "Material",
+      "type": "Tipo de Carrada",
+      "produced": "Produzida",
+      "sold": "Vendida",
+      "driver": "Motorista",
+      "manager": "Gestor",
+      "sprint": "Sprint",
+      "scheduledDate": "Data/Hora Agendada",
+      "deliveryDate": "Data/Hora de Entrega",
+      "spent": "Gastos",
+      "earnings": "Ganhos",
+      "status": "Status"
+    },
+    "messages": {
+      "loadDriversError": "Erro ao carregar motoristas.",
+      "loadManagersError": "Erro ao carregar gestores.",
+      "loadSprintsError": "Erro ao carregar sprints.",
+      "loadCustomersError": "Erro ao carregar clientes.",
+      "loadError": "Erro ao carregar carradas.",
+      "emptyReport": "N?o h? carradas para gerar neste relat?rio.",
+      "required": "Preencha todos os campos obrigat?rios!",
+      "updated": "Carrada atualizada com sucesso!",
+      "copied": "Carrada copiada e criada com sucesso!",
+      "created": "Carrada criada com sucesso!",
+      "saveError": "Erro ao gravar carrada.",
+      "deleted": "Carrada eliminada com sucesso!",
+      "deleteError": "Erro ao eliminar carrada.",
+      "periodRequired": "Selecione a data inicial e final."
+    },
+    "modal": {
+      "deleteTitle": "Eliminar carrada?",
+      "deleteContent": "Cliente: <strong>{{ customer }}</strong> - Destino: <strong>{{ destination }}</strong>"
+    },
+    "scopes": {
+      "all": "Todas as carradas"
+    }
+  },
+  "customers": {
+    "title": "Lista de Clientes",
+    "metrics": {
+      "total": "Total Clientes",
+      "withEmail": "Com Email",
+      "withoutEmail": "Sem Email"
+    },
+    "search": "Pesquisar nome/c?digo/email/telefone",
+    "drawer": {
+      "createTitle": "Criar Cliente",
+      "editTitle": "Editar Cliente",
+      "section": "Informa??o do Cliente"
+    },
+    "messages": {
+      "deleteTitle": "Eliminar cliente?",
+      "deleted": "Cliente eliminado com sucesso!",
+      "deleteError": "Erro ao eliminar cliente",
+      "fieldUpdated": "Campo {{ field }} atualizado com sucesso!",
+      "fieldError": "Erro ao atualizar campo",
+      "required": "Preencha Nome e Telefone (obrigat?rios).",
+      "created": "Cliente criado com sucesso!",
+      "updated": "Cliente atualizado com sucesso!",
+      "saveError": "Erro ao gravar cliente.",
+      "loadError": "Erro ao carregar clientes"
+    }
+  },
+  "drivers": {
+    "title": "Lista de Motoristas",
+    "detailsTitle": "Detalhes do Motorista",
+    "metrics": {
+      "total": "Total Motoristas",
+      "active": "Ativos",
+      "inactive": "Inativos"
+    },
+    "search": "Pesquisar nome/telefone/carro",
+    "drawer": {
+      "createTitle": "Criar Motorista",
+      "editTitle": "Editar Motorista",
+      "section": "Informa??o do Motorista",
+      "car": "Carro",
+      "activity": "Atividade"
+    },
+    "messages": {
+      "loadError": "Erro ao carregar motoristas.",
+      "required": "Preencha todos os campos obrigat?rios!",
+      "saved": "Motorista guardado com sucesso!",
+      "created": "Motorista criado com sucesso!",
+      "updated": "Motorista atualizado com sucesso!",
+      "saveError": "Erro ao gravar motorista.",
+      "deleteTitle": "Eliminar motorista?",
+      "deleted": "Motorista eliminado com sucesso!",
+      "deleteError": "Erro ao eliminar motorista."
+    }
+  },
+  "managers": {
+    "title": "Lista de Gestores",
+    "detailsTitle": "Detalhes do Gestor",
+    "metrics": {
+      "total": "Total Gestores",
+      "active": "Ativos",
+      "inactive": "Inativos"
+    },
+    "search": "Pesquisar nome/telefone/email",
+    "drawer": {
+      "createTitle": "Criar Gestor",
+      "editTitle": "Editar Gestor",
+      "section": "Informa??o do Gestor"
+    },
+    "messages": {
+      "loadError": "Erro ao carregar gestores.",
+      "required": "Preencha todos os campos obrigat?rios!",
+      "created": "Gestor criado com sucesso!",
+      "updated": "Gestor atualizado com sucesso!",
+      "saveError": "Erro ao gravar gestor.",
+      "deleteTitle": "Eliminar gestor?",
+      "deleted": "Gestor eliminado com sucesso!",
+      "deleteError": "Erro ao eliminar gestor."
+    }
+  },
+  "sprints": {
+    "title": "Campanhas",
+    "detailsTitle": "Detalhes da Campanha",
+    "new": "Nova Campanha",
+    "metrics": {
+      "totalCarloads": "Total Carradas",
+      "delivered": "Entregues",
+      "progress": "Em execu??o",
+      "scheduled": "Agendadas",
+      "investment": "Investimento",
+      "revenue": "Receita",
+      "profit": "Lucro l?quido",
+      "roi": "ROI"
+    },
+    "fields": {
+      "channel": "Canal",
+      "focusMaterial": "Material foco",
+      "period": "Per?odo",
+      "promotedVolumes": "Volumes promovidos",
+      "createdBy": "Criada por",
+      "closedBy": "Encerrada por",
+      "closedAt": "Encerrada em",
+      "targetCarloads": "Meta carradas",
+      "targetRevenue": "Meta receita",
+      "bestVolume": "Volume mais vendido"
+    },
+    "drawer": {
+      "createTitle": "Criar Campanha",
+      "editTitle": "Editar Campanha",
+      "section": "Dados da Campanha",
+      "carloadSection": "Dados da Carrada (Sprint)"
+    },
+    "messages": {
+      "loadCarloadsError": "Erro ao carregar carradas desta sprint.",
+      "loadDriversError": "Erro ao carregar motoristas.",
+      "loadManagersError": "Erro ao carregar gestores.",
+      "required": "Preencha todos os campos obrigat?rios.",
+      "updated": "Carrada atualizada com sucesso.",
+      "copied": "Carrada copiada e criada com sucesso.",
+      "created": "Carrada criada com sucesso.",
+      "saveError": "Erro ao gravar carrada.",
+      "deleteTitle": "Eliminar carrada?",
+      "deleted": "Carrada eliminada com sucesso.",
+      "deleteError": "Erro ao eliminar carrada."
+    }
+  },
+  "users": {
+    "title": "Lista de Usu?rios",
+    "new": "Novo Usu?rio",
+    "edit": "Editar Usu?rio",
+    "register": "Registrar Usu?rio",
+    "detailTitle": "Perfil do utilizador",
+    "mainData": "Dados principais",
+    "access": "Acesso",
+    "notFound": "Utilizador n?o encontrado",
+    "notFoundHint": "Volte ? lista e selecione um utilizador v?lido.",
+    "goToUsers": "Ir para utilizadores",
+    "fields": {
+      "state": "Estado",
+      "role": "Papel",
+      "function": "Fun??o",
+      "permissions": "Permiss?es operacionais",
+      "accessControl": "Controlo de acesso ao sistema",
+      "total": "Total Usu?rios"
+    },
+    "messages": {
+      "missing": "Utilizador n?o informado.",
+      "notFound": "Utilizador n?o encontrado.",
+      "loadError": "Erro ao carregar utilizador."
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "created": "Criado"
+    }
+  },
+  "auth": {
+    "login": {
+      "area": "?rea do Sistema",
+      "welcome": "Bem-vindo de volta",
+      "hint": "Use as suas credenciais para aceder ao painel.",
+      "user": "Utilizador",
+      "password": "Senha",
+      "userPlaceholder": "Digite o utilizador",
+      "passwordPlaceholder": "Digite a senha",
+      "userRequired": "Informe o utilizador.",
+      "passwordRequired": "Informe a senha.",
+      "remember": "Lembrar-me",
+      "forgot": "Esqueceu a senha?",
+      "enter": "Entrar no painel",
+      "entering": "A entrar...",
+      "noAccount": "N?o tem conta?",
+      "createAccount": "Criar conta",
+      "brandKicker": "Gest?o de cargas e entregas",
+      "brandTitle": "Entre no painel e continue a opera??o com clareza.",
+      "brandText": "Acompanhe clientes, motoristas, cargas, cota??es e faturas num ambiente organizado para o trabalho di?rio.",
+      "organizedData": "Dados organizados",
+      "authenticatedAccess": "Acesso autenticado",
+      "newAccess": "Novo acesso",
+      "registerHint": "Registe um utilizador para aceder ao sistema de gest?o."
+    },
+    "recovery": {
+      "title": "Recuperar senha",
+      "whatsapp": "WhatsApp",
+      "confirmAccount": "Confirmar conta",
+      "newPassword": "Nova senha",
+      "step1": "Passo 1",
+      "step2": "Passo 2",
+      "step3": "Passo 3",
+      "findAccount": "Encontre a sua conta",
+      "findHint": "Introduza o WhatsApp associado ao utilizador para iniciarmos a recupera??o.",
+      "phoneRequired": "Informe o n?mero.",
+      "confirmData": "Confirme os dados",
+      "confirmHint": "Verifique se esta ? a conta correta antes de enviarmos o c?digo.",
+      "sendCode": "Enviar c?digo",
+      "definePassword": "Defina uma nova senha",
+      "defineHint": "Use o c?digo recebido e escolha uma senha com pelo menos 6 caracteres.",
+      "code": "C?digo",
+      "codeRequired": "Informe o c?digo.",
+      "minPassword": "M?nimo 6 caracteres.",
+      "confirmPassword": "Confirmar senha",
+      "confirmPasswordTip": "Confirme a senha.",
+      "resendCode": "Reenviar c?digo",
+      "messages": {
+        "invalidLogin": "Login inv?lido",
+        "whatsappRequired": "Informe o n?mero de WhatsApp.",
+        "accountNotFound": "N?o foi poss?vel localizar a conta com esse WhatsApp.",
+        "codeSent": "Envi?mos um c?digo para o WhatsApp e email associados.",
+        "sendError": "N?o foi poss?vel iniciar o envio do c?digo.",
+        "fillCodePassword": "Preencha o c?digo e a nova senha.",
+        "passwordMismatch": "As senhas n?o coincidem.",
+        "passwordChanged": "Senha alterada com sucesso. J? pode entrar.",
+        "invalidCode": "C?digo inv?lido ou expirado."
+      }
+    }
+  },
+  "register": {
+    "title": "Criar conta",
+    "subtitle": "Preencha os dados para registar um utilizador",
+    "nameRequired": "Informe o nome.",
+    "emailInvalid": "Email inv?lido.",
+    "phoneRequired": "Informe o telefone.",
+    "phoneHint": "O n?mero ser? guardado como +258 seguido do teu contacto.",
+    "loginRequired": "Informe o login.",
+    "passwordRequired": "Informe a senha.",
+    "passwordPlaceholder": "Crie uma senha",
+    "role": "Fun??o",
+    "roleRequired": "Selecione a fun??o.",
+    "select": "Selecione",
+    "submit": "Registrar"
+  },
+  "invoice": {
+    "title": "Faturas",
+    "totalInvoices": "Total Faturas",
+    "customers": "Clientes",
+    "filtered": "Filtradas",
+    "search": "Pesquisar fatura/item...",
+    "selectCustomer": "Selecionar cliente",
+    "dateRange": "Intervalo de datas",
+    "customerInfo": "Informa??o do Cliente",
+    "invoiceCode": "C?digo da Fatura",
+    "items": "Itens da Fatura",
+    "item": "Item",
+    "selectItem": "Selecione o item",
+    "qty": "Qtd",
+    "unitPrice": "Pre?o Unit.",
+    "subtotal": "Subtotal",
+    "totals": "Totais",
+    "taxRate": "Taxa (decimal)",
+    "tax": "Taxa",
+    "messages": {
+      "required": "Preencha os campos obrigat?rios.",
+      "created": "Fatura criada com sucesso!",
+      "createError": "Erro ao criar fatura",
+      "deleteTitle": "Eliminar fatura?",
+      "deleted": "Fatura eliminada com sucesso!",
+      "deleteError": "Erro ao eliminar fatura",
+      "loadError": "Erro ao carregar faturas",
+      "loadCustomersError": "Erro ao carregar clientes"
+    }
+  }
+}

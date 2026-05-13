@@ -17,6 +17,7 @@ import {SprintService} from '@core/services/sprint.service';
 import {CarloadCustomerService} from '@core/services/carload-customer.service';
 import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
 import {CarloadListPdfService} from '@core/services/carload-list-pdf.service';
+import {TranslationService} from '@core/services/translation.service';
 
 type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
 type CustomerMode = 'NEW' | 'EXISTING';
@@ -57,7 +58,7 @@ export class CarLoadComponent implements OnInit {
 
   isEditMode = false;
   isCopyMode = false;
-  carLoadDrawerTitle = 'Criar Carrada';
+  carLoadDrawerTitle = '';
   selectedCarLoadId: string | null = null;
 
   drawerWidth: string | number = 720;
@@ -113,7 +114,8 @@ export class CarLoadComponent implements OnInit {
     private locationSuggestionService: LocationSuggestionService,
     private carloadListPdfService: CarloadListPdfService,
     private message: NzMessageService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private translationService: TranslationService
   ) {
   }
 
@@ -206,13 +208,13 @@ export class CarLoadComponent implements OnInit {
   getStatusLabel(status: CarLoadStatus): string {
     switch ((status || '').toUpperCase()) {
       case 'SCHEDULED':
-        return 'Agendada';
+        return this.t('dashboard.status.scheduled');
       case 'IN_PROGRESS':
-        return 'Em execução';
+        return this.t('dashboard.status.progress');
       case 'DELIVERED':
-        return 'Entregue';
+        return this.t('dashboard.status.delivered');
       case 'CANCELLED':
-        return 'Cancelada';
+        return this.t('dashboard.status.cancelled');
       default:
         return status as string;
     }
@@ -227,22 +229,22 @@ export class CarLoadComponent implements OnInit {
 
     this.driverService.getDrivers().subscribe({
       next: data => (this.drivers = data || []),
-      error: () => this.message.error('Erro ao carregar motoristas.')
+      error: () => this.message.error(this.t('carloads.messages.loadDriversError'))
     });
 
     this.managerService.getManagers().subscribe({
       next: data => (this.managers = data || []),
-      error: () => this.message.error('Erro ao carregar gestores.')
+      error: () => this.message.error(this.t('carloads.messages.loadManagersError'))
     });
 
     this.sprintService.getSprints().subscribe({
       next: data => (this.sprints = data || []),
-      error: () => this.message.error('Erro ao carregar sprints.')
+      error: () => this.message.error(this.t('carloads.messages.loadSprintsError'))
     });
 
     this.customerService.getCustomers().subscribe({
       next: data => (this.customers = data || []),
-      error: () => this.message.error('Erro ao carregar clientes.')
+      error: () => this.message.error(this.t('carloads.messages.loadCustomersError'))
     });
 
     setTimeout(() => (this.isLoadingLookups = false), 500);
@@ -259,7 +261,7 @@ export class CarLoadComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.message.error('Erro ao carregar carradas.');
+        this.message.error(this.t('carloads.messages.loadError'));
         this.isLoading = false;
       }
     });
@@ -340,7 +342,7 @@ export class CarLoadComponent implements OnInit {
     const carloads = this.getReportCarloads(mode);
 
     if (!carloads.length) {
-      this.message.warning('Nao ha carradas para gerar neste relatorio.');
+      this.message.warning(this.t('carloads.messages.emptyReport'));
       return;
     }
 
@@ -352,7 +354,7 @@ export class CarLoadComponent implements OnInit {
     this.isEditMode = false;
     this.isCopyMode = false;
     this.selectedCarLoadId = null;
-    this.carLoadDrawerTitle = 'Criar Carrada';
+    this.carLoadDrawerTitle = this.t('carloads.drawer.createTitle');
     this.customerMode = 'NEW';
 
     this.carLoadForm.reset({
@@ -393,7 +395,7 @@ export class CarLoadComponent implements OnInit {
   editCarLoad(carload: CarLoad): void {
     this.isEditMode = true;
     this.isCopyMode = false;
-    this.carLoadDrawerTitle = 'Editar Carrada';
+    this.carLoadDrawerTitle = this.t('carloads.drawer.editTitle');
     this.selectedCarLoadId = carload.id;
 
     if (!this.drivers.length || !this.managers.length || !this.sprints.length || !this.customers.length) {
@@ -412,7 +414,7 @@ export class CarLoadComponent implements OnInit {
     this.isEditMode = false;
     this.isCopyMode = true;
     this.selectedCarLoadId = null;
-    this.carLoadDrawerTitle = 'Copiar Carrada';
+    this.carLoadDrawerTitle = this.t('carloads.drawer.copyTitle');
 
     if (!this.drivers.length || !this.managers.length || !this.sprints.length || !this.customers.length) {
       this.loadLookups();
@@ -437,7 +439,7 @@ export class CarLoadComponent implements OnInit {
     this.applyCustomerModeRules();
 
     if (this.carLoadForm.invalid) {
-      this.message.warning('Preencha todos os campos obrigatórios!');
+      this.message.warning(this.t('carloads.messages.required'));
       return;
     }
 
@@ -497,17 +499,17 @@ export class CarLoadComponent implements OnInit {
         this.closeCarLoadDrawer();
 
         if (isUpdate) {
-          this.message.success('Carrada actualizada com sucesso!');
+          this.message.success(this.t('carloads.messages.updated'));
         } else if (this.isCopyMode) {
-          this.message.success('Carrada copiada e criada com sucesso!');
+          this.message.success(this.t('carloads.messages.copied'));
         } else {
-          this.message.success('Carrada criada com sucesso!');
+          this.message.success(this.t('carloads.messages.created'));
         }
 
         this.isSaving = false;
       },
       error: () => {
-        this.message.error('Erro ao gravar carrada.');
+        this.message.error(this.t('carloads.messages.saveError'));
         this.isSaving = false;
       }
     });
@@ -515,18 +517,18 @@ export class CarLoadComponent implements OnInit {
 
   deleteCarLoad(data: CarLoad): void {
     this.modal.confirm({
-      nzTitle: 'Tens certeza que quer eliminar esta Carrada?',
-      nzContent: `Cliente: <strong>${data.customerName}</strong> — Destino: <strong>${data.deliveryDestination}</strong>`,
+      nzTitle: this.t('carloads.modal.deleteTitle'),
+      nzContent: this.t('carloads.modal.deleteContent', {customer: data.customerName, destination: data.deliveryDestination}),
       nzOkDanger: true,
-      nzOkText: 'Sim',
-      nzCancelText: 'Não',
+      nzOkText: this.t('common.yes'),
+      nzCancelText: this.t('common.no'),
       nzOnOk: () =>
         this.carLoadService.deleteCarLoad(data.id).subscribe({
           next: () => {
             this.getCarLoads();
-            this.message.success('Carrada eliminada com sucesso!');
+            this.message.success(this.t('carloads.messages.deleted'));
           },
-          error: () => this.message.error('Erro ao eliminar carrada.')
+          error: () => this.message.error(this.t('carloads.messages.deleteError'))
         })
     });
   }
@@ -614,7 +616,7 @@ export class CarLoadComponent implements OnInit {
       const endValue = this.reportForm.value.endDate;
 
       if (!startValue || !endValue) {
-        this.message.warning('Selecione a data inicial e final.');
+        this.message.warning(this.t('carloads.messages.periodRequired'));
         return [];
       }
 
@@ -635,7 +637,7 @@ export class CarLoadComponent implements OnInit {
 
   private getReportScopeLabel(mode: CarloadReportMode): string {
     if (mode === 'ALL') {
-      return 'Todas as carradas';
+      return this.t('carloads.scopes.all');
     }
 
     if (mode === 'PRESET') {
@@ -688,11 +690,11 @@ export class CarLoadComponent implements OnInit {
 
   private getPresetLabel(preset: CarloadReportPreset): string {
     const labels: Record<CarloadReportPreset, string> = {
-      TODAY: 'Hoje',
-      THIS_WEEK: 'Esta semana',
-      THIS_MONTH: 'Este mes',
-      LAST_MONTH: 'Ultimo mes',
-      LAST_30_DAYS: 'Ultimos 30 dias'
+      TODAY: this.t('carloads.reportDrawer.today'),
+      THIS_WEEK: this.t('carloads.reportDrawer.thisWeek'),
+      THIS_MONTH: this.t('carloads.reportDrawer.thisMonth'),
+      LAST_MONTH: this.t('carloads.reportDrawer.lastMonth'),
+      LAST_30_DAYS: this.t('carloads.reportDrawer.last30Days')
     };
 
     return labels[preset];
@@ -740,5 +742,9 @@ export class CarLoadComponent implements OnInit {
       deliveryScheduledDate: this.toDatetimeLocalInput(carload.deliveryScheduledDate),
       deliveryDate: this.toDatetimeLocalInput(carload.deliveryDate)
     };
+  }
+
+  t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

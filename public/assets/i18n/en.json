@@ -1,0 +1,566 @@
+{
+  "common": {
+    "actions": {
+      "cancel": "Cancel",
+      "clear": "Clear",
+      "deliver": "Deliver",
+      "keep": "Keep",
+      "logout": "Logout",
+      "reschedule": "Reschedule",
+      "start": "Start",
+      "view": "View",
+      "add": "Add",
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "update": "Update",
+      "download": "Download",
+      "print": "Print",
+      "search": "Search",
+      "reset": "Reset",
+      "confirm": "Confirm",
+      "continue": "Continue",
+      "back": "Back",
+      "send": "Send",
+      "close": "Close",
+      "duplicate": "Copy",
+      "viewDetails": "View details"
+    },
+    "fields": {
+      "contact": "Contact",
+      "createdBy": "Created by",
+      "driver": "Driver",
+      "manager": "Manager"
+    },
+    "notAvailable": "N/A",
+    "system": "System",
+    "home": "Home",
+    "details": "Detail",
+    "status": "Status",
+    "code": "Code",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "city": "City",
+    "zipCode": "Zip Code",
+    "nuit": "Tax ID",
+    "createdAt": "Created at",
+    "table": {
+      "customer": "Customer",
+      "contact": "Contact",
+      "destination": "Destination",
+      "material": "Material",
+      "driver": "Driver",
+      "manager": "Manager",
+      "sprint": "Sprint",
+      "status": "Status",
+      "scheduled": "Scheduled",
+      "delivered": "Delivered",
+      "earnings": "Earnings",
+      "spent": "Spent",
+      "actions": "Actions"
+    },
+    "placeholders": {
+      "search": "Search...",
+      "selectCustomer": "Select customer",
+      "selectMaterial": "Select material",
+      "selectDriver": "Select driver",
+      "selectManager": "Select manager",
+      "selectSprint": "Select sprint",
+      "selectStatus": "Select status",
+      "name": "Enter name",
+      "phone": "Enter phone",
+      "customerName": "Customer name",
+      "contact": "Contact",
+      "destination": "Delivery destination"
+    },
+    "validation": {
+      "required": "Required field.",
+      "scheduledDate": "Enter scheduled date",
+      "deliveryDate": "Enter delivery date"
+    },
+    "yes": "Yes",
+    "no": "No"
+  },
+  "layout": {
+    "brandSubtitle": "Carload Management",
+    "sectionOperation": "Operation",
+    "menu": {
+      "dashboard": "Dashboard",
+      "carloadsGroup": "Carloads",
+      "carloads": "Carloads",
+      "sprints": "Sprints",
+      "customers": "Customers",
+      "team": "Team",
+      "drivers": "Drivers",
+      "managers": "Managers",
+      "finance": "Finance",
+      "quotes": "Quotes",
+      "invoices": "Invoices",
+      "users": "Users"
+    },
+    "footer": {
+      "title": "System active",
+      "subtitle": "Fleet, billing and deliveries"
+    },
+    "topbar": {
+      "toggleMenu": "Toggle menu",
+      "title": "Management panel",
+      "subtitle": "Carloads, team and documents",
+      "secure": "Secure environment"
+    },
+    "account": {
+      "profile": "Profile",
+      "users": "Users",
+      "authenticated": "Authenticated account",
+      "defaultUser": "User"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "manager": "Manager",
+      "operator": "Operator"
+    },
+    "language": "Language"
+  },
+  "dashboard": {
+    "hero": {
+      "kicker": "Operations center",
+      "scheduledAttention": "{{ count }} overdue carload(s) need attention",
+      "inProgressNow": "{{ count }} carload(s) in progress right now",
+      "todayMarked": "{{ count }} carload(s) scheduled for today",
+      "ready": "Operation ready for the next deliveries",
+      "empty": "No active carloads at the moment",
+      "next": "Next: {{ customer }} to {{ destination }} at {{ date }}.",
+      "start": "Create or schedule carloads to track the operation from here."
+    },
+    "actions": {
+      "newCarload": "New carload",
+      "today": "View today",
+      "refresh": "Refresh",
+      "hideCancelled": "Hide cancelled",
+      "showCancelled": "Show cancelled",
+      "hideDelivered": "Hide delivered",
+      "showDelivered": "Show delivered",
+      "all": "All",
+      "range": "Range"
+    },
+    "metrics": {
+      "active": "Active carloads",
+      "activeSummary": "{{ scheduled }} scheduled, {{ progress }} in progress",
+      "today": "Today",
+      "todaySummary": "Schedule and deliveries for the day",
+      "overdue": "Overdue",
+      "overdueSummary": "Need a decision",
+      "cancelled": "Cancelled",
+      "cancelledSummary": "Operational record",
+      "margin": "Estimated margin",
+      "marginSummary": "Revenue {{ earnings }} / costs {{ spent }}"
+    },
+    "filters": {
+      "search": "Search customer, destination, material, driver, manager...",
+      "start": "Start",
+      "end": "End"
+    },
+    "loading": "Loading dashboard...",
+    "panels": {
+      "priorityKicker": "Priority",
+      "priorityTitle": "Do now",
+      "liveKicker": "Live",
+      "liveTitle": "In progress",
+      "scheduleKicker": "Schedule",
+      "scheduleTitle": "Scheduled",
+      "cancelledKicker": "Interrupted",
+      "cancelledTitle": "Cancelled",
+      "closedKicker": "Closed",
+      "closedTitle": "Delivered"
+    },
+    "empty": {
+      "priority": "No urgent action now.",
+      "progress": "No carloads in progress.",
+      "scheduled": "No scheduled carloads.",
+      "cancelled": "No cancelled carloads.",
+      "delivered": "No delivered carloads."
+    },
+    "status": {
+      "scheduled": "Scheduled",
+      "progress": "In progress",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "type": {
+      "sold": "Sold",
+      "produced": "Produced"
+    },
+    "schedule": {
+      "noDate": "No date",
+      "today": "Today - {{ date }}",
+      "tomorrow": "Tomorrow - {{ date }}",
+      "overdue": "Overdue - {{ date }}"
+    },
+    "priority": {
+      "progress": "In progress now",
+      "overdue": "Overdue",
+      "today": "Scheduled for today",
+      "next": "Next in line"
+    },
+    "card": {
+      "to": "to",
+      "revenue": "Revenue {{ value }}",
+      "margin": "Margin {{ value }}"
+    },
+    "modal": {
+      "cancelTitle": "Cancel carload?",
+      "cancelContent": "Customer: <strong>{{ customer }}</strong><br>Destination: <strong>{{ destination }}</strong>",
+      "cancelOk": "Cancel carload"
+    },
+    "messages": {
+      "scheduled": "Carload moved back to Scheduled.",
+      "progress": "Carload started.",
+      "delivered": "Carload marked as Delivered.",
+      "cancelled": "Carload cancelled successfully.",
+      "statusError": "Error updating carload status.",
+      "loadError": "Error loading dashboard."
+    }
+  },
+  "carloads": {
+    "title": "Carload List",
+    "breadcrumb": "Carload List",
+    "new": "New Carload",
+    "report": "Report",
+    "metrics": {
+      "scheduled": "Scheduled",
+      "progress": "In progress",
+      "delivered": "Delivered"
+    },
+    "search": "Search customer, destination, material, driver...",
+    "reportDrawer": {
+      "title": "Carload Report",
+      "section": "Report data",
+      "type": "Type",
+      "quantity": "Quantity",
+      "period": "Period",
+      "start": "Start",
+      "end": "End",
+      "latest": "Latest carloads",
+      "preset": "Quick period",
+      "customPeriod": "Custom period",
+      "all": "All",
+      "today": "Today",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "lastMonth": "Last month",
+      "last30Days": "Last 30 days",
+      "latestHint": "Prints the most recent carloads by delivery, schedule or creation date.",
+      "presetHint": "Uses a quick period for common day, week or month reports.",
+      "periodHint": "Filters by operational carload date: delivery, schedule or creation.",
+      "allHint": "Includes all carloads loaded in the system."
+    },
+    "drawer": {
+      "createTitle": "Create Carload",
+      "editTitle": "Edit Carload",
+      "copyTitle": "Copy Carload",
+      "section": "Carload Data",
+      "existingCustomer": "Existing customer",
+      "customer": "Customer",
+      "contact": "Contact",
+      "destination": "Destination",
+      "material": "Material",
+      "type": "Carload Type",
+      "produced": "Produced",
+      "sold": "Sold",
+      "driver": "Driver",
+      "manager": "Manager",
+      "sprint": "Sprint",
+      "scheduledDate": "Scheduled Date/Time",
+      "deliveryDate": "Delivery Date/Time",
+      "spent": "Spent",
+      "earnings": "Earnings",
+      "status": "Status"
+    },
+    "messages": {
+      "loadDriversError": "Error loading drivers.",
+      "loadManagersError": "Error loading managers.",
+      "loadSprintsError": "Error loading sprints.",
+      "loadCustomersError": "Error loading customers.",
+      "loadError": "Error loading carloads.",
+      "emptyReport": "There are no carloads for this report.",
+      "required": "Fill in all required fields!",
+      "updated": "Carload updated successfully!",
+      "copied": "Carload copied and created successfully!",
+      "created": "Carload created successfully!",
+      "saveError": "Error saving carload.",
+      "deleted": "Carload deleted successfully!",
+      "deleteError": "Error deleting carload.",
+      "periodRequired": "Select start and end dates."
+    },
+    "modal": {
+      "deleteTitle": "Delete carload?",
+      "deleteContent": "Customer: <strong>{{ customer }}</strong> - Destination: <strong>{{ destination }}</strong>"
+    },
+    "scopes": {
+      "all": "All carloads"
+    }
+  },
+  "customers": {
+    "title": "Customer List",
+    "metrics": {
+      "total": "Total Customers",
+      "withEmail": "With Email",
+      "withoutEmail": "Without Email"
+    },
+    "search": "Search name/code/email/phone",
+    "drawer": {
+      "createTitle": "Create Customer",
+      "editTitle": "Edit Customer",
+      "section": "Customer Information"
+    },
+    "messages": {
+      "deleteTitle": "Delete customer?",
+      "deleted": "Customer deleted successfully!",
+      "deleteError": "Error deleting customer",
+      "fieldUpdated": "Field {{ field }} updated successfully!",
+      "fieldError": "Error updating field",
+      "required": "Fill in Name and Phone (required).",
+      "created": "Customer created successfully!",
+      "updated": "Customer updated successfully!",
+      "saveError": "Error saving customer.",
+      "loadError": "Error loading customers"
+    }
+  },
+  "drivers": {
+    "title": "Driver List",
+    "detailsTitle": "Driver Details",
+    "metrics": {
+      "total": "Total Drivers",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "search": "Search name/phone/car",
+    "drawer": {
+      "createTitle": "Create Driver",
+      "editTitle": "Edit Driver",
+      "section": "Driver Information",
+      "car": "Car",
+      "activity": "Activity"
+    },
+    "messages": {
+      "loadError": "Error loading drivers.",
+      "required": "Fill in all required fields!",
+      "saved": "Driver saved successfully!",
+      "created": "Driver created successfully!",
+      "updated": "Driver updated successfully!",
+      "saveError": "Error saving driver.",
+      "deleteTitle": "Delete driver?",
+      "deleted": "Driver deleted successfully!",
+      "deleteError": "Error deleting driver."
+    }
+  },
+  "managers": {
+    "title": "Manager List",
+    "detailsTitle": "Manager Details",
+    "metrics": {
+      "total": "Total Managers",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "search": "Search name/phone/email",
+    "drawer": {
+      "createTitle": "Create Manager",
+      "editTitle": "Edit Manager",
+      "section": "Manager Information"
+    },
+    "messages": {
+      "loadError": "Error loading managers.",
+      "required": "Fill in all required fields!",
+      "created": "Manager created successfully!",
+      "updated": "Manager updated successfully!",
+      "saveError": "Error saving manager.",
+      "deleteTitle": "Delete manager?",
+      "deleted": "Manager deleted successfully!",
+      "deleteError": "Error deleting manager."
+    }
+  },
+  "sprints": {
+    "title": "Campaigns",
+    "detailsTitle": "Campaign Details",
+    "new": "New Campaign",
+    "metrics": {
+      "totalCarloads": "Total Carloads",
+      "delivered": "Delivered",
+      "progress": "In progress",
+      "scheduled": "Scheduled",
+      "investment": "Investment",
+      "revenue": "Revenue",
+      "profit": "Net profit",
+      "roi": "ROI"
+    },
+    "fields": {
+      "channel": "Channel",
+      "focusMaterial": "Focus material",
+      "period": "Period",
+      "promotedVolumes": "Promoted volumes",
+      "createdBy": "Created by",
+      "closedBy": "Closed by",
+      "closedAt": "Closed at",
+      "targetCarloads": "Target carloads",
+      "targetRevenue": "Target revenue",
+      "bestVolume": "Best-selling volume"
+    },
+    "drawer": {
+      "createTitle": "Create Campaign",
+      "editTitle": "Edit Campaign",
+      "section": "Campaign Data",
+      "carloadSection": "Carload Data (Sprint)"
+    },
+    "messages": {
+      "loadCarloadsError": "Error loading this sprint carloads.",
+      "loadDriversError": "Error loading drivers.",
+      "loadManagersError": "Error loading managers.",
+      "required": "Fill in all required fields.",
+      "updated": "Carload updated successfully.",
+      "copied": "Carload copied and created successfully.",
+      "created": "Carload created successfully.",
+      "saveError": "Error saving carload.",
+      "deleteTitle": "Delete carload?",
+      "deleted": "Carload deleted successfully.",
+      "deleteError": "Error deleting carload."
+    }
+  },
+  "users": {
+    "title": "User List",
+    "new": "New User",
+    "edit": "Edit User",
+    "register": "Register User",
+    "detailTitle": "User profile",
+    "mainData": "Main data",
+    "access": "Access",
+    "notFound": "User not found",
+    "notFoundHint": "Go back to the list and select a valid user.",
+    "goToUsers": "Go to users",
+    "fields": {
+      "state": "State",
+      "role": "Role",
+      "function": "Function",
+      "permissions": "Operational permissions",
+      "accessControl": "System access control",
+      "total": "Total Users"
+    },
+    "messages": {
+      "missing": "User not provided.",
+      "notFound": "User not found.",
+      "loadError": "Error loading user."
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "created": "Created"
+    }
+  },
+  "auth": {
+    "login": {
+      "area": "System Area",
+      "welcome": "Welcome back",
+      "hint": "Use your credentials to access the panel.",
+      "user": "User",
+      "password": "Password",
+      "userPlaceholder": "Enter username",
+      "passwordPlaceholder": "Enter password",
+      "userRequired": "Enter username.",
+      "passwordRequired": "Enter password.",
+      "remember": "Remember me",
+      "forgot": "Forgot password?",
+      "enter": "Enter panel",
+      "entering": "Signing in...",
+      "noAccount": "No account?",
+      "createAccount": "Create account",
+      "brandKicker": "Load and delivery management",
+      "brandTitle": "Enter the panel and keep operations clear.",
+      "brandText": "Track customers, drivers, loads, quotes and invoices in an organized daily work environment.",
+      "organizedData": "Organized data",
+      "authenticatedAccess": "Authenticated access",
+      "newAccess": "New access",
+      "registerHint": "Register a user to access the management system."
+    },
+    "recovery": {
+      "title": "Recover password",
+      "whatsapp": "WhatsApp",
+      "confirmAccount": "Confirm account",
+      "newPassword": "New password",
+      "step1": "Step 1",
+      "step2": "Step 2",
+      "step3": "Step 3",
+      "findAccount": "Find your account",
+      "findHint": "Enter the WhatsApp linked to the user to start recovery.",
+      "phoneRequired": "Enter the number.",
+      "confirmData": "Confirm data",
+      "confirmHint": "Check that this is the correct account before we send the code.",
+      "sendCode": "Send code",
+      "definePassword": "Set a new password",
+      "defineHint": "Use the code received and choose a password with at least 6 characters.",
+      "code": "Code",
+      "codeRequired": "Enter the code.",
+      "minPassword": "Minimum 6 characters.",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordTip": "Confirm password.",
+      "resendCode": "Resend code",
+      "messages": {
+        "invalidLogin": "Invalid login",
+        "whatsappRequired": "Enter the WhatsApp number.",
+        "accountNotFound": "Could not find an account with that WhatsApp.",
+        "codeSent": "We sent a code to the linked WhatsApp and email.",
+        "sendError": "Could not start sending the code.",
+        "fillCodePassword": "Fill in the code and new password.",
+        "passwordMismatch": "Passwords do not match.",
+        "passwordChanged": "Password changed successfully. You can now sign in.",
+        "invalidCode": "Invalid or expired code."
+      }
+    }
+  },
+  "register": {
+    "title": "Create account",
+    "subtitle": "Fill in the data to register a user",
+    "nameRequired": "Enter the name.",
+    "emailInvalid": "Invalid email.",
+    "phoneRequired": "Enter the phone.",
+    "phoneHint": "The number will be saved as +258 followed by your contact.",
+    "loginRequired": "Enter login.",
+    "passwordRequired": "Enter password.",
+    "passwordPlaceholder": "Create a password",
+    "role": "Role",
+    "roleRequired": "Select role.",
+    "select": "Select",
+    "submit": "Register"
+  },
+  "invoice": {
+    "title": "Invoices",
+    "totalInvoices": "Total Invoices",
+    "customers": "Customers",
+    "filtered": "Filtered",
+    "search": "Search invoice/item...",
+    "selectCustomer": "Select customer",
+    "dateRange": "Date range",
+    "customerInfo": "Customer Information",
+    "invoiceCode": "Invoice Code",
+    "items": "Invoice Items",
+    "item": "Item",
+    "selectItem": "Select item",
+    "qty": "Qty",
+    "unitPrice": "Unit price",
+    "subtotal": "Subtotal",
+    "totals": "Totals",
+    "taxRate": "Tax rate (decimal)",
+    "tax": "Tax",
+    "messages": {
+      "required": "Fill in required fields.",
+      "created": "Invoice created successfully!",
+      "createError": "Error creating invoice",
+      "deleteTitle": "Delete invoice?",
+      "deleted": "Invoice deleted successfully!",
+      "deleteError": "Error deleting invoice",
+      "loadError": "Error loading invoices",
+      "loadCustomersError": "Error loading customers"
+    }
+  }
+}

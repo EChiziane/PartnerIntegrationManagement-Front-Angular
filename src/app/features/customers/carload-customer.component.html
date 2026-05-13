@@ -3,7 +3,7 @@
   <!-- ===== Breadcrumb ===== -->
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
-      <a routerLink="/app">Home</a>
+      <a routerLink="/app">{{ 'common.home' | translate }}</a>
     </nz-breadcrumb-item>
 
     <nz-breadcrumb-item>
@@ -13,7 +13,7 @@
 
   <!-- ===== Page Header ===== -->
   <div class="page-header">
-    <p>Lista de Clientes</p>
+    <p>{{ 'customers.title' | translate }}</p>
 
     <span (click)="onBack()" class="back-arrow">
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
@@ -33,7 +33,7 @@
                 <nz-icon nzTheme="outline" nzType="team"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Total Clientes</span>
+                <span class="title">{{ 'customers.metrics.total' | translate }}</span>
                 <p>{{ totalCustomers }}</p>
               </div>
             </div>
@@ -48,7 +48,7 @@
                 <nz-icon nzTheme="outline" nzType="mail"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Com Email</span>
+                <span class="title">{{ 'customers.metrics.withEmail' | translate }}</span>
                 <p>{{ customersWithEmail }}</p>
               </div>
             </div>
@@ -63,7 +63,7 @@
                 <nz-icon nzTheme="outline" nzType="stop"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Sem Email</span>
+                <span class="title">{{ 'customers.metrics.withoutEmail' | translate }}</span>
                 <p>{{ customersWithoutEmail }}</p>
               </div>
             </div>
@@ -107,12 +107,12 @@
         >
           <thead>
           <tr>
-            <th>Nome</th>
+            <th>{{ 'common.name' | translate }}</th>
             <th>Código</th>
-            <th>Telefone</th>
-            <th>Email</th>
-            <th>Morada</th>
-            <th>Criado em</th>
+            <th>{{ 'common.phone' | translate }}</th>
+            <th>{{ 'common.email' | translate }}</th>
+            <th>{{ 'common.address' | translate }}</th>
+            <th>{{ 'common.createdAt' | translate }}</th>
             <th>Ações</th>
           </tr>
           </thead>
@@ -202,9 +202,9 @@
           <!-- Name -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label nzRequired>Nome</nz-form-label>
+              <nz-form-label nzRequired>{{ 'common.name' | translate }}</nz-form-label>
               <nz-form-control>
-                <input formControlName="name" nz-input placeholder="Nome do cliente"/>
+                <input formControlName="name" nz-input [placeholder]="'common.placeholders.customerName' | translate"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -212,7 +212,7 @@
           <!-- Phone -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label nzRequired>Telefone</nz-form-label>
+              <nz-form-label nzRequired>{{ 'common.phone' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-input-group nzAddOnBefore="+258">
                   <input formControlName="phoneNumber" nz-input placeholder="Número de telefone"/>
@@ -228,7 +228,7 @@
           <!-- NUIT -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>NUIT</nz-form-label>
+              <nz-form-label>{{ 'common.nuit' | translate }}</nz-form-label>
               <nz-form-control>
                 <input formControlName="nuitNumber" nz-input placeholder="Ex. 123456789"/>
               </nz-form-control>
@@ -242,7 +242,7 @@
           <!-- Address -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Morada</nz-form-label>
+              <nz-form-label>{{ 'common.address' | translate }}</nz-form-label>
               <nz-form-control>
                 <input
                   (blur)="rememberCustomerLocation()"
@@ -267,7 +267,7 @@
           <!-- City -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Cidade</nz-form-label>
+              <nz-form-label>{{ 'common.city' | translate }}</nz-form-label>
               <nz-form-control>
                 <input
                   (blur)="rememberCustomerLocation()"
@@ -296,7 +296,7 @@
           <!-- Zip -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Zip Code</nz-form-label>
+              <nz-form-label>{{ 'common.zipCode' | translate }}</nz-form-label>
               <nz-form-control>
                 <input formControlName="zipCode" nz-input placeholder="Ex. 12345"/>
               </nz-form-control>
@@ -306,7 +306,7 @@
           <!-- Email -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Email</nz-form-label>
+              <nz-form-label>{{ 'common.email' | translate }}</nz-form-label>
               <nz-form-control>
                 <input formControlName="emailAddress" nz-input placeholder="Ex. customer@gmail.com"/>
               </nz-form-control>

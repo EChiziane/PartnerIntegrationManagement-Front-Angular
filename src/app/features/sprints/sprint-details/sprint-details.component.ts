@@ -14,6 +14,7 @@ import {DriverService} from '@core/services/driver.service';
 import {ManagerService} from '@core/services/manager.service';
 import {SprintService} from '@core/services/sprint.service';
 import {SprintDetailPdfService} from '@core/services/sprint-detail-pdf.service';
+import {TranslationService} from '@core/services/translation.service';
 
 type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
 
@@ -61,7 +62,7 @@ export class SprintDetailsComponent implements OnInit {
   isCarloadDrawerVisible = false;
   isEditMode = false;
   isCopyMode = false;
-  carLoadDrawerTitle = 'Criar Carrada';
+  carLoadDrawerTitle = '';
   selectedCarLoadId: string | null = null;
 
   drawerWidth: string | number = 720;
@@ -102,7 +103,8 @@ export class SprintDetailsComponent implements OnInit {
     private sprintService: SprintService,
     private sprintDetailPdfService: SprintDetailPdfService,
     private modal: NzModalService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private translationService: TranslationService
   ) {
   }
 
@@ -158,13 +160,13 @@ export class SprintDetailsComponent implements OnInit {
   getStatusLabel(status: CarLoadStatus | string): string {
     switch ((status || '').toUpperCase()) {
       case 'SCHEDULED':
-        return 'Agendada';
+        return this.t('dashboard.status.scheduled');
       case 'IN_PROGRESS':
-        return 'Em execução';
+        return this.t('dashboard.status.progress');
       case 'DELIVERED':
-        return 'Entregue';
+        return this.t('dashboard.status.delivered');
       case 'CANCELLED':
-        return 'Cancelada';
+        return this.t('dashboard.status.cancelled');
       default:
         return status as string;
     }
@@ -184,12 +186,12 @@ export class SprintDetailsComponent implements OnInit {
 
     this.driverService.getDrivers().subscribe({
       next: data => (this.dataDrivers = data || []),
-      error: () => this.message.error('Erro ao carregar motoristas.')
+      error: () => this.message.error(this.t('sprints.messages.loadDriversError'))
     });
 
     this.managerService.getManagers().subscribe({
       next: data => (this.dataManagers = data || []),
-      error: () => this.message.error('Erro ao carregar gestores.')
+      error: () => this.message.error(this.t('sprints.messages.loadManagersError'))
     });
 
     setTimeout(() => (this.isLoadingLookups = false), 400);
@@ -206,7 +208,7 @@ export class SprintDetailsComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.message.error('Erro ao carregar carradas desta sprint.');
+        this.message.error(this.t('sprints.messages.loadCarloadsError'));
         this.isLoading = false;
       }
     });
@@ -236,7 +238,7 @@ export class SprintDetailsComponent implements OnInit {
     this.isEditMode = false;
     this.isCopyMode = false;
     this.selectedCarLoadId = null;
-    this.carLoadDrawerTitle = 'Criar Carrada';
+    this.carLoadDrawerTitle = this.t('carloads.drawer.createTitle');
 
     this.carloadForm.reset({
       deliveryStatus: 'SCHEDULED',
@@ -271,7 +273,7 @@ export class SprintDetailsComponent implements OnInit {
     this.isEditMode = true;
     this.isCopyMode = false;
     this.selectedCarLoadId = carload.id;
-    this.carLoadDrawerTitle = 'Editar Carrada';
+    this.carLoadDrawerTitle = this.t('carloads.drawer.editTitle');
 
     this.isCarloadDrawerVisible = true;
     this.carloadForm.patchValue(this.mapCarloadToForm(carload));
@@ -284,7 +286,7 @@ export class SprintDetailsComponent implements OnInit {
     this.isEditMode = false;
     this.isCopyMode = true;
     this.selectedCarLoadId = null;
-    this.carLoadDrawerTitle = 'Copiar Carrada';
+    this.carLoadDrawerTitle = this.t('carloads.drawer.copyTitle');
 
     this.isCarloadDrawerVisible = true;
     this.carloadForm.patchValue(this.mapCarloadToForm(carload));
@@ -302,7 +304,7 @@ export class SprintDetailsComponent implements OnInit {
     this.applyDateRulesByStatus();
 
     if (this.carloadForm.invalid) {
-      this.message.warning('Preencha todos os campos obrigatórios.');
+      this.message.warning(this.t('sprints.messages.required'));
       return;
     }
 
@@ -344,34 +346,34 @@ export class SprintDetailsComponent implements OnInit {
         this.loadCarloadsBySprint();
 
         if (isUpdate) {
-          this.message.success('Carrada actualizada com sucesso.');
+          this.message.success(this.t('sprints.messages.updated'));
         } else if (this.isCopyMode) {
-          this.message.success('Carrada copiada e criada com sucesso.');
+          this.message.success(this.t('sprints.messages.copied'));
         } else {
-          this.message.success('Carrada criada com sucesso.');
+          this.message.success(this.t('sprints.messages.created'));
         }
       },
       error: () => {
         this.isSaving = false;
-        this.message.error('Erro ao gravar carrada.');
+        this.message.error(this.t('sprints.messages.saveError'));
       }
     });
   }
 
   deleteCarload(carload: CarLoad): void {
     this.modal.confirm({
-      nzTitle: 'Tens certeza que quer eliminar esta Carrada?',
-      nzContent: `Cliente: <strong>${carload.customerName}</strong> — Destino: <strong>${carload.deliveryDestination}</strong>`,
+      nzTitle: this.t('sprints.messages.deleteTitle'),
+      nzContent: this.t('carloads.modal.deleteContent', {customer: carload.customerName, destination: carload.deliveryDestination}),
       nzOkDanger: true,
-      nzOkText: 'Sim',
-      nzCancelText: 'Não',
+      nzOkText: this.t('common.yes'),
+      nzCancelText: this.t('common.no'),
       nzOnOk: () =>
         this.carloadService.deleteCarLoad(carload.id).subscribe({
           next: () => {
-            this.message.success('Carrada eliminada com sucesso.');
+            this.message.success(this.t('sprints.messages.deleted'));
             this.loadCarloadsBySprint();
           },
-          error: () => this.message.error('Erro ao eliminar carrada.')
+          error: () => this.message.error(this.t('sprints.messages.deleteError'))
         })
     });
   }
@@ -561,5 +563,9 @@ export class SprintDetailsComponent implements OnInit {
       deliveryScheduledDate: this.toDatetimeLocalInput(carload.deliveryScheduledDate),
       deliveryDate: this.toDatetimeLocalInput(carload.deliveryDate)
     };
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

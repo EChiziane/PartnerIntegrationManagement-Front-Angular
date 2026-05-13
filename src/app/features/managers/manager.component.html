@@ -3,7 +3,7 @@
   <!-- ===== Breadcrumb ===== -->
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
-      <a routerLink="/app">Home</a>
+      <a routerLink="/app">{{ 'common.home' | translate }}</a>
     </nz-breadcrumb-item>
 
     <nz-breadcrumb-item>
@@ -13,7 +13,7 @@
 
   <!-- ===== Page Header ===== -->
   <div class="page-header">
-    <p>Lista de Gestores</p>
+    <p>{{ 'managers.title' | translate }}</p>
 
     <span (click)="onBack()" class="back-arrow">
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
@@ -33,7 +33,7 @@
                 <nz-icon nzTheme="outline" nzType="team"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Total Gestores</span>
+                <span class="title">{{ 'managers.metrics.total' | translate }}</span>
                 <p>{{ totalManagers }}</p>
               </div>
             </div>
@@ -48,7 +48,7 @@
                 <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Ativos</span>
+                <span class="title">{{ 'managers.metrics.active' | translate }}</span>
                 <p>{{ activeManagers }}</p>
               </div>
             </div>
@@ -63,7 +63,7 @@
                 <nz-icon nzTheme="outline" nzType="warning"></nz-icon>
               </div>
               <div class="summary-content">
-                <span class="title">Inativos</span>
+                <span class="title">{{ 'managers.metrics.inactive' | translate }}</span>
                 <p>{{ inactiveManagers }}</p>
               </div>
             </div>
@@ -116,10 +116,10 @@
                 <nz-icon nzType="search"></nz-icon>
               </nz-filter-trigger>
             </th>
-            <th>Contacto</th>
+            <th>{{ 'common.table.contact' | translate }}</th>
             <th>Endereço</th>
-            <th>Status</th>
-            <th>Criado em</th>
+            <th>{{ 'common.status' | translate }}</th>
+            <th>{{ 'common.createdAt' | translate }}</th>
             <th>Ações</th>
           </tr>
           </thead>
@@ -165,12 +165,12 @@
               (ngModelChange)="search()"
               [(ngModel)]="searchValue"
               nz-input
-              placeholder="Pesquisar..."
+              [placeholder]="'common.placeholders.search' | translate"
               type="text"
             />
 
-            <button (click)="search()" nz-button nzSize="small" nzType="primary">Search</button>
-            <button (click)="reset()" nz-button nzSize="small">Reset</button>
+            <button (click)="search()" nz-button nzSize="small" nzType="primary">{{ 'common.actions.search' | translate }}</button>
+            <button (click)="reset()" nz-button nzSize="small">{{ 'common.actions.reset' | translate }}</button>
           </div>
         </div>
       </nz-dropdown-menu>
@@ -199,19 +199,19 @@
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Nome</nz-form-label>
+              <nz-form-label>{{ 'common.name' | translate }}</nz-form-label>
               <nz-form-control>
-                <input formControlName="name" nz-input placeholder="Digite o nome"/>
+                <input formControlName="name" nz-input [placeholder]="'common.placeholders.name' | translate"/>
               </nz-form-control>
             </nz-form-item>
           </div>
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Contacto</nz-form-label>
+              <nz-form-label>{{ 'common.table.contact' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-input-group nzAddOnBefore="+258">
-                  <input formControlName="contact" nz-input placeholder="Digite o contacto"/>
+                  <input formControlName="contact" nz-input [placeholder]="'common.placeholders.contact' | translate"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -232,11 +232,11 @@
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Status</nz-form-label>
+              <nz-form-label>{{ 'common.status' | translate }}</nz-form-label>
               <nz-form-control>
-                <nz-select formControlName="status" nzPlaceHolder="Selecione o status">
-                  <nz-option nzLabel="ACTIVO" nzValue="ACTIVO"></nz-option>
-                  <nz-option nzLabel="INACTIVO" nzValue="INACTIVO"></nz-option>
+                <nz-select formControlName="status" [nzPlaceHolder]="'common.placeholders.selectStatus' | translate">
+                  <nz-option [nzLabel]="'managers.metrics.active' | translate" nzValue="ACTIVO"></nz-option>
+                  <nz-option [nzLabel]="'managers.metrics.inactive' | translate" nzValue="INACTIVO"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>

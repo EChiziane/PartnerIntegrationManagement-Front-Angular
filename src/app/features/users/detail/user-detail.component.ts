@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {User} from '@shared/models/user';
 import {UserService} from '@core/services/user.service';
+import {TranslationService} from '@core/services/translation.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -18,7 +19,8 @@ export class UserDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private translationService: TranslationService
   ) {
   }
 
@@ -27,7 +29,7 @@ export class UserDetailComponent implements OnInit {
       const id = params.get('id');
 
       if (!id) {
-        this.message.error('Utilizador nao informado.');
+        this.message.error(this.t('users.messages.missing'));
         this.goBack();
         return;
       }
@@ -49,13 +51,13 @@ export class UserDetailComponent implements OnInit {
 
   roleLabel(role: User['role'] | undefined): string {
     const labels: Record<User['role'], string> = {
-      ADMIN: 'Administrador',
-      MANAGER: 'Gestor',
-      OPERATOR: 'Operador',
-      USER: 'Operador'
+      ADMIN: this.t('layout.roles.admin'),
+      MANAGER: this.t('layout.roles.manager'),
+      OPERATOR: this.t('layout.roles.operator'),
+      USER: this.t('layout.roles.operator')
     };
 
-    return role ? labels[role] : 'Sem funcao';
+    return role ? labels[role] : this.t('users.fields.function');
   }
 
   roleColor(role: User['role'] | undefined): string {
@@ -65,9 +67,9 @@ export class UserDetailComponent implements OnInit {
   }
 
   statusLabel(status: User['status'] | undefined): string {
-    if (status === 'ACTIVE') return 'Activo';
-    if (status === 'INACTIVE') return 'Inactivo';
-    return 'Criado';
+    if (status === 'ACTIVE') return this.t('users.status.active');
+    if (status === 'INACTIVE') return this.t('users.status.inactive');
+    return this.t('users.status.created');
   }
 
   statusColor(status: User['status'] | undefined): string {
@@ -93,13 +95,17 @@ export class UserDetailComponent implements OnInit {
         this.isLoading = false;
 
         if (!this.user) {
-          this.message.warning('Utilizador nao encontrado.');
+          this.message.warning(this.t('users.messages.notFound'));
         }
       },
       error: () => {
         this.isLoading = false;
-        this.message.error('Erro ao carregar utilizador.');
+        this.message.error(this.t('users.messages.loadError'));
       }
     });
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }
