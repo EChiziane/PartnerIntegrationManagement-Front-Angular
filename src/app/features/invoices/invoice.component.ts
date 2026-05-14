@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 
@@ -10,6 +10,8 @@ import {CarloadInvoiceService} from '@core/services/carload-invoice.service';
 import {CarloadCustomerService} from '@core/services/carload-customer.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+
+type InvoicePeriodPreset = 'ALL' | 'TODAY' | 'THIS_MONTH' | 'LAST_30_DAYS' | 'CUSTOM';
 
 @Component({
   selector: 'app-invoice',
@@ -30,6 +32,7 @@ export class InvoiceComponent implements OnInit {
   searchValue = '';
   dateRange: Date[] | null = null;
   selectedCustomerId: string | null = null;
+  selectedPeriodPreset: InvoicePeriodPreset = 'ALL';
 
   totalInvoices = 0;
   totalCustomers = 0;
@@ -178,6 +181,10 @@ export class InvoiceComponent implements OnInit {
     return this.invoiceForm.get('items') as FormArray;
   }
 
+  get hasActiveFilters(): boolean {
+    return !!this.searchValue.trim() || !!this.selectedCustomerId || !!this.dateRange || this.selectedPeriodPreset !== 'ALL';
+  }
+
   ngOnInit(): void {
     this.initForm();
     this.loadInvoices();
@@ -207,6 +214,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   filterByDateRange(): void {
+    this.selectedPeriodPreset = this.dateRange ? 'CUSTOM' : 'ALL';
     this.applyFilters();
   }
 
@@ -218,6 +226,13 @@ export class InvoiceComponent implements OnInit {
     this.searchValue = '';
     this.selectedCustomerId = null;
     this.dateRange = null;
+    this.selectedPeriodPreset = 'ALL';
+    this.applyFilters();
+  }
+
+  setPeriodPreset(preset: InvoicePeriodPreset): void {
+    this.selectedPeriodPreset = preset;
+    this.dateRange = preset === 'ALL' ? null : this.getPresetRange(preset);
     this.applyFilters();
   }
 
@@ -296,14 +311,15 @@ export class InvoiceComponent implements OnInit {
 
   submitInvoice(): void {
     if (this.invoiceForm.invalid) {
-      this.message.warning('Preencha os campos obrigatórios.');
+      this.markControlTouched(this.invoiceForm);
+      this.message.warning('Preencha os campos obrigatorios.');
       return;
     }
 
     this.isSaving = true;
 
     this.invoiceForm.get('invoiceCode')?.enable({emitEvent: false});
-    const invoiceData = this.invoiceForm.getRawValue();
+    const invoiceData = this.buildInvoicePayload();
     this.invoiceForm.get('invoiceCode')?.disable({emitEvent: false});
 
     this.invoiceService.addInvoice(invoiceData).subscribe({
@@ -311,11 +327,11 @@ export class InvoiceComponent implements OnInit {
         this.isSaving = false;
         this.loadInvoices();
         this.closeDrawer();
-        this.message.success('Fatura criada com sucesso! ✅');
+        this.message.success('Fatura criada com sucesso.');
       },
       error: () => {
         this.isSaving = false;
-        this.message.error('Erro ao criar fatura 🚫');
+        this.message.error('Erro ao criar fatura.');
       }
     });
   }
@@ -325,15 +341,15 @@ export class InvoiceComponent implements OnInit {
       nzTitle: 'Tens certeza que quer eliminar esta fatura?',
       nzContent: `<b>${invoice.invoiceCode}</b>`,
       nzOkText: 'Sim',
-      nzCancelText: 'Não',
+      nzCancelText: 'Nao',
       nzOkDanger: true,
       nzOnOk: () => {
         this.invoiceService.deleteInvoice(invoice.id).subscribe({
           next: () => {
             this.loadInvoices();
-            this.message.success('Fatura eliminada com sucesso! 🗑️');
+            this.message.success('Fatura eliminada com sucesso.');
           },
-          error: () => this.message.error('Erro ao eliminar fatura 🚫')
+          error: () => this.message.error('Erro ao eliminar fatura.')
         });
       }
     });
@@ -518,7 +534,11 @@ export class InvoiceComponent implements OnInit {
       filtered = filtered.filter(inv =>
         (inv.invoiceCode || '').toLowerCase().includes(val) ||
         (inv.carloadCustomerName || '').toLowerCase().includes(val) ||
-        (inv.items || []).some(it => (it.description || '').toLowerCase().includes(val))
+        (inv.createdByName || '').toLowerCase().includes(val) ||
+        (inv.items || []).some(it =>
+          (it.description || '').toLowerCase().includes(val) ||
+          this.getItemLabel(it.description || '').toLowerCase().includes(val)
+        )
       );
     }
 
@@ -532,6 +552,26 @@ export class InvoiceComponent implements OnInit {
 
     itemGroup.patchValue({amount}, {emitEvent: false});
     this.calculateTotals();
+  }
+
+  private buildInvoicePayload(): any {
+    const rawValue = this.invoiceForm.getRawValue();
+    return {
+      ...rawValue,
+      items: (rawValue.items || []).map((item: any) => ({
+        ...item,
+        description: this.normalizeMaterialType(item.description)
+      }))
+    };
+  }
+
+  private normalizeMaterialType(value: string): string {
+    if (!value) {
+      return value;
+    }
+
+    const byLabel = Object.entries(this.itemLabels).find(([, label]) => label === value);
+    return byLabel?.[0] || value;
   }
 
   private calculateTotals(): void {
@@ -579,7 +619,7 @@ export class InvoiceComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        this.message.error('Erro ao carregar faturas 🚫');
+        this.message.error('Erro ao carregar faturas.');
       }
     });
   }
@@ -590,8 +630,39 @@ export class InvoiceComponent implements OnInit {
         this.dataCustomer = data || [];
         this.totalCustomers = this.dataCustomer.length;
       },
-      error: () => this.message.error('Erro ao carregar clientes 🚫')
+      error: () => this.message.error('Erro ao carregar clientes.')
     });
+  }
+
+  private getPresetRange(preset: InvoicePeriodPreset): Date[] | null {
+    if (preset === 'ALL' || preset === 'CUSTOM') {
+      return null;
+    }
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+
+    const start = new Date(end);
+    start.setHours(0, 0, 0, 0);
+
+    if (preset === 'THIS_MONTH') {
+      start.setDate(1);
+    }
+
+    if (preset === 'LAST_30_DAYS') {
+      start.setDate(start.getDate() - 29);
+    }
+
+    return [start, end];
+  }
+
+  private markControlTouched(control: AbstractControl): void {
+    control.markAsDirty();
+    control.markAsTouched();
+
+    if (control instanceof FormGroup || control instanceof FormArray) {
+      Object.values(control.controls).forEach(child => this.markControlTouched(child));
+    }
   }
 
   private generateNextInvoiceCode(): number {

@@ -105,6 +105,7 @@
         <nz-table
           #nzTable
           [nzData]="listOfDisplayData"
+          [nzNoResult]="emptyCarloads"
           [nzScroll]="{ y: '440px' }"
           class="compact-carload-table"
           nzTableLayout="fixed">
@@ -135,7 +136,7 @@
             <td class="cell-ellipsis" [title]="data.carloadBatchName">{{ data.carloadBatchName }}</td>
 
             <td>
-              <nz-tag [nzColor]="isDelivered(data.deliveryStatus) ? 'green' : 'orange'">
+              <nz-tag [nzColor]="getStatusColor(data.deliveryStatus)">
                 {{ getStatusLabel(data.deliveryStatus) }}
               </nz-tag>
             </td>
@@ -165,11 +166,24 @@
                   <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
                 </button>
 
-                <button (click)="editCarLoad(data)" nz-button nzSize="small" nzType="link">
+                <button
+                  (click)="editCarLoad(data)"
+                  nz-button
+                  nz-tooltip
+                  nzSize="small"
+                  nzTooltipTitle="Editar carrada"
+                  nzType="link">
                   <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
                 </button>
 
-                <button (click)="deleteCarLoad(data)" nz-button nzDanger nzSize="small" nzType="link">
+                <button
+                  (click)="deleteCarLoad(data)"
+                  nz-button
+                  nzDanger
+                  nz-tooltip
+                  nzSize="small"
+                  nzTooltipTitle="Eliminar carrada"
+                  nzType="link">
                   <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
                 </button>
               </div>
@@ -177,6 +191,25 @@
           </tr>
           </tbody>
         </nz-table>
+
+        <ng-template #emptyCarloads>
+          <div class="table-empty-state">
+            <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
+            <h3>{{ isLoading ? 'A carregar carradas...' : 'Nenhuma carrada encontrada' }}</h3>
+            <p *ngIf="!isLoading && hasActiveFilters">Nao ha carradas para os filtros atuais. Limpa os filtros ou tenta outro estado.</p>
+            <p *ngIf="!isLoading && !hasActiveFilters">Comeca criando a primeira carrada para acompanhar agendamentos, execucao e entregas.</p>
+            <div class="filter-chip-bar" *ngIf="!isLoading">
+              <button *ngIf="hasActiveFilters" (click)="reset()" nz-button nzType="default">
+                <nz-icon nzTheme="outline" nzType="reload"></nz-icon>
+                Limpar filtros
+              </button>
+              <button (click)="openCarLoadDrawer()" nz-button nzType="primary">
+                <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
+                Nova Carrada
+              </button>
+            </div>
+          </div>
+        </ng-template>
       </nz-spin>
     </div>
   </div>
@@ -283,6 +316,11 @@
 
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar carrada...">
     <form [formGroup]="carLoadForm" class="drawer-form" nz-form>
+      <div class="form-helper-card">
+        <nz-icon nzTheme="outline" nzType="info-circle"></nz-icon>
+        <span>Preenche os dados essenciais da carrada. O estado define quais datas sao obrigatorias.</span>
+      </div>
+
       <div class="drawer-section">
         <h3 class="section-title">{{ 'carloads.drawer.section' | translate }}</h3>
 

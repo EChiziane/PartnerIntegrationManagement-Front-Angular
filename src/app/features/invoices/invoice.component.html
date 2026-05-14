@@ -66,6 +66,20 @@
   </div>
 
   <div class="filters-panel">
+    <div class="filter-chip-bar">
+      <button (click)="setPeriodPreset('ALL')" [class.active]="selectedPeriodPreset === 'ALL'" nz-button nzType="default">
+        Todas
+      </button>
+      <button (click)="setPeriodPreset('TODAY')" [class.active]="selectedPeriodPreset === 'TODAY'" nz-button nzType="default">
+        Hoje
+      </button>
+      <button (click)="setPeriodPreset('THIS_MONTH')" [class.active]="selectedPeriodPreset === 'THIS_MONTH'" nz-button nzType="default">
+        Este mes
+      </button>
+      <button (click)="setPeriodPreset('LAST_30_DAYS')" [class.active]="selectedPeriodPreset === 'LAST_30_DAYS'" nz-button nzType="default">
+        Ultimos 30 dias
+      </button>
+    </div>
 
     <input
       (ngModelChange)="search()"
@@ -120,6 +134,7 @@
         <nz-table
           #nzTable
           [nzData]="invoices"
+          [nzNoResult]="emptyInvoices"
           [nzScroll]="{ x: '1120px', y: '340px' }"
           nzTableLayout="fixed"
         >
@@ -148,8 +163,9 @@
                 <button
                   (click)="downloadInvoice(invoice)"
                   nz-button
-                  nz-tooltip="Download"
+                  nz-tooltip
                   nzSize="small"
+                  nzTooltipTitle="Baixar fatura"
                   nzType="link"
                 >
                   <nz-icon nzTheme="outline" nzType="download"></nz-icon>
@@ -158,9 +174,10 @@
                 <button
                   (click)="deleteInvoice(invoice)"
                   nz-button
-                  nz-tooltip="Eliminar"
+                  nz-tooltip
                   nzDanger
                   nzSize="small"
+                  nzTooltipTitle="Eliminar fatura"
                   nzType="link"
                 >
                   <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
@@ -171,6 +188,25 @@
           </tbody>
 
         </nz-table>
+
+        <ng-template #emptyInvoices>
+          <div class="table-empty-state">
+            <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
+            <h3>{{ isLoading ? 'A carregar faturas...' : 'Nenhuma fatura encontrada' }}</h3>
+            <p *ngIf="!isLoading && hasActiveFilters">Nao ha faturas para os filtros atuais. Ajusta o cliente, periodo ou pesquisa.</p>
+            <p *ngIf="!isLoading && !hasActiveFilters">Cria a primeira fatura para acompanhar os documentos comerciais dos clientes.</p>
+            <div class="filter-chip-bar" *ngIf="!isLoading">
+              <button *ngIf="hasActiveFilters" (click)="clearFilters()" nz-button nzType="default">
+                <nz-icon nzTheme="outline" nzType="reload"></nz-icon>
+                Limpar filtros
+              </button>
+              <button (click)="openDrawer()" nz-button nzType="primary">
+                <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
+                Nova Fatura
+              </button>
+            </div>
+          </div>
+        </ng-template>
       </nz-spin>
 
     </div>
@@ -189,6 +225,10 @@
 >
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar fatura...">
     <form [formGroup]="invoiceForm" class="drawer-form" nz-form>
+      <div class="form-helper-card">
+        <nz-icon nzTheme="outline" nzType="info-circle"></nz-icon>
+        <span>Escolhe o cliente, adiciona os itens e confirma os totais antes de criar a fatura.</span>
+      </div>
 
       <div class="drawer-section">
         <h3 class="section-title">{{ 'invoice.customerInfo' | translate }}</h3>

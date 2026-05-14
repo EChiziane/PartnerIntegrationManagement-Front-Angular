@@ -349,6 +349,78 @@ body {
   box-shadow: 0 18px 45px rgba(16, 33, 43, 0.05) !important;
 }
 
+.table-wrapper .ant-table-placeholder {
+  border-bottom: 0 !important;
+}
+
+.empty-state,
+.table-empty-state {
+  display: grid !important;
+  justify-items: center !important;
+  gap: 10px !important;
+  padding: 34px 18px !important;
+  color: #5f7481 !important;
+  text-align: center !important;
+}
+
+.empty-state h3,
+.table-empty-state h3 {
+  margin: 0 !important;
+  color: #10212b !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+
+.empty-state p,
+.table-empty-state p {
+  max-width: 460px !important;
+  margin: 0 !important;
+  color: #607786 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.empty-state [nz-button],
+.table-empty-state [nz-button] {
+  margin-top: 6px !important;
+}
+
+.form-helper-card {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  margin-bottom: 14px !important;
+  padding: 12px 14px !important;
+  border: 1px solid #cce6df !important;
+  border-radius: 8px !important;
+  background: #f0fbf8 !important;
+  color: #285d56 !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+.form-helper-card nz-icon {
+  margin-top: 2px !important;
+  color: #0e7c72 !important;
+}
+
+.filter-chip-bar {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.filter-chip-bar button[nz-button] {
+  min-width: auto !important;
+}
+
+.filter-chip-bar button.active {
+  color: #0e7c72 !important;
+  border-color: #8edfd1 !important;
+  background: #e7faf5 !important;
+}
+
 .table-scroll {
   padding: 0 !important;
 }

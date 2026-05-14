@@ -139,6 +139,10 @@ export class CarLoadComponent implements OnInit {
     return this.selectedCarloadType === 'Sold';
   }
 
+  get hasActiveFilters(): boolean {
+    return this.filterMode !== 'ALL' || !!this.searchValue.trim();
+  }
+
   get availableSprints(): Sprint[] {
     const selectedSprintId = this.carLoadForm.get('carloadBatchId')?.value;
 
@@ -222,6 +226,19 @@ export class CarLoadComponent implements OnInit {
 
   isDelivered(status: CarLoadStatus): boolean {
     return (status || '').toUpperCase() === 'DELIVERED';
+  }
+
+  getStatusColor(status: CarLoadStatus): string {
+    switch ((status || '').toUpperCase()) {
+      case 'DELIVERED':
+        return 'green';
+      case 'IN_PROGRESS':
+        return 'blue';
+      case 'CANCELLED':
+        return 'red';
+      default:
+        return 'orange';
+    }
   }
 
   loadLookups(): void {
@@ -439,6 +456,7 @@ export class CarLoadComponent implements OnInit {
     this.applyCustomerModeRules();
 
     if (this.carLoadForm.invalid) {
+      this.markFormGroupTouched(this.carLoadForm);
       this.message.warning(this.t('carloads.messages.required'));
       return;
     }
@@ -742,6 +760,17 @@ export class CarLoadComponent implements OnInit {
       deliveryScheduledDate: this.toDatetimeLocalInput(carload.deliveryScheduledDate),
       deliveryDate: this.toDatetimeLocalInput(carload.deliveryDate)
     };
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsDirty();
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 
   t(key: string, params?: Record<string, string | number | null | undefined>): string {
