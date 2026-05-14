@@ -14,7 +14,6 @@ import {TranslationService} from '@core/services/translation.service';
 })
 export class DriverComponent implements OnInit {
 
-  // ========= Data =========
   dataSource: Driver[] = [];
   listOfDisplayData: Driver[] = [];
 
@@ -25,26 +24,22 @@ export class DriverComponent implements OnInit {
   activeDrivers = 0;
   inactiveDrivers = 0;
 
-  // ========= UI State =========
   searchValue = '';
   visible = false;
 
   isDriverDrawerVisible = false;
 
-  // ========= Edit State =========
   isEditMode = false;
   driverDrawerTitle = '';
   selectedDriverId: string | null = null;
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
-  // ✅ Details Drawer State
   isDriverDetailsVisible = false;
   selectedDriverDetails: Driver | null = null;
   detailsDrawerWidth: string | number = 560;
   detailsDrawerPlacement: 'right' | 'bottom' = 'right';
 
-  // ✅ Opções de carros
   carOptions: string[] = [
     '4m3(DYNA)',
     '7m3(HINO-RANGER)',
@@ -53,7 +48,6 @@ export class DriverComponent implements OnInit {
     '24m3(SINOTRUK)'
   ];
 
-  // ========= Forms =========
   driverForm = new FormGroup({
     Name: new FormControl('', Validators.required),
     Phone: new FormControl('', [Validators.required, Validators.pattern('^[+0-9 ]+$')]),
@@ -61,7 +55,6 @@ export class DriverComponent implements OnInit {
     status: new FormControl('ACTIVO', Validators.required)
   });
 
-  // ✅ Guardar o driver original para não perder id/createdAt no update
   private selectedDriver: Driver | null = null;
 
   constructor(
@@ -94,7 +87,6 @@ export class DriverComponent implements OnInit {
     }
   }
 
-  // ========= Driver Logic =========
   getDrivers() {
     this.isLoading = true;
     this.driverService.getDrivers().subscribe({
@@ -142,7 +134,6 @@ export class DriverComponent implements OnInit {
     this.search();
   }
 
-  // ========= Drawer CRUD =========
   openDriverDrawer() {
     this.isEditMode = false;
     this.driverDrawerTitle = this.t('drivers.drawer.createTitle');
@@ -194,11 +185,11 @@ export class DriverComponent implements OnInit {
 
     const formData: any = {...this.driverForm.value};
 
-    // Normalizar phone para +258
+    // Normaliza o contacto para o formato usado pela API.
     const rawPhone = (formData.Phone || '').toString().trim();
     formData.Phone = rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`;
 
-    // ✅ No update, preserva campos fora do form (id, createdAt, etc.)
+    // Preserva campos controlados pelo backend que nao fazem parte do formulario.
     const payload = (this.isEditMode && this.selectedDriver)
       ? {...this.selectedDriver, ...formData}
       : formData;
@@ -242,7 +233,6 @@ export class DriverComponent implements OnInit {
     });
   }
 
-  // ========= Details Drawer =========
   viewDriver(data: Driver) {
     this.selectedDriverDetails = data;
     this.isDriverDetailsVisible = true;
@@ -263,7 +253,6 @@ export class DriverComponent implements OnInit {
     this.deleteDriver(driver);
   }
 
-  // ========= Navigation =========
   onBack() {
     window.history.back();
   }

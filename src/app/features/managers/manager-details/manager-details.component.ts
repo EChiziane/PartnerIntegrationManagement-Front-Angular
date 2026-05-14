@@ -12,7 +12,6 @@ export class ManagerDetailsComponent {
   @Input() visible = false;
   @Input() manager: Manager | null = null;
 
-  // Responsivo (igual ao padrão)
   @Input() drawerWidth: string | number = 560;
   @Input() drawerPlacement: 'right' | 'bottom' = 'right';
 

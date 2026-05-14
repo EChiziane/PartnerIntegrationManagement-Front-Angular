@@ -21,7 +21,6 @@ export class CarloadQuoteService {
   }
 
   public addQuote(quote: any): Observable<CarloadQuote> {
-    console.log(quote)
     return this.http.post<CarloadQuote>(this.baseURL, quote).pipe(take(1));
   }
 

@@ -1,6 +1,4 @@
 <div class="content-wrapper">
-
-  <!-- ===== Breadcrumb ===== -->
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
       <a routerLink="/app">{{ 'common.home' | translate }}</a>
@@ -10,8 +8,6 @@
       Lista de Clientes
     </nz-breadcrumb-item>
   </nz-breadcrumb>
-
-  <!-- ===== Page Header ===== -->
   <div class="page-header">
     <p>{{ 'customers.title' | translate }}</p>
 
@@ -19,13 +15,9 @@
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
     </span>
   </div>
-
-  <!-- ===== Summary Section ===== -->
   <div class="summary-section">
     <div class="summary-background">
       <div [nzGutter]="8" nz-row>
-
-        <!-- Total -->
         <div [nzSpan]="8" nz-col>
           <nz-card nzSize="small">
             <div class="summary-card">
@@ -39,8 +31,6 @@
             </div>
           </nz-card>
         </div>
-
-        <!-- Com Email -->
         <div [nzSpan]="8" nz-col>
           <nz-card nzSize="small">
             <div class="summary-card">
@@ -54,8 +44,6 @@
             </div>
           </nz-card>
         </div>
-
-        <!-- Sem Email -->
         <div [nzSpan]="8" nz-col>
           <nz-card nzSize="small">
             <div class="summary-card">
@@ -73,8 +61,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ===== Filters Panel ===== -->
   <div class="filters-panel">
     <input
       (ngModelChange)="search()"
@@ -89,8 +75,6 @@
       Novo Cliente
     </button>
   </div>
-
-  <!-- ===== Table ===== -->
   <div class="table-wrapper">
     <div class="table-scroll">
 
@@ -119,8 +103,6 @@
 
           <tbody>
           <tr *ngFor="let customer of customerTable.data">
-
-            <!-- Editable Name -->
             <td>
               <ng-container
                 *ngIf="editingCustomer?.id === customer.id && editingField === 'name'; else viewName"
@@ -143,20 +125,10 @@
             <td>
               <span>{{ customer.customerCode || '-' }}</span>
             </td>
-
-            <!-- Phone -->
             <td>{{ customer.phoneNumber }}</td>
-
-            <!-- Email -->
             <td>{{ customer.emailAddress }}</td>
-
-            <!-- Address -->
             <td>{{ customer.streetAddress }}, {{ customer.city }}, {{ customer.zipCode }}</td>
-
-            <!-- Created -->
             <td>{{ customer.createdAt | date:'dd/MM/yyyy - HH:mm' }}</td>
-
-            <!-- Actions -->
             <td>
               <button [routerLink]="['/app/carload-customer-detail', customer.id]" nz-button nzSize="small" nzType="link">
                 <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
@@ -179,8 +151,6 @@
     </div>
   </div>
 </div>
-
-<!-- ===== Drawer ===== -->
 <nz-drawer
   (nzOnClose)="closeDrawer()"
   [nzBodyStyle]="{ overflow: 'auto' }"
@@ -198,8 +168,6 @@
         <h3 class="section-title">Informação do Cliente</h3>
 
         <div [nzGutter]="16" nz-row>
-
-          <!-- Name -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label nzRequired>{{ 'common.name' | translate }}</nz-form-label>
@@ -208,8 +176,6 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-
-          <!-- Phone -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label nzRequired>{{ 'common.phone' | translate }}</nz-form-label>
@@ -224,8 +190,6 @@
         </div>
 
         <div [nzGutter]="16" nz-row>
-
-          <!-- NUIT -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>{{ 'common.nuit' | translate }}</nz-form-label>
@@ -238,8 +202,6 @@
         </div>
 
         <div [nzGutter]="16" nz-row>
-
-          <!-- Address -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>{{ 'common.address' | translate }}</nz-form-label>
@@ -263,8 +225,6 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-
-          <!-- City -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>{{ 'common.city' | translate }}</nz-form-label>
@@ -292,8 +252,6 @@
         </div>
 
         <div [nzGutter]="16" nz-row>
-
-          <!-- Zip -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>{{ 'common.zipCode' | translate }}</nz-form-label>
@@ -302,8 +260,6 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-
-          <!-- Email -->
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
               <nz-form-label>{{ 'common.email' | translate }}</nz-form-label>

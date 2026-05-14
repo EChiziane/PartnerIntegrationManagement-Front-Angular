@@ -28,13 +28,11 @@ import {
 
 const routes: Routes = [
 
-  // 🌍 Público
   {path: '', redirectTo: 'landing-page', pathMatch: 'full'},
   {path: 'landing-page', component: LandingPageComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: SigninComponent},
 
-  // 🔐 Sistema protegido
   {
     path: 'app',
     component: MainLayoutComponent,
@@ -56,13 +54,11 @@ const routes: Routes = [
 
 
       {path: 'users', component: ListuserComponent},
-
-      // rota default do sistema
+      // Mantem o dashboard como primeira tela apos login.
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'}
     ]
   },
 
-  // fallback
   {path: '**', redirectTo: 'landing-page'}
 ];
 

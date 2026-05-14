@@ -12,7 +12,6 @@ export class DriverDetailsComponent {
   @Input() visible = false;
   @Input() driver: Driver | null = null;
 
-  // Responsivo (igual ao teu padrão)
   @Input() drawerWidth: string | number = 560;
   @Input() drawerPlacement: 'right' | 'bottom' = 'right';
 
@@ -31,8 +30,7 @@ export class DriverDetailsComponent {
 
   get statusColor(): string {
     const s = (this.driver?.status ?? '').toUpperCase();
-    // no teu código tens ACTIVO/INACTIVO, mas na tabela comparas ATIVO.
-    // Vamos considerar ambos:
+    // Aceita as duas grafias historicas usadas no sistema.
     if (s === 'ACTIVO' || s === 'ATIVO') return 'green';
     return 'red';
   }

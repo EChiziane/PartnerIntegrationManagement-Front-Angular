@@ -24,7 +24,7 @@ export class ListuserComponent {
 
   searchValue = '';
   visible = false;
-  visible1 = false; // Controla a visibilidade do modal
+  visible1 = false;
   userForm!: FormGroup;
   currentEditingUserId: string | null = null;
   isUserDrawerVisible = false;
@@ -50,7 +50,7 @@ export class ListuserComponent {
 
   loadUsers() {
     this.userService.getUsers().subscribe(users => {
-      this.dataSource = users;              // <<< importante
+      this.dataSource = users;
       this.listOfDisplayData = [...users];
 
       this.totalUsers = users.length;
@@ -82,7 +82,7 @@ export class ListuserComponent {
         next: () => {
           this.loadUsers();
           this.closeUserDrawer();
-          this.message.success('Utilizador atualizado com sucesso! ✅');
+          this.message.success('Utilizador atualizado com sucesso.');
           this.isSaving = false;
         },
         error: () => {
@@ -126,7 +126,6 @@ export class ListuserComponent {
   }
 
   viewUser(data: User) {
-    // Implementar visualização do utilizador
   }
 
   roleLabel(role: User['role']): string {
@@ -172,7 +171,7 @@ export class ListuserComponent {
       nzContent: `Utilizador: <strong>${user.name}</strong>`,
       nzOkText: `Sim`,
       nzOkType: `primary`,
-      nzCancelText: `Não`,
+      nzCancelText: `Nao`,
       nzOnOk: () => {
         this.userService.deleteUser(user.id).subscribe({
           next: () => {

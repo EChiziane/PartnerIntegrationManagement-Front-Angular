@@ -23,7 +23,6 @@ export class DriverService {
   }
 
   public addDriver(driver: any): Observable<Driver> {
-    console.log(driver)
     return this.http.post<Driver>(this.baseURL, driver).pipe(take(1));
   }
 
@@ -32,7 +31,6 @@ export class DriverService {
   }
 
   public updateDriver(id: any, driver: any): Observable<Driver> {
-    console.log(driver)
     return this.http.put<Driver>(`${this.baseURL}/${id}`, driver).pipe(take(1));
   }
 }

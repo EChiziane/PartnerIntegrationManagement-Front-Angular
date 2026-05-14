@@ -4,7 +4,7 @@ export interface Driver {
   Phone: string;
   CarDescription: string;
   status: string;
-  createdAt: string; // ISO 8601
+  createdAt: string;
   createdBy?: string | null;
   createdByName?: string | null;
 }

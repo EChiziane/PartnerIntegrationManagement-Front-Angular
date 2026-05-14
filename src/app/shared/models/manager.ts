@@ -4,7 +4,7 @@ export interface Manager {
   contact: string;
   address: string;
   status: 'ACTIVO' | 'INACTIVO' | string;
-  createdAt: string; // ISO 8601
+  createdAt: string;
   createdBy?: string | null;
   createdByName?: string | null;
 }

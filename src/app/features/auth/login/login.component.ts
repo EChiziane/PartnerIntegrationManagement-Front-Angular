@@ -24,10 +24,8 @@ export class LoginComponent implements OnInit {
   responseMessage: string | null = null;
   isLoading = false;
 
-  // show/hide login password
   isPasswordVisible = false;
 
-  // ===== Recovery Modal =====
   isForgotPasswordVisible = false;
   recoveryStep: 0 | 1 | 2 = 0;
   recoveryLoading = false;
@@ -97,16 +95,14 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
         this.router.navigate(['/app/dashboard']);
       },
-      error: (err) => {
+      error: () => {
         this.isLoading = false;
         this.responseMessage = this.t('auth.recovery.messages.invalidLogin');
-        console.error(err);
       }
     });
   }
 
 
-  // ===== Register Modal =====
   openRegisterModal(): void {
     this.isRegisterVisible = true;
   }
@@ -115,7 +111,6 @@ export class LoginComponent implements OnInit {
     this.isRegisterVisible = false;
   }
 
-  // ===== Recovery Modal =====
   openForgotPasswordModal(): void {
     this.isForgotPasswordVisible = true;
     this.recoveryStep = 0;
@@ -152,9 +147,8 @@ export class LoginComponent implements OnInit {
         this.recoveryPreview = preview;
         this.recoveryStep = 1;
       },
-      error: (err) => {
+      error: () => {
         this.recoveryLoading = false;
-        console.error(err);
         this.msg.error(this.t('auth.recovery.messages.accountNotFound'));
       }
     });
@@ -170,9 +164,8 @@ export class LoginComponent implements OnInit {
         this.recoveryStep = 2;
         this.msg.success(this.t('auth.recovery.messages.codeSent'));
       },
-      error: (err) => {
+      error: () => {
         this.recoveryLoading = false;
-        console.error(err);
         this.msg.error(this.t('auth.recovery.messages.sendError'));
       }
     });
@@ -206,9 +199,8 @@ export class LoginComponent implements OnInit {
         this.msg.success(this.t('auth.recovery.messages.passwordChanged'));
         this.closeForgotPasswordModal();
       },
-      error: (err) => {
+      error: () => {
         this.recoveryLoading = false;
-        console.error(err);
         this.msg.error(this.t('auth.recovery.messages.invalidCode'));
       }
     });

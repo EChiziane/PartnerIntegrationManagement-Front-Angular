@@ -1,4 +1,3 @@
-// manager.component.ts (ATUALIZADO - completo)
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
@@ -15,7 +14,6 @@ import {ManagerService} from '@core/services/manager.service';
 })
 export class ManagerComponent implements OnInit {
 
-  // ========= Data =========
   dataSource: Manager[] = [];
   listOfDisplayData: Manager[] = [];
 
@@ -26,13 +24,11 @@ export class ManagerComponent implements OnInit {
   activeManagers = 0;
   inactiveManagers = 0;
 
-  // ========= UI State =========
   searchValue = '';
   visible = false;
 
   isManagerDrawerVisible = false;
 
-  // ========= Edit State =========
   isEditMode = false;
   managerDrawerTitle = '';
   selectedManagerId: any | null = null;
@@ -40,13 +36,11 @@ export class ManagerComponent implements OnInit {
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
-  // ✅ Details Drawer State
   isManagerDetailsVisible = false;
   selectedManagerDetails: Manager | null = null;
   detailsDrawerWidth: string | number = 560;
   detailsDrawerPlacement: 'right' | 'bottom' = 'right';
 
-  // ========= Forms =========
   managerForm = new FormGroup({
     name: new FormControl('', Validators.required),
     contact: new FormControl('', [Validators.required, Validators.pattern('^[+0-9 ]+$')]),
@@ -84,7 +78,6 @@ export class ManagerComponent implements OnInit {
     }
   }
 
-  // ========= Manager Logic =========
   getManagers() {
     this.isLoading = true;
     this.managerService.getManagers().subscribe({
@@ -132,7 +125,6 @@ export class ManagerComponent implements OnInit {
     this.search();
   }
 
-  // ========= Drawer Controls =========
   openManagerDrawer() {
     this.isEditMode = false;
     this.managerDrawerTitle = this.t('managers.drawer.createTitle');
@@ -150,7 +142,6 @@ export class ManagerComponent implements OnInit {
     this.selectedManagerId = null;
   }
 
-  // ========= Edit/Create =========
   editManager(manager: Manager) {
     this.isEditMode = true;
     this.managerDrawerTitle = this.t('managers.drawer.editTitle');
@@ -167,7 +158,7 @@ export class ManagerComponent implements OnInit {
 
   saveManager() {
     if (this.managerForm.invalid) {
-      this.message.warning('Preencha todos os campos obrigatórios!');
+      this.message.warning('Preencha todos os campos obrigatorios.');
       return;
     }
 
@@ -175,7 +166,7 @@ export class ManagerComponent implements OnInit {
 
     const formData: any = {...this.managerForm.value};
 
-    // Normalizar contacto (opcional) para +258
+    // Normaliza o contacto para o formato usado pela API.
     const rawContact = (formData.contact || '').toString().trim();
     formData.contact = rawContact.startsWith('+258') ? rawContact : `+258 ${rawContact}`;
 
@@ -188,7 +179,7 @@ export class ManagerComponent implements OnInit {
         this.isSaving = false;
         this.getManagers();
         this.closeManagerDrawer();
-        this.message.success(this.isEditMode ? 'Gestor atualizado com sucesso! ✅' : 'Gestor criado com sucesso! 🎉');
+        this.message.success(this.isEditMode ? 'Gestor atualizado com sucesso.' : 'Gestor criado com sucesso.');
       },
       error: () => {
         this.isSaving = false;
@@ -216,7 +207,6 @@ export class ManagerComponent implements OnInit {
     });
   }
 
-  // ========= Details Drawer =========
   viewManager(data: Manager) {
     this.selectedManagerDetails = data;
     this.isManagerDetailsVisible = true;

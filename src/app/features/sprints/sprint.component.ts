@@ -13,7 +13,6 @@ import {SprintService} from '@core/services/sprint.service';
 })
 export class SprintComponent implements OnInit {
 
-  // ========= Data =========
   dataSource: Sprint[] = [];
   listOfDisplayData: Sprint[] = [];
 
@@ -23,23 +22,20 @@ export class SprintComponent implements OnInit {
   isSaving = false;
 
   totalSprints = 0;
-  activeSprints = 0;   // EM_EXECUCAO
-  inactiveSprints = 0; // ENCERRADO
+  activeSprints = 0;
+  inactiveSprints = 0;
   totalMarketingBudget = 0;
 
-  // ========= UI =========
   searchValue = '';
 
   isSprintDrawerVisible = false;
 
-  // ========= Edit =========
   isEditMode = false;
   sprintDrawerTitle = 'Criar Campanha';
   selectedSprintId: string | null = null;
-  // Drawer responsive
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
-  // ========= Form =========
+
   sprintForm = new FormGroup({
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -54,7 +50,6 @@ export class SprintComponent implements OnInit {
     startDate: new FormControl<string | null>(null),
     expectedEndDate: new FormControl<string | null>(null)
   });
-  // Guardar sprint original (id/createdAt etc.)
   private selectedSprint: Sprint | null = null;
 
   constructor(
@@ -80,7 +75,6 @@ export class SprintComponent implements OnInit {
     }
   }
 
-  // ========= Load =========
   getSprints(): void {
     this.isLoading = true;
 
@@ -92,7 +86,7 @@ export class SprintComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.message.error('Erro ao carregar sprints. 🚫');
+        this.message.error('Erro ao carregar sprints.');
         this.isLoading = false;
       }
     });
@@ -129,7 +123,6 @@ export class SprintComponent implements OnInit {
     this.applyFilters();
   }
 
-  // ========= Drawer =========
   openSprintDrawer(): void {
     this.isEditMode = false;
     this.sprintDrawerTitle = 'Criar Campanha';
@@ -184,7 +177,7 @@ export class SprintComponent implements OnInit {
 
   saveSprint(): void {
     if (this.sprintForm.invalid) {
-      this.message.warning('Preencha todos os campos obrigatórios!');
+      this.message.warning('Preencha todos os campos obrigatorios.');
       return;
     }
 
@@ -196,27 +189,26 @@ export class SprintComponent implements OnInit {
       : (formData.volumesPromoted || '');
     formData.campaignProducts = formData.volumesPromoted;
 
-    // Preservar campos fora do form (id/createdAt), se necessário
+    // Preserva campos controlados pelo backend que nao fazem parte do formulario.
     const request$ = (this.isEditMode && this.selectedSprintId)
       ? this.sprintService.updateSprint(this.selectedSprintId, formData)
       : this.sprintService.addSprint(formData);
 
     request$.subscribe({
       next: () => {
-        // ✅ importante: desligar saving antes de fechar
         this.isSaving = false;
 
         this.getSprints();
         this.closeSprintDrawer();
 
         this.message.success(this.isEditMode
-          ? 'Sprint atualizada com sucesso! ✅'
-          : 'Sprint criada com sucesso! 🎉'
+          ? 'Sprint atualizada com sucesso.'
+          : 'Sprint criada com sucesso.'
         );
       },
       error: () => {
         this.isSaving = false;
-        this.message.error('Erro ao gravar sprint. 🚫');
+        this.message.error('Erro ao gravar sprint.');
       }
     });
   }
@@ -227,14 +219,14 @@ export class SprintComponent implements OnInit {
       nzContent: `Sprint: <strong>${data.name}</strong>`,
       nzOkDanger: true,
       nzOkText: 'Sim',
-      nzCancelText: 'Não',
+      nzCancelText: 'Nao',
       nzOnOk: () =>
         this.sprintService.deleteSprint(data.id).subscribe({
           next: () => {
             this.getSprints();
-            this.message.success('Sprint eliminada com sucesso! 🗑️');
+            this.message.success('Sprint eliminada com sucesso.');
           },
-          error: () => this.message.error('Erro ao eliminar sprint. 🚫')
+          error: () => this.message.error('Erro ao eliminar sprint.')
         })
     });
   }
@@ -243,7 +235,6 @@ export class SprintComponent implements OnInit {
     window.history.back();
   }
 
-  // ========= Search =========
   private applyFilters(): void {
     let data = [...this.dataSource];
 

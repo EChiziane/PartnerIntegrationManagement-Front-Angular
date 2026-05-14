@@ -35,7 +35,6 @@ export class LandingPageComponent {
   quoteMaterial: MaterialKey = 'areia_grossa';
   quoteCapacity = '7m³';
 
-  // ✅ IMAGEM (a tua) como fundo do slide
   heroSlides = [
     {
       title: 'Materiais de Construção com Entrega Rápida',

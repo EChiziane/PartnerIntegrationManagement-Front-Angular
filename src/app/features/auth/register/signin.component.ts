@@ -23,7 +23,7 @@ export class SigninComponent {
     this.signinForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required], // aqui guardamos só os dígitos (sem +258)
+      phone: ['', Validators.required],
       login: ['', Validators.required],
       password: ['', Validators.required],
       role: ['OPERATOR', Validators.required]
@@ -38,7 +38,7 @@ export class SigninComponent {
     const raw = (this.signinForm.value.phone ?? '').toString();
     const digits = raw.replace(/\D/g, '');
 
-    // Se o user colar +258..., remove o prefixo e fica só com os dígitos locais
+    // Mantem apenas os digitos locais no formulario antes de enviar.
     const normalized = digits.startsWith('258') ? digits.substring(3) : digits;
 
     this.signinForm.patchValue({phone: normalized});
@@ -60,9 +60,8 @@ export class SigninComponent {
         this.msg.success('Utilizador registado com sucesso!');
         this.signinForm.reset({role: 'OPERATOR'});
       },
-      error: (err) => {
+      error: () => {
         this.isLoading = false;
-        console.error('Erro ao registrar usuário:', err);
         this.msg.error('Falha ao registar utilizador.');
       }
     });

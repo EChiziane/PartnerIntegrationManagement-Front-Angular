@@ -1,6 +1,3 @@
-/* =========================================================
-   LAYOUT BASE
-========================================================= */
 .content-wrapper {
   display: flex;
   flex-direction: column;
@@ -10,9 +7,6 @@
   overflow: hidden;
 }
 
-/* =========================================================
-   PAGE HEADER
-========================================================= */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -43,9 +37,6 @@
   }
 }
 
-/* =========================================================
-   SUMMARY SECTION
-========================================================= */
 .summary-section {
   margin-bottom: 12px;
   padding: 4px 0;
@@ -141,9 +132,6 @@
   }
 }
 
-/* =========================================================
-   FILTERS PANEL
-========================================================= */
 .filters-panel {
   display: flex;
   align-items: center;
@@ -175,9 +163,6 @@
   }
 }
 
-/* =========================================================
-   TABLE
-========================================================= */
 .table-wrapper {
   display: flex;
   flex-direction: column;
@@ -205,9 +190,6 @@
   }
 }
 
-/* =========================================================
-   DRAWER
-========================================================= */
 .drawer-form {
   padding: 8px 16px 24px;
   background: #fff;
@@ -244,7 +226,6 @@ nz-select {
   border-radius: 8px;
 }
 
-/* Drawer Footer */
 .drawer-footer {
   display: flex;
   justify-content: flex-end;
@@ -269,7 +250,6 @@ nz-select {
   }
 }
 
-/* Avatar (centralizado e limpo) */
 .avatar-pace {
   display: flex;
   align-items: center;
@@ -287,9 +267,6 @@ nz-select {
   flex-shrink: 0;
 }
 
-/* =========================================================
-   GLOBAL BUTTON FIX
-========================================================= */
 [nz-button] {
   margin-right: 8px;
 

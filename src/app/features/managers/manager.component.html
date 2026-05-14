@@ -1,6 +1,4 @@
 <div class="content-wrapper">
-
-  <!-- ===== Breadcrumb ===== -->
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
       <a routerLink="/app">{{ 'common.home' | translate }}</a>
@@ -10,8 +8,6 @@
       Lista de Gestores
     </nz-breadcrumb-item>
   </nz-breadcrumb>
-
-  <!-- ===== Page Header ===== -->
   <div class="page-header">
     <p>{{ 'managers.title' | translate }}</p>
 
@@ -19,13 +15,9 @@
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
     </span>
   </div>
-
-  <!-- ===== Summary Section ===== -->
   <div class="summary-section">
     <div class="summary-background">
       <div [nzGutter]="8" nz-row>
-
-        <!-- Total -->
         <div [nzSpan]="8" nz-col>
           <nz-card nzSize="small">
             <div class="summary-card">
@@ -39,8 +31,6 @@
             </div>
           </nz-card>
         </div>
-
-        <!-- Active -->
         <div [nzSpan]="8" nz-col>
           <nz-card nzSize="small">
             <div class="summary-card">
@@ -54,8 +44,6 @@
             </div>
           </nz-card>
         </div>
-
-        <!-- Inactive -->
         <div [nzSpan]="8" nz-col>
           <nz-card nzSize="small">
             <div class="summary-card">
@@ -73,8 +61,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ===== Filters Panel ===== -->
   <div class="filters-panel">
     <input
       (ngModelChange)="search()"
@@ -89,8 +75,6 @@
       Novo Gestor
     </button>
   </div>
-
-  <!-- ===== Table ===== -->
   <div class="table-wrapper">
     <div class="table-scroll">
 
@@ -156,8 +140,6 @@
 
         </nz-table>
       </nz-spin>
-
-      <!-- ===== Filter Dropdown ===== -->
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <div class="ant-table-filter-dropdown">
           <div class="search-box">
@@ -178,8 +160,6 @@
     </div>
   </div>
 </div>
-
-<!-- ===== Drawer ===== -->
 <nz-drawer
   (nzOnClose)="closeManagerDrawer()"
   [nzBodyStyle]="{ overflow: 'auto' }"
@@ -276,7 +256,6 @@
   </ng-template>
 
 </nz-drawer>
-<!-- manager.component.html (ADICIONAR NO FIM) -->
 <app-manager-details
   (edit)="editFromDetails($event)"
   (remove)="deleteFromDetails($event)"
