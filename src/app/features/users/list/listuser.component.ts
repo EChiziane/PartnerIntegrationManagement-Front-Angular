@@ -3,8 +3,9 @@ import {User} from '@shared/models/user';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
 import {UserService} from '@core/services/user.service';
+import {TranslationService} from '@core/services/translation.service';
+import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 
 @Component({
   selector: 'app-listuser',
@@ -17,6 +18,7 @@ export class ListuserComponent {
   listOfDisplayData: User[] = [];
 
   drawerWidth: string | number = 720;
+  drawerPlacement: 'right' | 'bottom' = 'right';
 
   totalUsers = 0;
   activeUsers = 0;
@@ -34,14 +36,15 @@ export class ListuserComponent {
     private http: HttpClient,
     private message: NzMessageService,
     private userService: UserService,
-    private modal: NzModalService,
-    private fb: FormBuilder
+    private confirmationDialog: ConfirmationDialogService,
+    private fb: FormBuilder,
+    private translationService: TranslationService
   ) {
     this.initForms();
   }
 
   get userDrawerTitle(): string {
-    return this.currentEditingUserId ? 'Editar Utilizador' : 'Criar Utilizador';
+    return this.currentEditingUserId ? this.t('users.edit') : this.t('users.register');
   }
 
   onBack() {
@@ -108,6 +111,18 @@ export class ListuserComponent {
 
   ngOnInit(): void {
     this.loadUsers();
+    this.updateDrawer();
+    window.addEventListener('resize', () => this.updateDrawer());
+  }
+
+  updateDrawer(): void {
+    if (window.innerWidth <= 768) {
+      this.drawerWidth = '100%';
+      this.drawerPlacement = 'bottom';
+    } else {
+      this.drawerWidth = 720;
+      this.drawerPlacement = 'right';
+    }
   }
 
 
@@ -166,13 +181,10 @@ export class ListuserComponent {
 
 
   deleteUser(user: User): void {
-    this.modal.confirm({
-      nzTitle: "Tens a certeza de que queres eliminar este utilizador?",
-      nzContent: `Utilizador: <strong>${user.name}</strong>`,
-      nzOkText: `Sim`,
-      nzOkType: `primary`,
-      nzCancelText: `Nao`,
-      nzOnOk: () => {
+    this.confirmationDialog.confirmDelete({
+      entity: this.t('common.entities.user'),
+      name: user.name,
+      onOk: () => {
         this.userService.deleteUser(user.id).subscribe({
           next: () => {
             this.loadUsers();
@@ -195,5 +207,9 @@ export class ListuserComponent {
       phone: ['', Validators.required],
       role: ['OPERATOR', Validators.required],
     });
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

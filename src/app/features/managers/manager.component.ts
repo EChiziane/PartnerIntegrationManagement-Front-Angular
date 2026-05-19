@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
 import {Manager} from '@shared/models/manager';
 import {TranslationService} from '@core/services/translation.service';
 import {ManagerService} from '@core/services/manager.service';
+import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 
 @Component({
   selector: 'app-manager',
@@ -30,7 +30,6 @@ export class ManagerComponent implements OnInit {
   isManagerDrawerVisible = false;
 
   isEditMode = false;
-  managerDrawerTitle = '';
   selectedManagerId: any | null = null;
 
   drawerWidth: string | number = 720;
@@ -51,7 +50,7 @@ export class ManagerComponent implements OnInit {
   constructor(
     private managerService: ManagerService,
     private message: NzMessageService,
-    private modal: NzModalService,
+    private confirmationDialog: ConfirmationDialogService,
     private translationService: TranslationService
   ) {
   }
@@ -60,6 +59,12 @@ export class ManagerComponent implements OnInit {
     this.getManagers();
     this.updateDrawer();
     window.addEventListener('resize', () => this.updateDrawer());
+  }
+
+  get managerDrawerTitle(): string {
+    return this.isEditMode
+      ? this.t('managers.drawer.editTitle')
+      : this.t('managers.drawer.createTitle');
   }
 
   updateDrawer() {
@@ -127,7 +132,6 @@ export class ManagerComponent implements OnInit {
 
   openManagerDrawer() {
     this.isEditMode = false;
-    this.managerDrawerTitle = this.t('managers.drawer.createTitle');
     this.selectedManagerId = null;
 
     this.managerForm.reset({status: 'ACTIVO'});
@@ -144,7 +148,6 @@ export class ManagerComponent implements OnInit {
 
   editManager(manager: Manager) {
     this.isEditMode = true;
-    this.managerDrawerTitle = this.t('managers.drawer.editTitle');
     this.selectedManagerId = manager.id;
     this.isManagerDrawerVisible = true;
 
@@ -189,14 +192,10 @@ export class ManagerComponent implements OnInit {
   }
 
   deleteManager(data: Manager) {
-    this.modal.confirm({
-      nzTitle: this.t('managers.messages.deleteTitle'),
-      nzContent: `Gestor: <strong>${data.name}</strong>`,
-      nzOkText: this.t('common.yes'),
-      nzOkType: 'primary',
-      nzOkDanger: true,
-      nzCancelText: this.t('common.no'),
-      nzOnOk: () =>
+    this.confirmationDialog.confirmDelete({
+      entity: this.t('common.entities.manager'),
+      name: data.name,
+      onOk: () =>
         this.managerService.deleteManager(data.id).subscribe({
           next: () => {
             this.getManagers();

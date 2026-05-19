@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper compact-list-layout">
 
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
@@ -172,6 +172,17 @@
                 </button>
 
                 <button
+                  (click)="copyInvoice(invoice)"
+                  nz-button
+                  nz-tooltip
+                  nzSize="small"
+                  nzTooltipTitle="Copiar fatura"
+                  nzType="link"
+                >
+                  <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
+                </button>
+
+                <button
                   (click)="deleteInvoice(invoice)"
                   nz-button
                   nz-tooltip
@@ -219,7 +230,7 @@
   [nzFooter]="drawerFooter"
   [nzMaskClosable]="false"
   [nzPlacement]="drawerPlacement"
-  [nzTitle]="'Nova Fatura'"
+  [nzTitle]="drawerTitle"
   [nzVisible]="isDrawerVisible"
   [nzWidth]="drawerWidth"
 >
@@ -227,7 +238,7 @@
     <form [formGroup]="invoiceForm" class="drawer-form" nz-form>
       <div class="form-helper-card">
         <nz-icon nzTheme="outline" nzType="info-circle"></nz-icon>
-        <span>Escolhe o cliente, adiciona os itens e confirma os totais antes de criar a fatura.</span>
+        <span>Escolhe o cliente; o sistema mostra as carradas concluidas ainda nao faturadas para entrarem nesta fatura.</span>
       </div>
 
       <div class="drawer-section">
@@ -240,6 +251,7 @@
               <nz-form-label nzRequired>{{ 'common.table.customer' | translate }}</nz-form-label>
               <nz-form-control>
                 <nz-select
+                  (ngModelChange)="onInvoiceCustomerChange($event)"
                   [nzDisabled]="isSaving"
                   formControlName="carloadCustomerId"
                   [nzPlaceHolder]="'common.placeholders.selectCustomer' | translate"
@@ -267,7 +279,92 @@
       </div>
 
       <div class="drawer-section">
-        <h3 class="section-title">{{ 'invoice.items' | translate }}</h3>
+        <h3 class="section-title">Carradas por faturar</h3>
+
+        <nz-spin [nzSpinning]="isLoadingBillableCarloads" nzTip="A carregar carradas...">
+          <div class="items-list" *ngIf="billableCarloads.length > 0; else noBillableCarloads">
+            <div class="item-row" *ngFor="let carload of billableCarloads">
+              <label
+                (ngModelChange)="toggleCarloadSelection(carload.id, $event)"
+                [ngModel]="isCarloadSelected(carload.id)"
+                [ngModelOptions]="{standalone: true}"
+                nz-checkbox
+              >
+                {{ getBillableCarloadLabel(carload) }}
+              </label>
+            </div>
+          </div>
+
+          <ng-template #noBillableCarloads>
+            <div class="form-helper-card">
+              <nz-icon nzTheme="outline" nzType="info-circle"></nz-icon>
+              <span>Nenhuma carrada concluida por faturar para este cliente. Podes adicionar itens manuais abaixo.</span>
+            </div>
+          </ng-template>
+        </nz-spin>
+      </div>
+
+      <div class="drawer-section">
+        <h3 class="section-title">Itens da fatura</h3>
+
+        <div class="items-list selected-carload-items" *ngIf="selectedBillableCarloads.length > 0">
+          <div class="item-row carload-preview-row" *ngFor="let carload of selectedBillableCarloads">
+            <div class="item-grid">
+              <nz-form-item>
+                <nz-form-label>Item</nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    [ngModel]="getCarloadInvoiceItemCode(carload)"
+                    [ngModelOptions]="{standalone: true}"
+                    [nzDisabled]="true"
+                    [nzPlaceHolder]="'invoice.selectItem' | translate"
+                  >
+                    <nz-option
+                      *ngFor="let it of itemsOptions"
+                      [nzLabel]="getItemLabel(it)"
+                      [nzValue]="it">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+
+              <nz-form-item>
+                <nz-form-label>{{ 'invoice.qty' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <input value="1" nz-input readonly/>
+                </nz-form-control>
+              </nz-form-item>
+
+              <nz-form-item>
+                <nz-form-label>Preço Unit.</nz-form-label>
+                <nz-form-control>
+                  <input [value]="formatMoney(getBillableCarloadValue(carload)) + ' Mts'" nz-input readonly/>
+                </nz-form-control>
+              </nz-form-item>
+
+              <nz-form-item>
+                <nz-form-label>{{ 'invoice.subtotal' | translate }}</nz-form-label>
+                <nz-form-control>
+                  <input [value]="formatMoney(getBillableCarloadValue(carload)) + ' Mts'" nz-input readonly/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <button
+              (click)="removeSelectedCarload(carload.id)"
+              [disabled]="isSaving"
+              class="remove-btn"
+              nz-button
+              nzType="default"
+              type="button"
+            >
+              <nz-icon nzType="minus-circle"></nz-icon>
+              Remover
+            </button>
+          </div>
+        </div>
+
+        <h3 class="section-title manual-items-title">Itens manuais</h3>
 
         <div class="items-list" formArrayName="items">
 
@@ -321,7 +418,7 @@
 
             <button
               (click)="removeItem(i)"
-              [disabled]="isSaving || items.length <= 1"
+              [disabled]="isSaving"
               class="remove-btn"
               nz-button
               nzType="default"
@@ -407,7 +504,7 @@
         nzType="primary"
       >
         <ng-container *ngIf="!isSaving; else savingTpl">
-          Criar
+          {{ isCopyMode ? 'Criar Copia' : 'Criar' }}
         </ng-container>
 
         <ng-template #savingTpl>

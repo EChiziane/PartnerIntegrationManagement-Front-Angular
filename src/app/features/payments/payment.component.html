@@ -1,0 +1,144 @@
+<div class="content-wrapper compact-list-layout">
+  <nz-breadcrumb class="page-breadcrumb">
+    <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
+    <nz-breadcrumb-item>Pagamentos</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <div class="page-header">
+    <p>Gestao de Pagamentos</p>
+    <span (click)="onBack()" class="back-arrow"><nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon></span>
+  </div>
+
+  <div class="summary-section">
+    <div [nzGutter]="8" nz-row>
+      <div [nzSpan]="6" nz-col>
+        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper total"><nz-icon nzTheme="outline" nzType="wallet"></nz-icon></div><div class="summary-content"><span class="title">Total</span><p>{{ totalPayments }}</p></div></div></nz-card>
+      </div>
+      <div [nzSpan]="6" nz-col>
+        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper inactive"><nz-icon nzTheme="outline" nzType="clock-circle"></nz-icon></div><div class="summary-content"><span class="title">Pendentes</span><p>{{ pendingPayments }}</p></div></div></nz-card>
+      </div>
+      <div [nzSpan]="6" nz-col>
+        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper active"><nz-icon nzTheme="outline" nzType="check-circle"></nz-icon></div><div class="summary-content"><span class="title">Liquidados</span><p>{{ settledPayments }}</p></div></div></nz-card>
+      </div>
+      <div [nzSpan]="6" nz-col>
+        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper total"><nz-icon nzTheme="outline" nzType="percentage"></nz-icon></div><div class="summary-content"><span class="title">Comissao</span><p>{{ totalCommission | number:'1.2-2' }}</p></div></div></nz-card>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-panel">
+    <input (ngModelChange)="search()" [(ngModel)]="searchValue" nz-input placeholder="Pesquisar cliente, fatura, estado..." type="text"/>
+    <button (click)="openDrawer()" nz-button nzType="primary"><nz-icon nzTheme="outline" nzType="plus"></nz-icon>Novo Pagamento</button>
+    <button (click)="reset()" nz-button nzType="default"><nz-icon nzTheme="outline" nzType="reload"></nz-icon>Limpar</button>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="table-scroll">
+      <nz-spin [nzSpinning]="isLoading" nzSize="large" nzTip="A carregar pagamentos...">
+        <nz-table #nzTable [nzData]="filteredPayments" [nzScroll]="{ x: '1320px', y: '440px' }" nzTableLayout="fixed">
+          <thead>
+          <tr>
+            <th>Cliente/Carrada</th>
+            <th>Fatura</th>
+            <th>Cliente</th>
+            <th>Motorista</th>
+            <th>Comissao</th>
+            <th>Escopo</th>
+            <th>Estado</th>
+            <th>Data</th>
+            <th>Acoes</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let payment of nzTable.data">
+            <td>{{ payment.carLoadCustomerName || '-' }}</td>
+            <td>{{ payment.invoiceCode || '-' }}</td>
+            <td>{{ formatMoney(payment.customerAmount) }} Mts</td>
+            <td>{{ formatMoney(payment.driverAmount) }} Mts</td>
+            <td>{{ formatMoney(payment.companyCommission) }} Mts</td>
+            <td>{{ payment.paymentScope }}</td>
+            <td><nz-tag [nzColor]="getStatusColor(payment.paymentStatus)">{{ payment.paymentStatus }}</nz-tag></td>
+            <td>{{ payment.paymentDate | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>
+              <button (click)="editPayment(payment)" nz-button nzSize="small" nzType="link"><nz-icon nzTheme="outline" nzType="edit"></nz-icon></button>
+              <button (click)="deletePayment(payment)" nz-button nzDanger nzSize="small" nzType="link"><nz-icon nzTheme="outline" nzType="delete"></nz-icon></button>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-spin>
+    </div>
+  </div>
+</div>
+
+<nz-drawer
+  (nzOnClose)="closeDrawer()"
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzFooter]="drawerFooter"
+  [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
+  [nzTitle]="drawerTitle"
+  [nzVisible]="isDrawerVisible"
+  [nzWidth]="drawerWidth">
+  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar pagamento...">
+    <form [formGroup]="paymentForm" class="drawer-form" nz-form>
+      <div class="drawer-section">
+        <h3 class="section-title">Associacao</h3>
+        <div [nzGutter]="16" nz-row>
+          <div nz-col nzMd="8" nzSm="24" nzXs="24">
+            <nz-form-item><nz-form-label>Escopo</nz-form-label><nz-form-control>
+              <nz-select formControlName="paymentScope">
+                <nz-option nzLabel="Carrada" nzValue="CARLOAD"></nz-option>
+                <nz-option nzLabel="Fatura" nzValue="INVOICE"></nz-option>
+                <nz-option nzLabel="Ambos" nzValue="BOTH"></nz-option>
+              </nz-select>
+            </nz-form-control></nz-form-item>
+          </div>
+          <div nz-col nzMd="8" nzSm="24" nzXs="24">
+            <nz-form-item><nz-form-label>Carrada</nz-form-label><nz-form-control>
+              <nz-select (ngModelChange)="onCarloadChange($event)" formControlName="carLoadId" nzAllowClear nzPlaceHolder="Selecionar carrada" nzShowSearch>
+                <nz-option *ngFor="let carload of carloads" [nzLabel]="carload.customerName + ' - ' + carload.deliveryDestination" [nzValue]="carload.id"></nz-option>
+              </nz-select>
+            </nz-form-control></nz-form-item>
+          </div>
+          <div nz-col nzMd="8" nzSm="24" nzXs="24">
+            <nz-form-item><nz-form-label>Fatura</nz-form-label><nz-form-control>
+              <nz-select formControlName="invoiceId" nzAllowClear nzPlaceHolder="Selecionar fatura" nzShowSearch>
+                <nz-option *ngFor="let invoice of invoices" [nzLabel]="invoice.invoiceCode + ' - ' + invoice.carloadCustomerName" [nzValue]="invoice.id"></nz-option>
+              </nz-select>
+            </nz-form-control></nz-form-item>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-section">
+        <h3 class="section-title">Valores</h3>
+        <div [nzGutter]="16" nz-row>
+          <div nz-col nzMd="8" nzSm="24" nzXs="24"><nz-form-item><nz-form-label>Valor cliente</nz-form-label><nz-form-control><input formControlName="customerAmount" nz-input type="number"/></nz-form-control></nz-form-item></div>
+          <div nz-col nzMd="8" nzSm="24" nzXs="24"><nz-form-item><nz-form-label>Valor motorista</nz-form-label><nz-form-control><input formControlName="driverAmount" nz-input type="number"/></nz-form-control></nz-form-item></div>
+          <div nz-col nzMd="8" nzSm="24" nzXs="24"><nz-form-item><nz-form-label>Comissao</nz-form-label><nz-form-control><input formControlName="companyCommission" nz-input type="number"/></nz-form-control></nz-form-item></div>
+        </div>
+        <div [nzGutter]="16" nz-row>
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item><nz-form-label>Estado</nz-form-label><nz-form-control>
+              <nz-select formControlName="paymentStatus">
+                <nz-option nzLabel="Pendente" nzValue="PENDING"></nz-option>
+                <nz-option nzLabel="Parcial" nzValue="PARTIAL"></nz-option>
+                <nz-option nzLabel="Liquidado" nzValue="SETTLED"></nz-option>
+                <nz-option nzLabel="Cancelado" nzValue="CANCELLED"></nz-option>
+              </nz-select>
+            </nz-form-control></nz-form-item>
+          </div>
+          <div nz-col nzMd="12" nzSm="24" nzXs="24"><nz-form-item><nz-form-label>Data</nz-form-label><nz-form-control><input formControlName="paymentDate" nz-input type="datetime-local"/></nz-form-control></nz-form-item></div>
+        </div>
+        <nz-form-item><nz-form-label>Notas</nz-form-label><nz-form-control><textarea formControlName="notes" nz-input rows="3"></textarea></nz-form-control></nz-form-item>
+      </div>
+    </form>
+  </nz-spin>
+  <ng-template #drawerFooter>
+    <div class="drawer-footer">
+      <button (click)="closeDrawer()" [disabled]="isSaving" class="btn-cancel" nz-button nzType="default">Cancelar</button>
+      <button (click)="savePayment()" [disabled]="paymentForm.invalid || isSaving" class="btn-save" nz-button nzType="primary">{{ isEditMode ? 'Salvar' : 'Criar' }}</button>
+    </div>
+  </ng-template>
+</nz-drawer>

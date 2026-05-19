@@ -1,13 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 
 import {CarloadInvoice} from '@shared/models/carload-invoice';
 import {CarloadCustomer} from '@shared/models/carload-customer';
+import {CarLoad} from '@shared/models/carload';
+import {CarloadInvoiceItem} from '@shared/models/carload-invoice-item';
 
 import {CarloadInvoiceService} from '@core/services/carload-invoice.service';
 import {CarloadCustomerService} from '@core/services/carload-customer.service';
+import {TranslationService} from '@core/services/translation.service';
+import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -23,11 +26,15 @@ export class InvoiceComponent implements OnInit {
   invoices: CarloadInvoice[] = [];
   allInvoices: CarloadInvoice[] = [];
   dataCustomer: CarloadCustomer[] = [];
+  billableCarloads: CarLoad[] = [];
+  selectedCarloadIds: string[] = [];
+  isLoadingBillableCarloads = false;
 
   isLoading = false;
   isSaving = false;
 
   isDrawerVisible = false;
+  isCopyMode = false;
 
   searchValue = '';
   dateRange: Date[] | null = null;
@@ -173,7 +180,8 @@ export class InvoiceComponent implements OnInit {
     private invoiceService: CarloadInvoiceService,
     private customerService: CarloadCustomerService,
     private message: NzMessageService,
-    private modal: NzModalService
+    private confirmationDialog: ConfirmationDialogService,
+    private translationService: TranslationService
   ) {
   }
 
@@ -183,6 +191,17 @@ export class InvoiceComponent implements OnInit {
 
   get hasActiveFilters(): boolean {
     return !!this.searchValue.trim() || !!this.selectedCustomerId || !!this.dateRange || this.selectedPeriodPreset !== 'ALL';
+  }
+
+  get selectedBillableCarloads(): CarLoad[] {
+    const selectedIds = new Set(this.selectedCarloadIds);
+    return this.billableCarloads.filter(carload => selectedIds.has(carload.id));
+  }
+
+  get drawerTitle(): string {
+    return this.isCopyMode
+      ? this.t('invoice.drawer.copyTitle')
+      : this.t('invoice.drawer.createTitle');
   }
 
   ngOnInit(): void {
@@ -237,6 +256,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   openDrawer(): void {
+    this.isCopyMode = false;
     this.isDrawerVisible = true;
 
     this.invoiceForm.reset({
@@ -248,7 +268,8 @@ export class InvoiceComponent implements OnInit {
     });
 
     this.items.clear();
-    this.addItem();
+    this.billableCarloads = [];
+    this.selectedCarloadIds = [];
 
     const nextCode = this.generateNextInvoiceCode();
     this.invoiceForm.patchValue({invoiceCode: nextCode.toString()});
@@ -259,6 +280,7 @@ export class InvoiceComponent implements OnInit {
     if (this.isSaving) return;
 
     this.isDrawerVisible = false;
+    this.isCopyMode = false;
 
     this.invoiceForm.reset({
       taxRate: 0.16,
@@ -268,6 +290,47 @@ export class InvoiceComponent implements OnInit {
     });
 
     this.items.clear();
+    this.billableCarloads = [];
+    this.selectedCarloadIds = [];
+  }
+
+  onInvoiceCustomerChange(customerId: string | null): void {
+    this.billableCarloads = [];
+    this.selectedCarloadIds = [];
+
+    if (!customerId) {
+      return;
+    }
+
+    this.isLoadingBillableCarloads = true;
+    this.invoiceService.getBillableCarloads(customerId).subscribe({
+      next: carloads => {
+        this.billableCarloads = carloads || [];
+        this.isLoadingBillableCarloads = false;
+      },
+      error: () => {
+        this.isLoadingBillableCarloads = false;
+        this.message.error('Erro ao carregar carradas por faturar.');
+      }
+    });
+  }
+
+  toggleCarloadSelection(carloadId: string, checked: boolean): void {
+    if (checked) {
+      this.selectedCarloadIds = Array.from(new Set([...this.selectedCarloadIds, carloadId]));
+    } else {
+      this.selectedCarloadIds = this.selectedCarloadIds.filter(id => id !== carloadId);
+    }
+
+    this.calculateTotals();
+  }
+
+  isCarloadSelected(carloadId: string): boolean {
+    return this.selectedCarloadIds.includes(carloadId);
+  }
+
+  removeSelectedCarload(carloadId: string): void {
+    this.toggleCarloadSelection(carloadId, false);
   }
 
   addItem(): void {
@@ -309,7 +372,162 @@ export class InvoiceComponent implements OnInit {
     return this.itemLabels[itemKey] || itemKey;
   }
 
+  copyInvoice(invoice: CarloadInvoice): void {
+    this.isCopyMode = true;
+    this.isDrawerVisible = true;
+
+    this.items.clear();
+    this.billableCarloads = [];
+    this.selectedCarloadIds = [];
+
+    this.invoiceForm.reset({
+      carloadCustomerId: invoice.carloadCustomerId,
+      taxRate: invoice.taxRate ?? 0.16,
+      subtotal: 0,
+      tax: 0,
+      total: 0
+    });
+
+    this.invoiceForm.patchValue({invoiceCode: this.generateNextInvoiceCode().toString()});
+    this.invoiceForm.get('invoiceCode')?.disable({emitEvent: false});
+
+    (invoice.items || []).forEach(item => {
+      const itemGroup = this.fb.group({
+        description: [this.normalizeMaterialType(item.description), Validators.required],
+        quantity: [Number(item.quantity || 1), [Validators.required, Validators.min(1)]],
+        unitPrice: [Number(item.unitPrice || 0), [Validators.required, Validators.min(0)]],
+        amount: [{value: Number(item.amount || 0), disabled: true}]
+      });
+
+      itemGroup.get('quantity')?.valueChanges.subscribe(() => this.updateItemAmount(itemGroup));
+      itemGroup.get('unitPrice')?.valueChanges.subscribe(() => this.updateItemAmount(itemGroup));
+
+      this.items.push(itemGroup);
+    });
+
+    if (this.items.length === 0) {
+      this.addItem();
+    }
+
+    this.calculateTotals();
+  }
+
+  getInvoiceItemLabel(item: CarloadInvoiceItem): string {
+    return item.descriptionLabel || this.getItemLabel(item.description);
+  }
+
+  getInvoicePdfItemLabel(item: CarloadInvoiceItem): string {
+    return this.getInvoiceItemLabel(item);
+  }
+
+  getBillableCarloadValue(carload: CarLoad): number {
+    return Number(carload.customerPrice ?? carload.totalEarnings ?? 0);
+  }
+
+  getBillableCarloadLabel(carload: CarLoad): string {
+    const itemName = this.getItemLabel(this.getCarloadInvoiceItemCode(carload));
+    const details = this.getCarloadOperationalSummary(carload);
+    const value = this.formatMoney(this.getBillableCarloadValue(carload));
+
+    return [itemName, details, `${value} Mts`].filter(Boolean).join(' - ');
+  }
+
+  getCarloadInvoiceItemCode(carload: CarLoad): string {
+    const truckSizeCode = this.normalizeInvoiceTruckSizeCode(carload.assignedTruckSize || carload.truckSize);
+    const materialCode = this.normalizeInvoiceMaterialCode(carload.transportedMaterial);
+    const itemCode = [truckSizeCode, materialCode].filter(Boolean).join('_');
+
+    return this.itemsOptions.includes(itemCode) ? itemCode : '';
+  }
+
+  getCarloadCommercialItemName(carload: CarLoad): string {
+    const itemCode = this.getCarloadInvoiceItemCode(carload);
+    return itemCode ? this.getItemLabel(itemCode) : this.buildCommercialItemName(carload.assignedTruckSize || carload.truckSize, carload.transportedMaterial);
+  }
+
+  getCarloadOperationalSummary(carload: CarLoad): string {
+    const details = [
+      [carload.assignedDriverName, carload.assignedTruckPlateNumber || carload.assignedTruckSize].filter(Boolean).join(' / '),
+      carload.deliveryDestination ? `Destino: ${carload.deliveryDestination}` : ''
+    ].filter(Boolean);
+
+    return details.join(' - ');
+  }
+
+  getCarloadItemDriverTruck(carload: CarLoad): string {
+    return [carload.assignedDriverName, carload.assignedTruckPlateNumber || carload.assignedTruckSize]
+      .filter(Boolean)
+      .join(' / ') || '-';
+  }
+
+  private buildCommercialItemName(truckSize: string | null | undefined, material: string | null | undefined): string {
+    const normalizedTruckSize = this.normalizeInvoiceTruckSize(truckSize);
+    const normalizedMaterial = this.normalizeInvoiceMaterial(material);
+
+    return [normalizedTruckSize, normalizedMaterial].filter(Boolean).join(' ') || 'Carrada';
+  }
+
+  private normalizeInvoiceTruckSize(value: string | null | undefined): string {
+    if (!value) {
+      return '';
+    }
+
+    const normalized = value
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/m(?:3|³|Â³)?/g, 'm')
+      .replace(/\s+/g, '');
+
+    const numericSize = normalized.match(/\d+/)?.[0];
+
+    return numericSize ? `${numericSize}m` : normalized;
+  }
+
+  private normalizeInvoiceTruckSizeCode(value: string | null | undefined): string {
+    const normalized = this.normalizeInvoiceTruckSize(value);
+    const numericSize = normalized.match(/\d+/)?.[0];
+
+    return numericSize ? `M${numericSize}` : '';
+  }
+
+  private normalizeInvoiceMaterial(value: string | null | undefined): string {
+    if (!value) {
+      return 'Carrada';
+    }
+
+    return value
+      .toString()
+      .replace(/_/g, ' ')
+      .replace(/^\s*\d+\s*m(?:3|³|Â³)?\s*/i, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  private normalizeInvoiceMaterialCode(value: string | null | undefined): string {
+    const material = this.normalizeInvoiceMaterial(value)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toUpperCase()
+      .replace(/[^A-Z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+
+    const aliases: Record<string, string> = {
+      PO_DE_PEDRA: 'PO_DE_PEDRA',
+      PO_PEDRA: 'PO_DE_PEDRA',
+      PEDRA_3_4: 'PEDRA_3_4',
+      PEDRA_34: 'PEDRA_3_4'
+    };
+
+    return aliases[material] || material;
+  }
+
   submitInvoice(): void {
+    if (this.selectedCarloadIds.length === 0 && this.items.length === 0) {
+      this.message.warning('Selecione carradas concluidas ou adicione pelo menos um item manual.');
+      return;
+    }
+
     if (this.invoiceForm.invalid) {
       this.markControlTouched(this.invoiceForm);
       this.message.warning('Preencha os campos obrigatorios.');
@@ -327,7 +545,7 @@ export class InvoiceComponent implements OnInit {
         this.isSaving = false;
         this.loadInvoices();
         this.closeDrawer();
-        this.message.success('Fatura criada com sucesso.');
+        this.message.success(this.isCopyMode ? 'Copia da fatura criada com sucesso.' : 'Fatura criada com sucesso.');
       },
       error: () => {
         this.isSaving = false;
@@ -337,19 +555,16 @@ export class InvoiceComponent implements OnInit {
   }
 
   deleteInvoice(invoice: CarloadInvoice): void {
-    this.modal.confirm({
-      nzTitle: 'Tens certeza que quer eliminar esta fatura?',
-      nzContent: `<b>${invoice.invoiceCode}</b>`,
-      nzOkText: 'Sim',
-      nzCancelText: 'Nao',
-      nzOkDanger: true,
-      nzOnOk: () => {
+    this.confirmationDialog.confirmDelete({
+      entity: this.t('common.entities.invoice'),
+      name: invoice.invoiceCode,
+      onOk: () => {
         this.invoiceService.deleteInvoice(invoice.id).subscribe({
           next: () => {
             this.loadInvoices();
-            this.message.success('Fatura eliminada com sucesso.');
+            this.message.success(this.t('invoice.messages.deleted'));
           },
-          error: () => this.message.error('Erro ao eliminar fatura.')
+          error: () => this.message.error(this.t('invoice.messages.deleteError'))
         });
       }
     });
@@ -420,9 +635,9 @@ export class InvoiceComponent implements OnInit {
 
     autoTable(doc, {
       startY: 126,
-      head: [['Item', 'Qtd', 'Preço Unit.', 'Subtotal']],
+      head: [['Item', 'Qtd', 'Preco Unitario', 'Subtotal']],
       body: invoice.items.map(item => [
-        this.getItemLabel(item.description),
+        this.getInvoicePdfItemLabel(item),
         item.quantity,
         `${this.formatMoney(item.unitPrice)} Mts`,
         `${this.formatMoney(item.amount)} Mts`
@@ -444,7 +659,8 @@ export class InvoiceComponent implements OnInit {
         fillColor: [248, 251, 253]
       },
       columnStyles: {
-        1: {halign: 'center', cellWidth: 20},
+        0: {cellWidth: 86},
+        1: {halign: 'center', cellWidth: 18},
         2: {halign: 'right', cellWidth: 38},
         3: {halign: 'right', cellWidth: 38}
       },
@@ -537,7 +753,10 @@ export class InvoiceComponent implements OnInit {
         (inv.createdByName || '').toLowerCase().includes(val) ||
         (inv.items || []).some(it =>
           (it.description || '').toLowerCase().includes(val) ||
-          this.getItemLabel(it.description || '').toLowerCase().includes(val)
+          this.getInvoiceItemLabel(it).toLowerCase().includes(val) ||
+          (it.driverName || '').toLowerCase().includes(val) ||
+          (it.truckPlateNumber || '').toLowerCase().includes(val) ||
+          (it.deliveryDestination || '').toLowerCase().includes(val)
         )
       );
     }
@@ -558,6 +777,7 @@ export class InvoiceComponent implements OnInit {
     const rawValue = this.invoiceForm.getRawValue();
     return {
       ...rawValue,
+      carloadIds: this.selectedCarloadIds,
       items: (rawValue.items || []).map((item: any) => ({
         ...item,
         description: this.normalizeMaterialType(item.description)
@@ -575,10 +795,14 @@ export class InvoiceComponent implements OnInit {
   }
 
   private calculateTotals(): void {
+    const selectedCarloadsTotal = this.billableCarloads
+      .filter(carload => this.selectedCarloadIds.includes(carload.id))
+      .reduce((sum, carload) => sum + this.getBillableCarloadValue(carload), 0);
+
     const subtotal = this.items.controls.reduce((sum, item) => {
       const amount = Number(item.get('amount')?.value || 0);
       return sum + amount;
-    }, 0);
+    }, selectedCarloadsTotal);
 
     const taxRate = Number(this.invoiceForm.get('taxRate')?.value || 0);
     const tax = subtotal * taxRate;
@@ -672,5 +896,9 @@ export class InvoiceComponent implements OnInit {
 
     const lastCode = Math.max(...this.allInvoices.map(inv => Number(inv.invoiceCode) || 0));
     return lastCode + 1;
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

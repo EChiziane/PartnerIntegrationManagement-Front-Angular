@@ -112,6 +112,55 @@ body {
   font-weight: 500;
 }
 
+.ant-drawer-content {
+  background: #ffffff !important;
+}
+
+.ant-drawer-header {
+  min-height: 64px !important;
+  padding: 18px 24px !important;
+  border-bottom: 1px solid #e2edf3 !important;
+  background: #fbfdff !important;
+}
+
+.ant-drawer-title {
+  color: #10212b !important;
+  font-size: 18px !important;
+  font-weight: 850 !important;
+  line-height: 1.25 !important;
+}
+
+.ant-drawer-close {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  margin-right: 8px !important;
+  border-radius: 8px !important;
+  color: #607786 !important;
+}
+
+.ant-drawer-close:hover {
+  color: #0e7c72 !important;
+  background: #e7faf5 !important;
+}
+
+.ant-drawer-body {
+  padding: 0 !important;
+  background: #ffffff !important;
+}
+
+.ant-drawer-footer {
+  padding: 0 24px !important;
+  border-top: 1px solid #e2edf3 !important;
+  background: #f8fbfd !important;
+}
+
+.ant-drawer-bottom .ant-drawer-content-wrapper {
+  max-height: 92vh !important;
+}
+
 .ant-btn-primary {
   border-color: #0e7c72;
   background: #0e7c72;
@@ -495,6 +544,110 @@ body {
 .material,
 .file-link {
   color: #0e7c72 !important;
+}
+
+.compact-list-layout {
+  gap: 8px !important;
+  padding: 12px !important;
+}
+
+.compact-list-layout .page-breadcrumb {
+  display: none !important;
+}
+
+.compact-list-layout .page-header {
+  min-height: 46px !important;
+  padding: 10px 12px !important;
+  border-radius: 7px !important;
+}
+
+.compact-list-layout .page-header p,
+.compact-list-layout .page-header .title {
+  font-size: 18px !important;
+  line-height: 1.2 !important;
+}
+
+.compact-title-block {
+  display: grid !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+}
+
+.compact-title-block p {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.list-meta {
+  color: #607786 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+}
+
+.compact-list-layout .back-arrow {
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 16px !important;
+}
+
+.compact-list-layout .summary-section {
+  display: none !important;
+}
+
+.compact-list-layout .quick-filters {
+  margin: 0 !important;
+  gap: 6px !important;
+}
+
+.compact-list-layout .quick-filters button[nz-button] {
+  height: 30px !important;
+  padding: 0 10px !important;
+  font-size: 12px !important;
+}
+
+.compact-list-layout .filters-panel {
+  gap: 8px !important;
+  padding: 8px 10px !important;
+  border-radius: 7px !important;
+}
+
+.compact-list-layout .filters-panel input[nz-input],
+.compact-list-layout .filters-panel .filter-select,
+.compact-list-layout .filters-panel .filter-date,
+.compact-list-layout .filters-panel nz-range-picker {
+  min-width: 180px !important;
+  height: 32px !important;
+}
+
+.compact-list-layout .filters-panel button[nz-button] {
+  height: 32px !important;
+  padding: 0 10px !important;
+  font-size: 12px !important;
+}
+
+.compact-list-layout .table-wrapper {
+  flex: 1 1 auto !important;
+  min-height: 520px !important;
+  border-radius: 7px !important;
+}
+
+.compact-list-layout .table-wrapper .ant-table-thead > tr > th {
+  padding: 8px 10px !important;
+  font-size: 11px !important;
+}
+
+.compact-list-layout .table-wrapper .ant-table-tbody > tr > td {
+  padding: 7px 10px !important;
+  font-size: 12px !important;
+}
+
+.compact-list-layout .ant-tag {
+  margin-right: 0 !important;
+  padding: 0 6px !important;
+  font-size: 11px !important;
+  line-height: 20px !important;
 }
 
 @media (max-width: 992px) {

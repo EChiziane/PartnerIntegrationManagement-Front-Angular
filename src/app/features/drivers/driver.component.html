@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper compact-list-layout">
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
       <a routerLink="/app">{{ 'common.home' | translate }}</a>
@@ -112,7 +112,7 @@
           <tr *ngFor="let data of nzTable.data">
             <td>{{ data.Name }}</td>
             <td>{{ data.Phone }}</td>
-            <td>{{ data.CarDescription }}</td>
+            <td>{{ data.truckId ? formatDriverTruckLabel(data) : (data.CarDescription || '-') }}</td>
 
             <td>
               <nz-tag [nzColor]="(data.status === 'ACTIVO' || data.status === 'ATIVO') ? 'green' : 'red'">
@@ -201,21 +201,15 @@
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>{{ 'drivers.drawer.car' | translate }}</nz-form-label>
+              <nz-form-label>Origem do camiao</nz-form-label>
               <nz-form-control>
-                <nz-select
-                  [nzDisabled]="isSaving"
-                  formControlName="CarDescription"
-                  [nzPlaceHolder]="'drivers.drawer.car' | translate"
-                  nzShowSearch>
-
-                  <nz-option
-                    *ngFor="let car of carOptions"
-                    [nzLabel]="car"
-                    [nzValue]="car">
-                  </nz-option>
-
-                </nz-select>
+                <nz-radio-group
+                  [ngModel]="truckMode"
+                  [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="changeTruckMode($event)">
+                  <label nz-radio-button nzValue="existing" [nzDisabled]="isSaving">Existente</label>
+                  <label nz-radio-button nzValue="new" [nzDisabled]="isSaving">Novo</label>
+                </nz-radio-group>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -227,6 +221,90 @@
                   <nz-option [nzLabel]="'drivers.metrics.active' | translate" nzValue="ACTIVO"></nz-option>
                   <nz-option [nzLabel]="'drivers.metrics.inactive' | translate" nzValue="INACTIVO"></nz-option>
                 </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div *ngIf="truckMode === 'existing'" [nzGutter]="16" nz-row>
+          <div nz-col nzMd="24" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Camiao disponivel</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  [nzDisabled]="isSaving"
+                  formControlName="truckId"
+                  nzAllowClear
+                  nzPlaceHolder="Selecionar camiao"
+                  nzShowSearch>
+                  <nz-option
+                    *ngFor="let truck of availableTrucks"
+                    [nzLabel]="formatTruckLabel(truck)"
+                    [nzValue]="truck.id">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <ng-container *ngIf="truckMode === 'new'">
+          <div [nzGutter]="16" nz-row>
+            <div nz-col nzMd="12" nzSm="24" nzXs="24">
+              <nz-form-item>
+                <nz-form-label>Matricula</nz-form-label>
+                <nz-form-control>
+                  <input formControlName="truckPlateNumber" nz-input placeholder="Ex: AAD-345-MC"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzMd="12" nzSm="24" nzXs="24">
+              <nz-form-item>
+                <nz-form-label nzRequired>Tamanho</nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    [nzDisabled]="isSaving"
+                    formControlName="truckSize"
+                    nzPlaceHolder="Selecionar tamanho">
+                    <nz-option *ngFor="let option of truckSizeOptions" [nzLabel]="option.size" [nzValue]="option.size"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div [nzGutter]="16" nz-row>
+            <div nz-col nzMd="12" nzSm="24" nzXs="24">
+              <nz-form-item>
+                <nz-form-label>Nome/Modelo</nz-form-label>
+                <nz-form-control>
+                  <input
+                    formControlName="truckBrand"
+                    nz-input
+                    placeholder="Ex: SINOTRUK"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzMd="12" nzSm="24" nzXs="24">
+              <nz-form-item>
+                <nz-form-label>Tipo</nz-form-label>
+                <nz-form-control>
+                  <nz-select [nzDisabled]="isSaving" formControlName="truckOwnershipType">
+                    <nz-option nzLabel="Externo" nzValue="EXTERNAL"></nz-option>
+                    <nz-option nzLabel="Interno" nzValue="INTERNAL"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </ng-container>
+
+        <div [nzGutter]="16" nz-row>
+          <div nz-col nzMd="24" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>{{ 'drivers.drawer.car' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input formControlName="CarDescription" nz-input readonly/>
               </nz-form-control>
             </nz-form-item>
           </div>

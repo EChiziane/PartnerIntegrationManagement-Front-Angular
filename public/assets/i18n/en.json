@@ -82,7 +82,27 @@
       "deliveryDate": "Enter delivery date"
     },
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "entities": {
+      "carload": "carload",
+      "customer": "customer",
+      "driver": "driver",
+      "manager": "manager",
+      "sprint": "campaign",
+      "user": "user",
+      "payment": "payment",
+      "truck": "truck",
+      "invoice": "invoice",
+      "quote": "quote"
+    },
+    "confirmation": {
+      "deleteTitle": "Are you sure you want to delete {{ entity }} {{ name }}?",
+      "deleteContent": "{{ entity }}: <strong>{{ name }}</strong>",
+      "deleteCarloadContent": "Customer: <strong>{{ customer }}</strong><br>Destination: <strong>{{ destination }}</strong>",
+      "deleteQuoteContent": "Quote: <strong>{{ code }}</strong><br>Customer: <strong>{{ customer }}</strong>",
+      "deleteOk": "Delete",
+      "deletePermanentWarning": "After confirmation, this action will be permanent and cannot be undone."
+    }
   },
   "layout": {
     "brandSubtitle": "Carload Management",
@@ -412,7 +432,8 @@
       "createTitle": "Create Campaign",
       "editTitle": "Edit Campaign",
       "section": "Campaign Data",
-      "carloadSection": "Carload Data (Sprint)"
+      "carloadSection": "Carload Data (Sprint)",
+      "copyTitle": "Copy Campaign"
     },
     "messages": {
       "loadCarloadsError": "Error loading this sprint carloads.",
@@ -424,8 +445,8 @@
       "created": "Carload created successfully.",
       "saveError": "Error saving carload.",
       "deleteTitle": "Delete carload?",
-      "deleted": "Carload deleted successfully.",
-      "deleteError": "Error deleting carload."
+      "deleted": "Campaign deleted successfully.",
+      "deleteError": "Error deleting campaign."
     }
   },
   "users": {
@@ -561,6 +582,46 @@
       "deleteError": "Error deleting invoice",
       "loadError": "Error loading invoices",
       "loadCustomersError": "Error loading customers"
+    },
+    "drawer": {
+      "createTitle": "New Invoice",
+      "copyTitle": "Copy Invoice"
+    }
+  },
+  "payments": {
+    "drawer": {
+      "createTitle": "New Payment",
+      "editTitle": "Edit Payment"
+    },
+    "messages": {
+      "deleted": "Payment deleted successfully.",
+      "deleteError": "Error deleting payment."
+    }
+  },
+  "trucks": {
+    "drawer": {
+      "createTitle": "New Truck",
+      "editTitle": "Edit Truck",
+      "copyTitle": "Copy Truck"
+    },
+    "messages": {
+      "deleted": "Truck deleted successfully.",
+      "deleteError": "Error deleting truck."
+    }
+  },
+  "quotes": {
+    "drawer": {
+      "createTitle": "New Quote",
+      "editTitle": "Edit Quote"
+    },
+    "messages": {
+      "deleted": "Quote deleted successfully!",
+      "deleteError": "Error deleting quote."
+    },
+    "confirmation": {
+      "approveTitle": "Approve quote and generate carloads?",
+      "approveContent": "Quote <strong>{{ code }}</strong> will generate carloads from the item quantities. You can assign driver and truck later in Carloads.",
+      "approveOk": "Generate carloads"
     }
   }
 }

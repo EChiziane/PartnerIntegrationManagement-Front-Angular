@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper compact-list-layout">
 
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
@@ -112,6 +112,9 @@
             <th>Código</th>
             <th>Destino</th>
             <th>Total</th>
+            <th>Estado</th>
+            <th>Carradas</th>
+            <th>Versao</th>
             <th>Validade</th>
             <th>Criado em</th>
             <th>Criado por</th>
@@ -125,11 +128,37 @@
             <td>{{ quote.quoteCode }}</td>
             <td>{{ quote.destination || '—' }}</td>
             <td>{{ quote.total | number:'1.2-2' }} Mts</td>
+            <td>{{ getQuoteStatusLabel(quote) }}</td>
+            <td>{{ quote.generatedCarloadsCount || 0 }}</td>
+            <td>{{ getQuoteVersionLabel(quote) }}</td>
             <td>{{ quote.validUntil ? (quote.validUntil | date:'dd/MM/yyyy') : '—' }}</td>
             <td>{{ quote.createdAt | date:'dd/MM/yyyy' }}</td>
             <td>{{ quote.createdByName || 'Sistema' }}</td>
 
             <td class="action-buttons">
+              <button
+                (click)="viewQuoteVersions(quote)"
+                nz-button
+                nz-tooltip
+                nzSize="small"
+                nzTooltipTitle="Ver versoes"
+                nzType="link"
+              >
+                <nz-icon nzTheme="outline" nzType="history"></nz-icon>
+              </button>
+
+              <button
+                (click)="approveAndGenerateCarloads(quote)"
+                [disabled]="!canGenerateCarloads(quote)"
+                nz-button
+                nz-tooltip
+                nzSize="small"
+                nzTooltipTitle="Aprovar e gerar carradas"
+                nzType="link"
+              >
+                <nz-icon nzTheme="outline" nzType="partition"></nz-icon>
+              </button>
+
               <button
                 (click)="downloadQuote(quote)"
                 nz-button
@@ -191,7 +220,7 @@
   [nzFooter]="drawerFooter"
   [nzMaskClosable]="false"
   [nzPlacement]="drawerPlacement"
-  [nzTitle]="currentQuoteId ? 'Editar Cotação' : 'Nova Cotação'"
+  [nzTitle]="drawerTitle"
   [nzVisible]="isDrawerVisible"
   [nzWidth]="drawerWidth"
 >
@@ -204,7 +233,7 @@
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label nzRequired>Cliente</nz-form-label>
+              <nz-form-label>Cliente</nz-form-label>
               <nz-form-control>
                 <input formControlName="customerName" nz-input placeholder="Nome do cliente"/>
               </nz-form-control>

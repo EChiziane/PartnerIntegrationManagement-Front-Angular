@@ -1,11 +1,16 @@
-<div class="content-wrapper">
+<div class="content-wrapper compact-list-layout">
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item><a routerLink="/app">{{ 'common.home' | translate }}</a></nz-breadcrumb-item>
     <nz-breadcrumb-item>{{ 'carloads.breadcrumb' | translate }}</nz-breadcrumb-item>
   </nz-breadcrumb>
 
   <div class="page-header">
-    <p>{{ 'carloads.title' | translate }}</p>
+    <div class="compact-title-block">
+      <p>{{ 'carloads.title' | translate }}</p>
+      <span class="list-meta">
+        {{ totalCarLoads }} carradas · {{ scheduled }} agendadas · {{ inProgress }} em execução · {{ delivered }} entregues
+      </span>
+    </div>
     <span (click)="onBack()" class="back-arrow">
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
     </span>
@@ -221,7 +226,7 @@
   [nzFooter]="reportDrawerFooter"
   [nzMaskClosable]="false"
   [nzPlacement]="drawerPlacement"
-  [nzTitle]="'Relatório de Carradas'"
+  [nzTitle]="'carloads.reportDrawer.title' | translate"
   [nzVisible]="isReportDrawerVisible"
   [nzWidth]="420">
 
@@ -453,6 +458,15 @@
               </nz-form-control>
             </nz-form-item>
           </div>
+
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>Quantidade</nz-form-label>
+              <nz-form-control>
+                <input formControlName="quantity" nz-input type="number"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
         </div>
 
         <div [nzGutter]="16" nz-row>
@@ -470,17 +484,9 @@
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>{{ 'carloads.drawer.manager' | translate }}</nz-form-label>
+              <nz-form-label>Camiao do motorista</nz-form-label>
               <nz-form-control>
-                <nz-select
-                  [nzDisabled]="shouldDisableManager"
-                  [nzLoading]="isLoadingLookups"
-                  formControlName="logisticsManagerId"
-                  nzAllowClear
-                  [nzPlaceHolder]="'common.placeholders.selectManager' | translate"
-                  nzShowSearch>
-                  <nz-option *ngFor="let m of managers" [nzLabel]="m.name" [nzValue]="m.id"></nz-option>
-                </nz-select>
+                <input [value]="selectedDriverTruckLabel" nz-input readonly/>
               </nz-form-control>
             </nz-form-item>
           </div>

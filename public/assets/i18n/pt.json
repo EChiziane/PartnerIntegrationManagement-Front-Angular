@@ -82,7 +82,27 @@
       "deliveryDate": "Informe a data de entrega"
     },
     "yes": "Sim",
-    "no": "N?o"
+    "no": "N?o",
+    "entities": {
+      "carload": "carrada",
+      "customer": "cliente",
+      "driver": "motorista",
+      "manager": "gestor",
+      "sprint": "campanha",
+      "user": "utilizador",
+      "payment": "pagamento",
+      "truck": "camiao",
+      "invoice": "fatura",
+      "quote": "cotacao"
+    },
+    "confirmation": {
+      "deleteTitle": "Tem certeza de que deseja eliminar {{ entity }} {{ name }}?",
+      "deleteContent": "{{ entity }}: <strong>{{ name }}</strong>",
+      "deleteCarloadContent": "Cliente: <strong>{{ customer }}</strong><br>Destino: <strong>{{ destination }}</strong>",
+      "deleteQuoteContent": "Cotacao: <strong>{{ code }}</strong><br>Cliente: <strong>{{ customer }}</strong>",
+      "deleteOk": "Eliminar",
+      "deletePermanentWarning": "Apos a confirmacao, esta acao sera permanente e nao podera ser revertida."
+    }
   },
   "layout": {
     "brandSubtitle": "Carload Management",
@@ -412,7 +432,8 @@
       "createTitle": "Criar Campanha",
       "editTitle": "Editar Campanha",
       "section": "Dados da Campanha",
-      "carloadSection": "Dados da Carrada (Sprint)"
+      "carloadSection": "Dados da Carrada (Sprint)",
+      "copyTitle": "Copiar Campanha"
     },
     "messages": {
       "loadCarloadsError": "Erro ao carregar carradas desta sprint.",
@@ -424,8 +445,8 @@
       "created": "Carrada criada com sucesso.",
       "saveError": "Erro ao gravar carrada.",
       "deleteTitle": "Eliminar carrada?",
-      "deleted": "Carrada eliminada com sucesso.",
-      "deleteError": "Erro ao eliminar carrada."
+      "deleted": "Campanha eliminada com sucesso.",
+      "deleteError": "Erro ao eliminar campanha."
     }
   },
   "users": {
@@ -561,6 +582,46 @@
       "deleteError": "Erro ao eliminar fatura",
       "loadError": "Erro ao carregar faturas",
       "loadCustomersError": "Erro ao carregar clientes"
+    },
+    "drawer": {
+      "createTitle": "Nova Fatura",
+      "copyTitle": "Copiar Fatura"
+    }
+  },
+  "payments": {
+    "drawer": {
+      "createTitle": "Novo Pagamento",
+      "editTitle": "Editar Pagamento"
+    },
+    "messages": {
+      "deleted": "Pagamento eliminado com sucesso.",
+      "deleteError": "Erro ao eliminar pagamento."
+    }
+  },
+  "trucks": {
+    "drawer": {
+      "createTitle": "Novo Camiao",
+      "editTitle": "Editar Camiao",
+      "copyTitle": "Copiar Camiao"
+    },
+    "messages": {
+      "deleted": "Camiao eliminado com sucesso.",
+      "deleteError": "Erro ao eliminar camiao."
+    }
+  },
+  "quotes": {
+    "drawer": {
+      "createTitle": "Nova Cotacao",
+      "editTitle": "Editar Cotacao"
+    },
+    "messages": {
+      "deleted": "Cotacao eliminada com sucesso!",
+      "deleteError": "Erro ao eliminar a cotacao."
+    },
+    "confirmation": {
+      "approveTitle": "Aprovar cotacao e gerar carradas?",
+      "approveContent": "A cotacao <strong>{{ code }}</strong> vai gerar carradas conforme as quantidades dos itens. Depois podes atribuir motorista e camiao em Carradas.",
+      "approveOk": "Gerar carradas"
     }
   }
 }

@@ -290,6 +290,25 @@ textarea[nz-input] {
   padding: 12px;
 }
 
+.selected-carload-items {
+  margin-bottom: 14px;
+}
+
+.carload-preview-row {
+  border-color: #b7ebd9;
+  background: #f6fffb;
+
+  input[readonly] {
+    color: #1f2933;
+    background: #fff;
+  }
+}
+
+.manual-items-title {
+  margin-top: 14px;
+  border-left-color: #8b95a1;
+}
+
 .item-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(180px, 1fr));

@@ -11,6 +11,7 @@ export interface CarloadInvoice {
   tax: number;
   total: number;
   createdAt: string;
+  carloadIds?: string[];
   createdBy?: string | null;
   createdByName?: string | null;
 }

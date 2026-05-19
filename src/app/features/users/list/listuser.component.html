@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper compact-list-layout">
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
       <a routerLink="/app">Home</a>
@@ -148,6 +148,7 @@
   [nzBodyStyle]="{ overflow: 'auto' }"
   [nzFooter]="nzUserDrawerFooter"
   [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
   [nzTitle]="userDrawerTitle"
   [nzVisible]="isUserDrawerVisible"
   [nzWidth]="drawerWidth">

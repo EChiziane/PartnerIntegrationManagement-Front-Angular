@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
 import {Sprint} from '@shared/models/sprint';
 import {SprintService} from '@core/services/sprint.service';
+import {TranslationService} from '@core/services/translation.service';
+import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 
 @Component({
   selector: 'app-sprint',
@@ -31,7 +32,7 @@ export class SprintComponent implements OnInit {
   isSprintDrawerVisible = false;
 
   isEditMode = false;
-  sprintDrawerTitle = 'Criar Campanha';
+  isCopyMode = false;
   selectedSprintId: string | null = null;
   drawerWidth: string | number = 720;
   drawerPlacement: 'right' | 'bottom' = 'right';
@@ -55,7 +56,8 @@ export class SprintComponent implements OnInit {
   constructor(
     private sprintService: SprintService,
     private message: NzMessageService,
-    private modal: NzModalService
+    private confirmationDialog: ConfirmationDialogService,
+    private translationService: TranslationService
   ) {
   }
 
@@ -99,6 +101,16 @@ export class SprintComponent implements OnInit {
     this.totalMarketingBudget = this.dataSource.reduce((sum, sprint) => sum + Number(sprint.marketingBudget || 0), 0);
   }
 
+  get sprintDrawerTitle(): string {
+    if (this.isCopyMode) {
+      return this.t('sprints.drawer.copyTitle');
+    }
+
+    return this.isEditMode
+      ? this.t('sprints.drawer.editTitle')
+      : this.t('sprints.drawer.createTitle');
+  }
+
   getStatusLabel(status: string): string {
     const labels: Record<string, string> = {
       PLANEADA: 'Planeada',
@@ -125,7 +137,7 @@ export class SprintComponent implements OnInit {
 
   openSprintDrawer(): void {
     this.isEditMode = false;
-    this.sprintDrawerTitle = 'Criar Campanha';
+    this.isCopyMode = false;
 
     this.selectedSprintId = null;
     this.selectedSprint = null;
@@ -148,11 +160,13 @@ export class SprintComponent implements OnInit {
     this.sprintForm.reset();
     this.selectedSprintId = null;
     this.selectedSprint = null;
+    this.isEditMode = false;
+    this.isCopyMode = false;
   }
 
   editSprint(sprint: Sprint): void {
     this.isEditMode = true;
-    this.sprintDrawerTitle = 'Editar Campanha';
+    this.isCopyMode = false;
 
     this.selectedSprintId = sprint.id;
     this.selectedSprint = sprint;
@@ -163,6 +177,30 @@ export class SprintComponent implements OnInit {
       name: sprint.name,
       description: sprint.description,
       status: (sprint.status as any) || 'EM_EXECUCAO',
+      campaignChannel: sprint.campaignChannel || 'FACEBOOK',
+      materialFocus: sprint.materialFocus || '',
+      volumesPromoted: this.parseVolumes(sprint.volumesPromoted || sprint.campaignProducts || ''),
+      campaignProducts: sprint.campaignProducts || '',
+      marketingBudget: Number(sprint.marketingBudget || 0),
+      targetCarloads: Number(sprint.targetCarloads || 0),
+      targetRevenue: Number(sprint.targetRevenue || 0),
+      startDate: sprint.startDate || null,
+      expectedEndDate: sprint.expectedEndDate || null
+    });
+  }
+
+  copySprint(sprint: Sprint): void {
+    this.isEditMode = false;
+    this.isCopyMode = true;
+
+    this.selectedSprintId = null;
+    this.selectedSprint = null;
+    this.isSprintDrawerVisible = true;
+
+    this.sprintForm.patchValue({
+      name: `${sprint.name || 'Campanha'} (copia)`,
+      description: sprint.description,
+      status: 'PLANEADA',
       campaignChannel: sprint.campaignChannel || 'FACEBOOK',
       materialFocus: sprint.materialFocus || '',
       volumesPromoted: this.parseVolumes(sprint.volumesPromoted || sprint.campaignProducts || ''),
@@ -190,7 +228,9 @@ export class SprintComponent implements OnInit {
     formData.campaignProducts = formData.volumesPromoted;
 
     // Preserva campos controlados pelo backend que nao fazem parte do formulario.
-    const request$ = (this.isEditMode && this.selectedSprintId)
+    const isUpdate = this.isEditMode && this.selectedSprintId;
+    const wasCopy = this.isCopyMode;
+    const request$ = isUpdate
       ? this.sprintService.updateSprint(this.selectedSprintId, formData)
       : this.sprintService.addSprint(formData);
 
@@ -201,10 +241,13 @@ export class SprintComponent implements OnInit {
         this.getSprints();
         this.closeSprintDrawer();
 
-        this.message.success(this.isEditMode
-          ? 'Sprint atualizada com sucesso.'
-          : 'Sprint criada com sucesso.'
-        );
+        if (isUpdate) {
+          this.message.success('Sprint atualizada com sucesso.');
+        } else if (wasCopy) {
+          this.message.success('Copia da sprint criada com sucesso.');
+        } else {
+          this.message.success('Sprint criada com sucesso.');
+        }
       },
       error: () => {
         this.isSaving = false;
@@ -214,19 +257,16 @@ export class SprintComponent implements OnInit {
   }
 
   deleteSprint(data: Sprint): void {
-    this.modal.confirm({
-      nzTitle: 'Tens certeza que quer eliminar esta Sprint?',
-      nzContent: `Sprint: <strong>${data.name}</strong>`,
-      nzOkDanger: true,
-      nzOkText: 'Sim',
-      nzCancelText: 'Nao',
-      nzOnOk: () =>
+    this.confirmationDialog.confirmDelete({
+      entity: this.t('common.entities.sprint'),
+      name: data.name,
+      onOk: () =>
         this.sprintService.deleteSprint(data.id).subscribe({
           next: () => {
             this.getSprints();
-            this.message.success('Sprint eliminada com sucesso.');
+            this.message.success(this.t('sprints.messages.deleted'));
           },
-          error: () => this.message.error('Erro ao eliminar sprint.')
+          error: () => this.message.error(this.t('sprints.messages.deleteError'))
         })
     });
   }
@@ -260,5 +300,9 @@ export class SprintComponent implements OnInit {
       .split(',')
       .map(item => item.trim())
       .filter(Boolean);
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
 }

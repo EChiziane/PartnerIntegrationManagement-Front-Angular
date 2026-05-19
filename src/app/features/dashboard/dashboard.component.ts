@@ -415,14 +415,14 @@ export class DashboardComponent implements OnInit {
 
     this.carloadService.updateCarLoad(carload.id, payload).subscribe({
       next: () => {
-        const messageMap: Record<CarLoadStatus, string> = {
+        const messageMap: Partial<Record<CarLoadStatus, string>> = {
           SCHEDULED: this.t('dashboard.messages.scheduled'),
           IN_PROGRESS: this.t('dashboard.messages.progress'),
           DELIVERED: this.t('dashboard.messages.delivered'),
           CANCELLED: this.t('dashboard.messages.cancelled')
         };
 
-        this.message.success(messageMap[newStatus]);
+        this.message.success(messageMap[newStatus] || this.t('dashboard.messages.progress'));
         this.changingStatusId = null;
         this.load();
       },

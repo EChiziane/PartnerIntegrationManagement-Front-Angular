@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper compact-list-layout">
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item>
       <a routerLink="/app">{{ 'common.home' | translate }}</a>
@@ -165,6 +165,7 @@
   [nzBodyStyle]="{ overflow: 'auto' }"
   [nzFooter]="managerDrawerFooter"
   [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
   [nzTitle]="managerDrawerTitle"
   [nzVisible]="isManagerDrawerVisible"
   [nzWidth]="drawerWidth">

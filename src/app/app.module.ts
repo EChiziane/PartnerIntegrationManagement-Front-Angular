@@ -27,6 +27,7 @@ import {NzFilterTriggerComponent, NzTableModule, NzThAddOnComponent} from 'ng-zo
 
 import {NzDrawerComponent, NzDrawerContentDirective, NzDrawerModule} from 'ng-zorro-antd/drawer';
 import {NzSelectComponent, NzSelectModule} from 'ng-zorro-antd/select';
+import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzFormDirective, NzFormModule} from 'ng-zorro-antd/form';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
@@ -79,6 +80,8 @@ import {ManagerDetailsComponent} from '@features/managers/manager-details/manage
 import {CarloadDetailsComponent} from '@features/carloads/carload-details/carload-details.component';
 import {QuoteComponent} from '@features/quotes/quote.component';
 import {UserDetailComponent} from '@features/users/detail/user-detail.component';
+import {TruckComponent} from '@features/trucks/truck.component';
+import {PaymentComponent} from '@features/payments/payment.component';
 import {
   CarloadCustomerDetailComponent
 } from '@features/customers/carload-customer-detail/carload-customer-detail.component';
@@ -109,6 +112,8 @@ registerLocaleData(en);
     , CarloadDetailsComponent,
     QuoteComponent,
     UserDetailComponent,
+    TruckComponent,
+    PaymentComponent,
     CarloadCustomerDetailComponent,
     TranslatePipe
 
@@ -153,6 +158,7 @@ registerLocaleData(en);
     NzFormModule,
     NzInputModule,
     NzSelectModule,
+    NzRadioModule,
     ReactiveFormsModule,
     NzSwitchComponent,
     NzTagComponent,
@@ -183,6 +189,7 @@ registerLocaleData(en);
     NzFormModule,
     NzInputModule,
     NzSelectModule,
+    NzRadioModule,
     ReactiveFormsModule,
     NzSwitchComponent,
     NzTagComponent,

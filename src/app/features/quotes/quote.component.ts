@@ -9,6 +9,8 @@ import { CarloadQuote } from '@shared/models/carload-quote';
 import { CarloadQuoteItem } from '@shared/models/carload-quote-item';
 import { CarloadQuoteService } from '@core/services/carload-quote.service';
 import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
+import {TranslationService} from '@core/services/translation.service';
+import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 
 @Component({
   selector: 'app-quote',
@@ -84,11 +86,19 @@ export class QuoteComponent implements OnInit {
     private quoteService: CarloadQuoteService,
     private locationSuggestionService: LocationSuggestionService,
     private message: NzMessageService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private confirmationDialog: ConfirmationDialogService,
+    private translationService: TranslationService
   ) {}
 
   get items(): FormArray {
     return this.quoteForm.get('items') as FormArray;
+  }
+
+  get drawerTitle(): string {
+    return this.currentQuoteId
+      ? this.t('quotes.drawer.editTitle')
+      : this.t('quotes.drawer.createTitle');
   }
 
   ngOnInit(): void {
@@ -254,7 +264,7 @@ export class QuoteComponent implements OnInit {
 
   editQuote(quote: CarloadQuote): void {
     this.currentQuoteId = quote.id || null;
-    this.currentQuoteCode = this.generateNextQuoteCode(),
+    this.currentQuoteCode = quote.quoteCode;
     this.isDrawerVisible = true;
 
     this.items.clear();
@@ -322,23 +332,89 @@ export class QuoteComponent implements OnInit {
     });
   }
 
-  deleteQuote(quote: CarloadQuote): void {
+  viewQuoteVersions(quote: CarloadQuote): void {
+    if (!quote.id) return;
+
+    this.quoteService.getQuoteVersions(quote.id).subscribe({
+      next: versions => {
+        const rows = (versions || [])
+          .map(version => {
+            const createdAt = version.createdAt
+              ? this.formatDateOnly(version.createdAt)
+              : '-';
+            const total = this.formatMoney(Number(version.total || 0));
+            return `<li><strong>v${version.versionNumber || 1}</strong> - ${createdAt} - ${total} Mts</li>`;
+          })
+          .join('');
+
+        this.modal.info({
+          nzTitle: `Versoes da cotacao ${quote.quoteCode}`,
+          nzContent: `<ul>${rows || '<li>Sem historico de versoes.</li>'}</ul>`,
+          nzOkText: 'Fechar'
+        });
+      },
+      error: () => {
+        this.message.error('Erro ao carregar versoes da cotacao.');
+      }
+    });
+  }
+
+  approveAndGenerateCarloads(quote: CarloadQuote): void {
+    if (!quote.id) return;
+
     this.modal.confirm({
-      nzTitle: 'Tens certeza que quer eliminar esta cotação?',
-      nzContent: `Cotação: <strong>${quote.quoteCode}</strong> — Cliente: <strong>${quote.customerName}</strong>`,
-      nzOkDanger: true,
-      nzOkText: 'Sim',
-      nzCancelText: 'Não',
+      nzTitle: this.t('quotes.confirmation.approveTitle'),
+      nzContent: this.t('quotes.confirmation.approveContent', {code: quote.quoteCode}),
+      nzOkText: this.t('quotes.confirmation.approveOk'),
+      nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => {
+        this.quoteService.approveAndGenerateCarloads(quote.id as string).subscribe({
+          next: carloads => {
+            this.loadQuotes();
+            this.message.success(`${carloads.length} carrada(s) gerada(s) a partir da cotacao.`);
+          },
+          error: () => {
+            this.message.error('Erro ao gerar carradas da cotacao.');
+          }
+        });
+      }
+    });
+  }
+
+  canGenerateCarloads(quote: CarloadQuote): boolean {
+    return (quote.generatedCarloadsCount || 0) === 0;
+  }
+
+  getQuoteStatusLabel(quote: CarloadQuote): string {
+    const statusMap: Record<string, string> = {
+      DRAFT: 'Rascunho',
+      SENT: 'Enviada',
+      APPROVED: 'Aprovada',
+      REJECTED: 'Rejeitada',
+      EXPIRED: 'Expirada'
+    };
+
+    return statusMap[quote.quoteStatus || 'DRAFT'] || 'Rascunho';
+  }
+
+  getQuoteVersionLabel(quote: CarloadQuote): string {
+    return `v${quote.versionNumber || 1}`;
+  }
+
+  deleteQuote(quote: CarloadQuote): void {
+    this.confirmationDialog.confirmDelete({
+      entity: this.t('common.entities.quote'),
+      details: this.t('common.confirmation.deleteQuoteContent', {code: quote.quoteCode, customer: quote.customerName}),
+      onOk: () => {
         if (!quote.id) return;
 
         this.quoteService.deleteQuote(quote.id).subscribe({
           next: () => {
             this.loadQuotes();
-            this.message.success('Cotação eliminada com sucesso!');
+            this.message.success(this.t('quotes.messages.deleted'));
           },
           error: () => {
-            this.message.error('Erro ao eliminar a cotação.');
+            this.message.error(this.t('quotes.messages.deleteError'));
           }
         });
       }
@@ -530,7 +606,7 @@ export class QuoteComponent implements OnInit {
   private initForm(): void {
     this.quoteForm = this.fb.group({
       quoteCode: ['', Validators.required],
-      customerName: ['', Validators.required],
+      customerName: [''],
       customerPhoneNumber: ['', Validators.required],
       destination: [''],
       items: this.fb.array([]),
@@ -669,5 +745,9 @@ export class QuoteComponent implements OnInit {
     );
 
     return `COT-${max + 1}`;
+  }
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translationService.instant(key, params);
   }
+
 }

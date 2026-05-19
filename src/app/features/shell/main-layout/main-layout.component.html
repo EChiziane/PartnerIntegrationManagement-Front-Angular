@@ -51,6 +51,13 @@
           </li>
 
           <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/truck">
+              <span nz-icon nzType="truck"></span>
+              <span>Camioes</span>
+            </a>
+          </li>
+
+          <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/carload-customer">
               <span nz-icon nzType="team"></span>
               <span>{{ 'layout.menu.customers' | translate }}</span>
@@ -90,6 +97,13 @@
             <a routerLink="/app/invoice">
               <span nz-icon nzType="file-done"></span>
               <span>{{ 'layout.menu.invoices' | translate }}</span>
+            </a>
+          </li>
+
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/app/payment">
+              <span nz-icon nzType="wallet"></span>
+              <span>Pagamentos</span>
             </a>
           </li>
         </ul>

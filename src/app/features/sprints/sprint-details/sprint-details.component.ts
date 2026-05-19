@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
 
 import {CarLoad, CarLoadStatus} from '@shared/models/carload';
 import {Driver} from '@shared/models/driver';
@@ -15,6 +14,7 @@ import {ManagerService} from '@core/services/manager.service';
 import {SprintService} from '@core/services/sprint.service';
 import {SprintDetailPdfService} from '@core/services/sprint-detail-pdf.service';
 import {TranslationService} from '@core/services/translation.service';
+import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 
 type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
 
@@ -62,7 +62,6 @@ export class SprintDetailsComponent implements OnInit {
   isCarloadDrawerVisible = false;
   isEditMode = false;
   isCopyMode = false;
-  carLoadDrawerTitle = '';
   selectedCarLoadId: string | null = null;
 
   drawerWidth: string | number = 720;
@@ -102,7 +101,7 @@ export class SprintDetailsComponent implements OnInit {
     private managerService: ManagerService,
     private sprintService: SprintService,
     private sprintDetailPdfService: SprintDetailPdfService,
-    private modal: NzModalService,
+    private confirmationDialog: ConfirmationDialogService,
     private message: NzMessageService,
     private translationService: TranslationService
   ) {
@@ -110,6 +109,16 @@ export class SprintDetailsComponent implements OnInit {
 
   get selectedStatusUpper(): string {
     return (this.carloadForm.get('deliveryStatus')?.value || 'SCHEDULED').toString().toUpperCase();
+  }
+
+  get carLoadDrawerTitle(): string {
+    if (this.isCopyMode) {
+      return this.t('carloads.drawer.copyTitle');
+    }
+
+    return this.isEditMode
+      ? this.t('carloads.drawer.editTitle')
+      : this.t('carloads.drawer.createTitle');
   }
 
   get shouldShowScheduledDate(): boolean {
@@ -238,7 +247,6 @@ export class SprintDetailsComponent implements OnInit {
     this.isEditMode = false;
     this.isCopyMode = false;
     this.selectedCarLoadId = null;
-    this.carLoadDrawerTitle = this.t('carloads.drawer.createTitle');
 
     this.carloadForm.reset({
       deliveryStatus: 'SCHEDULED',
@@ -273,7 +281,6 @@ export class SprintDetailsComponent implements OnInit {
     this.isEditMode = true;
     this.isCopyMode = false;
     this.selectedCarLoadId = carload.id;
-    this.carLoadDrawerTitle = this.t('carloads.drawer.editTitle');
 
     this.isCarloadDrawerVisible = true;
     this.carloadForm.patchValue(this.mapCarloadToForm(carload));
@@ -286,7 +293,6 @@ export class SprintDetailsComponent implements OnInit {
     this.isEditMode = false;
     this.isCopyMode = true;
     this.selectedCarLoadId = null;
-    this.carLoadDrawerTitle = this.t('carloads.drawer.copyTitle');
 
     this.isCarloadDrawerVisible = true;
     this.carloadForm.patchValue(this.mapCarloadToForm(carload));
@@ -361,13 +367,11 @@ export class SprintDetailsComponent implements OnInit {
   }
 
   deleteCarload(carload: CarLoad): void {
-    this.modal.confirm({
-      nzTitle: this.t('sprints.messages.deleteTitle'),
-      nzContent: this.t('carloads.modal.deleteContent', {customer: carload.customerName, destination: carload.deliveryDestination}),
-      nzOkDanger: true,
-      nzOkText: this.t('common.yes'),
-      nzCancelText: this.t('common.no'),
-      nzOnOk: () =>
+    this.confirmationDialog.confirmDelete({
+      entity: this.t('common.entities.carload'),
+      name: carload.sourceQuoteCode || carload.invoiceCode || carload.customerName,
+      details: this.t('common.confirmation.deleteCarloadContent', {customer: carload.customerName, destination: carload.deliveryDestination}),
+      onOk: () =>
         this.carloadService.deleteCarLoad(carload.id).subscribe({
           next: () => {
             this.message.success(this.t('sprints.messages.deleted'));

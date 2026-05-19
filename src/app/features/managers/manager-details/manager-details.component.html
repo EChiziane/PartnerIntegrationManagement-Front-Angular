@@ -4,7 +4,7 @@
   [nzPlacement]="drawerPlacement"
   [nzVisible]="visible"
   [nzWidth]="drawerWidth"
-  nzTitle="Detalhes do Gestor">
+  [nzTitle]="'managers.detailsTitle' | translate">
 
   <ng-container *nzDrawerContent>
     <ng-container *ngIf="manager; else emptyState">

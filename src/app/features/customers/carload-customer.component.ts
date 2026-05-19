@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
 import {CarloadCustomer} from '@shared/models/carload-customer';
 import {CarloadCustomerService} from '@core/services/carload-customer.service';
 import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
 import {TranslationService} from '@core/services/translation.service';
+import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 
 @Component({
   selector: 'app-carload-customer',
@@ -43,7 +43,7 @@ export class CarloadCustomerComponent implements OnInit {
     private fb: FormBuilder,
     private locationSuggestionService: LocationSuggestionService,
     private message: NzMessageService,
-    private modal: NzModalService,
+    private confirmationDialog: ConfirmationDialogService,
     private translationService: TranslationService
   ) {
     this.initForm();
@@ -93,14 +93,10 @@ export class CarloadCustomerComponent implements OnInit {
   }
 
   deleteCustomer(customer: CarloadCustomer): void {
-    this.modal.confirm({
-      nzTitle: this.t('customers.messages.deleteTitle'),
-      nzContent: `Cliente: <strong>${customer.name}</strong>`,
-      nzOkText: this.t('common.yes'),
-      nzOkType: 'primary',
-      nzOkDanger: true,
-      nzCancelText: this.t('common.no'),
-      nzOnOk: () => {
+    this.confirmationDialog.confirmDelete({
+      entity: this.t('common.entities.customer'),
+      name: customer.name,
+      onOk: () => {
         this.customerService.deleteCustomer(customer.id).subscribe({
           next: () => {
             this.loadCustomers();
