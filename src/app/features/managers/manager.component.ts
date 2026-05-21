@@ -43,7 +43,7 @@ export class ManagerComponent implements OnInit {
   managerForm = new FormGroup({
     name: new FormControl('', Validators.required),
     contact: new FormControl('', [Validators.required, Validators.pattern('^[+0-9 ]+$')]),
-    address: new FormControl('', Validators.required),
+    address: new FormControl('', [Validators.required, Validators.email]),
     status: new FormControl('ACTIVO', Validators.required)
   });
 
@@ -161,7 +161,7 @@ export class ManagerComponent implements OnInit {
 
   saveManager() {
     if (this.managerForm.invalid) {
-      this.message.warning('Preencha todos os campos obrigatorios.');
+      this.message.warning('Preencha nome, telefone e email validos.');
       return;
     }
 

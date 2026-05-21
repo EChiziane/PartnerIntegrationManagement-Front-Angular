@@ -66,7 +66,7 @@
       (ngModelChange)="search()"
       [(ngModel)]="searchValue"
       nz-input
-      placeholder="Pesquisar nome/contacto/endereço"
+      placeholder="Pesquisar nome/contacto/email"
       type="text"
     />
 
@@ -101,7 +101,7 @@
               </nz-filter-trigger>
             </th>
             <th>{{ 'common.table.contact' | translate }}</th>
-            <th>Endereço</th>
+            <th>Email</th>
             <th>{{ 'common.status' | translate }}</th>
             <th>{{ 'common.createdAt' | translate }}</th>
             <th>Ações</th>
@@ -204,9 +204,9 @@
 
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Endereço</nz-form-label>
+              <nz-form-label>Email</nz-form-label>
               <nz-form-control>
-                <input formControlName="address" nz-input placeholder="Digite o endereço"/>
+                <input formControlName="address" nz-input placeholder="Digite o email"/>
               </nz-form-control>
             </nz-form-item>
           </div>

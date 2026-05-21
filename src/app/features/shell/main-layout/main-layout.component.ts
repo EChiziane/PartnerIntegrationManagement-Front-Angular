@@ -74,7 +74,19 @@ export class MainLayoutComponent implements OnInit {
     return this.translationService.currentLanguage;
   }
 
+  get currentLanguageLabel(): string {
+    return this.translationService.languages.find(language => language.code === this.currentLanguage)?.label || this.currentLanguage.toUpperCase();
+  }
+
+  get currentLanguageShortLabel(): string {
+    return this.currentLanguage.toUpperCase();
+  }
+
   changeLanguage(language: string): void {
+    if (language === this.currentLanguage) {
+      return;
+    }
+
     this.translationService.use(language).subscribe(() => {
       const userJson = localStorage.getItem('user');
 
@@ -91,6 +103,10 @@ export class MainLayoutComponent implements OnInit {
         this.userRole = this.translationService.instant('layout.account.authenticated');
       }
     });
+  }
+
+  languageShortLabel(languageCode: string): string {
+    return languageCode.toUpperCase();
   }
 
   get userInitials(): string {

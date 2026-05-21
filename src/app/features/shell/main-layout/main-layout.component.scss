@@ -244,8 +244,127 @@
   font-weight: 700;
 }
 
-.language-select {
-  min-width: 108px;
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 4px 8px 4px 5px;
+  border: 1px solid #d8e4ec;
+  border-radius: 8px;
+  color: #10212b;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(16, 33, 43, 0.04);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.language-switch:hover {
+  border-color: #b8d8d2;
+  box-shadow: 0 12px 28px rgba(16, 33, 43, 0.08);
+  transform: translateY(-1px);
+}
+
+.language-icon,
+.language-code,
+.language-option-code {
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  font-weight: 850;
+}
+
+.language-icon {
+  width: 32px;
+  height: 32px;
+  color: #0e7c72;
+  background: #f1fbf8;
+}
+
+.language-copy {
+  display: flex;
+  min-width: 92px;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+}
+
+.language-copy small {
+  color: #7a8f9d;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.language-copy strong {
+  margin-top: 2px;
+  color: #10212b;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.language-code {
+  min-width: 32px;
+  height: 28px;
+  padding: 0 7px;
+  color: #ffffff;
+  background: #10212b;
+  font-size: 11px;
+}
+
+.language-arrow {
+  color: #7a8f9d;
+  font-size: 11px;
+}
+
+.language-menu {
+  min-width: 220px;
+  padding: 6px;
+}
+
+.language-menu li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  border-radius: 8px;
+}
+
+.language-menu li.active {
+  background: #f1fbf8;
+}
+
+.language-option-code {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 32px;
+  color: #0e7c72;
+  background: #e5f7f2;
+  font-size: 12px;
+}
+
+.language-option-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.language-option-copy strong {
+  color: #10212b;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.language-option-copy small {
+  margin-top: 3px;
+  color: #7a8f9d;
+  font-size: 11px;
+}
+
+.language-check {
+  color: #0e7c72;
 }
 
 .user-menu {
@@ -354,7 +473,7 @@
   }
 
   .operator-chip,
-  .language-select,
+  .language-switch,
   .user-copy {
     display: none;
   }

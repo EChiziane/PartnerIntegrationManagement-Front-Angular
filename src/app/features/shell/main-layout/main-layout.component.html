@@ -142,19 +142,37 @@
       </div>
 
       <div class="topbar-actions">
-        <nz-select
-          (ngModelChange)="changeLanguage($event)"
-          [ngModel]="currentLanguage"
-          [nzDropdownMatchSelectWidth]="false"
-          [nzPlaceHolder]="'layout.language' | translate"
-          class="language-select"
-          nzSize="small">
-          <nz-option
-            *ngFor="let language of translationService.languages"
-            [nzLabel]="language.label"
-            [nzValue]="language.code">
-          </nz-option>
-        </nz-select>
+        <button
+          [nzDropdownMenu]="languageMenu"
+          class="language-switch"
+          nz-dropdown
+          nzTrigger="click"
+          type="button">
+          <span class="language-icon" nz-icon nzType="global"></span>
+          <span class="language-copy">
+            <small>{{ 'layout.language' | translate }}</small>
+            <strong>{{ currentLanguageLabel }}</strong>
+          </span>
+          <span class="language-code">{{ currentLanguageShortLabel }}</span>
+          <span class="language-arrow" nz-icon nzType="down"></span>
+        </button>
+
+        <nz-dropdown-menu #languageMenu="nzDropdownMenu">
+          <ul class="language-menu" nz-menu>
+            <li
+              *ngFor="let language of translationService.languages"
+              (click)="changeLanguage(language.code)"
+              [class.active]="language.code === currentLanguage"
+              nz-menu-item>
+              <span class="language-option-code">{{ languageShortLabel(language.code) }}</span>
+              <span class="language-option-copy">
+                <strong>{{ language.label }}</strong>
+                <small>{{ language.code === currentLanguage ? 'Ativo' : 'Disponivel' }}</small>
+              </span>
+              <span *ngIf="language.code === currentLanguage" class="language-check" nz-icon nzType="check"></span>
+            </li>
+          </ul>
+        </nz-dropdown-menu>
 
         <div class="operator-chip">
           <span nz-icon nzType="safety-certificate"></span>
