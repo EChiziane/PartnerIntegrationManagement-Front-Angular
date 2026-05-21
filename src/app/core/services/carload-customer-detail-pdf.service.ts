@@ -4,11 +4,14 @@ import autoTable from 'jspdf-autotable';
 
 import {CarloadCustomer} from '@shared/models/carload-customer';
 import {CarLoad} from '@shared/models/carload';
+import {DocumentFilenameService} from '@core/services/document-filename.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarloadCustomerDetailPdfService {
+  constructor(private documentFilename: DocumentFilenameService) {
+  }
 
   downloadCustomerReport(customer: CarloadCustomer, carloads: CarLoad[]): void {
     const doc = new jsPDF({orientation: 'landscape'});
@@ -39,7 +42,7 @@ export class CarloadCustomerDetailPdfService {
 
     this.drawCarloadsTable(doc, carloads, margin, 154);
     this.drawFooter(doc);
-    doc.save(`CLIENTE_${this.fileSafe(customer.customerCode || customer.name || customer.id)}.pdf`);
+    doc.save(this.documentFilename.build('CLIENTE', customer.customerCode || customer.id, customer.name));
   }
 
   private drawCarloadsTable(doc: jsPDF, carloads: CarLoad[], margin: number, startY: number): void {
@@ -219,7 +222,4 @@ export class CarloadCustomerDetailPdfService {
     return String(value).padStart(2, '0');
   }
 
-  private fileSafe(value: string): string {
-    return value.replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_') || 'cliente';
-  }
 }

@@ -11,6 +11,7 @@ import { CarloadQuoteService } from '@core/services/carload-quote.service';
 import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
 import {TranslationService} from '@core/services/translation.service';
 import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
+import {DocumentFilenameService} from '@core/services/document-filename.service';
 
 @Component({
   selector: 'app-quote',
@@ -88,7 +89,8 @@ export class QuoteComponent implements OnInit {
     private message: NzMessageService,
     private modal: NzModalService,
     private confirmationDialog: ConfirmationDialogService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private documentFilename: DocumentFilenameService
   ) {}
 
   get items(): FormArray {
@@ -586,7 +588,7 @@ export class QuoteComponent implements OnInit {
     doc.text('Documento gerado por Transportes Chiziane', 14, 282);
     doc.text(`Validade da cotação: 7 dias (${createdAtFormatted} até ${validUntilFormatted})`, 14, 287);
 
-    doc.save(`${quote.quoteCode}_${(quote.customerName || 'cliente').replace(/\s+/g, '_')}.pdf`);
+    doc.save(this.documentFilename.build('COTACAO', quote.quoteCode, quote.customerName));
   }
 
   search(): void {

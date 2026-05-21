@@ -3,11 +3,14 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 import {CarLoad} from '@shared/models/carload';
+import {DocumentFilenameService} from '@core/services/document-filename.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarloadListPdfService {
+  constructor(private documentFilename: DocumentFilenameService) {
+  }
 
   downloadCarloadListReport(carloads: CarLoad[], scopeLabel: string): void {
     const doc = new jsPDF({orientation: 'landscape'});
@@ -100,7 +103,7 @@ export class CarloadListPdfService {
       didDrawPage: () => this.drawFooter(doc, margin, pageWidth, pageHeight)
     });
 
-    doc.save(`CARRADAS_${this.fileSafe(scopeLabel)}.pdf`);
+    doc.save(this.documentFilename.build('RELATORIO_CARRADAS', 'REL-CARRADAS', scopeLabel));
   }
 
   private drawHeader(doc: jsPDF, pageWidth: number, margin: number, scopeLabel: string): void {
@@ -214,7 +217,4 @@ export class CarloadListPdfService {
     return String(value).padStart(2, '0');
   }
 
-  private fileSafe(value: string): string {
-    return value.replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_') || 'carradas';
-  }
 }

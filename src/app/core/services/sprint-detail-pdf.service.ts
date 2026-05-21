@@ -4,6 +4,7 @@ import autoTable from 'jspdf-autotable';
 
 import {CarLoad} from '@shared/models/carload';
 import {Sprint} from '@shared/models/sprint';
+import {DocumentFilenameService} from '@core/services/document-filename.service';
 
 export interface SprintReportMetrics {
   totalCarloads: number;
@@ -24,6 +25,8 @@ export interface SprintReportMetrics {
   providedIn: 'root'
 })
 export class SprintDetailPdfService {
+  constructor(private documentFilename: DocumentFilenameService) {
+  }
 
   downloadSprintReport(sprint: Sprint | null, sprintName: string, carloads: CarLoad[], metrics: SprintReportMetrics): void {
     const doc = new jsPDF({orientation: 'landscape'});
@@ -117,7 +120,7 @@ export class SprintDetailPdfService {
       didDrawPage: () => this.drawFooter(doc, margin, pageWidth, pageHeight)
     });
 
-    doc.save(`campanha_${this.fileSafe(campaignCode || sprintName)}.pdf`);
+    doc.save(this.documentFilename.build('CAMPANHA', campaignCode, sprintName));
   }
 
   private drawHeader(doc: jsPDF, pageWidth: number, margin: number): void {
@@ -257,7 +260,4 @@ export class SprintDetailPdfService {
     return String(value).padStart(2, '0');
   }
 
-  private fileSafe(value: string): string {
-    return value.replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_') || 'campanha';
-  }
 }

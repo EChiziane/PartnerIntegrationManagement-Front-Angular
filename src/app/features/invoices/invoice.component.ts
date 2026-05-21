@@ -11,6 +11,7 @@ import {CarloadInvoiceService} from '@core/services/carload-invoice.service';
 import {CarloadCustomerService} from '@core/services/carload-customer.service';
 import {TranslationService} from '@core/services/translation.service';
 import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
+import {DocumentFilenameService} from '@core/services/document-filename.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -181,7 +182,8 @@ export class InvoiceComponent implements OnInit {
     private customerService: CarloadCustomerService,
     private message: NzMessageService,
     private confirmationDialog: ConfirmationDialogService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private documentFilename: DocumentFilenameService
   ) {
   }
 
@@ -702,7 +704,7 @@ export class InvoiceComponent implements OnInit {
     doc.text('Documento gerado por Transportes Chiziane', 14, 282);
     doc.text(`Fatura emitida em ${createdAtFormatted}`, 14, 287);
 
-    doc.save(`fatura_${invoice.invoiceCode}_${(invoice.carloadCustomerName || 'cliente').replace(/\s+/g, '_')}.pdf`);
+    doc.save(this.documentFilename.build('FATURA', invoice.invoiceCode, invoice.carloadCustomerName));
   }
 
   formatMoney(value: number | null | undefined): string {

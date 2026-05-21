@@ -6,11 +6,14 @@ import {CarLoad} from '@shared/models/carload';
 import {Driver} from '@shared/models/driver';
 import {Manager} from '@shared/models/manager';
 import {Sprint} from '@shared/models/sprint';
+import {DocumentFilenameService} from '@core/services/document-filename.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarloadDetailPdfService {
+  constructor(private documentFilename: DocumentFilenameService) {
+  }
 
   downloadCarloadReport(
     carload: CarLoad,
@@ -56,7 +59,7 @@ export class CarloadDetailPdfService {
 
     this.drawFinancialTable(doc, carload, margin, 216);
     this.drawFooter(doc);
-    doc.save(`CARRADA_${this.fileSafe(carload.customerName || carload.id)}.pdf`);
+    doc.save(this.documentFilename.build('CARRADA', this.resolveCarloadCode(carload), carload.customerName || carload.deliveryDestination));
   }
 
   private drawFinancialTable(doc: jsPDF, carload: CarLoad, margin: number, startY: number): void {
@@ -228,7 +231,7 @@ export class CarloadDetailPdfService {
     return String(value).padStart(2, '0');
   }
 
-  private fileSafe(value: string): string {
-    return value.replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_') || 'carrada';
+  private resolveCarloadCode(carload: CarLoad): string {
+    return carload.invoiceCode || carload.sourceQuoteCode || carload.id;
   }
 }
