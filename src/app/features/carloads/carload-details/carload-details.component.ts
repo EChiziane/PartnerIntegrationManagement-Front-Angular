@@ -11,6 +11,7 @@ import {Manager} from '@shared/models/manager';
 import {Driver} from '@shared/models/driver';
 import {CarLoad} from '@shared/models/carload';
 import {Sprint} from '@shared/models/sprint';
+import {COMPANY_PROFILE} from '@shared/data/company-profile';
 
 @Component({
   selector: 'app-carload-details',
@@ -21,6 +22,7 @@ import {Sprint} from '@shared/models/sprint';
 export class CarloadDetailsComponent {
   isLoading = false;
   isDownloadingPdf = false;
+  company = COMPANY_PROFILE;
 
   carload: CarLoad | null = null;
 

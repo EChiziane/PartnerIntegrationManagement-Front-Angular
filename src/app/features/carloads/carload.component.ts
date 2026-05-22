@@ -144,6 +144,10 @@ export class CarLoadComponent implements OnInit {
     return this.filterMode !== 'ALL' || !!this.searchValue.trim();
   }
 
+  get isAdminUser(): boolean {
+    return this.getCurrentUserRole() === 'ADMIN';
+  }
+
   get availableSprints(): Sprint[] {
     const selectedSprintId = this.carLoadForm.get('carloadBatchId')?.value;
 
@@ -269,6 +273,60 @@ export class CarLoadComponent implements OnInit {
       default:
         return 'orange';
     }
+  }
+
+  getStatusClass(status: CarLoadStatus): string {
+    return `status-${(status || 'SCHEDULED').toString().toLowerCase().replace('_', '-')}`;
+  }
+
+  getAvailableStatusTransitions(carload: CarLoad): CarLoadStatus[] {
+    if (this.isAdminUser) {
+      return ['SCHEDULED', 'IN_PROGRESS', 'DELIVERED', 'CANCELLED']
+        .filter(status => status !== carload.deliveryStatus) as CarLoadStatus[];
+    }
+
+    switch ((carload.deliveryStatus || '').toUpperCase()) {
+      case 'SCHEDULED':
+        return ['IN_PROGRESS', 'DELIVERED', 'CANCELLED'];
+      case 'IN_PROGRESS':
+        return ['DELIVERED', 'CANCELLED'];
+      default:
+        return [];
+    }
+  }
+
+  canChangeStatus(carload: CarLoad): boolean {
+    return this.getAvailableStatusTransitions(carload).length > 0;
+  }
+
+  onQuickStatusChange(carload: CarLoad, status: CarLoadStatus): void {
+    if (!carload?.id || !status || status === carload.deliveryStatus) {
+      return;
+    }
+
+    if (!this.getAvailableStatusTransitions(carload).includes(status)) {
+      this.message.warning('Este estado ja esta fechado e nao permite alteracao.');
+      return;
+    }
+
+    const now = this.normalizeDateTimeLocal(new Date().toISOString().substring(0, 16));
+    const payload = {
+      deliveryStatus: status,
+      deliveryScheduledDate: status === 'SCHEDULED'
+        ? (carload.deliveryScheduledDate || now)
+        : carload.deliveryScheduledDate,
+      deliveryDate: status === 'DELIVERED' ? now : null
+    };
+
+    this.carLoadService.updateCarLoadStatus(carload.id, payload).subscribe({
+      next: updated => {
+        this.dataSource = this.dataSource.map(item => item.id === updated.id ? updated : item);
+        this.calculateStats();
+        this.applyFilters();
+        this.message.success(`Estado atualizado para ${this.getStatusLabel(status)}.`);
+      },
+      error: () => this.message.error('Erro ao atualizar estado da carrada.')
+    });
   }
 
   loadLookups(): void {
@@ -836,6 +894,15 @@ export class CarLoadComponent implements OnInit {
         this.markFormGroupTouched(control);
       }
     });
+  }
+
+  private getCurrentUserRole(): string {
+    try {
+      const rawUser = localStorage.getItem('user');
+      return rawUser ? (JSON.parse(rawUser)?.role || '').toString().toUpperCase() : '';
+    } catch {
+      return '';
+    }
   }
 
   private resolveMoneyValue(primary: unknown, fallback: unknown): number {

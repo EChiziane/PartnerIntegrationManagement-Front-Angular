@@ -12,18 +12,33 @@
   <div class="summary-section">
     <div [nzGutter]="8" nz-row>
       <div [nzSpan]="6" nz-col>
-        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper total"><nz-icon nzTheme="outline" nzType="wallet"></nz-icon></div><div class="summary-content"><span class="title">Total</span><p>{{ totalPayments }}</p></div></div></nz-card>
+        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper inactive"><nz-icon nzTheme="outline" nzType="clock-circle"></nz-icon></div><div class="summary-content"><span class="title">A receber</span><p>{{ totalReceivable | number:'1.2-2' }}</p></div></div></nz-card>
       </div>
       <div [nzSpan]="6" nz-col>
-        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper inactive"><nz-icon nzTheme="outline" nzType="clock-circle"></nz-icon></div><div class="summary-content"><span class="title">Pendentes</span><p>{{ pendingPayments }}</p></div></div></nz-card>
+        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper warning"><nz-icon nzTheme="outline" nzType="car"></nz-icon></div><div class="summary-content"><span class="title">Motoristas</span><p>{{ totalDriverPayable | number:'1.2-2' }}</p></div></div></nz-card>
       </div>
       <div [nzSpan]="6" nz-col>
-        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper active"><nz-icon nzTheme="outline" nzType="check-circle"></nz-icon></div><div class="summary-content"><span class="title">Liquidados</span><p>{{ settledPayments }}</p></div></div></nz-card>
+        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper active"><nz-icon nzTheme="outline" nzType="check-circle"></nz-icon></div><div class="summary-content"><span class="title">Comissao real</span><p>{{ realizedCommission | number:'1.2-2' }}</p></div></div></nz-card>
       </div>
       <div [nzSpan]="6" nz-col>
-        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper total"><nz-icon nzTheme="outline" nzType="percentage"></nz-icon></div><div class="summary-content"><span class="title">Comissao</span><p>{{ totalCommission | number:'1.2-2' }}</p></div></div></nz-card>
+        <nz-card nzSize="small"><div class="summary-card"><div class="icon-wrapper total"><nz-icon nzTheme="outline" nzType="percentage"></nz-icon></div><div class="summary-content"><span class="title">Comissao prevista</span><p>{{ totalCommission | number:'1.2-2' }}</p></div></div></nz-card>
       </div>
     </div>
+  </div>
+
+  <div class="payment-cycle-tabs">
+    <button (click)="setView('RECEIVABLE')" [class.active]="activeView === 'RECEIVABLE'" nz-button>
+      A receber <span>{{ pendingPayments }}</span>
+    </button>
+    <button (click)="setView('DRIVER_PAYABLE')" [class.active]="activeView === 'DRIVER_PAYABLE'" nz-button>
+      Motoristas por pagar <span>{{ driverPayablePayments }}</span>
+    </button>
+    <button (click)="setView('SETTLED')" [class.active]="activeView === 'SETTLED'" nz-button>
+      Fechadas <span>{{ settledPayments }}</span>
+    </button>
+    <button (click)="setView('ALL')" [class.active]="activeView === 'ALL'" nz-button>
+      Todas <span>{{ totalPayments }}</span>
+    </button>
   </div>
 
   <div class="filters-panel">
@@ -38,30 +53,40 @@
         <nz-table #nzTable [nzData]="filteredPayments" [nzScroll]="{ x: '1320px', y: '440px' }" nzTableLayout="fixed">
           <thead>
           <tr>
-            <th>Cliente/Carrada</th>
-            <th>Fatura</th>
+            <th>Carrada</th>
             <th>Cliente</th>
-            <th>Motorista</th>
+            <th>Destino</th>
+            <th>Fatura</th>
             <th>Comissao</th>
-            <th>Escopo</th>
+            <th>Motorista</th>
             <th>Estado</th>
             <th>Data</th>
             <th>Acoes</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let payment of nzTable.data">
-            <td>{{ payment.carLoadCustomerName || '-' }}</td>
-            <td>{{ payment.invoiceCode || '-' }}</td>
-            <td>{{ formatMoney(payment.customerAmount) }} Mts</td>
-            <td>{{ formatMoney(payment.driverAmount) }} Mts</td>
-            <td>{{ formatMoney(payment.companyCommission) }} Mts</td>
-            <td>{{ payment.paymentScope }}</td>
-            <td><nz-tag [nzColor]="getStatusColor(payment.paymentStatus)">{{ payment.paymentStatus }}</nz-tag></td>
-            <td>{{ payment.paymentDate | date:'yyyy-MM-dd HH:mm' }}</td>
+          <tr *ngFor="let payment of nzTable.data" [class.pending-suggestion-row]="isPendingSuggestion(payment)">
             <td>
-              <button (click)="editPayment(payment)" nz-button nzSize="small" nzType="link"><nz-icon nzTheme="outline" nzType="edit"></nz-icon></button>
-              <button (click)="deletePayment(payment)" nz-button nzDanger nzSize="small" nzType="link"><nz-icon nzTheme="outline" nzType="delete"></nz-icon></button>
+              <div class="payment-customer-cell">
+                <span>{{ payment.carLoadDescription || 'Carrada' }}</span>
+                <nz-tag *ngIf="isPendingSuggestion(payment)" nzColor="orange">Por registar</nz-tag>
+              </div>
+            </td>
+            <td>{{ payment.carLoadCustomerName || '-' }}</td>
+            <td>{{ payment.deliveryDestination || '-' }}</td>
+            <td>{{ payment.invoiceCode || '-' }}</td>
+            <td>{{ formatMoney(payment.companyCommission) }} Mts</td>
+            <td>
+              <div>{{ payment.driverName || '-' }}</div>
+              <small *ngIf="getDriverBalance(payment) > 0">{{ formatMoney(getDriverBalance(payment)) }} Mts por pagar</small>
+            </td>
+            <td><nz-tag [nzColor]="getStatusColor(payment.paymentStatus)">{{ getStatusLabel(payment.paymentStatus) }}</nz-tag></td>
+            <td>{{ payment.paymentDate ? (payment.paymentDate | date:'yyyy-MM-dd HH:mm') : '-' }}</td>
+            <td>
+              <button *ngIf="canReceiveCustomerPayment(payment)" (click)="markClientPaid(payment)" nz-button nzShape="circle" nzSize="small" nz-tooltip nzTooltipTitle="Registar pagamento do cliente" nzType="link"><nz-icon nzTheme="outline" nzType="dollar"></nz-icon></button>
+              <button *ngIf="canPayDriver(payment)" (click)="markSettled(payment)" nz-button nzShape="circle" nzSize="small" nz-tooltip nzTooltipTitle="Pagar motorista" nzType="link"><nz-icon nzTheme="outline" nzType="car"></nz-icon></button>
+              <button (click)="editPayment(payment)" nz-button nzShape="circle" nzSize="small" nz-tooltip [nzTooltipTitle]="getPaymentActionLabel(payment)" nzType="link"><nz-icon nzTheme="outline" nzType="edit"></nz-icon></button>
+              <button *ngIf="payment.id" (click)="deletePayment(payment)" nz-button nzDanger nzShape="circle" nzSize="small" nz-tooltip nzTooltipTitle="Apagar" nzType="link"><nz-icon nzTheme="outline" nzType="delete"></nz-icon></button>
             </td>
           </tr>
           </tbody>
@@ -119,12 +144,18 @@
           <div nz-col nzMd="8" nzSm="24" nzXs="24"><nz-form-item><nz-form-label>Comissao</nz-form-label><nz-form-control><input formControlName="companyCommission" nz-input type="number"/></nz-form-control></nz-form-item></div>
         </div>
         <div [nzGutter]="16" nz-row>
+          <div nz-col nzMd="12" nzSm="24" nzXs="24"><nz-form-item><nz-form-label>Recebido do cliente</nz-form-label><nz-form-control><input formControlName="customerPaidAmount" nz-input type="number"/></nz-form-control></nz-form-item></div>
+          <div nz-col nzMd="12" nzSm="24" nzXs="24"><nz-form-item><nz-form-label>Pago ao motorista</nz-form-label><nz-form-control><input formControlName="driverPaidAmount" nz-input type="number"/></nz-form-control></nz-form-item></div>
+        </div>
+        <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item><nz-form-label>Estado</nz-form-label><nz-form-control>
               <nz-select formControlName="paymentStatus">
                 <nz-option nzLabel="Pendente" nzValue="PENDING"></nz-option>
                 <nz-option nzLabel="Parcial" nzValue="PARTIAL"></nz-option>
-                <nz-option nzLabel="Liquidado" nzValue="SETTLED"></nz-option>
+                <nz-option nzLabel="Cliente pagou" nzValue="CLIENT_PAID"></nz-option>
+                <nz-option nzLabel="Motorista por pagar" nzValue="DRIVER_PENDING"></nz-option>
+                <nz-option nzLabel="Fechado" nzValue="SETTLED"></nz-option>
                 <nz-option nzLabel="Cancelado" nzValue="CANCELLED"></nz-option>
               </nz-select>
             </nz-form-control></nz-form-item>
@@ -142,3 +173,27 @@
     </div>
   </ng-template>
 </nz-drawer>
+
+<nz-modal
+  (nzOnCancel)="closePaymentAction()"
+  (nzOnOk)="savePaymentAction()"
+  [nzOkDisabled]="paymentActionForm.invalid"
+  [nzOkLoading]="isSaving"
+  [nzOkText]="paymentActionType === 'CUSTOMER' ? 'Confirmar recebimento' : 'Confirmar pagamento'"
+  [nzTitle]="paymentActionType === 'CUSTOMER' ? 'Registar pagamento do cliente' : 'Pagar motorista'"
+  [nzVisible]="isPaymentActionVisible">
+  <form *nzModalContent [formGroup]="paymentActionForm" class="drawer-form" nz-form>
+    <nz-form-item>
+      <nz-form-label>Valor</nz-form-label>
+      <nz-form-control>
+        <input formControlName="amount" nz-input type="number"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label>Notas</nz-form-label>
+      <nz-form-control>
+        <textarea formControlName="notes" nz-input rows="3"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>

@@ -247,6 +247,24 @@ nz-select {
   font-weight: 500;
 }
 
+.customer-mode-switch {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+
+  button {
+    border-radius: 999px;
+    font-weight: 500;
+  }
+
+  button.active {
+    border-color: #007bff;
+    color: #007bff;
+    background: rgba(0, 123, 255, 0.08);
+  }
+}
+
 .drawer-footer {
   display: flex;
   justify-content: flex-end;

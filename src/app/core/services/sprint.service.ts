@@ -30,6 +30,10 @@ export class SprintService {
     return this.http.put<Sprint>(`${this.baseURL}/${id}`, sprint).pipe(take(1));
   }
 
+  updateSprintStatus(id: string, status: string): Observable<Sprint> {
+    return this.http.patch<Sprint>(`${this.baseURL}/${id}/status`, {status}).pipe(take(1));
+  }
+
   deleteSprint(id: any): Observable<Sprint> {
     return this.http.delete<Sprint>(`${this.baseURL}/${id}`);
   }

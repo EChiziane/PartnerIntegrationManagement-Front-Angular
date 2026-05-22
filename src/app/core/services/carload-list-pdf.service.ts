@@ -4,6 +4,7 @@ import autoTable from 'jspdf-autotable';
 
 import {CarLoad} from '@shared/models/carload';
 import {DocumentFilenameService} from '@core/services/document-filename.service';
+import {COMPANY_PDF_LINES, COMPANY_PROFILE} from '@shared/data/company-profile';
 
 @Injectable({
   providedIn: 'root'
@@ -114,7 +115,7 @@ export class CarloadListPdfService {
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
-    doc.text('TC', margin + 9, 21, {align: 'center'});
+    doc.text(COMPANY_PROFILE.initials, margin + 9, 21, {align: 'center'});
     doc.setFontSize(18);
     doc.text('RELATORIO DE CARRADAS', 38, 18);
     doc.setFont('helvetica', 'normal');
@@ -123,11 +124,12 @@ export class CarloadListPdfService {
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('Transportes Chiziane', pageWidth - margin, 14, {align: 'right'});
+    doc.text(COMPANY_PROFILE.tradeName, pageWidth - margin, 14, {align: 'right'});
     doc.setFont('helvetica', 'normal');
-    doc.text('Bairro Cumbe km16', pageWidth - margin, 20, {align: 'right'});
-    doc.text('Av. de Mocambique 2063', pageWidth - margin, 25, {align: 'right'});
-    doc.text('Tel: 845098583 / 879985279', pageWidth - margin, 30, {align: 'right'});
+    doc.text(COMPANY_PDF_LINES[0], pageWidth - margin, 19, {align: 'right'});
+    doc.text(COMPANY_PDF_LINES[1], pageWidth - margin, 24, {align: 'right'});
+    doc.text(COMPANY_PDF_LINES[2], pageWidth - margin, 29, {align: 'right'});
+    doc.text(COMPANY_PDF_LINES[4], pageWidth - margin, 34, {align: 'right'});
   }
 
   private drawMetric(doc: jsPDF, x: number, y: number, width: number, title: string, value: string, accent: [number, number, number]): void {
@@ -183,7 +185,7 @@ export class CarloadListPdfService {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     doc.setTextColor(99, 115, 129);
-    doc.text('Documento gerado por Transportes Chiziane', margin, pageHeight - 8);
+    doc.text(`Documento gerado por ${COMPANY_PROFILE.legalName} | NUIT: ${COMPANY_PROFILE.nuit}`, margin, pageHeight - 8);
     doc.text(`Pagina ${pageNumber} de ${doc.getNumberOfPages()}`, pageWidth - margin, pageHeight - 8, {align: 'right'});
   }
 

@@ -31,7 +31,7 @@
         <div class="pdf-header">
           <div class="pdf-brand">
             <span class="pdf-title">Detalhes da Carrada</span>
-            <span class="pdf-subtitle">Transportes Chiziane</span>
+            <span class="pdf-subtitle">{{ company.legalName }} · NUIT {{ company.nuit }}</span>
           </div>
 
           <div class="pdf-status">
@@ -208,8 +208,8 @@
         </div>
 
         <div class="pdf-footer">
-          <span>Transportes Chiziane</span>
-          <span>Documento gerado pelo sistema</span>
+          <span>{{ company.tradeName }}</span>
+          <span>{{ company.taxOffice }}</span>
         </div>
       </div>
     </ng-container>

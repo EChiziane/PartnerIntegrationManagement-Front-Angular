@@ -1,1 +1,57 @@
 @import '../managers/manager.component.scss';
+
+.pending-suggestion-row {
+  background: #fffaf0;
+}
+
+.payment-cycle-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+
+  button {
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+
+    span {
+      min-width: 22px;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #334155;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    &.active {
+      border-color: #1677ff;
+      color: #1677ff;
+      background: #eef6ff;
+    }
+  }
+}
+
+.payment-customer-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  nz-tag {
+    margin: 0;
+    flex: 0 0 auto;
+  }
+}

@@ -10,6 +10,9 @@ import {CarloadInvoiceService} from '@core/services/carload-invoice.service';
 import {TranslationService} from '@core/services/translation.service';
 import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 
+type PaymentView = 'RECEIVABLE' | 'DRIVER_PAYABLE' | 'SETTLED' | 'ALL';
+type PaymentActionType = 'CUSTOMER' | 'DRIVER';
+
 @Component({
   selector: 'app-payment',
   standalone: false,
@@ -28,12 +31,20 @@ export class PaymentComponent implements OnInit {
 
   totalPayments = 0;
   pendingPayments = 0;
+  driverPayablePayments = 0;
   settledPayments = 0;
+  totalReceivable = 0;
+  totalDriverPayable = 0;
+  realizedCommission = 0;
   totalCommission = 0;
+  activeView: PaymentView = 'RECEIVABLE';
 
   isDrawerVisible = false;
+  isPaymentActionVisible = false;
   isEditMode = false;
   selectedPaymentId: string | null = null;
+  selectedPayment: CarloadPayment | null = null;
+  paymentActionType: PaymentActionType = 'CUSTOMER';
   drawerWidth: string | number = 820;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
@@ -43,9 +54,15 @@ export class PaymentComponent implements OnInit {
     customerAmount: new FormControl(0, [Validators.required, Validators.min(0)]),
     driverAmount: new FormControl(0, [Validators.required, Validators.min(0)]),
     companyCommission: new FormControl(0),
+    customerPaidAmount: new FormControl(0, [Validators.min(0)]),
+    driverPaidAmount: new FormControl(0, [Validators.min(0)]),
     paymentStatus: new FormControl<PaymentStatus>('PENDING', Validators.required),
     paymentScope: new FormControl<PaymentScope>('CARLOAD', Validators.required),
     paymentDate: new FormControl<string | null>(null),
+    notes: new FormControl('')
+  });
+  paymentActionForm = new FormGroup({
+    amount: new FormControl(0, [Validators.required, Validators.min(1)]),
     notes: new FormControl('')
   });
 
@@ -117,8 +134,20 @@ export class PaymentComponent implements OnInit {
   calculateStats(): void {
     this.totalPayments = this.payments.length;
     this.pendingPayments = this.payments.filter(payment => payment.paymentStatus === 'PENDING' || payment.paymentStatus === 'PARTIAL').length;
+    this.driverPayablePayments = this.payments.filter(payment => this.canPayDriver(payment)).length;
     this.settledPayments = this.payments.filter(payment => payment.paymentStatus === 'SETTLED').length;
-    this.totalCommission = this.payments.reduce((sum, payment) => sum + Number(payment.companyCommission || 0), 0);
+    this.totalReceivable = this.payments
+      .filter(payment => payment.paymentStatus === 'PENDING' || payment.paymentStatus === 'PARTIAL')
+      .reduce((sum, payment) => sum + this.getCustomerBalance(payment), 0);
+    this.totalDriverPayable = this.payments
+      .filter(payment => this.canPayDriver(payment))
+      .reduce((sum, payment) => sum + this.getDriverBalance(payment), 0);
+    this.totalCommission = this.payments
+      .filter(payment => payment.paymentStatus !== 'CANCELLED')
+      .reduce((sum, payment) => sum + Number(payment.companyCommission || 0), 0);
+    this.realizedCommission = this.payments
+      .filter(payment => payment.paymentStatus === 'SETTLED')
+      .reduce((sum, payment) => sum + Number(payment.companyCommission || 0), 0);
   }
 
   search(): void {
@@ -130,17 +159,23 @@ export class PaymentComponent implements OnInit {
     this.applyFilters();
   }
 
+  setView(view: PaymentView): void {
+    this.activeView = view;
+    this.applyFilters();
+  }
+
   applyFilters(): void {
     const value = this.searchValue.toLowerCase().trim();
+    const scopedPayments = this.payments.filter(payment => this.matchesActiveView(payment));
     this.filteredPayments = value
-      ? this.payments.filter(payment =>
+      ? scopedPayments.filter(payment =>
         (payment.carLoadCustomerName || '').toLowerCase().includes(value) ||
         (payment.invoiceCode || '').toLowerCase().includes(value) ||
         (payment.paymentStatus || '').toLowerCase().includes(value) ||
         (payment.paymentScope || '').toLowerCase().includes(value) ||
         (payment.notes || '').toLowerCase().includes(value)
       )
-      : [...this.payments];
+      : [...scopedPayments];
   }
 
   openDrawer(): void {
@@ -152,6 +187,8 @@ export class PaymentComponent implements OnInit {
       customerAmount: 0,
       driverAmount: 0,
       companyCommission: 0,
+      customerPaidAmount: 0,
+      driverPaidAmount: 0,
       paymentStatus: 'PENDING',
       paymentScope: 'CARLOAD',
       paymentDate: this.toDatetimeLocalInput(new Date().toISOString()),
@@ -162,7 +199,7 @@ export class PaymentComponent implements OnInit {
   }
 
   editPayment(payment: CarloadPayment): void {
-    this.isEditMode = true;
+    this.isEditMode = !!payment.id;
     this.selectedPaymentId = payment.id || null;
     this.paymentForm.patchValue({
       carLoadId: payment.carLoadId || null,
@@ -170,6 +207,8 @@ export class PaymentComponent implements OnInit {
       customerAmount: Number(payment.customerAmount || 0),
       driverAmount: Number(payment.driverAmount || 0),
       companyCommission: Number(payment.companyCommission || 0),
+      customerPaidAmount: Number(payment.customerPaidAmount || 0),
+      driverPaidAmount: Number(payment.driverPaidAmount || 0),
       paymentStatus: payment.paymentStatus || 'PENDING',
       paymentScope: payment.paymentScope || 'CARLOAD',
       paymentDate: this.toDatetimeLocalInput(payment.paymentDate || null),
@@ -202,6 +241,8 @@ export class PaymentComponent implements OnInit {
       companyCommission: Number(raw.companyCommission || 0),
       customerAmount: Number(raw.customerAmount || 0),
       driverAmount: Number(raw.driverAmount || 0),
+      customerPaidAmount: Number(this.paymentForm.value.customerPaidAmount || 0),
+      driverPaidAmount: Number(this.paymentForm.value.driverPaidAmount || 0),
       paymentStatus: raw.paymentStatus || 'PENDING',
       paymentScope: raw.paymentScope || 'CARLOAD',
       notes: raw.notes || ''
@@ -281,12 +322,107 @@ export class PaymentComponent implements OnInit {
   getStatusColor(status: PaymentStatus): string {
     if (status === 'SETTLED') return 'green';
     if (status === 'PARTIAL') return 'blue';
+    if (status === 'CLIENT_PAID') return 'cyan';
+    if (status === 'DRIVER_PENDING') return 'purple';
     if (status === 'CANCELLED') return 'red';
     return 'orange';
   }
 
+  getStatusLabel(status: PaymentStatus): string {
+    const labels: Record<PaymentStatus, string> = {
+      PENDING: 'A receber',
+      PARTIAL: 'Parcial',
+      CLIENT_PAID: 'Cliente pagou',
+      DRIVER_PENDING: 'Motorista por pagar',
+      SETTLED: 'Fechado',
+      CANCELLED: 'Cancelado'
+    };
+
+    return labels[status] || status;
+  }
+
   formatMoney(value: number | null | undefined): string {
     return Number(value || 0).toFixed(2);
+  }
+
+  getCustomerBalance(payment: CarloadPayment): number {
+    return Number(payment.customerBalance ?? (Number(payment.customerAmount || 0) - Number(payment.customerPaidAmount || 0)));
+  }
+
+  getDriverBalance(payment: CarloadPayment): number {
+    return Number(payment.driverBalance ?? (Number(payment.driverAmount || 0) - Number(payment.driverPaidAmount || 0)));
+  }
+
+  isPendingSuggestion(payment: CarloadPayment): boolean {
+    return !payment.id && payment.paymentStatus === 'PENDING';
+  }
+
+  getPaymentActionLabel(payment: CarloadPayment): string {
+    return this.isPendingSuggestion(payment) ? 'Regularizar' : 'Editar';
+  }
+
+  canReceiveCustomerPayment(payment: CarloadPayment): boolean {
+    return (payment.paymentStatus === 'PENDING' || payment.paymentStatus === 'PARTIAL')
+      && !this.isCancelledOrFailed(payment);
+  }
+
+  canPayDriver(payment: CarloadPayment): boolean {
+    return payment.paymentStatus === 'DRIVER_PENDING'
+      && this.isDelivered(payment)
+      && this.getDriverBalance(payment) > 0;
+  }
+
+  markClientPaid(payment: CarloadPayment): void {
+    this.openPaymentAction(payment, 'CUSTOMER');
+  }
+
+  markSettled(payment: CarloadPayment): void {
+    this.openPaymentAction(payment, 'DRIVER');
+  }
+
+  openPaymentAction(payment: CarloadPayment, type: PaymentActionType): void {
+    this.selectedPayment = payment;
+    this.paymentActionType = type;
+    this.paymentActionForm.reset({
+      amount: type === 'CUSTOMER' ? this.getCustomerBalance(payment) : this.getDriverBalance(payment),
+      notes: ''
+    });
+    this.isPaymentActionVisible = true;
+  }
+
+  closePaymentAction(): void {
+    if (this.isSaving) return;
+    this.isPaymentActionVisible = false;
+    this.selectedPayment = null;
+    this.paymentActionForm.reset();
+  }
+
+  savePaymentAction(): void {
+    if (!this.selectedPayment || this.paymentActionForm.invalid) {
+      this.message.warning('Informe o valor.');
+      return;
+    }
+
+    const amount = Number(this.paymentActionForm.value.amount || 0);
+    const notes = this.paymentActionForm.value.notes || '';
+    const currentNotes = this.selectedPayment.notes || '';
+    const actionNote = this.paymentActionType === 'CUSTOMER'
+      ? `Recebido do cliente: ${this.formatMoney(amount)} Mts`
+      : `Pago ao motorista: ${this.formatMoney(amount)} Mts`;
+
+    const payload = this.buildPaymentPayload(this.selectedPayment, {
+      customerPaidAmount: this.paymentActionType === 'CUSTOMER'
+        ? Number(this.selectedPayment.customerPaidAmount || 0) + amount
+        : Number(this.selectedPayment.customerPaidAmount || 0),
+      driverPaidAmount: this.paymentActionType === 'DRIVER'
+        ? Number(this.selectedPayment.driverPaidAmount || 0) + amount
+        : Number(this.selectedPayment.driverPaidAmount || 0),
+      notes: [currentNotes, actionNote, notes].filter(Boolean).join('\n')
+    });
+
+    this.persistPayment(this.selectedPayment, payload, this.paymentActionType === 'CUSTOMER'
+      ? 'Pagamento do cliente registado.'
+      : 'Pagamento ao motorista registado.');
   }
 
   onBack(): void {
@@ -308,5 +444,69 @@ export class PaymentComponent implements OnInit {
 
   private t(key: string, params?: Record<string, string | number | null | undefined>): string {
     return this.translationService.instant(key, params);
+  }
+
+  private matchesActiveView(payment: CarloadPayment): boolean {
+    if (this.activeView === 'RECEIVABLE') {
+      return payment.paymentStatus === 'PENDING' || payment.paymentStatus === 'PARTIAL';
+    }
+
+    if (this.activeView === 'DRIVER_PAYABLE') {
+      return this.canPayDriver(payment);
+    }
+
+    if (this.activeView === 'SETTLED') {
+      return payment.paymentStatus === 'SETTLED';
+    }
+
+    return true;
+  }
+
+  private buildPaymentPayload(payment: CarloadPayment, overrides: Partial<CarloadPayment> = {}): Partial<CarloadPayment> {
+    return {
+      carLoadId: payment.carLoadId || null,
+      invoiceId: payment.invoiceId || null,
+      paymentDate: new Date().toISOString().substring(0, 19),
+      companyCommission: Number(payment.companyCommission || 0),
+      customerAmount: Number(payment.customerAmount || 0),
+      driverAmount: Number(payment.driverAmount || 0),
+      customerPaidAmount: Number(payment.customerPaidAmount || 0),
+      driverPaidAmount: Number(payment.driverPaidAmount || 0),
+      paymentStatus: payment.paymentStatus || 'PENDING',
+      paymentScope: payment.paymentScope || 'CARLOAD',
+      notes: payment.notes || '',
+      ...overrides
+    };
+  }
+
+  private isDelivered(payment: CarloadPayment): boolean {
+    const status = (payment.carLoadDeliveryStatus || '').toUpperCase();
+    return status === 'DELIVERED' || status === 'ENTREGUE' || status === 'COMPLETED';
+  }
+
+  private isCancelledOrFailed(payment: CarloadPayment): boolean {
+    const status = (payment.carLoadDeliveryStatus || '').toUpperCase();
+    return status === 'CANCELLED' || status === 'FAILED';
+  }
+
+  private persistPayment(payment: CarloadPayment, payload: Partial<CarloadPayment>, successMessage: string): void {
+    this.isSaving = true;
+
+    const request$ = payment.id
+      ? this.paymentService.updatePayment(payment.id, payload)
+      : this.paymentService.addPayment(payload);
+
+    request$.subscribe({
+      next: () => {
+        this.isSaving = false;
+        this.closePaymentAction();
+        this.loadPayments();
+        this.message.success(successMessage);
+      },
+      error: () => {
+        this.isSaving = false;
+        this.message.error('Erro ao atualizar estado financeiro.');
+      }
+    });
   }
 }

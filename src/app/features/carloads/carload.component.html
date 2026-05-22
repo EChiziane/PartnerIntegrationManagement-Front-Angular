@@ -141,9 +141,32 @@
             <td class="cell-ellipsis" [title]="data.carloadBatchName">{{ data.carloadBatchName }}</td>
 
             <td>
-              <nz-tag [nzColor]="getStatusColor(data.deliveryStatus)">
-                {{ getStatusLabel(data.deliveryStatus) }}
-              </nz-tag>
+              <button
+                [class.locked]="!canChangeStatus(data)"
+                [ngClass]="getStatusClass(data.deliveryStatus)"
+                [nzDropdownMenu]="statusMenu"
+                [nzDisabled]="!canChangeStatus(data)"
+                class="status-action-pill"
+                nz-button
+                nz-dropdown
+                nzSize="small"
+                nzTrigger="click">
+                <span>{{ getStatusLabel(data.deliveryStatus) }}</span>
+                <nz-icon *ngIf="canChangeStatus(data)" nzTheme="outline" nzType="down"></nz-icon>
+                <nz-icon *ngIf="!canChangeStatus(data)" nzTheme="outline" nzType="lock"></nz-icon>
+              </button>
+
+              <nz-dropdown-menu #statusMenu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li
+                    (click)="onQuickStatusChange(data, nextStatus)"
+                    *ngFor="let nextStatus of getAvailableStatusTransitions(data)"
+                    nz-menu-item>
+                    <span class="status-menu-dot" [ngClass]="getStatusClass(nextStatus)"></span>
+                    {{ getStatusLabel(nextStatus) }}
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
             </td>
 
             <td>{{ data.deliveryScheduledDate | date:'yyyy-MM-dd' }}</td>

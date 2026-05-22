@@ -231,11 +231,60 @@
         <h3 class="section-title">Dados do Cliente</h3>
 
         <div [nzGutter]="16" nz-row>
+          <div nz-col nzSpan="24">
+            <div class="customer-mode-switch">
+              <button
+                (click)="setCustomerMode('NEW')"
+                [class.active]="customerMode === 'NEW'"
+                nz-button
+                nzType="default"
+                type="button">
+                Novo cliente
+              </button>
+
+              <button
+                (click)="setCustomerMode('EXISTING')"
+                [class.active]="customerMode === 'EXISTING'"
+                nz-button
+                nzType="default"
+                type="button">
+                Cliente existente
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="customerMode === 'EXISTING'" [nzGutter]="16" nz-row>
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Cliente existente</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="customerId"
+                  nzAllowClear
+                  nzPlaceHolder="Selecione o cliente"
+                  nzShowSearch>
+                  <nz-option
+                    *ngFor="let customer of customers"
+                    [nzLabel]="customer.name + ' - ' + customer.phoneNumber"
+                    [nzValue]="customer.id">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Cliente</nz-form-label>
+              <nz-form-label nzRequired>Cliente</nz-form-label>
               <nz-form-control>
-                <input formControlName="customerName" nz-input placeholder="Nome do cliente"/>
+                <input
+                  [readonly]="customerMode === 'EXISTING'"
+                  formControlName="customerName"
+                  nz-input
+                  placeholder="Nome do cliente"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -245,7 +294,11 @@
               <nz-form-label nzRequired>Telefone</nz-form-label>
               <nz-form-control>
                 <nz-input-group nzAddOnBefore="+258">
-                  <input formControlName="customerPhoneNumber" nz-input placeholder="Número"/>
+                  <input
+                    [readonly]="customerMode === 'EXISTING'"
+                    formControlName="customerPhoneNumber"
+                    nz-input
+                    placeholder="Número"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>

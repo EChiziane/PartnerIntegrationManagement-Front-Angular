@@ -131,6 +131,57 @@ export class SprintComponent implements OnInit {
     return 'default';
   }
 
+  get isAdminUser(): boolean {
+    return this.getCurrentUserRole() === 'ADMIN';
+  }
+
+  getStatusClass(status: string): string {
+    return `status-${(status || 'PLANEADA').toString().toLowerCase().replace('_', '-')}`;
+  }
+
+  getAvailableStatusTransitions(sprint: Sprint): string[] {
+    if (this.isAdminUser) {
+      return ['PLANEADA', 'EM_EXECUCAO', 'PAUSADA', 'ENCERRADO', 'CANCELADA']
+        .filter(status => status !== sprint.status);
+    }
+
+    switch ((sprint.status || '').toUpperCase()) {
+      case 'PLANEADA':
+        return ['EM_EXECUCAO', 'CANCELADA'];
+      case 'EM_EXECUCAO':
+        return ['PAUSADA', 'ENCERRADO', 'CANCELADA'];
+      case 'PAUSADA':
+        return ['EM_EXECUCAO', 'ENCERRADO', 'CANCELADA'];
+      default:
+        return [];
+    }
+  }
+
+  canChangeStatus(sprint: Sprint): boolean {
+    return this.getAvailableStatusTransitions(sprint).length > 0;
+  }
+
+  onQuickStatusChange(sprint: Sprint, status: string): void {
+    if (!sprint?.id || !status || status === sprint.status) {
+      return;
+    }
+
+    if (!this.getAvailableStatusTransitions(sprint).includes(status)) {
+      this.message.warning('Este estado da campanha ja esta fechado e nao permite alteracao.');
+      return;
+    }
+
+    this.sprintService.updateSprintStatus(sprint.id, status).subscribe({
+      next: updated => {
+        this.dataSource = this.dataSource.map(item => item.id === updated.id ? updated : item);
+        this.calculateStats();
+        this.applyFilters();
+        this.message.success(`Estado atualizado para ${this.getStatusLabel(status)}.`);
+      },
+      error: () => this.message.error('Erro ao atualizar estado da campanha.')
+    });
+  }
+
   search(): void {
     this.applyFilters();
   }
@@ -304,5 +355,14 @@ export class SprintComponent implements OnInit {
 
   private t(key: string, params?: Record<string, string | number | null | undefined>): string {
     return this.translationService.instant(key, params);
+  }
+
+  private getCurrentUserRole(): string {
+    try {
+      const rawUser = localStorage.getItem('user');
+      return rawUser ? (JSON.parse(rawUser)?.role || '').toString().toUpperCase() : '';
+    } catch {
+      return '';
+    }
   }
 }

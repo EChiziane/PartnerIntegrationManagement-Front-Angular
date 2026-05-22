@@ -33,6 +33,10 @@ export class CarloadService {
     return this.http.put<CarLoad>(`${this.baseURL}/${id}`, carload).pipe(take(1));
   }
 
+  updateCarLoadStatus(id: string, payload: Pick<Partial<CarLoad>, 'deliveryStatus' | 'deliveryScheduledDate' | 'deliveryDate'>): Observable<CarLoad> {
+    return this.http.patch<CarLoad>(`${this.baseURL}/${id}/status`, payload).pipe(take(1));
+  }
+
   deleteCarLoad(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseURL}/${id}`).pipe(take(1));
   }

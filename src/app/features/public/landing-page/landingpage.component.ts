@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
+import {COMPANY_PROFILE} from '@shared/data/company-profile';
 
 type MaterialKey = 'areia_grossa' | 'areia_vermelha' | 'pedra_34' | 'pedra_sarrisca' | 'po_de_pedra';
 
@@ -23,9 +24,13 @@ export class LandingPageComponent {
 
   isQuoteModalVisible = false;
 
-  companyName = 'Transportes Chiziane';
+  companyName = COMPANY_PROFILE.tradeName;
+  legalName = COMPANY_PROFILE.legalName;
+  nuit = COMPANY_PROFILE.nuit;
+  addressLine = COMPANY_PROFILE.addressLine1;
+  taxOffice = COMPANY_PROFILE.taxOffice;
   whatsappNumber = '258845098583';
-  phoneDisplay = '+258 845 098 583';
+  phoneDisplay = COMPANY_PROFILE.phonePrimary;
 
   capacities = ['4m³', '7m³', '18m³', '22m³', '24m³'];
 

@@ -114,9 +114,32 @@
               <span *ngIf="!data.targetCarloads && !data.targetRevenue">-</span>
             </td>
             <td>
-              <nz-tag [nzColor]="getStatusColor(data.status)">
-                {{ getStatusLabel(data.status) }}
-              </nz-tag>
+              <button
+                [class.locked]="!canChangeStatus(data)"
+                [ngClass]="getStatusClass(data.status)"
+                [nzDisabled]="!canChangeStatus(data)"
+                [nzDropdownMenu]="sprintStatusMenu"
+                class="status-action-pill"
+                nz-button
+                nz-dropdown
+                nzSize="small"
+                nzTrigger="click">
+                <span>{{ getStatusLabel(data.status) }}</span>
+                <nz-icon *ngIf="canChangeStatus(data)" nzTheme="outline" nzType="down"></nz-icon>
+                <nz-icon *ngIf="!canChangeStatus(data)" nzTheme="outline" nzType="lock"></nz-icon>
+              </button>
+
+              <nz-dropdown-menu #sprintStatusMenu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li
+                    (click)="onQuickStatusChange(data, nextStatus)"
+                    *ngFor="let nextStatus of getAvailableStatusTransitions(data)"
+                    nz-menu-item>
+                    <span class="status-menu-dot" [ngClass]="getStatusClass(nextStatus)"></span>
+                    {{ getStatusLabel(nextStatus) }}
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
             </td>
             <td class="cell-ellipsis" [title]="data.createdByName || 'Sistema'">{{ data.createdByName || 'Sistema' }}</td>
             <td>
@@ -326,7 +349,17 @@
             <nz-form-item>
               <nz-form-label nzRequired>Descricao</nz-form-label>
               <nz-form-control>
-                <textarea formControlName="description" nz-input placeholder="Objetivo, publico ou observacoes..." rows="3"></textarea>
+                <textarea
+                  class="campaign-description-editor"
+                  formControlName="description"
+                  maxlength="5000"
+                  nz-input
+                  placeholder="Objetivo, publico, promessa da campanha, zonas, observacoes e criterios de encerramento..."
+                  rows="8">
+                </textarea>
+                <div class="field-counter">
+                  {{ sprintForm.get('description')?.value?.length || 0 }}/5000 caracteres
+                </div>
               </nz-form-control>
             </nz-form-item>
           </div>

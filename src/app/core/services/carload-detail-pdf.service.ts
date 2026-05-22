@@ -7,6 +7,7 @@ import {Driver} from '@shared/models/driver';
 import {Manager} from '@shared/models/manager';
 import {Sprint} from '@shared/models/sprint';
 import {DocumentFilenameService} from '@core/services/document-filename.service';
+import {COMPANY_PROFILE} from '@shared/data/company-profile';
 
 @Injectable({
   providedIn: 'root'
@@ -107,7 +108,7 @@ export class CarloadDetailPdfService {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
     doc.setTextColor(255, 255, 255);
-    doc.text('Transportes Chiziane', 14, 16);
+    doc.text(COMPANY_PROFILE.tradeName, 14, 16);
 
     doc.setFontSize(10);
     doc.setTextColor(228, 173, 84);
@@ -116,8 +117,8 @@ export class CarloadDetailPdfService {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     doc.setTextColor(219, 231, 236);
-    doc.text('Fornecimento e transporte de materiais de construcao', 14, 34);
-    doc.text('Documento gerado automaticamente pelo sistema', 14, 39);
+    doc.text(COMPANY_PROFILE.activity, 14, 34);
+    doc.text(`${COMPANY_PROFILE.legalName} | NUIT: ${COMPANY_PROFILE.nuit}`, 14, 39);
 
     doc.setFontSize(9);
     doc.setTextColor(255, 255, 255);
@@ -185,7 +186,7 @@ export class CarloadDetailPdfService {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
       doc.setTextColor(99, 115, 129);
-      doc.text('Documento emitido automaticamente pelo sistema Transportes Chiziane', 14, pageHeight - 10);
+      doc.text(`Documento emitido por ${COMPANY_PROFILE.legalName} | NUIT: ${COMPANY_PROFILE.nuit}`, 14, pageHeight - 10);
       doc.text(`Pagina ${page} de ${pageCount}`, pageWidth - 14, pageHeight - 10, {align: 'right'});
     }
   }

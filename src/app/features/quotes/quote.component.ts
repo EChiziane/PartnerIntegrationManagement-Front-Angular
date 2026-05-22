@@ -8,10 +8,15 @@ import autoTable from 'jspdf-autotable';
 import { CarloadQuote } from '@shared/models/carload-quote';
 import { CarloadQuoteItem } from '@shared/models/carload-quote-item';
 import { CarloadQuoteService } from '@core/services/carload-quote.service';
+import {CarloadCustomer} from '@shared/models/carload-customer';
+import {CarloadCustomerService} from '@core/services/carload-customer.service';
 import {LocationSuggestion, LocationSuggestionService} from '@core/services/location-suggestion.service';
 import {TranslationService} from '@core/services/translation.service';
 import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 import {DocumentFilenameService} from '@core/services/document-filename.service';
+import {COMPANY_PDF_LINES, COMPANY_PROFILE} from '@shared/data/company-profile';
+
+type CustomerMode = 'NEW' | 'EXISTING';
 
 @Component({
   selector: 'app-quote',
@@ -42,6 +47,8 @@ export class QuoteComponent implements OnInit {
 
   quoteForm!: FormGroup;
   destinationSuggestions: LocationSuggestion[] = [];
+  customers: CarloadCustomer[] = [];
+  customerMode: CustomerMode = 'NEW';
 
   itemsOptions: string[] = [];
 
@@ -85,6 +92,7 @@ export class QuoteComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private quoteService: CarloadQuoteService,
+    private customerService: CarloadCustomerService,
     private locationSuggestionService: LocationSuggestionService,
     private message: NzMessageService,
     private modal: NzModalService,
@@ -106,9 +114,16 @@ export class QuoteComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.loadQuotes();
+    this.loadCustomers();
     this.updateDrawer();
     window.addEventListener('resize', () => this.updateDrawer());
     this.itemsOptions = Object.keys(this.itemsPrices);
+
+    this.quoteForm.get('customerId')?.valueChanges.subscribe(value => {
+      if (this.customerMode === 'EXISTING' && value) {
+        this.fillCustomerFromSelection(value);
+      }
+    });
   }
 
   updateDrawer(): void {
@@ -128,10 +143,12 @@ export class QuoteComponent implements OnInit {
   openDrawer(): void {
     this.currentQuoteId = null;
     this.currentQuoteCode = null;
+    this.customerMode = 'NEW';
     this.isDrawerVisible = true;
 
     this.quoteForm.reset({
       quoteCode: this.generateNextQuoteCode(),
+      customerId: null,
       customerName: '',
       customerPhoneNumber: '',
       destination: '',
@@ -146,6 +163,7 @@ export class QuoteComponent implements OnInit {
 
     this.items.clear();
     this.addItem();
+    this.applyCustomerModeRules();
   }
 
   closeDrawer(): void {
@@ -154,8 +172,25 @@ export class QuoteComponent implements OnInit {
     this.isDrawerVisible = false;
     this.currentQuoteId = null;
     this.currentQuoteCode = null;
+    this.customerMode = 'NEW';
     this.quoteForm.reset();
     this.items.clear();
+  }
+
+  setCustomerMode(mode: CustomerMode): void {
+    this.customerMode = mode;
+
+    if (mode === 'EXISTING') {
+      this.quoteForm.patchValue({
+        customerId: null,
+        customerName: '',
+        customerPhoneNumber: ''
+      });
+    } else {
+      this.quoteForm.patchValue({customerId: null});
+    }
+
+    this.applyCustomerModeRules();
   }
 
   addItem(): void {
@@ -211,13 +246,17 @@ export class QuoteComponent implements OnInit {
 
     const raw = this.quoteForm.getRawValue();
     this.locationSuggestionService.remember(raw.destination);
-    const normalizedPhone = this.normalizePhone(raw.customerPhoneNumber);
+    const selectedCustomer = this.customerMode === 'EXISTING'
+      ? this.customers.find(customer => customer.id === raw.customerId)
+      : null;
+    const customerName = selectedCustomer?.name || raw.customerName;
+    const normalizedPhone = this.normalizePhone(selectedCustomer?.phoneNumber || raw.customerPhoneNumber);
 
     const payload: CarloadQuote = {
       quoteCode: this.currentQuoteId
         ? (this.currentQuoteCode || raw.quoteCode)
         : raw.quoteCode,
-      customerName: raw.customerName,
+      customerName,
       customerPhoneNumber: normalizedPhone,
       destination: raw.destination || '',
       items: this.items.getRawValue().map((item: CarloadQuoteItem) => ({
@@ -267,6 +306,8 @@ export class QuoteComponent implements OnInit {
   editQuote(quote: CarloadQuote): void {
     this.currentQuoteId = quote.id || null;
     this.currentQuoteCode = quote.quoteCode;
+    const existingCustomer = this.findMatchingCustomer(quote);
+    this.customerMode = existingCustomer ? 'EXISTING' : 'NEW';
     this.isDrawerVisible = true;
 
     this.items.clear();
@@ -287,6 +328,7 @@ export class QuoteComponent implements OnInit {
 
     this.quoteForm.patchValue({
       quoteCode: quote.quoteCode,
+      customerId: existingCustomer?.id || null,
       customerName: quote.customerName,
       customerPhoneNumber: (quote.customerPhoneNumber || '').replace('+258', '').trim(),
       destination: quote.destination,
@@ -300,6 +342,7 @@ export class QuoteComponent implements OnInit {
     });
 
     this.calculateTotals();
+    this.applyCustomerModeRules();
   }
 
   duplicateQuote(quote: CarloadQuote): void {
@@ -453,7 +496,7 @@ export class QuoteComponent implements OnInit {
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
-    doc.text('TC', 23, 21, { align: 'center' });
+    doc.text(COMPANY_PROFILE.initials, 23, 21, { align: 'center' });
     doc.setFontSize(18);
     doc.text('COTAÇÃO', 38, 18);
     doc.setFont('helvetica', 'normal');
@@ -462,12 +505,13 @@ export class QuoteComponent implements OnInit {
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('Transportes Chiziane', pageWidth - 14, 14, { align: 'right' });
+    doc.text(COMPANY_PROFILE.tradeName, pageWidth - 14, 14, { align: 'right' });
 
     doc.setFont('helvetica', 'normal');
-    doc.text('Bairro Cumbe km16', pageWidth - 14, 20, { align: 'right' });
-    doc.text('Av. de Moçambique 2063', pageWidth - 14, 25, { align: 'right' });
-    doc.text('Tel: 845098583 / 879985279', pageWidth - 14, 30, { align: 'right' });
+    doc.text(COMPANY_PDF_LINES[0], pageWidth - 14, 19, { align: 'right' });
+    doc.text(COMPANY_PDF_LINES[1], pageWidth - 14, 24, { align: 'right' });
+    doc.text(COMPANY_PDF_LINES[2], pageWidth - 14, 29, { align: 'right' });
+    doc.text(COMPANY_PDF_LINES[4], pageWidth - 14, 34, { align: 'right' });
 
     doc.setTextColor(16, 33, 43);
     doc.setDrawColor(223, 234, 240);
@@ -585,7 +629,7 @@ export class QuoteComponent implements OnInit {
 
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    doc.text('Documento gerado por Transportes Chiziane', 14, 282);
+    doc.text(`Documento gerado por ${COMPANY_PROFILE.legalName} | NUIT: ${COMPANY_PROFILE.nuit}`, 14, 282);
     doc.text(`Validade da cotação: 7 dias (${createdAtFormatted} até ${validUntilFormatted})`, 14, 287);
 
     doc.save(this.documentFilename.build('COTACAO', quote.quoteCode, quote.customerName));
@@ -608,6 +652,7 @@ export class QuoteComponent implements OnInit {
   private initForm(): void {
     this.quoteForm = this.fb.group({
       quoteCode: ['', Validators.required],
+      customerId: [null],
       customerName: [''],
       customerPhoneNumber: ['', Validators.required],
       destination: [''],
@@ -623,6 +668,7 @@ export class QuoteComponent implements OnInit {
 
     this.quoteForm.get('discount')?.valueChanges.subscribe(() => this.calculateTotals());
     this.quoteForm.get('taxRate')?.valueChanges.subscribe(() => this.calculateTotals());
+    this.applyCustomerModeRules();
   }
 
   private loadQuotes(): void {
@@ -639,6 +685,13 @@ export class QuoteComponent implements OnInit {
         this.isLoading = false;
         this.message.error('Erro ao carregar cotações.');
       }
+    });
+  }
+
+  private loadCustomers(): void {
+    this.customerService.getCustomers().subscribe({
+      next: customers => (this.customers = customers || []),
+      error: () => this.message.error('Erro ao carregar clientes.')
     });
   }
 
@@ -714,6 +767,45 @@ export class QuoteComponent implements OnInit {
   private normalizePhone(phone: string): string {
     const raw = (phone || '').toString().trim();
     return raw.startsWith('+258') ? raw : `+258 ${raw}`;
+  }
+
+  private applyCustomerModeRules(): void {
+    if (!this.quoteForm) return;
+
+    const customerIdCtrl = this.quoteForm.get('customerId');
+    const customerNameCtrl = this.quoteForm.get('customerName');
+    const customerPhoneCtrl = this.quoteForm.get('customerPhoneNumber');
+
+    if (!customerIdCtrl || !customerNameCtrl || !customerPhoneCtrl) return;
+
+    if (this.customerMode === 'EXISTING') {
+      customerIdCtrl.setValidators([Validators.required]);
+      customerNameCtrl.clearValidators();
+      customerPhoneCtrl.clearValidators();
+    } else {
+      customerIdCtrl.clearValidators();
+      customerNameCtrl.setValidators([Validators.required]);
+      customerPhoneCtrl.setValidators([Validators.required]);
+    }
+
+    customerIdCtrl.updateValueAndValidity({emitEvent: false});
+    customerNameCtrl.updateValueAndValidity({emitEvent: false});
+    customerPhoneCtrl.updateValueAndValidity({emitEvent: false});
+  }
+
+  private fillCustomerFromSelection(customerId: string): void {
+    const customer = this.customers.find(item => item.id === customerId);
+    if (!customer) return;
+
+    this.quoteForm.patchValue({
+      customerName: customer.name,
+      customerPhoneNumber: (customer.phoneNumber || '').replace('+258', '').trim()
+    }, {emitEvent: false});
+  }
+
+  private findMatchingCustomer(quote: CarloadQuote): CarloadCustomer | null {
+    const phone = this.normalizePhone(quote.customerPhoneNumber || '');
+    return this.customers.find(customer => this.normalizePhone(customer.phoneNumber || '') === phone) || null;
   }
 
   private toDateInput(value: string): string {
