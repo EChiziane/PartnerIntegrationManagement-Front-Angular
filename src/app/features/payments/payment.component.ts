@@ -133,11 +133,11 @@ export class PaymentComponent implements OnInit {
 
   calculateStats(): void {
     this.totalPayments = this.payments.length;
-    this.pendingPayments = this.payments.filter(payment => payment.paymentStatus === 'PENDING' || payment.paymentStatus === 'PARTIAL').length;
+    this.pendingPayments = this.payments.filter(payment => this.canReceiveCustomerPayment(payment)).length;
     this.driverPayablePayments = this.payments.filter(payment => this.canPayDriver(payment)).length;
-    this.settledPayments = this.payments.filter(payment => payment.paymentStatus === 'SETTLED').length;
+    this.settledPayments = this.payments.filter(payment => this.getEffectivePaymentStatus(payment) === 'SETTLED').length;
     this.totalReceivable = this.payments
-      .filter(payment => payment.paymentStatus === 'PENDING' || payment.paymentStatus === 'PARTIAL')
+      .filter(payment => this.canReceiveCustomerPayment(payment))
       .reduce((sum, payment) => sum + this.getCustomerBalance(payment), 0);
     this.totalDriverPayable = this.payments
       .filter(payment => this.canPayDriver(payment))
@@ -341,6 +341,33 @@ export class PaymentComponent implements OnInit {
     return labels[status] || status;
   }
 
+  getPaymentStatusColor(payment: CarloadPayment): string {
+    return this.getStatusColor(this.getEffectivePaymentStatus(payment));
+  }
+
+  getPaymentStatusLabel(payment: CarloadPayment): string {
+    return this.getStatusLabel(this.getEffectivePaymentStatus(payment));
+  }
+
+  getEffectivePaymentStatus(payment: CarloadPayment): PaymentStatus {
+    if (payment.paymentStatus === 'CANCELLED' || this.isCancelledOrFailed(payment)) {
+      return 'CANCELLED';
+    }
+
+    const customerBalance = this.getCustomerBalance(payment);
+    const customerPaidAmount = Number(payment.customerPaidAmount || 0);
+
+    if (customerBalance > 0) {
+      return customerPaidAmount > 0 ? 'PARTIAL' : 'PENDING';
+    }
+
+    if (this.getDriverBalance(payment) > 0) {
+      return this.isDelivered(payment) ? 'DRIVER_PENDING' : 'CLIENT_PAID';
+    }
+
+    return 'SETTLED';
+  }
+
   formatMoney(value: number | null | undefined): string {
     return Number(value || 0).toFixed(2);
   }
@@ -353,6 +380,55 @@ export class PaymentComponent implements OnInit {
     return Number(payment.driverBalance ?? (Number(payment.driverAmount || 0) - Number(payment.driverPaidAmount || 0)));
   }
 
+  getActionTotalAmount(): number {
+    if (!this.selectedPayment) return 0;
+    return this.paymentActionType === 'CUSTOMER'
+      ? Number(this.selectedPayment.customerAmount || 0)
+      : Number(this.selectedPayment.driverAmount || 0);
+  }
+
+  getActionPaidAmount(): number {
+    if (!this.selectedPayment) return 0;
+    return this.paymentActionType === 'CUSTOMER'
+      ? Number(this.selectedPayment.customerPaidAmount || 0)
+      : Number(this.selectedPayment.driverPaidAmount || 0);
+  }
+
+  getActionBalance(): number {
+    if (!this.selectedPayment) return 0;
+    return this.paymentActionType === 'CUSTOMER'
+      ? this.getCustomerBalance(this.selectedPayment)
+      : this.getDriverBalance(this.selectedPayment);
+  }
+
+  getActionInsertedAmount(): number {
+    return Number(this.paymentActionForm.value.amount || 0);
+  }
+
+  getActionProjectedPaid(): number {
+    return Math.min(this.getActionPaidAmount() + this.getActionInsertedAmount(), this.getActionTotalAmount());
+  }
+
+  getActionProjectedBalance(): number {
+    return Math.max(this.getActionBalance() - this.getActionInsertedAmount(), 0);
+  }
+
+  getActionAmountLabel(): string {
+    return this.paymentActionType === 'CUSTOMER'
+      ? 'Valor inserido manualmente'
+      : 'Valor pago agora';
+  }
+
+  getActionTotalLabel(): string {
+    return this.paymentActionType === 'CUSTOMER'
+      ? 'Valor da carrada'
+      : 'Valor do motorista';
+  }
+
+  willCloseAction(): boolean {
+    return this.getActionProjectedBalance() <= 0;
+  }
+
   isPendingSuggestion(payment: CarloadPayment): boolean {
     return !payment.id && payment.paymentStatus === 'PENDING';
   }
@@ -362,12 +438,12 @@ export class PaymentComponent implements OnInit {
   }
 
   canReceiveCustomerPayment(payment: CarloadPayment): boolean {
-    return (payment.paymentStatus === 'PENDING' || payment.paymentStatus === 'PARTIAL')
+    return this.getCustomerBalance(payment) > 0
       && !this.isCancelledOrFailed(payment);
   }
 
   canPayDriver(payment: CarloadPayment): boolean {
-    return payment.paymentStatus === 'DRIVER_PENDING'
+    return this.getCustomerBalance(payment) <= 0
       && this.isDelivered(payment)
       && this.getDriverBalance(payment) > 0;
   }
@@ -448,7 +524,7 @@ export class PaymentComponent implements OnInit {
 
   private matchesActiveView(payment: CarloadPayment): boolean {
     if (this.activeView === 'RECEIVABLE') {
-      return payment.paymentStatus === 'PENDING' || payment.paymentStatus === 'PARTIAL';
+      return this.canReceiveCustomerPayment(payment);
     }
 
     if (this.activeView === 'DRIVER_PAYABLE') {
@@ -456,7 +532,7 @@ export class PaymentComponent implements OnInit {
     }
 
     if (this.activeView === 'SETTLED') {
-      return payment.paymentStatus === 'SETTLED';
+      return this.getEffectivePaymentStatus(payment) === 'SETTLED';
     }
 
     return true;

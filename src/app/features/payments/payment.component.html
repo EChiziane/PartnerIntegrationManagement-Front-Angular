@@ -80,7 +80,7 @@
               <div>{{ payment.driverName || '-' }}</div>
               <small *ngIf="getDriverBalance(payment) > 0">{{ formatMoney(getDriverBalance(payment)) }} Mts por pagar</small>
             </td>
-            <td><nz-tag [nzColor]="getStatusColor(payment.paymentStatus)">{{ getStatusLabel(payment.paymentStatus) }}</nz-tag></td>
+            <td><nz-tag [nzColor]="getPaymentStatusColor(payment)">{{ getPaymentStatusLabel(payment) }}</nz-tag></td>
             <td>{{ payment.paymentDate ? (payment.paymentDate | date:'yyyy-MM-dd HH:mm') : '-' }}</td>
             <td>
               <button *ngIf="canReceiveCustomerPayment(payment)" (click)="markClientPaid(payment)" nz-button nzShape="circle" nzSize="small" nz-tooltip nzTooltipTitle="Registar pagamento do cliente" nzType="link"><nz-icon nzTheme="outline" nzType="dollar"></nz-icon></button>
@@ -183,8 +183,41 @@
   [nzTitle]="paymentActionType === 'CUSTOMER' ? 'Registar pagamento do cliente' : 'Pagar motorista'"
   [nzVisible]="isPaymentActionVisible">
   <form *nzModalContent [formGroup]="paymentActionForm" class="drawer-form" nz-form>
+    <div *ngIf="selectedPayment" class="payment-action-summary">
+      <div class="payment-action-context">
+        <span>{{ selectedPayment.carLoadDescription || 'Carrada' }}</span>
+        <strong>{{ selectedPayment.carLoadCustomerName || selectedPayment.driverName || '-' }}</strong>
+        <small>{{ selectedPayment.deliveryDestination || selectedPayment.invoiceCode || 'Sem destino associado' }}</small>
+      </div>
+
+      <div class="payment-action-grid">
+        <div class="payment-action-card">
+          <span>{{ getActionTotalLabel() }}</span>
+          <strong>{{ formatMoney(getActionTotalAmount()) }} Mts</strong>
+        </div>
+        <div class="payment-action-card">
+          <span>{{ paymentActionType === 'CUSTOMER' ? 'Ja recebido' : 'Ja pago' }}</span>
+          <strong>{{ formatMoney(getActionPaidAmount()) }} Mts</strong>
+        </div>
+        <div class="payment-action-card highlight">
+          <span>Saldo aberto</span>
+          <strong>{{ formatMoney(getActionBalance()) }} Mts</strong>
+        </div>
+        <div class="payment-action-card">
+          <span>Valor inserido</span>
+          <strong>{{ formatMoney(getActionInsertedAmount()) }} Mts</strong>
+        </div>
+      </div>
+
+      <div class="payment-action-result" [class.closed]="willCloseAction()">
+        <span>Depois deste registo</span>
+        <strong *ngIf="!willCloseAction()">Ficam {{ formatMoney(getActionProjectedBalance()) }} Mts em aberto</strong>
+        <strong *ngIf="willCloseAction()">Pagamento fica completo</strong>
+      </div>
+    </div>
+
     <nz-form-item>
-      <nz-form-label>Valor</nz-form-label>
+      <nz-form-label>{{ getActionAmountLabel() }}</nz-form-label>
       <nz-form-control>
         <input formControlName="amount" nz-input type="number"/>
       </nz-form-control>
