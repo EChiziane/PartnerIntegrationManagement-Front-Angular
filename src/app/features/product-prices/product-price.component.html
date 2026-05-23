@@ -1,0 +1,108 @@
+<div class="content-wrapper compact-list-layout">
+  <nz-breadcrumb class="page-breadcrumb">
+    <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
+    <nz-breadcrumb-item>Catalogo de Precos</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <div class="page-header">
+    <p>Catalogo de Precos</p>
+    <span (click)="onBack()" class="back-arrow"><nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon></span>
+  </div>
+
+  <div class="summary-section">
+    <div [nzGutter]="8" nz-row>
+      <div [nzSpan]="12" nz-col>
+        <nz-card nzSize="small">
+          <div class="summary-card">
+            <div class="icon-wrapper total"><nz-icon nzTheme="outline" nzType="database"></nz-icon></div>
+            <div class="summary-content"><span class="title">Produtos</span><p>{{ prices.length }}</p></div>
+          </div>
+        </nz-card>
+      </div>
+      <div [nzSpan]="12" nz-col>
+        <nz-card nzSize="small">
+          <div class="summary-card">
+            <div class="icon-wrapper active"><nz-icon nzTheme="outline" nzType="tag"></nz-icon></div>
+            <div class="summary-content"><span class="title">Maior preco</span><p>{{ highestPrice | number:'1.2-2' }}</p></div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-panel price-filters">
+    <input (ngModelChange)="applyFilters()" [(ngModel)]="searchValue" nz-input placeholder="Pesquisar produto" type="text"/>
+    <nz-select (ngModelChange)="onVolumeFilterChange($event)" [(ngModel)]="selectedVolume" nzPlaceHolder="Volume">
+      <nz-option nzLabel="Todos volumes" nzValue="ALL"></nz-option>
+      <nz-option *ngFor="let volume of volumes" [nzLabel]="volume" [nzValue]="volume"></nz-option>
+    </nz-select>
+    <nz-select (ngModelChange)="onMaterialFilterChange($event)" [(ngModel)]="selectedMaterial" nzPlaceHolder="Material">
+      <nz-option nzLabel="Todos materiais" nzValue="ALL"></nz-option>
+      <nz-option *ngFor="let material of materials" [nzLabel]="material" [nzValue]="material"></nz-option>
+    </nz-select>
+    <button (click)="openDrawer()" nz-button nzType="primary"><nz-icon nzTheme="outline" nzType="plus"></nz-icon>Novo Produto</button>
+    <button (click)="printPriceList()" nz-button nzType="default"><nz-icon nzTheme="outline" nzType="printer"></nz-icon>Imprimir</button>
+    <button (click)="resetFilters()" nz-button nzType="default"><nz-icon nzTheme="outline" nzType="reload"></nz-icon>Limpar</button>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="table-scroll">
+      <nz-spin [nzSpinning]="isLoading" nzSize="large" nzTip="A carregar catalogo...">
+        <nz-table #nzTable [nzData]="filteredPrices" [nzScroll]="{ y: '440px' }" nzTableLayout="fixed">
+          <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Preco</th>
+            <th>Atualizado</th>
+            <th>Por</th>
+            <th>Acoes</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let price of nzTable.data">
+            <td>
+              <div class="price-product-cell">
+                <strong>{{ price.label }}</strong>
+                <small>{{ price.code }}</small>
+              </div>
+            </td>
+            <td><strong>{{ formatMoney(price.salePrice) }} Mts</strong></td>
+            <td>{{ price.updatedAt | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ price.updatedByName || 'Sistema' }}</td>
+            <td>
+              <button (click)="editPrice(price)" nz-button nzShape="circle" nzSize="small" nz-tooltip nzTooltipTitle="Editar" nzType="link"><nz-icon nzTheme="outline" nzType="edit"></nz-icon></button>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-spin>
+    </div>
+  </div>
+</div>
+
+<nz-drawer
+  (nzOnClose)="closeDrawer()"
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzFooter]="priceDrawerFooter"
+  [nzMaskClosable]="false"
+  [nzPlacement]="drawerPlacement"
+  [nzTitle]="drawerTitle"
+  [nzVisible]="isDrawerVisible"
+  [nzWidth]="drawerWidth">
+  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar preco...">
+    <form [formGroup]="priceForm" class="drawer-form" nz-form>
+      <div class="drawer-section">
+        <h3 class="section-title">Preco do Produto</h3>
+        <nz-form-item><nz-form-label>Produto</nz-form-label><nz-form-control><input formControlName="label" nz-input placeholder="24m Areia Grossa"/></nz-form-control></nz-form-item>
+        <nz-form-item><nz-form-label>Preco</nz-form-label><nz-form-control><input formControlName="salePrice" nz-input type="number"/></nz-form-control></nz-form-item>
+      </div>
+    </form>
+  </nz-spin>
+
+  <ng-template #priceDrawerFooter>
+    <div class="drawer-footer">
+      <button (click)="closeDrawer()" [disabled]="isSaving" class="btn-cancel" nz-button nzType="default">Cancelar</button>
+      <button (click)="savePrice()" [disabled]="priceForm.invalid || isSaving" class="btn-save" nz-button nzType="primary">{{ isEditMode ? 'Salvar' : 'Criar' }}</button>
+    </div>
+  </ng-template>
+</nz-drawer>

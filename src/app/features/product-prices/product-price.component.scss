@@ -1,0 +1,39 @@
+@import '../managers/manager.component.scss';
+
+.price-filters {
+  grid-template-columns: minmax(220px, 1fr) 170px 220px auto auto auto;
+
+  nz-select {
+    min-width: 0;
+  }
+}
+
+.price-product-cell {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+
+  strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  small {
+    color: #64748b;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+}
+
+:host ::ng-deep .ant-table-thead > tr > th:nth-child(5),
+:host ::ng-deep .ant-table-tbody > tr > td:nth-child(5) {
+  width: 96px;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .price-filters {
+    grid-template-columns: 1fr;
+  }
+}

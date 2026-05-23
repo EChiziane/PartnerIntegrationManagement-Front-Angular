@@ -82,6 +82,7 @@ import {QuoteComponent} from '@features/quotes/quote.component';
 import {UserDetailComponent} from '@features/users/detail/user-detail.component';
 import {TruckComponent} from '@features/trucks/truck.component';
 import {PaymentComponent} from '@features/payments/payment.component';
+import {ProductPriceComponent} from '@features/product-prices/product-price.component';
 import {
   CarloadCustomerDetailComponent
 } from '@features/customers/carload-customer-detail/carload-customer-detail.component';
@@ -114,6 +115,7 @@ registerLocaleData(en);
     UserDetailComponent,
     TruckComponent,
     PaymentComponent,
+    ProductPriceComponent,
     CarloadCustomerDetailComponent,
     TranslatePipe
 

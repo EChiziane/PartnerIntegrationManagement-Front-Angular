@@ -13,6 +13,7 @@ import {TranslationService} from '@core/services/translation.service';
 import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 import {DocumentFilenameService} from '@core/services/document-filename.service';
 import {COMPANY_PDF_LINES, COMPANY_PROFILE} from '@shared/data/company-profile';
+import {ProductPriceService} from '@core/services/product-price.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -184,7 +185,8 @@ export class InvoiceComponent implements OnInit {
     private message: NzMessageService,
     private confirmationDialog: ConfirmationDialogService,
     private translationService: TranslationService,
-    private documentFilename: DocumentFilenameService
+    private documentFilename: DocumentFilenameService,
+    private productPriceService: ProductPriceService
   ) {
   }
 
@@ -211,6 +213,7 @@ export class InvoiceComponent implements OnInit {
     this.initForm();
     this.loadInvoices();
     this.loadCustomers();
+    this.loadProductPrices();
 
     this.updateDrawer();
     window.addEventListener('resize', () => this.updateDrawer());
@@ -859,6 +862,25 @@ export class InvoiceComponent implements OnInit {
         this.totalCustomers = this.dataCustomer.length;
       },
       error: () => this.message.error('Erro ao carregar clientes.')
+    });
+  }
+
+  private loadProductPrices(): void {
+    this.productPriceService.getActivePrices().subscribe({
+      next: prices => {
+        if (!prices?.length) return;
+
+        this.itemsOptions = prices.map(item => item.code);
+        this.itemLabels = prices.reduce((acc, item) => {
+          acc[item.code] = item.label;
+          return acc;
+        }, {} as { [key: string]: string });
+        this.itemsPrices = prices.reduce((acc, item) => {
+          acc[item.code] = Number(item.salePrice || 0);
+          return acc;
+        }, {} as { [key: string]: number });
+      },
+      error: () => this.message.warning('Catalogo de precos indisponivel. A usar precos locais.')
     });
   }
 

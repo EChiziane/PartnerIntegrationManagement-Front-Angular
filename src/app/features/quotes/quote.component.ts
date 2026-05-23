@@ -15,6 +15,7 @@ import {TranslationService} from '@core/services/translation.service';
 import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
 import {DocumentFilenameService} from '@core/services/document-filename.service';
 import {COMPANY_PDF_LINES, COMPANY_PROFILE} from '@shared/data/company-profile';
+import {ProductPriceService} from '@core/services/product-price.service';
 
 type CustomerMode = 'NEW' | 'EXISTING';
 
@@ -98,7 +99,8 @@ export class QuoteComponent implements OnInit {
     private modal: NzModalService,
     private confirmationDialog: ConfirmationDialogService,
     private translationService: TranslationService,
-    private documentFilename: DocumentFilenameService
+    private documentFilename: DocumentFilenameService,
+    private productPriceService: ProductPriceService
   ) {}
 
   get items(): FormArray {
@@ -115,6 +117,7 @@ export class QuoteComponent implements OnInit {
     this.initForm();
     this.loadQuotes();
     this.loadCustomers();
+    this.loadProductPrices();
     this.updateDrawer();
     window.addEventListener('resize', () => this.updateDrawer());
     this.itemsOptions = Object.keys(this.itemsPrices);
@@ -692,6 +695,21 @@ export class QuoteComponent implements OnInit {
     this.customerService.getCustomers().subscribe({
       next: customers => (this.customers = customers || []),
       error: () => this.message.error('Erro ao carregar clientes.')
+    });
+  }
+
+  private loadProductPrices(): void {
+    this.productPriceService.getActivePrices().subscribe({
+      next: prices => {
+        if (!prices?.length) return;
+
+        this.itemsPrices = prices.reduce((acc, item) => {
+          acc[item.label] = Number(item.salePrice || 0);
+          return acc;
+        }, {} as { [key: string]: number });
+        this.itemsOptions = Object.keys(this.itemsPrices);
+      },
+      error: () => this.message.warning('Catalogo de precos indisponivel. A usar precos locais.')
     });
   }
 

@@ -18,6 +18,8 @@ import {LocationSuggestion, LocationSuggestionService} from '@core/services/loca
 import {CarloadListPdfService} from '@core/services/carload-list-pdf.service';
 import {TranslationService} from '@core/services/translation.service';
 import {ConfirmationDialogService} from '@core/services/confirmation-dialog.service';
+import {ProductPriceService} from '@core/services/product-price.service';
+import {ProductPrice} from '@shared/models/product-price';
 
 type FilterMode = 'ALL' | 'SCHEDULED' | 'IN_PROGRESS' | 'DELIVERED' | 'CANCELLED';
 type CustomerMode = 'NEW' | 'EXISTING';
@@ -46,6 +48,7 @@ export class CarLoadComponent implements OnInit {
   trucks: Truck[] = [];
   sprints: Sprint[] = [];
   customers: CarloadCustomer[] = [];
+  productPrices: ProductPrice[] = [];
   destinationSuggestions: LocationSuggestion[] = [];
   isLoadingLookups = false;
 
@@ -118,6 +121,7 @@ export class CarLoadComponent implements OnInit {
     private customerService: CarloadCustomerService,
     private locationSuggestionService: LocationSuggestionService,
     private carloadListPdfService: CarloadListPdfService,
+    private productPriceService: ProductPriceService,
     private message: NzMessageService,
     private confirmationDialog: ConfirmationDialogService,
     private translationService: TranslationService
@@ -179,6 +183,9 @@ export class CarLoadComponent implements OnInit {
     this.carLoadForm.get('assignedDriverId')!.valueChanges.subscribe(value => {
       this.applyDriverTruckSelection(value || null);
     });
+
+    this.carLoadForm.get('transportedMaterial')!.valueChanges.subscribe(() => this.applyCatalogPrice());
+    this.carLoadForm.get('truckSize')!.valueChanges.subscribe(() => this.applyCatalogPrice());
 
     this.applyDateRulesByStatus();
     this.applyCustomerModeRules();
@@ -350,6 +357,14 @@ export class CarLoadComponent implements OnInit {
     this.customerService.getCustomers().subscribe({
       next: data => (this.customers = data || []),
       error: () => this.message.error(this.t('carloads.messages.loadCustomersError'))
+    });
+
+    this.productPriceService.getActivePrices().subscribe({
+      next: data => {
+        this.productPrices = data || [];
+        this.materials = Array.from(new Set(this.productPrices.map(item => item.materialName))).sort();
+      },
+      error: () => this.message.warning('Catalogo de precos indisponivel. A usar materiais locais.')
     });
 
     setTimeout(() => (this.isLoadingLookups = false), 500);
@@ -700,6 +715,49 @@ export class CarLoadComponent implements OnInit {
       assignedTruckId: truck.id,
       truckSize: truck.truckSize || ''
     }, {emitEvent: false});
+    this.applyCatalogPrice();
+  }
+
+  private applyCatalogPrice(): void {
+    const material = this.carLoadForm.get('transportedMaterial')?.value || '';
+    const truckSize = this.carLoadForm.get('truckSize')?.value || '';
+    const price = this.findCatalogPrice(truckSize, material);
+
+    if (!price) {
+      return;
+    }
+
+    const salePrice = Number(price.salePrice || 0);
+    const driverCost = Number(price.driverCost || 0);
+
+    this.carLoadForm.patchValue({
+      totalEarnings: salePrice,
+      customerPrice: salePrice,
+      totalSpent: driverCost,
+      driverAmount: driverCost,
+      companyCommission: salePrice - driverCost
+    }, {emitEvent: false});
+  }
+
+  private findCatalogPrice(truckSize: string, material: string): ProductPrice | undefined {
+    const code = this.buildCatalogCode(truckSize, material);
+    return this.productPrices.find(item => item.code === code);
+  }
+
+  private buildCatalogCode(truckSize: string, material: string): string {
+    return `M${(truckSize || '').replace(/[^0-9]/g, '')}_${this.normalizeMaterialCode(material)}`;
+  }
+
+  private normalizeMaterialCode(material: string): string {
+    return (material || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace('/', '_')
+      .replace(/[^a-zA-Z0-9]+/g, '_')
+      .replace(/^_|_$/g, '')
+      .toUpperCase()
+      .replace('PO_PEDRA', 'PO_DE_PEDRA')
+      .replace('PEDRA_34', 'PEDRA_3_4');
   }
 
   private applyDateRulesByStatus(): void {
