@@ -119,7 +119,8 @@
       "finance": "Finance",
       "quotes": "Quotes",
       "invoices": "Invoices",
-      "users": "Users"
+      "users": "Users",
+      "commercialCatalogs": "Catalogs"
     },
     "footer": {
       "title": "System active",
@@ -622,6 +623,140 @@
       "approveTitle": "Approve quote and generate carloads?",
       "approveContent": "Quote <strong>{{ code }}</strong> will generate carloads from the item quantities. You can assign driver and truck later in Carloads.",
       "approveOk": "Generate carloads"
+    }
+  },
+  "commercialCatalog": {
+    "page": {
+      "title": "Professional client presentation",
+      "subtitle": "Truck catalogs with photos, capacity, materials, production references and contacts.",
+      "kicker": "Commercial catalog",
+      "vehicleKicker": "Know the truck"
+    },
+    "messages": {
+      "priceError": "Could not load updated prices. The catalog opened with standard commercial prices."
+    },
+    "metrics": {
+      "capacity": "Capacity",
+      "wheelbarrows": "Wheelbarrows",
+      "wheelbarrowsLower": "wheelbarrows",
+      "focus": "Commercial focus",
+      "delivery": "Delivery",
+      "unload": "Unload"
+    },
+    "wheelbarrow": {
+      "title": "Reference: wheelbarrow.",
+      "description": "The reference removes ambiguity and helps the client convert 24m3 into real site planning."
+    },
+    "production": {
+      "kicker": "Production for yards",
+      "title": "How much can a {{ volume }}m3 load support?",
+      "reference": "Production reference for yards"
+    },
+    "materialLabels": {
+      "centralPrice": "Commercial catalog price",
+      "idealFor": "Ideal for",
+      "benefits": "Benefits"
+    },
+    "comparison": {
+      "kicker": "Quick comparison",
+      "title": "One trip. More material. Fewer interruptions.",
+      "noteLabel": "Main reference",
+      "noteValue": "122 wheelbarrows",
+      "statement": "The number of wheelbarrows is the main reference for the client to calculate production."
+    },
+    "contact": {
+      "kicker": "Contacts",
+      "service": "Construction material transport",
+      "location": "Maputo and Province",
+      "payment": "Payment on unloading"
+    },
+    "catalogs": {
+      "sinotruk24m": {
+        "title": "Sinotruk HOWO 24m3",
+        "vehicleName": "Sinotruk HOWO",
+        "audience": "Block yards, construction material producers and civil construction",
+        "heroLine": "Solutions for block yards, material producers and civil construction",
+        "promise": "One trip can supply days of production."
+      },
+      "tata22m": {
+        "title": "Tata Signa 22m3",
+        "vehicleName": "Tata Signa",
+        "audience": "Block yards, factories and medium to large construction works",
+        "heroLine": "Strong delivery for yards, construction sites and block factories",
+        "promise": "A balanced load to supply production quickly and with controlled cost."
+      }
+    },
+    "materials": {
+      "coarseSand": {
+        "title": "Coarse Sand",
+        "subtitle": "The base of structural construction.",
+        "originNote": "Coarse sand is one of the most important construction materials. Its larger granulometry helps concrete mixes gain strength and stability for durable works.",
+        "applications": "Block production|Paver production|Kerb production|Concrete production|Foundations|Beams and columns|Slabs",
+        "benefits": "Good mix strength|High-volume supply|Fewer interruptions at the yard"
+      },
+      "stone34": {
+        "title": "3/4 Stone",
+        "subtitle": "Strength for major works.",
+        "originNote": "3/4 stone is a coarse aggregate used in structural concrete. It contributes to mechanical strength, stability and durability in several stages of construction.",
+        "applications": "Concrete production|Slabs|Foundations|Beams|Columns|Industrial floors|Large structures",
+        "benefits": "Higher compression strength|Better structural performance|Greater durability"
+      },
+      "fineSand": {
+        "title": "Fine Sand",
+        "subtitle": "Quality for finishing.",
+        "originNote": "Fine sand has reduced granulometry and is ideal for plaster, finishing and mortar work where smoother surfaces are needed.",
+        "applications": "Plastering|Rendering|Block laying|Brick laying|Fine finishes|Grouting",
+        "benefits": "Better finish|Higher adhesion|More uniform surfaces"
+      },
+      "redSand": {
+        "title": "Red Sand",
+        "subtitle": "Solution for filling and leveling.",
+        "originNote": "Red sand is used for filling, ground preparation, roads and leveling. It helps create solid bases for construction and paving.",
+        "applications": "Filling|Ground preparation|Roads|Backfilling|Land leveling|Platform preparation|Construction bases",
+        "benefits": "Good compaction|Affordable cost|Fast ground preparation"
+      },
+      "sarrisca": {
+        "title": "Sarrisca",
+        "subtitle": "Compaction, slabs and stability.",
+        "originNote": "Sarrisca is a versatile granular material for compaction, production, bases and concrete work in areas that need stability.",
+        "applications": "Compaction|Slabs|Beams|Floor preparation|Block production|Paver production|Road bases",
+        "benefits": "Excellent compaction|Good structural stability|Good drainage"
+      },
+      "rockfill": {
+        "title": "Rockfill",
+        "subtitle": "Protection, ground work and blinding concrete.",
+        "originNote": "Rockfill is made of larger stones and is used for ground work, blinding concrete, protection, drainage and stabilization where body is needed.",
+        "applications": "Ground work|Blinding concrete|Retaining walls|Erosion protection|Drainage|Slope stabilization|Road works",
+        "benefits": "High resistance|Long durability|Excellent containment capacity"
+      }
+    },
+    "sales": {
+      "audienceTag": "FOR YARDS AND LARGE WORKS",
+      "coverTitle": "Construction materials in commercial volume",
+      "coverSubtitle": "Receive 24m3 per trip with organized delivery to keep your yard producing without interruptions.",
+      "promiseTitle": "Your yard should not stop because material is missing.",
+      "promiseText": "Transportes Chiziane delivers sand and stone in commercial volume for block yards, large construction works and contractors who need predictability.",
+      "fastDeliveryLabel": "Commercial response",
+      "fastDeliveryValue": "Fast",
+      "targetLabel": "Ideal for",
+      "targetValue": "Yards",
+      "whyTitle": "Why this catalog helps you buy better",
+      "why1": "Clear prices per 24m3 load",
+      "why2": "Wheelbarrow reference",
+      "why3": "Materials explained by use",
+      "why4": "Direct contact to order"
+    },
+    "order": {
+      "title": "Quick price table and how to order",
+      "material": "Material",
+      "quantity": "Quantity",
+      "price": "Price",
+      "howTitle": "How to order",
+      "step1": "Choose the material and confirm the unloading destination.",
+      "step2": "Message or call to confirm availability and delivery time.",
+      "step3": "Receive the load at the yard and pay on unloading.",
+      "salesLine": "Keep this catalog at the yard: when you need sand or stone, the order is one call away.",
+      "callNow": "ORDER NOW"
     }
   }
 }

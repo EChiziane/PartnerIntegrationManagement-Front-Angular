@@ -24,6 +24,7 @@ import {UserDetailComponent} from '@features/users/detail/user-detail.component'
 import {TruckComponent} from '@features/trucks/truck.component';
 import {PaymentComponent} from '@features/payments/payment.component';
 import {ProductPriceComponent} from '@features/product-prices/product-price.component';
+import {CommercialCatalogComponent} from '@features/commercial-catalogs/commercial-catalog.component';
 import {
   CarloadCustomerDetailComponent
 } from '@features/customers/carload-customer-detail/carload-customer-detail.component';
@@ -52,6 +53,7 @@ const routes: Routes = [
       {path: 'truck', component: TruckComponent},
       {path: 'payment', component: PaymentComponent},
       {path: 'product-prices', component: ProductPriceComponent},
+      {path: 'commercial-catalogs', component: CommercialCatalogComponent},
       {path: 'sprint-detail/:id', component: SprintDetailsComponent},
       {path: 'driver', component: DriverComponent},
       {path: 'carload-details/:id', component: CarloadDetailsComponent},

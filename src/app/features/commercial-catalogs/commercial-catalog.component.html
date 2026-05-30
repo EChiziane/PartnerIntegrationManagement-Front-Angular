@@ -1,0 +1,329 @@
+<section class="catalog-page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Catalogos comerciais</span>
+      <h1>{{ 'commercialCatalog.page.title' | translate }}</h1>
+      <p>{{ 'commercialCatalog.page.subtitle' | translate }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button *ngIf="canEditCatalog" (click)="openEditDrawer()" [disabled]="!catalogView" class="ghost-action" type="button" title="Editar catalogo">
+        <span nz-icon nzType="edit"></span>
+      </button>
+      <button (click)="printPage()" class="ghost-action" type="button" title="Imprimir">
+        <span nz-icon nzType="printer"></span>
+      </button>
+      <button (click)="downloadCatalog()" [disabled]="!catalogView" class="primary-action" type="button">
+        <span nz-icon nzType="download"></span>
+        {{ 'common.actions.download' | translate }} PDF
+      </button>
+    </div>
+  </header>
+
+  <nz-alert
+    *ngIf="errorMessage"
+    [nzMessage]="errorMessage"
+    class="catalog-alert"
+    nzShowIcon
+    nzType="warning">
+  </nz-alert>
+
+  <div class="catalog-layout">
+    <aside class="catalog-list">
+      <button
+        *ngFor="let catalog of catalogs"
+        (click)="selectCatalog(catalog.id)"
+        [class.active]="catalog.id === selectedCatalogId"
+        type="button">
+        <span class="truck-badge">{{ catalog.vehicleModel }}</span>
+        <strong>{{ catalogText(catalog, 'vehicleName') }}</strong>
+        <small>{{ catalogText(catalog, 'audience') }}</small>
+      </button>
+    </aside>
+
+    <main *ngIf="catalogView as catalog" class="reader">
+      <section
+        class="catalog-sheet cover-sheet"
+        [style.background-image]="'linear-gradient(90deg, rgba(16, 33, 43, .72), rgba(16, 33, 43, .2) 58%, rgba(247, 181, 0, .78)), url(' + catalog.heroImageUrl + ')'">
+        <div class="brand-row light">
+          <div class="brand-mark">TC</div>
+          <div>
+            <strong>{{ company.tradeName }}</strong>
+            <span>NUIT: {{ company.nuit }}</span>
+          </div>
+        </div>
+
+        <div class="cover-copy">
+          <span class="eyebrow light-text">{{ 'commercialCatalog.page.kicker' | translate }}</span>
+          <h2>{{ catalogText(catalog, 'title') }}</h2>
+          <p>{{ catalogText(catalog, 'heroLine') }}</p>
+        </div>
+
+        <div class="contact-strip">
+          <span>{{ company.phonePrimary }}</span>
+          <span>{{ company.email }}</span>
+        </div>
+      </section>
+
+      <section class="catalog-sheet intro-sheet">
+        <div class="section-title">
+          <span class="eyebrow">{{ 'commercialCatalog.page.vehicleKicker' | translate }}</span>
+          <h2>{{ catalogText(catalog, 'vehicleName') }} {{ catalog.vehicleModel }}</h2>
+          <p>{{ catalogText(catalog, 'promise') }}</p>
+        </div>
+
+        <div class="intro-grid">
+          <figure class="photo-card">
+            <img [src]="catalog.vehicleImageUrl" [alt]="catalog.vehicleName">
+          </figure>
+
+          <div class="stats-panel">
+            <div class="stats-grid">
+              <article>
+                <small>{{ 'commercialCatalog.metrics.capacity' | translate }}</small>
+                <strong>{{ catalog.volumeM3 }}m3</strong>
+              </article>
+              <article>
+                <small>{{ 'commercialCatalog.metrics.wheelbarrows' | translate }}</small>
+                <strong>{{ catalog.wheelbarrows }}</strong>
+              </article>
+              <article>
+                <small>{{ 'commercialCatalog.metrics.focus' | translate }}</small>
+                <strong>24m3</strong>
+              </article>
+              <article>
+                <small>{{ 'commercialCatalog.metrics.delivery' | translate }}</small>
+                <strong>{{ 'commercialCatalog.metrics.unload' | translate }}</strong>
+              </article>
+            </div>
+
+            <div class="wheelbarrow-note">
+              <img [src]="catalog.wheelbarrowImageUrl" alt="Carrinho de mao">
+              <div>
+                <strong>{{ 'commercialCatalog.wheelbarrow.title' | translate }}</strong>
+                <span>{{ 'commercialCatalog.wheelbarrow.description' | translate }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="catalog-sheet production-sheet">
+        <div class="section-title">
+          <span class="eyebrow">{{ 'commercialCatalog.production.kicker' | translate }}</span>
+          <h2>{{ 'commercialCatalog.production.title' | translate: {volume: catalog.volumeM3} }}</h2>
+        </div>
+
+        <div class="production-hero">
+          <img [src]="catalog.productionImageUrl" alt="Camião carregado no areeiro">
+        </div>
+
+        <div class="production-grid">
+          <article *ngFor="let item of catalog.production">
+            <span>{{ item.measure }}</span>
+            <h3>{{ item.title }}</h3>
+            <strong>{{ item.output }}</strong>
+            <p>{{ item.ratio }}</p>
+          </article>
+        </div>
+      </section>
+
+      <section *ngFor="let material of catalog.materialViews" class="catalog-sheet material-sheet">
+        <div class="material-gallery">
+          <figure class="main-photo">
+            <img [src]="material.imageUrl" [alt]="material.title">
+          </figure>
+          <figure *ngIf="material.secondaryImageUrl" class="secondary-photo">
+            <img [src]="material.secondaryImageUrl" [alt]="material.title + ' detalhe'">
+          </figure>
+        </div>
+
+        <div class="material-copy">
+          <span class="eyebrow">{{ catalog.vehicleModel }}</span>
+          <h2>{{ materialText(material, 'title') }}</h2>
+          <p>{{ materialText(material, 'subtitle') }}</p>
+          <p class="origin-note">{{ materialText(material, 'originNote') }}</p>
+
+          <div class="price-line">
+            <strong>{{ priceFor(material) }}</strong>
+            <span>{{ catalog.volumeM3 }}m3 | {{ catalog.wheelbarrows }} {{ 'commercialCatalog.metrics.wheelbarrowsLower' | translate }}</span>
+          </div>
+
+          <strong class="list-title">{{ 'commercialCatalog.materialLabels.idealFor' | translate }}</strong>
+          <ul>
+            <li *ngFor="let application of materialList(material, 'applications')">
+              <span nz-icon nzType="check-circle"></span>
+              {{ application }}
+            </li>
+          </ul>
+
+          <strong class="list-title">{{ 'commercialCatalog.materialLabels.benefits' | translate }}</strong>
+          <ul>
+            <li *ngFor="let benefit of materialList(material, 'benefits')">
+              <span nz-icon nzType="star"></span>
+              {{ benefit }}
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="catalog-sheet comparison-sheet">
+        <div class="section-title">
+          <span class="eyebrow">{{ 'commercialCatalog.comparison.kicker' | translate }}</span>
+          <h2>{{ 'commercialCatalog.comparison.title' | translate }}</h2>
+        </div>
+
+        <div class="comparison-table">
+          <div><span>{{ 'commercialCatalog.metrics.wheelbarrows' | translate }}</span><strong>{{ catalog.wheelbarrows }}</strong></div>
+          <div><span>Blocos 15</span><strong>920</strong></div>
+          <div><span>Blocos 10</span><strong>1.104</strong></div>
+          <div><span>{{ 'commercialCatalog.comparison.noteLabel' | translate }}</span><strong>{{ 'commercialCatalog.comparison.noteValue' | translate }}</strong></div>
+        </div>
+      </section>
+
+      <section
+        class="catalog-sheet contact-sheet"
+        [style.background-image]="'linear-gradient(90deg, rgba(16, 33, 43, .96), rgba(16, 33, 43, .82)), url(' + catalog.contactImageUrl + ')'">
+        <div>
+          <span class="eyebrow light-text">{{ 'commercialCatalog.contact.kicker' | translate }}</span>
+          <h2>{{ company.tradeName }}</h2>
+          <p>{{ 'commercialCatalog.contact.service' | translate }}</p>
+          <strong>{{ company.phonePrimary }}</strong>
+          <span>{{ company.email }}</span>
+          <span>{{ 'commercialCatalog.contact.location' | translate }}</span>
+          <span>{{ 'commercialCatalog.contact.payment' | translate }}</span>
+        </div>
+      </section>
+    </main>
+  </div>
+</section>
+
+<nz-drawer
+  (nzOnClose)="closeEditDrawer()"
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzFooter]="catalogDrawerFooter"
+  [nzMaskClosable]="false"
+  nzWrapClassName="catalog-edit-drawer"
+  [nzTitle]="'Editar catalogo comercial'"
+  [nzVisible]="isDrawerVisible"
+  [nzWidth]="920">
+  <nz-spin *nzDrawerContent [nzSpinning]="saving" nzTip="A gravar catalogo...">
+    <form [formGroup]="catalogForm" class="catalog-edit-form" nz-form>
+      <div class="edit-hero">
+        <div>
+          <span class="eyebrow">Catalogo comercial</span>
+          <h2>{{ catalogForm.value.title || 'Editar catalogo' }}</h2>
+          <p>Atualize dados do camiao, fotos, precos, beneficios e texto que tambem alimentam o PDF.</p>
+        </div>
+        <div class="edit-hero-badge">
+          <strong>{{ catalogForm.value.volumeM3 || '-' }}m3</strong>
+          <span>{{ catalogForm.value.wheelbarrows || '-' }} carrinhos</span>
+        </div>
+      </div>
+
+      <div class="edit-section">
+        <div class="edit-section-title">
+          <span nz-icon nzType="car"></span>
+          <div>
+            <h3>Dados do camiao</h3>
+            <p>Informacao principal que aparece na capa e nas paginas de apresentacao.</p>
+          </div>
+        </div>
+        <div class="edit-grid">
+          <nz-form-item><nz-form-label>Codigo</nz-form-label><nz-form-control><input formControlName="code" nz-input></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Titulo</nz-form-label><nz-form-control><input formControlName="title" nz-input></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Camiao</nz-form-label><nz-form-control><input formControlName="vehicleName" nz-input></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Modelo</nz-form-label><nz-form-control><input formControlName="vehicleModel" nz-input></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Volume</nz-form-label><nz-form-control><input formControlName="volume" nz-input></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Volume m3</nz-form-label><nz-form-control><input formControlName="volumeM3" nz-input type="number"></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Carrinhos de mao</nz-form-label><nz-form-control><input formControlName="wheelbarrows" nz-input type="number"></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Ordem</nz-form-label><nz-form-control><input formControlName="displayOrder" nz-input type="number"></nz-form-control></nz-form-item>
+        </div>
+        <nz-form-item><nz-form-label>Publico ideal</nz-form-label><nz-form-control><textarea formControlName="audience" nz-input rows="2"></textarea></nz-form-control></nz-form-item>
+        <nz-form-item><nz-form-label>Promessa</nz-form-label><nz-form-control><textarea formControlName="promise" nz-input rows="2"></textarea></nz-form-control></nz-form-item>
+        <nz-form-item><nz-form-label>Frase da capa</nz-form-label><nz-form-control><textarea formControlName="heroLine" nz-input rows="2"></textarea></nz-form-control></nz-form-item>
+      </div>
+
+      <div class="edit-section">
+        <div class="edit-section-title">
+          <span nz-icon nzType="picture"></span>
+          <div>
+            <h3>Imagens do catalogo</h3>
+            <p>Use caminhos do projeto, por exemplo <strong>/catalogs/tata-22m/foto.png</strong>.</p>
+          </div>
+        </div>
+        <div class="edit-grid image-grid">
+          <nz-form-item><nz-form-label>Capa</nz-form-label><nz-form-control><input formControlName="heroImageUrl" nz-input></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Camiao</nz-form-label><nz-form-control><input formControlName="vehicleImageUrl" nz-input></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Rendimento</nz-form-label><nz-form-control><input formControlName="productionImageUrl" nz-input></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Contacto</nz-form-label><nz-form-control><input formControlName="contactImageUrl" nz-input></nz-form-control></nz-form-item>
+          <nz-form-item><nz-form-label>Carrinho mao</nz-form-label><nz-form-control><input formControlName="wheelbarrowImageUrl" nz-input></nz-form-control></nz-form-item>
+        </div>
+      </div>
+
+      <div class="edit-section">
+        <div class="edit-section-title">
+          <span nz-icon nzType="appstore"></span>
+          <div>
+            <h3>Materiais</h3>
+            <p>Preco, descricao, aplicacoes e beneficios usados no catalogo e no PDF.</p>
+          </div>
+        </div>
+        <div formArrayName="materials" class="material-editor-list">
+          <article *ngFor="let group of materialControls.controls; let i = index; trackBy: trackByIndex" [formGroupName]="i" class="material-editor">
+            <div class="editor-title">
+              <strong>{{ group.value.title || 'Material' }}</strong>
+              <span>{{ group.value.materialName }}</span>
+            </div>
+
+            <div class="edit-grid">
+              <nz-form-item><nz-form-label>Material</nz-form-label><nz-form-control><input formControlName="materialName" nz-input></nz-form-control></nz-form-item>
+              <nz-form-item><nz-form-label>Titulo</nz-form-label><nz-form-control><input formControlName="title" nz-input></nz-form-control></nz-form-item>
+              <nz-form-item><nz-form-label>Preco</nz-form-label><nz-form-control><input formControlName="price" nz-input type="number"></nz-form-control></nz-form-item>
+              <nz-form-item><nz-form-label>Tom</nz-form-label><nz-form-control><input formControlName="imageTone" nz-input></nz-form-control></nz-form-item>
+            </div>
+
+            <nz-form-item><nz-form-label>Subtitulo</nz-form-label><nz-form-control><input formControlName="subtitle" nz-input></nz-form-control></nz-form-item>
+            <nz-form-item><nz-form-label>Descricao</nz-form-label><nz-form-control><textarea formControlName="originNote" nz-input rows="3"></textarea></nz-form-control></nz-form-item>
+            <nz-form-item><nz-form-label>Imagem principal</nz-form-label><nz-form-control><input formControlName="imageUrl" nz-input></nz-form-control></nz-form-item>
+            <nz-form-item><nz-form-label>Imagem detalhe</nz-form-label><nz-form-control><input formControlName="secondaryImageUrl" nz-input></nz-form-control></nz-form-item>
+            <div class="edit-grid">
+              <nz-form-item><nz-form-label>Ideal para</nz-form-label><nz-form-control><textarea formControlName="applicationsText" nz-input rows="5"></textarea></nz-form-control></nz-form-item>
+              <nz-form-item><nz-form-label>Beneficios</nz-form-label><nz-form-control><textarea formControlName="benefitsText" nz-input rows="5"></textarea></nz-form-control></nz-form-item>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="edit-section">
+        <div class="edit-section-title">
+          <span nz-icon nzType="bar-chart"></span>
+          <div>
+            <h3>Rendimento</h3>
+            <p>Dados comerciais que ajudam o cliente a entender quanto a carga pode render.</p>
+          </div>
+        </div>
+        <div formArrayName="production" class="production-editor-list">
+          <article *ngFor="let group of productionControls.controls; let i = index; trackBy: trackByIndex" [formGroupName]="i" class="production-editor">
+            <div class="edit-grid">
+              <nz-form-item><nz-form-label>Titulo</nz-form-label><nz-form-control><input formControlName="title" nz-input></nz-form-control></nz-form-item>
+              <nz-form-item><nz-form-label>Medida</nz-form-label><nz-form-control><input formControlName="measure" nz-input></nz-form-control></nz-form-item>
+              <nz-form-item><nz-form-label>Regra</nz-form-label><nz-form-control><input formControlName="ratio" nz-input></nz-form-control></nz-form-item>
+              <nz-form-item><nz-form-label>Resultado</nz-form-label><nz-form-control><input formControlName="output" nz-input></nz-form-control></nz-form-item>
+            </div>
+          </article>
+        </div>
+      </div>
+    </form>
+  </nz-spin>
+
+  <ng-template #catalogDrawerFooter>
+    <div class="drawer-footer">
+      <button (click)="closeEditDrawer()" [disabled]="saving" class="drawer-cancel" nz-button nzType="default">Cancelar</button>
+      <button (click)="saveCatalog()" [disabled]="catalogForm.invalid || saving" class="drawer-save" nz-button nzType="primary">
+        <span nz-icon nzType="save"></span>
+        Gravar catalogo
+      </button>
+    </div>
+  </ng-template>
+</nz-drawer>

@@ -11,6 +11,7 @@ export const COMPANY_PROFILE = {
   addressLine2: 'Posto de Cobranca de Marracuene',
   phonePrimary: '+258 84 509 8583',
   phoneSecondary: '+258 87 998 5279',
+  email: 'transporteschiziane@gmail.com',
   activity: 'Fornecimento e transporte de materiais de construcao'
 } as const;
 
@@ -19,5 +20,6 @@ export const COMPANY_PDF_LINES = [
   `NUIT: ${COMPANY_PROFILE.nuit}`,
   COMPANY_PROFILE.addressLine1,
   COMPANY_PROFILE.addressLine2,
-  `Tel: ${COMPANY_PROFILE.phonePrimary} / ${COMPANY_PROFILE.phoneSecondary}`
+  `Tel: ${COMPANY_PROFILE.phonePrimary} / ${COMPANY_PROFILE.phoneSecondary}`,
+  `Email: ${COMPANY_PROFILE.email}`
 ] as const;
