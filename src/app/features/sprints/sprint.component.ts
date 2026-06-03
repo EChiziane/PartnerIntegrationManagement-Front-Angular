@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {Sprint} from '@shared/models/sprint';
@@ -13,6 +13,7 @@ import {ConfirmationDialogService} from '@core/services/confirmation-dialog.serv
   styleUrls: ['./sprint.component.scss']
 })
 export class SprintComponent implements OnInit {
+  @ViewChild('descriptionEditor') descriptionEditor?: ElementRef<HTMLDivElement>;
 
   dataSource: Sprint[] = [];
   listOfDisplayData: Sprint[] = [];
@@ -39,7 +40,7 @@ export class SprintComponent implements OnInit {
 
   sprintForm = new FormGroup({
     name: new FormControl('', Validators.required),
-    description: new FormControl('', Validators.required),
+    description: new FormControl('', [Validators.required, Validators.maxLength(5000)]),
     status: new FormControl<'PLANEADA' | 'EM_EXECUCAO' | 'PAUSADA' | 'ENCERRADO' | 'CANCELADA'>('EM_EXECUCAO', Validators.required),
     campaignChannel: new FormControl('FACEBOOK', Validators.required),
     materialFocus: new FormControl('', Validators.required),
@@ -194,6 +195,7 @@ export class SprintComponent implements OnInit {
     this.selectedSprint = null;
 
     this.sprintForm.reset({
+      description: '',
       status: 'EM_EXECUCAO',
       campaignChannel: 'FACEBOOK',
       volumesPromoted: [],
@@ -202,6 +204,7 @@ export class SprintComponent implements OnInit {
       targetRevenue: 0
     });
     this.isSprintDrawerVisible = true;
+    this.syncDescriptionEditor();
   }
 
   closeSprintDrawer(): void {
@@ -238,6 +241,7 @@ export class SprintComponent implements OnInit {
       startDate: sprint.startDate || null,
       expectedEndDate: sprint.expectedEndDate || null
     });
+    this.syncDescriptionEditor();
   }
 
   copySprint(sprint: Sprint): void {
@@ -262,9 +266,12 @@ export class SprintComponent implements OnInit {
       startDate: sprint.startDate || null,
       expectedEndDate: sprint.expectedEndDate || null
     });
+    this.syncDescriptionEditor();
   }
 
   saveSprint(): void {
+    this.updateDescriptionFromEditor();
+
     if (this.sprintForm.invalid) {
       this.message.warning('Preencha todos os campos obrigatorios.');
       return;
@@ -305,6 +312,26 @@ export class SprintComponent implements OnInit {
         this.message.error('Erro ao gravar sprint.');
       }
     });
+  }
+
+  applyDescriptionFormat(command: 'bold' | 'italic' | 'insertUnorderedList' | 'insertOrderedList'): void {
+    this.focusDescriptionEditor();
+    document.execCommand(command, false);
+    this.updateDescriptionFromEditor();
+  }
+
+  clearDescriptionFormat(): void {
+    this.focusDescriptionEditor();
+    document.execCommand('removeFormat', false);
+    this.updateDescriptionFromEditor();
+  }
+
+  onDescriptionInput(): void {
+    this.updateDescriptionFromEditor();
+  }
+
+  descriptionLength(): number {
+    return this.descriptionEditor?.nativeElement.innerText.trim().length || 0;
   }
 
   deleteSprint(data: Sprint): void {
@@ -351,6 +378,38 @@ export class SprintComponent implements OnInit {
       .split(',')
       .map(item => item.trim())
       .filter(Boolean);
+  }
+
+  private syncDescriptionEditor(): void {
+    setTimeout(() => {
+      if (!this.descriptionEditor) {
+        return;
+      }
+
+      this.descriptionEditor.nativeElement.innerHTML = this.sprintForm.get('description')?.value || '';
+    });
+  }
+
+  private updateDescriptionFromEditor(): void {
+    if (!this.descriptionEditor) {
+      return;
+    }
+
+    const value = this.sanitizeDescriptionHtml(this.descriptionEditor.nativeElement.innerHTML);
+    this.sprintForm.get('description')?.setValue(value, {emitEvent: false});
+    this.sprintForm.get('description')?.markAsDirty();
+  }
+
+  private focusDescriptionEditor(): void {
+    this.descriptionEditor?.nativeElement.focus();
+  }
+
+  private sanitizeDescriptionHtml(value: string): string {
+    return (value || '')
+      .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+      .replace(/\son\w+="[^"]*"/gi, '')
+      .replace(/\son\w+='[^']*'/gi, '')
+      .trim();
   }
 
   private t(key: string, params?: Record<string, string | number | null | undefined>): string {

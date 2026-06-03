@@ -349,16 +349,35 @@
             <nz-form-item>
               <nz-form-label nzRequired>Descricao</nz-form-label>
               <nz-form-control>
-                <textarea
-                  class="campaign-description-editor"
-                  formControlName="description"
-                  maxlength="5000"
-                  nz-input
-                  placeholder="Objetivo, publico, promessa da campanha, zonas, observacoes e criterios de encerramento..."
-                  rows="8">
-                </textarea>
+                <div class="rich-description">
+                  <div class="rich-toolbar" aria-label="Ferramentas de formatacao">
+                    <button (click)="applyDescriptionFormat('bold')" [disabled]="isSaving" nz-button nzSize="small" nz-tooltip nzTooltipTitle="Negrito" type="button">
+                      <strong>B</strong>
+                    </button>
+                    <button (click)="applyDescriptionFormat('italic')" [disabled]="isSaving" nz-button nzSize="small" nz-tooltip nzTooltipTitle="Italico" type="button">
+                      <em>I</em>
+                    </button>
+                    <button (click)="applyDescriptionFormat('insertUnorderedList')" [disabled]="isSaving" nz-button nzSize="small" nz-tooltip nzTooltipTitle="Lista com bullets" type="button">
+                      <nz-icon nzTheme="outline" nzType="unordered-list"></nz-icon>
+                    </button>
+                    <button (click)="applyDescriptionFormat('insertOrderedList')" [disabled]="isSaving" nz-button nzSize="small" nz-tooltip nzTooltipTitle="Lista numerada" type="button">
+                      <nz-icon nzTheme="outline" nzType="ordered-list"></nz-icon>
+                    </button>
+                    <button (click)="clearDescriptionFormat()" [disabled]="isSaving" nz-button nzSize="small" nz-tooltip nzTooltipTitle="Limpar formatacao" type="button">
+                      <nz-icon nzTheme="outline" nzType="clear"></nz-icon>
+                    </button>
+                  </div>
+
+                  <div
+                    #descriptionEditor
+                    (input)="onDescriptionInput()"
+                    [attr.contenteditable]="!isSaving"
+                    class="campaign-description-editor rich-editor"
+                    data-placeholder="Objetivo, publico, promessa da campanha, zonas, observacoes e criterios de encerramento...">
+                  </div>
+                </div>
                 <div class="field-counter">
-                  {{ sprintForm.get('description')?.value?.length || 0 }}/5000 caracteres
+                  {{ descriptionLength() }}/5000 caracteres
                 </div>
               </nz-form-control>
             </nz-form-item>
