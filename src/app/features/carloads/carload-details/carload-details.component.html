@@ -91,7 +91,7 @@
             <div class="section-body">
               <div class="kv">
                 <span class="k">Nome</span>
-                <span class="v">{{ driver?.Name || carload?.assignedDriverName || 'N/D' }}</span>
+                <span class="v">{{ driver?.Name || carload.assignedDriverName || 'N/D' }}</span>
               </div>
 
               <div class="kv">
@@ -121,7 +121,7 @@
             <div class="section-body">
               <div class="kv">
                 <span class="k">Nome</span>
-                <span class="v">{{ manager?.name || carload?.logisticsManagerName || 'N/D' }}</span>
+                <span class="v">{{ manager?.name || carload.logisticsManagerName || 'N/D' }}</span>
               </div>
 
               <div class="kv">
@@ -130,7 +130,7 @@
               </div>
 
               <div class="kv">
-                <span class="k">Endereço</span>
+                <span class="k">Endereco</span>
                 <span class="v">{{ manager?.address || 'N/D' }}</span>
               </div>
             </div>
@@ -151,16 +151,16 @@
             <div class="section-body">
               <div class="kv">
                 <span class="k">Nome</span>
-                <span class="v">{{ sprint?.name || carload?.carloadBatchName || 'N/D' }}</span>
+                <span class="v">{{ sprint?.name || carload.carloadBatchName || 'N/D' }}</span>
               </div>
 
               <div class="kv">
-                <span class="k">Código</span>
+                <span class="k">Codigo</span>
                 <span class="v">{{ sprint?.code || 'N/D' }}</span>
               </div>
 
               <div class="kv">
-                <span class="k">Descrição</span>
+                <span class="k">Descricao</span>
                 <span class="v truncate">{{ sprint?.description || 'N/D' }}</span>
               </div>
             </div>
@@ -180,28 +180,28 @@
               <div class="kv">
                 <span class="k">Agendado</span>
                 <span
-                  class="v">{{ carload?.deliveryScheduledDate ? (carload.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+                  class="v">{{ carload.deliveryScheduledDate ? (carload.deliveryScheduledDate | date:'yyyy-MM-dd HH:mm') : '-' }}</span>
               </div>
 
               <div class="kv">
                 <span class="k">Entregue</span>
                 <span
-                  class="v">{{ carload?.deliveryDate ? (carload.deliveryDate | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+                  class="v">{{ carload.deliveryDate ? (carload.deliveryDate | date:'yyyy-MM-dd HH:mm') : '-' }}</span>
               </div>
 
               <div class="kv">
                 <span class="k">Criado em</span>
-                <span class="v">{{ carload?.createdAt ? (carload.createdAt | date:'yyyy-MM-dd HH:mm') : '—' }}</span>
+                <span class="v">{{ carload.createdAt ? (carload.createdAt | date:'yyyy-MM-dd HH:mm') : '-' }}</span>
               </div>
 
               <div class="kv">
                 <span class="k">Criado por</span>
-                <span class="v">{{ carload?.createdByName || 'Sistema' }}</span>
+                <span class="v">{{ carload.createdByName || 'Sistema' }}</span>
               </div>
 
               <div class="kv">
                 <span class="k">Material</span>
-                <span class="v">{{ carload?.transportedMaterial }}</span>
+                <span class="v">{{ carload.transportedMaterial }}</span>
               </div>
             </div>
           </div>
@@ -216,7 +216,7 @@
 
     <ng-template #emptyState>
       <div class="empty">
-        <nz-empty nzNotFoundContent="Carrada não encontrada."></nz-empty>
+        <nz-empty nzNotFoundContent="Carrada nao encontrada."></nz-empty>
       </div>
     </ng-template>
   </nz-spin>

@@ -1,3 +1,26 @@
+:root {
+  --tc-ink: #10212b;
+  --tc-muted: #607786;
+  --tc-soft: #f4f8fb;
+  --tc-panel: #ffffff;
+  --tc-panel-soft: #f8fbfd;
+  --tc-line: #dfeaf0;
+  --tc-line-strong: #cfe0e8;
+  --tc-primary: #0e7c72;
+  --tc-primary-dark: #0a645d;
+  --tc-primary-soft: #e7faf5;
+  --tc-accent: #f7b500;
+  --tc-accent-soft: #fff7e1;
+  --tc-danger: #dc2626;
+  --tc-danger-soft: #fff1f0;
+  --tc-success: #15803d;
+  --tc-success-soft: #f0fdf4;
+  --tc-warning: #b45309;
+  --tc-warning-soft: #fff7ed;
+  --tc-radius: 8px;
+  --tc-shadow: 0 18px 45px rgba(16, 33, 43, 0.06);
+}
+
 html, body {
   height: 100%;
 }
@@ -5,8 +28,8 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background: #f3f7fb;
-  color: #0c2538;
+  background: var(--tc-soft);
+  color: var(--tc-ink);
 }
 
 * {
@@ -51,8 +74,8 @@ body {
 .table-wrapper .ant-table-thead > tr > th,
 .timeline-table-wrapper .ant-table-thead > tr > th {
   padding: 12px 14px;
-  background: #f7f9fc;
-  color: #334155;
+  background: var(--tc-panel-soft);
+  color: var(--tc-ink);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0;
@@ -65,6 +88,11 @@ body {
   padding: 10px 14px;
   vertical-align: middle;
   overflow-wrap: anywhere;
+}
+
+.table-wrapper .ant-table-tbody > tr:hover > td,
+.timeline-table-wrapper .ant-table-tbody > tr:hover > td {
+  background: var(--tc-primary-soft) !important;
 }
 
 .table-actions,
@@ -98,7 +126,7 @@ body {
   justify-content: flex-end;
   gap: 10px;
   padding: 12px 0;
-  background: #f8f9fa;
+  background: var(--tc-panel-soft);
 }
 
 .drawer-footer [nz-button] {
@@ -112,19 +140,23 @@ body {
   font-weight: 500;
 }
 
+.drawer-footer [nz-button][disabled] {
+  opacity: 0.72;
+}
+
 .ant-drawer-content {
-  background: #ffffff !important;
+  background: var(--tc-panel) !important;
 }
 
 .ant-drawer-header {
   min-height: 64px !important;
   padding: 18px 24px !important;
-  border-bottom: 1px solid #e2edf3 !important;
-  background: #fbfdff !important;
+  border-bottom: 1px solid var(--tc-line) !important;
+  background: linear-gradient(180deg, #ffffff 0%, var(--tc-panel-soft) 100%) !important;
 }
 
 .ant-drawer-title {
-  color: #10212b !important;
+  color: var(--tc-ink) !important;
   font-size: 18px !important;
   font-weight: 850 !important;
   line-height: 1.25 !important;
@@ -138,23 +170,23 @@ body {
   height: 36px !important;
   margin-right: 8px !important;
   border-radius: 8px !important;
-  color: #607786 !important;
+  color: var(--tc-muted) !important;
 }
 
 .ant-drawer-close:hover {
-  color: #0e7c72 !important;
-  background: #e7faf5 !important;
+  color: var(--tc-primary) !important;
+  background: var(--tc-primary-soft) !important;
 }
 
 .ant-drawer-body {
   padding: 0 !important;
-  background: #ffffff !important;
+  background: var(--tc-panel) !important;
 }
 
 .ant-drawer-footer {
   padding: 0 24px !important;
-  border-top: 1px solid #e2edf3 !important;
-  background: #f8fbfd !important;
+  border-top: 1px solid var(--tc-line) !important;
+  background: var(--tc-panel-soft) !important;
 }
 
 .ant-drawer-bottom .ant-drawer-content-wrapper {
@@ -162,18 +194,96 @@ body {
 }
 
 .ant-btn-primary {
-  border-color: #0e7c72;
-  background: #0e7c72;
+  border-color: var(--tc-primary);
+  background: var(--tc-primary);
 }
 
 .ant-btn-primary:hover,
 .ant-btn-primary:focus {
-  border-color: #0a645d;
-  background: #0a645d;
+  border-color: var(--tc-primary-dark);
+  background: var(--tc-primary-dark);
+}
+
+.ant-btn-dangerous.ant-btn-primary {
+  border-color: var(--tc-danger) !important;
+  background: var(--tc-danger) !important;
+}
+
+.ant-btn-default:hover,
+.ant-btn-default:focus {
+  color: var(--tc-primary) !important;
+  border-color: var(--tc-primary) !important;
 }
 
 .ant-tag {
   border-radius: 6px;
+}
+
+.ant-modal-confirm .ant-modal-content,
+.ant-modal-content {
+  border-radius: var(--tc-radius) !important;
+  overflow: hidden;
+}
+
+.ant-modal-confirm .ant-modal-body {
+  padding: 26px 28px 22px !important;
+}
+
+.ant-modal-confirm-title,
+.ant-modal-title {
+  color: var(--tc-ink) !important;
+  font-weight: 850 !important;
+}
+
+.ant-modal-confirm-content {
+  color: var(--tc-muted) !important;
+  line-height: 1.55 !important;
+}
+
+.ant-modal-confirm-btns {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+}
+
+.ant-modal-confirm-btns .ant-btn {
+  margin-left: 0 !important;
+  border-radius: 7px !important;
+  font-weight: 700 !important;
+}
+
+.tc-confirm-danger .ant-modal-confirm-body > .anticon {
+  color: var(--tc-danger) !important;
+}
+
+.tc-confirm-info .ant-modal-confirm-body > .anticon {
+  color: var(--tc-primary) !important;
+}
+
+.ant-message-notice-content {
+  border: 1px solid var(--tc-line) !important;
+  border-radius: var(--tc-radius) !important;
+  box-shadow: var(--tc-shadow) !important;
+}
+
+.ant-message-success .anticon {
+  color: var(--tc-success) !important;
+}
+
+.ant-message-warning .anticon {
+  color: var(--tc-warning) !important;
+}
+
+.ant-message-error .anticon {
+  color: var(--tc-danger) !important;
+}
+
+.ant-pagination-item-active {
+  border-color: var(--tc-primary) !important;
+}
+
+.ant-pagination-item-active a {
+  color: var(--tc-primary) !important;
 }
 
 @media (max-width: 1199px) {
@@ -192,6 +302,11 @@ body {
   .table-wrapper .ant-table-cell,
   .timeline-table-wrapper .ant-table-cell {
     white-space: normal;
+  }
+
+  .table-wrapper .ant-table-content,
+  .timeline-table-wrapper .ant-table-content {
+    overflow-x: hidden !important;
   }
 }
 

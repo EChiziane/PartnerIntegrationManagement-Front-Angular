@@ -1,7 +1,7 @@
-@import '../managers/manager.component.scss';
+@use '../managers/manager.component.scss';
 
 .pending-suggestion-row {
-  background: #fffaf0;
+  background: var(--tc-warning-soft);
 }
 
 .payment-cycle-tabs {
@@ -22,8 +22,8 @@
       height: 22px;
       padding: 0 7px;
       border-radius: 999px;
-      background: #f1f5f9;
-      color: #334155;
+      background: var(--tc-panel-soft);
+      color: var(--tc-ink);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -31,9 +31,9 @@
     }
 
     &.active {
-      border-color: #1677ff;
-      color: #1677ff;
-      background: #eef6ff;
+      border-color: var(--tc-primary);
+      color: var(--tc-primary);
+      background: var(--tc-primary-soft);
     }
   }
 }
@@ -57,9 +57,9 @@
 }
 
 .payment-action-summary {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--tc-line);
   border-radius: 8px;
-  background: #f8fafc;
+  background: var(--tc-panel-soft);
   padding: 14px;
   margin-bottom: 16px;
 }
@@ -70,19 +70,19 @@
   margin-bottom: 12px;
 
   span {
-    color: #64748b;
+    color: var(--tc-muted);
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
   }
 
   strong {
-    color: #0f172a;
+    color: var(--tc-ink);
     font-size: 16px;
   }
 
   small {
-    color: #64748b;
+    color: var(--tc-muted);
   }
 }
 
@@ -93,30 +93,30 @@
 }
 
 .payment-action-card {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--tc-line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--tc-panel);
   padding: 10px;
   min-width: 0;
 
   span {
     display: block;
-    color: #64748b;
+    color: var(--tc-muted);
     font-size: 12px;
     margin-bottom: 4px;
   }
 
   strong {
-    color: #111827;
+    color: var(--tc-ink);
     font-size: 15px;
   }
 
   &.highlight {
-    border-color: #f59e0b;
-    background: #fffbeb;
+    border-color: var(--tc-accent);
+    background: var(--tc-accent-soft);
 
     strong {
-      color: #92400e;
+      color: var(--tc-warning);
     }
   }
 }
@@ -128,8 +128,8 @@
   margin-top: 10px;
   padding: 10px 12px;
   border-radius: 8px;
-  background: #fff7ed;
-  color: #9a3412;
+  background: var(--tc-warning-soft);
+  color: var(--tc-warning);
   font-size: 13px;
 
   strong {
@@ -137,8 +137,8 @@
   }
 
   &.closed {
-    background: #ecfdf5;
-    color: #047857;
+    background: var(--tc-success-soft);
+    color: var(--tc-success);
   }
 }
 

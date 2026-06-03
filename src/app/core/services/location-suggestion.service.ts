@@ -126,7 +126,7 @@ export class LocationSuggestionService {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(values));
     } catch {
-      // Autocomplete keeps working with the static list when storage is unavailable.
+      // Mantem o autocomplete funcional com a lista estatica quando o storage nao esta disponivel.
     }
   }
 

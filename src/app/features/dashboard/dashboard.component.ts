@@ -377,6 +377,8 @@ export class DashboardComponent implements OnInit {
 
   cancelCarload(carload: CarLoad): void {
     this.modal.confirm({
+      nzCentered: true,
+      nzClassName: 'tc-confirm-danger',
       nzTitle: this.t('dashboard.modal.cancelTitle'),
       nzContent: this.t('dashboard.modal.cancelContent', {
         customer: carload.customerName,

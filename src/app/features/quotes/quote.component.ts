@@ -396,6 +396,8 @@ export class QuoteComponent implements OnInit {
           .join('');
 
         this.modal.info({
+          nzCentered: true,
+          nzClassName: 'tc-confirm-info',
           nzTitle: `Versoes da cotacao ${quote.quoteCode}`,
           nzContent: `<ul>${rows || '<li>Sem historico de versoes.</li>'}</ul>`,
           nzOkText: 'Fechar'
@@ -411,6 +413,8 @@ export class QuoteComponent implements OnInit {
     if (!quote.id) return;
 
     this.modal.confirm({
+      nzCentered: true,
+      nzClassName: 'tc-confirm-info',
       nzTitle: this.t('quotes.confirmation.approveTitle'),
       nzContent: this.t('quotes.confirmation.approveContent', {code: quote.quoteCode}),
       nzOkText: this.t('quotes.confirmation.approveOk'),

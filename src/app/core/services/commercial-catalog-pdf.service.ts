@@ -527,7 +527,7 @@ export class CommercialCatalogPdfService {
   }
 
   private commercialCatalogPrice(material: CatalogMaterialView): string {
-    return this.money(material.fallbackPrice);
+    return this.money(material.price ?? material.fallbackPrice);
   }
 
   private t(key: string, params?: Record<string, string | number | null | undefined>): string {
@@ -535,14 +535,21 @@ export class CommercialCatalogPdfService {
   }
 
   private catalogText(catalog: CatalogView, field: string): string {
-    return this.translationService.instant(`${catalog.i18nKey}.${field}`);
+    const fallback = (catalog as any)[field];
+    if (fallback) return fallback;
+    const translated = this.translationService.instant(`${catalog.i18nKey}.${field}`);
+    return translated === `${catalog.i18nKey}.${field}` ? fallback : translated;
   }
 
   private materialText(material: CatalogMaterialView, field: string): string {
-    return this.translationService.instant(`${material.i18nKey}.${field}`);
+    const fallback = (material as any)[field];
+    if (fallback) return fallback;
+    const translated = this.translationService.instant(`${material.i18nKey}.${field}`);
+    return translated === `${material.i18nKey}.${field}` ? fallback : translated;
   }
 
   private materialList(material: CatalogMaterialView, field: 'applications' | 'benefits'): string[] {
+    if (material[field]?.length) return material[field];
     const value = this.translationService.instant(`${material.i18nKey}.${field}`);
     return value.includes('|') ? value.split('|') : material[field];
   }

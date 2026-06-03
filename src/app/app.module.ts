@@ -53,13 +53,6 @@ import {NzPageHeaderComponent, NzPageHeaderContentDirective} from 'ng-zorro-antd
 import {NzSpaceComponent, NzSpaceItemDirective} from 'ng-zorro-antd/space';
 import {NzDescriptionsComponent, NzDescriptionsItemComponent} from 'ng-zorro-antd/descriptions';
 
-import {MatFormField, MatLabel} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
-import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatButton} from '@angular/material/button';
-
-
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {NzTooltipDirective} from "ng-zorro-antd/tooltip";
 
@@ -174,52 +167,12 @@ registerLocaleData(en);
     NzSwitchModule,
     NzStatisticComponent,
 
-    NzFilterTriggerComponent,
-    NzThAddOnComponent,
-    NzRowDirective,
-    NzColDirective,
-    NzCardComponent,
-    NzDrawerComponent,
-    NzFormDirective,
-    NzInputGroupComponent,
-    NzSelectComponent,
-    NzRangePickerComponent,
-    NzAutosizeDirective,
-    NzDrawerContentDirective,
-    NzDatePickerComponent,
-    NzButtonModule,
-    NzDrawerModule,
-    NzDatePickerModule,
-    NzFormModule,
-    NzInputModule,
-    NzSelectModule,
-    NzRadioModule,
-    ReactiveFormsModule,
-    NzSwitchComponent,
-    NzTagComponent,
-    NzAlertComponent,
-    NzAutocompleteModule,
-    NzCheckboxComponent,
-    NzModalModule,
-    NzAvatarModule,
-    NzSwitchModule,
-    NzStatisticComponent,
-
     NzPageHeaderComponent,
     NzSpaceComponent,
     NzPageHeaderContentDirective,
     NzSpaceItemDirective,
     NzDescriptionsComponent,
     NzDescriptionsItemComponent,
-    MatLabel,
-    MatInput,
-    MatFormField,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatDatepicker,
-    MatSelect,
-    MatOption,
-    MatButton,
     NzSpinComponent,
     NzTooltipDirective,
     NzCarouselComponent,

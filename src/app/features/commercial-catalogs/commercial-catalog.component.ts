@@ -301,6 +301,7 @@ export class CommercialCatalogComponent implements OnInit {
   }
 
   private translatedOrValue(key: string, fallback: string): string {
+    if (fallback) return fallback;
     const translated = this.translationService.instant(key);
     return translated === key ? fallback : translated;
   }

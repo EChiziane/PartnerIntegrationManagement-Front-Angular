@@ -27,6 +27,8 @@ export class ConfirmationDialogService {
     });
 
     this.modal.confirm({
+      nzCentered: true,
+      nzClassName: 'tc-confirm-danger',
       nzTitle: this.t('common.confirmation.deleteTitle', {
         entity: options.entity,
         name: itemName

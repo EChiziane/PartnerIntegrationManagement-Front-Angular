@@ -1,4 +1,4 @@
-@import '../managers/manager.component.scss';
+@use '../managers/manager.component.scss';
 
 .price-filters {
   grid-template-columns: minmax(220px, 1fr) 170px 220px auto auto auto;
@@ -20,7 +20,7 @@
   }
 
   small {
-    color: #64748b;
+    color: var(--tc-muted);
     font-weight: 600;
     letter-spacing: 0;
   }
