@@ -298,13 +298,16 @@ export class QuoteComponent implements OnInit {
       validUntil: raw.validUntil || null
     };
 
-    if (this.currentQuoteId) {
-      this.quoteService.updateQuote(this.currentQuoteId, payload).subscribe({
-        next: () => {
+    const editingQuoteId = this.currentQuoteId;
+
+    if (editingQuoteId) {
+      this.quoteService.updateQuote(editingQuoteId, payload).subscribe({
+        next: savedQuote => {
           this.message.success('Nova versão da cotação criada com sucesso!');
           this.isSaving = false;
-          this.loadQuotes();
           this.closeDrawer();
+          this.openQuotePreview(savedQuote || {...payload, id: editingQuoteId});
+          this.loadQuotes();
         },
         error: () => {
           this.isSaving = false;
@@ -313,11 +316,12 @@ export class QuoteComponent implements OnInit {
       });
     } else {
       this.quoteService.addQuote(payload).subscribe({
-        next: () => {
+        next: savedQuote => {
           this.message.success('Cotação criada com sucesso!');
           this.isSaving = false;
-          this.loadQuotes();
           this.closeDrawer();
+          this.openQuotePreview(savedQuote || payload);
+          this.loadQuotes();
         },
         error: () => {
           this.isSaving = false;

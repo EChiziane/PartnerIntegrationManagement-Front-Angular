@@ -573,14 +573,16 @@ export class InvoiceComponent implements OnInit {
 
     this.invoiceForm.get('invoiceCode')?.enable({emitEvent: false});
     const invoiceData = this.buildInvoicePayload();
+    const wasCopyMode = this.isCopyMode;
     this.invoiceForm.get('invoiceCode')?.disable({emitEvent: false});
 
     this.invoiceService.addInvoice(invoiceData).subscribe({
-      next: () => {
+      next: savedInvoice => {
         this.isSaving = false;
-        this.loadInvoices();
         this.closeDrawer();
-        this.message.success(this.isCopyMode ? 'Copia da fatura criada com sucesso.' : 'Fatura criada com sucesso.');
+        this.openInvoicePreview(savedInvoice || this.buildInvoicePreviewFallback(invoiceData));
+        this.loadInvoices();
+        this.message.success(wasCopyMode ? 'Copia da fatura criada com sucesso.' : 'Fatura criada com sucesso.');
       },
       error: () => {
         this.isSaving = false;
@@ -823,6 +825,18 @@ export class InvoiceComponent implements OnInit {
         description: this.normalizeMaterialType(item.description)
       }))
     };
+  }
+
+  private buildInvoicePreviewFallback(invoiceData: any): CarloadInvoice {
+    const customer = this.dataCustomer.find(item => item.id === invoiceData.carloadCustomerId);
+
+    return {
+      ...invoiceData,
+      id: '',
+      carloadCustomerName: customer?.name || '-',
+      createdAt: new Date().toISOString(),
+      items: invoiceData.items || []
+    } as CarloadInvoice;
   }
 
   private normalizeMaterialType(value: string): string {
