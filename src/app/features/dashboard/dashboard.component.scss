@@ -212,14 +212,15 @@
   display: grid;
   grid-template-columns: repeat(5, minmax(220px, 1fr));
   gap: 10px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .operation-panel {
   display: flex;
   flex-direction: column;
-  min-height: 340px;
-  max-height: 500px;
+  height: clamp(380px, calc(100vh - 330px), 540px);
+  min-height: 380px;
+  max-height: calc(100vh - 300px);
   background: #ffffff;
   border: 1px solid #e4e3dc;
   border-radius: 10px;
@@ -568,6 +569,7 @@
   }
 
   .operation-panel {
+    height: auto;
     min-height: auto;
     max-height: none;
   }
