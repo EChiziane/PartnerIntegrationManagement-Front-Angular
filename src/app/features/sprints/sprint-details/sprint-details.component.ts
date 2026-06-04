@@ -89,7 +89,7 @@ export class SprintDetailsComponent implements OnInit {
     totalSpent: new FormControl(0, [Validators.required, Validators.min(0)]),
     totalEarnings: new FormControl(0, [Validators.required, Validators.min(0)]),
 
-    deliveryStatus: new FormControl<CarLoadStatus>('SCHEDULED', Validators.required),
+    deliveryStatus: new FormControl<CarLoadStatus>('DELIVERED', Validators.required),
     deliveryScheduledDate: new FormControl<string | null>(''),
     deliveryDate: new FormControl<string | null>(''),
   });
@@ -108,7 +108,7 @@ export class SprintDetailsComponent implements OnInit {
   }
 
   get selectedStatusUpper(): string {
-    return (this.carloadForm.get('deliveryStatus')?.value || 'SCHEDULED').toString().toUpperCase();
+    return (this.carloadForm.get('deliveryStatus')?.value || 'DELIVERED').toString().toUpperCase();
   }
 
   get carLoadDrawerTitle(): string {
@@ -254,11 +254,11 @@ export class SprintDetailsComponent implements OnInit {
     this.selectedCarLoadId = null;
 
     this.carloadForm.reset({
-      deliveryStatus: 'SCHEDULED',
+      deliveryStatus: 'DELIVERED',
       totalSpent: 0,
       totalEarnings: 0,
       deliveryScheduledDate: '',
-      deliveryDate: '',
+      deliveryDate: this.nowDateTimeLocal(),
       carloadBatchId: this.sprintId
     });
 
@@ -275,9 +275,11 @@ export class SprintDetailsComponent implements OnInit {
     this.isCopyMode = false;
 
     this.carloadForm.reset({
-      deliveryStatus: 'SCHEDULED',
+      deliveryStatus: 'DELIVERED',
       totalSpent: 0,
       totalEarnings: 0,
+      deliveryScheduledDate: '',
+      deliveryDate: this.nowDateTimeLocal(),
       carloadBatchId: this.sprintId
     });
   }
@@ -303,9 +305,9 @@ export class SprintDetailsComponent implements OnInit {
     this.carloadForm.patchValue(this.mapCarloadToForm(carload));
     this.carloadForm.patchValue({
       carloadBatchId: this.sprintId,
-      deliveryStatus: 'SCHEDULED',
+      deliveryStatus: 'DELIVERED',
       deliveryScheduledDate: '',
-      deliveryDate: ''
+      deliveryDate: this.nowDateTimeLocal()
     });
 
     this.applyDateRulesByStatus();
@@ -327,7 +329,7 @@ export class SprintDetailsComponent implements OnInit {
     const rawPhone = (formData.customerPhoneNumber || '').toString().trim();
     formData.customerPhoneNumber = rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`;
 
-    formData.deliveryStatus = (formData.deliveryStatus || 'SCHEDULED').toString().toUpperCase();
+    formData.deliveryStatus = (formData.deliveryStatus || 'DELIVERED').toString().toUpperCase();
 
     if (formData.deliveryStatus === 'CANCELLED' || formData.deliveryStatus === 'IN_PROGRESS') {
       formData.deliveryScheduledDate = this.normalizeDateTimeLocal(formData.deliveryScheduledDate);
@@ -533,6 +535,9 @@ export class SprintDetailsComponent implements OnInit {
       deliveredCtrl.setValue('', {emitEvent: false});
     } else if (status === 'DELIVERED') {
       deliveredCtrl.setValidators([Validators.required]);
+      if (!deliveredCtrl.value) {
+        deliveredCtrl.setValue(this.nowDateTimeLocal(), {emitEvent: false});
+      }
     } else {
       scheduledCtrl.setValue('', {emitEvent: false});
       deliveredCtrl.setValue('', {emitEvent: false});
@@ -547,6 +552,16 @@ export class SprintDetailsComponent implements OnInit {
     if (!value.includes('T')) return `${value}T00:00:00`;
     if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return `${value}:00`;
     return value;
+  }
+
+  private nowDateTimeLocal(): string {
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const hh = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
   }
 
   private toDatetimeLocalInput(value: string | null | undefined): string {

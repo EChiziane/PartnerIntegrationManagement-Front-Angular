@@ -616,7 +616,7 @@
         </div>
 
         <div [nzGutter]="16" nz-row>
-          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+          <div nz-col nzSpan="24">
             <nz-form-item>
               <nz-form-label>{{ 'carloads.drawer.sprint' | translate }}</nz-form-label>
               <nz-form-control>
@@ -631,6 +631,23 @@
                     [nzLabel]="s.name + ((s.status || '').toUpperCase() === 'ENCERRADO' ? ' (Encerrada)' : '')"
                     [nzValue]="s.id">
                   </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+        </div>
+
+        <div [nzGutter]="16" class="status-date-row" nz-row>
+          <div nz-col nzMd="12" nzSm="24" nzXs="24">
+            <nz-form-item>
+              <nz-form-label>{{ 'carloads.drawer.status' | translate }}</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="deliveryStatus">
+                  <nz-option [nzLabel]="'dashboard.status.scheduled' | translate" nzValue="SCHEDULED"></nz-option>
+                  <nz-option nzLabel="Em execucao" nzValue="IN_PROGRESS"></nz-option>
+                  <nz-option [nzLabel]="'dashboard.status.delivered' | translate" nzValue="DELIVERED"></nz-option>
+                  <nz-option [nzLabel]="'dashboard.status.cancelled' | translate" nzValue="CANCELLED"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -670,22 +687,6 @@
               <nz-form-label>{{ 'carloads.drawer.earnings' | translate }}</nz-form-label>
               <nz-form-control>
                 <input formControlName="totalEarnings" nz-input type="number"/>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-
-        <div [nzGutter]="16" nz-row>
-          <div nz-col nzMd="12" nzSm="24" nzXs="24">
-            <nz-form-item>
-              <nz-form-label>{{ 'carloads.drawer.status' | translate }}</nz-form-label>
-              <nz-form-control>
-                <nz-select formControlName="deliveryStatus">
-                  <nz-option [nzLabel]="'dashboard.status.scheduled' | translate" nzValue="SCHEDULED"></nz-option>
-                  <nz-option nzLabel="Em execução" nzValue="IN_PROGRESS"></nz-option>
-                  <nz-option [nzLabel]="'dashboard.status.delivered' | translate" nzValue="DELIVERED"></nz-option>
-                  <nz-option [nzLabel]="'dashboard.status.cancelled' | translate" nzValue="CANCELLED"></nz-option>
-                </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>

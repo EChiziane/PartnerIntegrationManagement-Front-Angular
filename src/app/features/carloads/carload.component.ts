@@ -107,7 +107,7 @@ export class CarLoadComponent implements OnInit {
     companyCommission: new FormControl(0),
 
     carloadType: new FormControl<CarloadType>('Produced', Validators.required),
-    deliveryStatus: new FormControl<CarLoadStatus>('SCHEDULED', Validators.required),
+    deliveryStatus: new FormControl<CarLoadStatus>('DELIVERED', Validators.required),
 
     deliveryScheduledDate: new FormControl<string | null>(''),
     deliveryDate: new FormControl<string | null>(''),
@@ -129,7 +129,7 @@ export class CarLoadComponent implements OnInit {
   }
 
   get selectedStatusUpper(): string {
-    return (this.carLoadForm.get('deliveryStatus')?.value || 'SCHEDULED').toString().toUpperCase();
+    return (this.carLoadForm.get('deliveryStatus')?.value || 'DELIVERED').toString().toUpperCase();
   }
 
   get selectedCarloadType(): string {
@@ -499,9 +499,9 @@ export class CarLoadComponent implements OnInit {
       driverAmount: 0,
       companyCommission: 0,
       carloadType: 'Produced',
-      deliveryStatus: 'SCHEDULED',
+      deliveryStatus: 'DELIVERED',
       deliveryScheduledDate: '',
-      deliveryDate: ''
+      deliveryDate: this.nowDateTimeLocal()
     });
 
     if (!this.drivers.length || !this.trucks.length || !this.sprints.length || !this.customers.length) {
@@ -553,9 +553,9 @@ export class CarLoadComponent implements OnInit {
     this.isCarLoadDrawerVisible = true;
     this.carLoadForm.patchValue(this.mapCarloadToForm(carload));
     this.carLoadForm.patchValue({
-      deliveryStatus: 'SCHEDULED',
+      deliveryStatus: 'DELIVERED',
       deliveryScheduledDate: '',
-      deliveryDate: ''
+      deliveryDate: this.nowDateTimeLocal()
     });
 
     this.applyDateRulesByStatus();
@@ -588,7 +588,7 @@ export class CarLoadComponent implements OnInit {
       ? (rawPhone.startsWith('+258') ? rawPhone : `+258 ${rawPhone}`)
       : null;
 
-    formData.deliveryStatus = (formData.deliveryStatus || 'SCHEDULED').toString().toUpperCase();
+    formData.deliveryStatus = (formData.deliveryStatus || 'DELIVERED').toString().toUpperCase();
     formData.carloadType = formData.carloadType || 'Produced';
 
     if (this.customerMode === 'EXISTING') {
@@ -779,6 +779,9 @@ export class CarLoadComponent implements OnInit {
       deliveredCtrl.setValue('', {emitEvent: false});
     } else if (status === 'DELIVERED') {
       deliveredCtrl.setValidators([Validators.required]);
+      if (!deliveredCtrl.value) {
+        deliveredCtrl.setValue(this.nowDateTimeLocal(), {emitEvent: false});
+      }
     } else if (status === 'CANCELLED') {
       deliveredCtrl.setValue('', {emitEvent: false});
     }
@@ -792,6 +795,16 @@ export class CarLoadComponent implements OnInit {
     if (!v.includes('T')) return `${v}T00:00:00`;
     if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v)) return `${v}:00`;
     return v;
+  }
+
+  private nowDateTimeLocal(): string {
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const hh = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
   }
 
   private getReportCarloads(mode: CarloadReportMode): CarLoad[] {
