@@ -48,12 +48,6 @@
       <strong>{{ cancelledCount }}</strong>
       <small>{{ 'dashboard.metrics.cancelledSummary' | translate }}</small>
     </article>
-
-    <article class="metric-card money" [ngClass]="marginTone">
-      <span class="metric-label">{{ 'dashboard.metrics.margin' | translate }}</span>
-      <strong>{{ formatMoney(estimatedMargin) }}</strong>
-      <small>{{ 'dashboard.metrics.marginSummary' | translate: {earnings: formatMoney(totalEarnings), spent: formatMoney(totalSpent)} }}</small>
-    </article>
   </div>
 
   <div class="toolbar">

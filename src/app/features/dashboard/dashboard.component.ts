@@ -43,9 +43,6 @@ export class DashboardComponent implements OnInit {
   scheduledCount = 0;
   cancelledCount = 0;
   doneCount = 0;
-  totalEarnings = 0;
-  totalSpent = 0;
-  estimatedMargin = 0;
 
   showDoneCard = false;
   showCancelledCard = false;
@@ -95,12 +92,6 @@ export class DashboardComponent implements OnInit {
     }
 
     return this.t('dashboard.hero.start');
-  }
-
-  get marginTone(): string {
-    if (this.estimatedMargin > 0) return 'positive';
-    if (this.estimatedMargin < 0) return 'negative';
-    return 'neutral';
   }
 
   reload(): void {
@@ -343,9 +334,6 @@ export class DashboardComponent implements OnInit {
     this.activeCount = this.inProgressCount + this.scheduledCount;
     this.todayCount = this.todayScheduledList.length + this.inProgressList.length + this.doneTodayList.length;
     this.overdueCount = this.overdueList.length;
-    this.totalEarnings = filteredData.reduce((total, carload) => total + Number(carload.totalEarnings || 0), 0);
-    this.totalSpent = filteredData.reduce((total, carload) => total + Number(carload.totalSpent || 0), 0);
-    this.estimatedMargin = this.totalEarnings - this.totalSpent;
   }
 
   goToCarloadDetails(carload: CarLoad): void {
