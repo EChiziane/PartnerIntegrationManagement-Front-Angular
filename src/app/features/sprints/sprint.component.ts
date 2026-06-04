@@ -187,6 +187,11 @@ export class SprintComponent implements OnInit {
     this.applyFilters();
   }
 
+  reset(): void {
+    this.searchValue = '';
+    this.applyFilters();
+  }
+
   openSprintDrawer(): void {
     this.isEditMode = false;
     this.isCopyMode = false;
