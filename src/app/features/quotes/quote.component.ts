@@ -449,6 +449,19 @@ export class QuoteComponent implements OnInit {
     return statusMap[quote.quoteStatus || 'DRAFT'] || 'Rascunho';
   }
 
+  getQuoteStatusColor(quote: CarloadQuote): string {
+    const status = (quote.quoteStatus || 'DRAFT').toUpperCase();
+    if (status === 'APPROVED') return 'green';
+    if (status === 'SENT') return 'blue';
+    if (status === 'REJECTED' || status === 'EXPIRED') return 'red';
+    return 'default';
+  }
+
+  phoneHref(phone: string | null | undefined): string {
+    const digits = (phone || '').toString().replace(/[^\d+]/g, '');
+    return digits ? `tel:${digits}` : 'tel:';
+  }
+
   getQuoteVersionLabel(quote: CarloadQuote): string {
     return `v${quote.versionNumber || 1}`;
   }

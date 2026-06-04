@@ -92,6 +92,101 @@
 
   </div>
 
+  <nz-spin [nzSpinning]="isLoading" class="mobile-quote-spin" nzTip="A carregar cotacoes...">
+    <div *ngIf="quotes.length; else mobileEmptyQuotes" class="mobile-quote-list">
+      <article *ngFor="let quote of quotes" class="mobile-quote-card">
+        <div class="mobile-card-topline">
+          <div>
+            <span class="mobile-card-kicker">{{ quote.quoteCode }}</span>
+            <h3>{{ quote.customerName }}</h3>
+          </div>
+
+          <nz-tag [nzColor]="getQuoteStatusColor(quote)">
+            {{ getQuoteStatusLabel(quote) }}
+          </nz-tag>
+        </div>
+
+        <div class="mobile-quote-value">
+          <span>Total</span>
+          <strong>{{ quote.total | number:'1.2-2' }} Mts</strong>
+        </div>
+
+        <div class="mobile-contact-row">
+          <nz-icon nzTheme="outline" nzType="environment"></nz-icon>
+          <span>{{ quote.destination || '-' }}</span>
+        </div>
+
+        <dl class="mobile-card-facts">
+          <div>
+            <dt>Carradas</dt>
+            <dd>{{ quote.generatedCarloadsCount || 0 }}</dd>
+          </div>
+          <div>
+            <dt>Versao</dt>
+            <dd>{{ getQuoteVersionLabel(quote) }}</dd>
+          </div>
+          <div>
+            <dt>Validade</dt>
+            <dd>{{ quote.validUntil ? (quote.validUntil | date:'dd/MM/yyyy') : '-' }}</dd>
+          </div>
+          <div>
+            <dt>Criado por</dt>
+            <dd>{{ quote.createdByName || 'Sistema' }}</dd>
+          </div>
+        </dl>
+
+        <div class="mobile-card-actions">
+          <a
+            [href]="phoneHref(quote.customerPhoneNumber)"
+            [attr.aria-label]="'Ligar para ' + quote.customerName"
+            class="mobile-icon-action"
+            nz-button
+            nzType="default">
+            <nz-icon nzTheme="outline" nzType="phone"></nz-icon>
+          </a>
+
+          <button (click)="approveAndGenerateCarloads(quote)" [disabled]="!canGenerateCarloads(quote)" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="partition"></nz-icon>
+          </button>
+
+          <button (click)="downloadQuote(quote)" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="download"></nz-icon>
+          </button>
+
+          <button (click)="editQuote(quote)" nz-button nzType="primary">
+            <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+            Editar
+          </button>
+
+          <button (click)="duplicateQuote(quote)" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
+          </button>
+
+          <button (click)="deleteQuote(quote)" nz-button nzDanger nzType="default">
+            <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+          </button>
+        </div>
+
+        <button (click)="viewQuoteVersions(quote)" class="mobile-secondary-action" nz-button nzType="link">
+          <nz-icon nzTheme="outline" nzType="history"></nz-icon>
+          Ver versoes
+        </button>
+      </article>
+    </div>
+  </nz-spin>
+
+  <ng-template #mobileEmptyQuotes>
+    <div *ngIf="!isLoading" class="mobile-empty-state">
+      <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
+      <h3>Nenhuma cotacao encontrada</h3>
+      <p *ngIf="searchValue || dateRange">Tenta ajustar a pesquisa ou o intervalo de datas.</p>
+      <button (click)="openDrawer()" nz-button nzType="primary">
+        <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
+        Nova Cotacao
+      </button>
+    </div>
+  </ng-template>
+
   <div class="table-wrapper">
     <div class="table-scroll">
 
