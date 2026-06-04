@@ -31,8 +31,10 @@ export class QuoteComponent implements OnInit {
   isSaving = false;
 
   isDrawerVisible = false;
+  isPreviewDrawerVisible = false;
   currentQuoteId: string | null = null;
   currentQuoteCode: string | null = null;
+  selectedQuote: CarloadQuote | null = null;
 
   searchValue = '';
   dateRange: Date[] | null = null;
@@ -42,6 +44,7 @@ export class QuoteComponent implements OnInit {
   filteredTotalAmount = 0;
 
   drawerWidth: string | number = 1000;
+  previewDrawerWidth: string | number = 860;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
   quoteForm!: FormGroup;
@@ -130,9 +133,11 @@ export class QuoteComponent implements OnInit {
   updateDrawer(): void {
     if (window.innerWidth <= 768) {
       this.drawerWidth = '100%';
+      this.previewDrawerWidth = '100%';
       this.drawerPlacement = 'right';
     } else {
       this.drawerWidth = 1000;
+      this.previewDrawerWidth = 860;
       this.drawerPlacement = 'right';
     }
   }
@@ -176,6 +181,24 @@ export class QuoteComponent implements OnInit {
     this.customerMode = 'NEW';
     this.quoteForm.reset();
     this.items.clear();
+  }
+
+  openQuotePreview(quote: CarloadQuote): void {
+    this.selectedQuote = quote;
+    this.isPreviewDrawerVisible = true;
+  }
+
+  closeQuotePreview(): void {
+    this.isPreviewDrawerVisible = false;
+    this.selectedQuote = null;
+  }
+
+  editPreviewedQuote(): void {
+    if (!this.selectedQuote) return;
+
+    const quote = this.selectedQuote;
+    this.closeQuotePreview();
+    this.editQuote(quote);
   }
 
   setCustomerMode(mode: CustomerMode): void {
@@ -462,6 +485,14 @@ export class QuoteComponent implements OnInit {
 
   getQuoteVersionLabel(quote: CarloadQuote): string {
     return `v${quote.versionNumber || 1}`;
+  }
+
+  getQuoteGrossSubtotal(quote: CarloadQuote): number {
+    return this.getGrossSubtotal(quote);
+  }
+
+  getQuoteNetSubtotal(quote: CarloadQuote): number {
+    return Math.max(this.getQuoteGrossSubtotal(quote) - Number(quote.discount || 0), 0);
   }
 
   deleteQuote(quote: CarloadQuote): void {

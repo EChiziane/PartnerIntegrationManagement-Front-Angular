@@ -35,7 +35,9 @@ export class InvoiceComponent implements OnInit {
   isSaving = false;
 
   isDrawerVisible = false;
+  isPreviewDrawerVisible = false;
   isCopyMode = false;
+  selectedInvoice: CarloadInvoice | null = null;
 
   searchValue = '';
   dateRange: Date[] | null = null;
@@ -46,6 +48,7 @@ export class InvoiceComponent implements OnInit {
   totalCustomers = 0;
 
   drawerWidth: string | number = 1000;
+  previewDrawerWidth: string | number = 860;
   drawerPlacement: 'right' | 'bottom' = 'right';
 
   invoiceForm!: FormGroup;
@@ -220,9 +223,11 @@ export class InvoiceComponent implements OnInit {
   updateDrawer(): void {
     if (window.innerWidth <= 768) {
       this.drawerWidth = '100%';
+      this.previewDrawerWidth = '100%';
       this.drawerPlacement = 'right';
     } else {
       this.drawerWidth = 1000;
+      this.previewDrawerWidth = 860;
       this.drawerPlacement = 'right';
     }
   }
@@ -296,6 +301,24 @@ export class InvoiceComponent implements OnInit {
     this.items.clear();
     this.billableCarloads = [];
     this.selectedCarloadIds = [];
+  }
+
+  openInvoicePreview(invoice: CarloadInvoice): void {
+    this.selectedInvoice = invoice;
+    this.isPreviewDrawerVisible = true;
+  }
+
+  closeInvoicePreview(): void {
+    this.isPreviewDrawerVisible = false;
+    this.selectedInvoice = null;
+  }
+
+  copyPreviewedInvoice(): void {
+    if (!this.selectedInvoice) return;
+
+    const invoice = this.selectedInvoice;
+    this.closeInvoicePreview();
+    this.copyInvoice(invoice);
   }
 
   onInvoiceCustomerChange(customerId: string | null): void {
@@ -418,6 +441,14 @@ export class InvoiceComponent implements OnInit {
 
   getInvoiceItemLabel(item: CarloadInvoiceItem): string {
     return item.descriptionLabel || this.getItemLabel(item.description);
+  }
+
+  getInvoiceGrossSubtotal(invoice: CarloadInvoice): number {
+    return this.getGrossSubtotal(invoice);
+  }
+
+  getInvoiceItemMeta(item: CarloadInvoiceItem): string {
+    return [item.driverName, item.truckPlateNumber].filter(Boolean).join(' / ');
   }
 
   getInvoicePdfItemLabel(item: CarloadInvoiceItem): string {

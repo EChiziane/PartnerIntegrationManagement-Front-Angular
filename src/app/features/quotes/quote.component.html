@@ -153,6 +153,10 @@
             <nz-icon nzTheme="outline" nzType="download"></nz-icon>
           </button>
 
+          <button (click)="openQuotePreview(quote)" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+          </button>
+
           <button (click)="editQuote(quote)" nz-button nzType="primary">
             <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
             Editar
@@ -232,6 +236,17 @@
 
             <td class="action-buttons">
               <button
+                (click)="openQuotePreview(quote)"
+                nz-button
+                nz-tooltip
+                nzSize="small"
+                nzTooltipTitle="Ver cotacao"
+                nzType="link"
+              >
+                <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+              </button>
+
+              <button
                 (click)="viewQuoteVersions(quote)"
                 nz-button
                 nz-tooltip
@@ -308,6 +323,105 @@
     </div>
   </div>
 </div>
+
+<nz-drawer
+  (nzOnClose)="closeQuotePreview()"
+  [nzFooter]="quotePreviewFooter"
+  [nzMaskClosable]="true"
+  [nzPlacement]="drawerPlacement"
+  [nzTitle]="selectedQuote?.quoteCode || 'Cotacao'"
+  [nzVisible]="isPreviewDrawerVisible"
+  [nzWidth]="previewDrawerWidth"
+>
+  <ng-container *nzDrawerContent>
+    <article *ngIf="selectedQuote as quote" class="document-preview">
+      <header class="preview-hero">
+        <div>
+          <span>Cotacao</span>
+          <h2>{{ quote.quoteCode }}</h2>
+          <p>{{ quote.customerName }}</p>
+        </div>
+
+        <nz-tag [nzColor]="getQuoteStatusColor(quote)">
+          {{ getQuoteStatusLabel(quote) }}
+        </nz-tag>
+      </header>
+
+      <section class="preview-facts">
+        <div>
+          <span>Cliente</span>
+          <strong>{{ quote.customerName }}</strong>
+        </div>
+        <div>
+          <span>Telefone</span>
+          <strong>{{ quote.customerPhoneNumber || '-' }}</strong>
+        </div>
+        <div>
+          <span>Destino</span>
+          <strong>{{ quote.destination || '-' }}</strong>
+        </div>
+        <div>
+          <span>Validade</span>
+          <strong>{{ quote.validUntil ? (quote.validUntil | date:'dd/MM/yyyy') : '-' }}</strong>
+        </div>
+        <div>
+          <span>Versao</span>
+          <strong>{{ getQuoteVersionLabel(quote) }}</strong>
+        </div>
+        <div>
+          <span>Criado por</span>
+          <strong>{{ quote.createdByName || 'Sistema' }}</strong>
+        </div>
+      </section>
+
+      <section class="preview-section">
+        <h3>Itens</h3>
+        <div class="preview-table">
+          <div class="preview-table-row preview-table-head">
+            <span>Descricao</span>
+            <span>Qtd</span>
+            <span>Preco</span>
+            <span>Total</span>
+          </div>
+
+          <div *ngFor="let item of quote.items" class="preview-table-row">
+            <strong>{{ item.description }}</strong>
+            <span>{{ item.quantity }}</span>
+            <span>{{ item.unitPrice | number:'1.2-2' }} Mts</span>
+            <span>{{ item.amount | number:'1.2-2' }} Mts</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="preview-totals">
+        <div><span>Subtotal bruto</span><strong>{{ getQuoteGrossSubtotal(quote) | number:'1.2-2' }} Mts</strong></div>
+        <div><span>Desconto</span><strong>{{ quote.discount | number:'1.2-2' }} Mts</strong></div>
+        <div><span>Subtotal</span><strong>{{ getQuoteNetSubtotal(quote) | number:'1.2-2' }} Mts</strong></div>
+        <div><span>IVA</span><strong>{{ quote.tax | number:'1.2-2' }} Mts</strong></div>
+        <div class="grand-total"><span>Total</span><strong>{{ quote.total | number:'1.2-2' }} Mts</strong></div>
+      </section>
+
+      <section *ngIf="quote.notes" class="preview-section">
+        <h3>Observacoes</h3>
+        <p class="preview-notes">{{ quote.notes }}</p>
+      </section>
+    </article>
+  </ng-container>
+
+  <ng-template #quotePreviewFooter>
+    <div class="drawer-footer preview-footer" *ngIf="selectedQuote as quote">
+      <button (click)="closeQuotePreview()" nz-button nzType="default">Fechar</button>
+      <button (click)="downloadQuote(quote)" nz-button nzType="default">
+        <nz-icon nzTheme="outline" nzType="download"></nz-icon>
+        Baixar
+      </button>
+      <button (click)="editPreviewedQuote()" nz-button nzType="primary">
+        <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+        Editar
+      </button>
+    </div>
+  </ng-template>
+</nz-drawer>
 
 <nz-drawer
   (nzOnClose)="closeDrawer()"

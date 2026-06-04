@@ -161,6 +161,11 @@
         </div>
 
         <div class="mobile-card-actions">
+          <button (click)="openInvoicePreview(invoice)" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+            Ver
+          </button>
+
           <button (click)="downloadInvoice(invoice)" nz-button nzType="primary">
             <nz-icon nzTheme="outline" nzType="download"></nz-icon>
             Baixar
@@ -230,6 +235,17 @@
             <td class="actions-cell">
               <div class="actions-group">
                 <button
+                  (click)="openInvoicePreview(invoice)"
+                  nz-button
+                  nz-tooltip
+                  nzSize="small"
+                  nzTooltipTitle="Ver fatura"
+                  nzType="link"
+                >
+                  <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+                </button>
+
+                <button
                   (click)="downloadInvoice(invoice)"
                   nz-button
                   nz-tooltip
@@ -292,6 +308,92 @@
     </div>
   </div>
 </div>
+
+<nz-drawer
+  (nzOnClose)="closeInvoicePreview()"
+  [nzFooter]="invoicePreviewFooter"
+  [nzMaskClosable]="true"
+  [nzPlacement]="drawerPlacement"
+  [nzTitle]="selectedInvoice?.invoiceCode || 'Fatura'"
+  [nzVisible]="isPreviewDrawerVisible"
+  [nzWidth]="previewDrawerWidth"
+>
+  <ng-container *nzDrawerContent>
+    <article *ngIf="selectedInvoice as invoice" class="document-preview">
+      <header class="preview-hero">
+        <div>
+          <span>Fatura</span>
+          <h2>{{ invoice.invoiceCode }}</h2>
+          <p>{{ invoice.carloadCustomerName }}</p>
+        </div>
+
+        <strong>{{ invoice.total | number:'1.2-2' }} Mts</strong>
+      </header>
+
+      <section class="preview-facts">
+        <div>
+          <span>Cliente</span>
+          <strong>{{ invoice.carloadCustomerName }}</strong>
+        </div>
+        <div>
+          <span>Criada em</span>
+          <strong>{{ invoice.createdAt | date:'dd/MM/yyyy' }}</strong>
+        </div>
+        <div>
+          <span>Criado por</span>
+          <strong>{{ invoice.createdByName || 'Sistema' }}</strong>
+        </div>
+        <div>
+          <span>Itens</span>
+          <strong>{{ invoice.items.length || 0 }}</strong>
+        </div>
+      </section>
+
+      <section class="preview-section">
+        <h3>Itens da fatura</h3>
+        <div class="preview-table">
+          <div class="preview-table-row preview-table-head">
+            <span>Descricao</span>
+            <span>Qtd</span>
+            <span>Preco</span>
+            <span>Total</span>
+          </div>
+
+          <div *ngFor="let item of invoice.items" class="preview-table-row">
+            <strong>
+              {{ getInvoiceItemLabel(item) }}
+              <small *ngIf="item.deliveryDestination">Destino: {{ item.deliveryDestination }}</small>
+              <small *ngIf="getInvoiceItemMeta(item)">{{ getInvoiceItemMeta(item) }}</small>
+            </strong>
+            <span>{{ item.quantity }}</span>
+            <span>{{ item.unitPrice | number:'1.2-2' }} Mts</span>
+            <span>{{ item.amount | number:'1.2-2' }} Mts</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="preview-totals">
+        <div><span>Subtotal</span><strong>{{ getInvoiceGrossSubtotal(invoice) | number:'1.2-2' }} Mts</strong></div>
+        <div><span>IVA</span><strong>{{ invoice.tax | number:'1.2-2' }} Mts</strong></div>
+        <div class="grand-total"><span>Total</span><strong>{{ invoice.total | number:'1.2-2' }} Mts</strong></div>
+      </section>
+    </article>
+  </ng-container>
+
+  <ng-template #invoicePreviewFooter>
+    <div class="drawer-footer preview-footer" *ngIf="selectedInvoice as invoice">
+      <button (click)="closeInvoicePreview()" nz-button nzType="default">Fechar</button>
+      <button (click)="downloadInvoice(invoice)" nz-button nzType="default">
+        <nz-icon nzTheme="outline" nzType="download"></nz-icon>
+        Baixar
+      </button>
+      <button (click)="copyPreviewedInvoice()" nz-button nzType="primary">
+        <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
+        Copiar
+      </button>
+    </div>
+  </ng-template>
+</nz-drawer>
 
 <nz-drawer
   (nzOnClose)="closeDrawer()"

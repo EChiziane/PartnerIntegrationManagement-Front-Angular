@@ -226,14 +226,14 @@
 }
 
 .actions-column {
-  width: 110px;
-  min-width: 110px;
+  width: 140px;
+  min-width: 140px;
   text-align: center;
 }
 
 .actions-cell {
-  width: 110px;
-  min-width: 110px;
+  width: 140px;
+  min-width: 140px;
 }
 
 .actions-group {
@@ -357,6 +357,151 @@ textarea[nz-input] {
   }
 }
 
+.document-preview {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  color: #10212b;
+}
+
+.preview-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 10px;
+  background: #eef7f5;
+
+  span {
+    color: #607786;
+    font-size: 11px;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 3px 0;
+    color: #10212b;
+    font-size: 26px;
+    font-weight: 900;
+  }
+
+  p {
+    margin: 0;
+    color: #344054;
+  }
+
+  > strong {
+    color: #0e7c72;
+    font-size: 22px;
+    white-space: nowrap;
+  }
+}
+
+.preview-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+
+  div {
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #dfeaf0;
+    border-radius: 8px;
+    background: #ffffff;
+  }
+
+  span {
+    display: block;
+    color: #607786;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  strong {
+    display: block;
+    margin-top: 4px;
+    overflow-wrap: anywhere;
+  }
+}
+
+.preview-section,
+.preview-totals {
+  padding: 14px;
+  border: 1px solid #dfeaf0;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.preview-section h3 {
+  margin: 0 0 10px;
+  color: #10212b;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.preview-table {
+  display: grid;
+  gap: 6px;
+}
+
+.preview-table-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 70px 120px 120px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f8fbfd;
+
+  strong {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  small {
+    color: #607786;
+    font-weight: 600;
+  }
+}
+
+.preview-table-head {
+  color: #607786;
+  background: #f4f8fb;
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.preview-totals {
+  display: grid;
+  gap: 8px;
+  justify-self: end;
+  width: min(100%, 360px);
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .grand-total {
+    padding-top: 8px;
+    border-top: 1px solid #dfeaf0;
+    color: #0e7c72;
+    font-size: 18px;
+    font-weight: 900;
+  }
+}
+
+.preview-footer {
+  flex-wrap: wrap;
+}
+
 ::ng-deep .ant-spin-text {
   font-size: 14px;
   white-space: nowrap;
@@ -440,6 +585,32 @@ textarea[nz-input] {
       min-height: 42px;
       margin: 0;
     }
+  }
+
+  .document-preview {
+    padding: 10px 12px 16px;
+  }
+
+  .preview-hero,
+  .preview-facts,
+  .preview-table-row {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-hero {
+    display: grid;
+
+    > strong {
+      white-space: normal;
+    }
+  }
+
+  .preview-facts {
+    gap: 8px;
+  }
+
+  .preview-totals {
+    justify-self: stretch;
   }
 }
 
@@ -548,7 +719,7 @@ textarea[nz-input] {
 
 .mobile-card-actions {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
 
   [nz-button] {
