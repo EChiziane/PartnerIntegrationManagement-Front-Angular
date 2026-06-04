@@ -260,6 +260,89 @@
     </button>
   </div>
 
+  <nz-spin [nzSpinning]="isLoading" class="mobile-carload-spin" nzTip="A carregar carradas...">
+    <div *ngIf="listOfDisplayData.length; else mobileEmptyCarloads" class="mobile-carload-list">
+      <article *ngFor="let data of listOfDisplayData" class="mobile-carload-card">
+        <div class="mobile-card-topline">
+          <div>
+            <span class="mobile-card-kicker">Carrada</span>
+            <h3>{{ data.customerName }}</h3>
+          </div>
+
+          <nz-tag [nzColor]="getTagColor(data.deliveryStatus)">
+            {{ getStatusLabel(data.deliveryStatus) }}
+          </nz-tag>
+        </div>
+
+        <div class="mobile-contact-row">
+          <nz-icon nzTheme="outline" nzType="environment"></nz-icon>
+          <span>{{ data.deliveryDestination || '-' }}</span>
+        </div>
+
+        <div class="mobile-contact-row">
+          <nz-icon nzTheme="outline" nzType="truck"></nz-icon>
+          <span>{{ data.transportedMaterial || '-' }} · {{ data.assignedDriverName || '-' }}</span>
+        </div>
+
+        <dl class="mobile-card-facts">
+          <div>
+            <dt>Contacto</dt>
+            <dd>{{ data.customerPhoneNumber || '-' }}</dd>
+          </div>
+          <div>
+            <dt>Agendada</dt>
+            <dd>{{ data.deliveryScheduledDate ? (data.deliveryScheduledDate | date:'dd/MM HH:mm') : '-' }}</dd>
+          </div>
+          <div>
+            <dt>Receita</dt>
+            <dd>{{ data.totalEarnings | number:'1.2-2' }} Mts</dd>
+          </div>
+          <div>
+            <dt>Custo</dt>
+            <dd>{{ data.totalSpent | number:'1.2-2' }} Mts</dd>
+          </div>
+        </dl>
+
+        <div class="mobile-card-actions">
+          <a
+            [href]="phoneHref(data.customerPhoneNumber)"
+            [attr.aria-label]="'Ligar para ' + data.customerName"
+            class="mobile-icon-action"
+            nz-button
+            nzType="default">
+            <nz-icon nzTheme="outline" nzType="phone"></nz-icon>
+          </a>
+
+          <button (click)="copyCarLoad(data)" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
+            Copiar
+          </button>
+
+          <button (click)="editCarload(data)" nz-button nzType="primary">
+            <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+            Editar
+          </button>
+
+          <button (click)="deleteCarload(data)" nz-button nzDanger nzType="default">
+            <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+          </button>
+        </div>
+      </article>
+    </div>
+  </nz-spin>
+
+  <ng-template #mobileEmptyCarloads>
+    <div *ngIf="!isLoading" class="mobile-empty-state">
+      <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
+      <h3>Nenhuma carrada encontrada</h3>
+      <p *ngIf="searchValue || filterMode !== 'ALL' || dateRange">Tenta ajustar os filtros desta campanha.</p>
+      <button (click)="openCarloadDrawer()" nz-button nzType="primary">
+        <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
+        Nova Carrada
+      </button>
+    </div>
+  </ng-template>
+
   <div class="table-wrapper">
     <div class="table-scroll">
       <nz-spin [nzSpinning]="isLoading" nzTip="A carregar carradas...">
