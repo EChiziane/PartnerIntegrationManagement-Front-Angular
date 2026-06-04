@@ -130,6 +130,11 @@ export class ManagerComponent implements OnInit {
     this.search();
   }
 
+  phoneHref(phone: string | null | undefined): string {
+    const digits = (phone || '').toString().replace(/[^\d+]/g, '');
+    return digits ? `tel:${digits}` : 'tel:';
+  }
+
   openManagerDrawer() {
     this.isEditMode = false;
     this.selectedManagerId = null;
