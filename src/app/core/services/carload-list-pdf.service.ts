@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import type jsPDF from 'jspdf';
 
 import {CarLoad} from '@shared/models/carload';
 import {DocumentFilenameService} from '@core/services/document-filename.service';
@@ -13,8 +12,12 @@ export class CarloadListPdfService {
   constructor(private documentFilename: DocumentFilenameService) {
   }
 
-  downloadCarloadListReport(carloads: CarLoad[], scopeLabel: string): void {
-    const doc = new jsPDF({orientation: 'landscape'});
+  async downloadCarloadListReport(carloads: CarLoad[], scopeLabel: string): Promise<void> {
+    const [{default: JsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
+    const doc = new JsPDF({orientation: 'landscape'});
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;

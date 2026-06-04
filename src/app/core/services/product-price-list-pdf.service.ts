@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import type jsPDF from 'jspdf';
 
 import {ProductPrice} from '@shared/models/product-price';
 import {DocumentFilenameService} from '@core/services/document-filename.service';
@@ -13,9 +12,13 @@ export class ProductPriceListPdfService {
   constructor(private documentFilename: DocumentFilenameService) {
   }
 
-  downloadPriceList(prices: ProductPrice[]): void {
+  async downloadPriceList(prices: ProductPrice[]): Promise<void> {
+    const [{default: JsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
     const sortedPrices = [...prices].sort((a, b) => this.sortByVolumeAndProduct(a, b));
-    const doc = new jsPDF({orientation: 'portrait'});
+    const doc = new JsPDF({orientation: 'portrait'});
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;

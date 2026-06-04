@@ -14,8 +14,6 @@ import {ConfirmationDialogService} from '@core/services/confirmation-dialog.serv
 import {DocumentFilenameService} from '@core/services/document-filename.service';
 import {COMPANY_PDF_LINES, COMPANY_PROFILE} from '@shared/data/company-profile';
 import {ProductPriceService} from '@core/services/product-price.service';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 
 type InvoicePeriodPreset = 'ALL' | 'TODAY' | 'THIS_MONTH' | 'LAST_30_DAYS' | 'CUSTOM';
 
@@ -576,7 +574,11 @@ export class InvoiceComponent implements OnInit {
     });
   }
 
-  downloadInvoice(invoice: CarloadInvoice): void {
+  async downloadInvoice(invoice: CarloadInvoice): Promise<void> {
+    const [{default: jsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
     const doc = new jsPDF('p', 'mm', 'a4');
     const pageWidth = doc.internal.pageSize.getWidth();
     const createdDate = new Date(invoice.createdAt || new Date().toISOString());

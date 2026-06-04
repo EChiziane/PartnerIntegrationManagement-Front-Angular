@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import type jsPDF from 'jspdf';
 
 import {CarloadCustomer} from '@shared/models/carload-customer';
 import {CarLoad} from '@shared/models/carload';
@@ -14,8 +13,12 @@ export class CarloadCustomerDetailPdfService {
   constructor(private documentFilename: DocumentFilenameService) {
   }
 
-  downloadCustomerReport(customer: CarloadCustomer, carloads: CarLoad[]): void {
-    const doc = new jsPDF({orientation: 'landscape'});
+  async downloadCustomerReport(customer: CarloadCustomer, carloads: CarLoad[]): Promise<void> {
+    const [{default: JsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
+    const doc = new JsPDF({orientation: 'landscape'});
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 14;
     const contentWidth = pageWidth - margin * 2;
@@ -41,12 +44,18 @@ export class CarloadCustomerDetailPdfService {
       ['Registado por', customer.createdByName || 'Sistema']
     ]);
 
-    this.drawCarloadsTable(doc, carloads, margin, 154);
+    this.drawCarloadsTable(doc, autoTable, carloads, margin, 154);
     this.drawFooter(doc);
     doc.save(this.documentFilename.build('CLIENTE', customer.customerCode || customer.id, customer.name));
   }
 
-  private drawCarloadsTable(doc: jsPDF, carloads: CarLoad[], margin: number, startY: number): void {
+  private drawCarloadsTable(
+    doc: jsPDF,
+    autoTable: typeof import('jspdf-autotable').default,
+    carloads: CarLoad[],
+    margin: number,
+    startY: number
+  ): void {
     this.drawSectionTitle(doc, 'Carradas do cliente', margin, startY - 6);
 
     const body = carloads.length

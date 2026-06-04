@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import type jsPDF from 'jspdf';
 
 import {CarLoad} from '@shared/models/carload';
 import {Sprint} from '@shared/models/sprint';
@@ -29,8 +28,12 @@ export class SprintDetailPdfService {
   constructor(private documentFilename: DocumentFilenameService) {
   }
 
-  downloadSprintReport(sprint: Sprint | null, sprintName: string, carloads: CarLoad[], metrics: SprintReportMetrics): void {
-    const doc = new jsPDF({orientation: 'landscape'});
+  async downloadSprintReport(sprint: Sprint | null, sprintName: string, carloads: CarLoad[], metrics: SprintReportMetrics): Promise<void> {
+    const [{default: JsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
+    const doc = new JsPDF({orientation: 'landscape'});
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;

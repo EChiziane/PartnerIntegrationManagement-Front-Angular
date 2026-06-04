@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 
 import { CarloadQuote } from '@shared/models/carload-quote';
 import { CarloadQuoteItem } from '@shared/models/carload-quote-item';
@@ -486,7 +484,11 @@ export class QuoteComponent implements OnInit {
     });
   }
 
-  downloadQuote(quote: CarloadQuote): void {
+  async downloadQuote(quote: CarloadQuote): Promise<void> {
+    const [{default: jsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
 

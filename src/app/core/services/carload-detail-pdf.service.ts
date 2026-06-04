@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import type jsPDF from 'jspdf';
 
 import {CarLoad} from '@shared/models/carload';
 import {Driver} from '@shared/models/driver';
@@ -21,8 +20,22 @@ export class CarloadDetailPdfService {
     driver: Driver | null,
     manager: Manager | null,
     sprint: Sprint | null
-  ): void {
-    const doc = new jsPDF({orientation: 'landscape'});
+  ): Promise<void> {
+    return this.createCarloadReport(carload, driver, manager, sprint);
+  }
+
+  private async createCarloadReport(
+    carload: CarLoad,
+    driver: Driver | null,
+    manager: Manager | null,
+    sprint: Sprint | null
+  ): Promise<void> {
+    const [{default: JsPDF}, {default: autoTableModule}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
+    const autoTable = autoTableModule;
+    const doc = new JsPDF({orientation: 'landscape'});
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 14;
     const contentWidth = pageWidth - margin * 2;
@@ -58,12 +71,18 @@ export class CarloadDetailPdfService {
       ['Criado em', this.formatDateTime(carload.createdAt)]
     ]);
 
-    this.drawFinancialTable(doc, carload, margin, 216);
+    this.drawFinancialTable(doc, autoTable, carload, margin, 216);
     this.drawFooter(doc);
     doc.save(this.documentFilename.build('CARRADA', this.resolveCarloadCode(carload), carload.customerName || carload.deliveryDestination));
   }
 
-  private drawFinancialTable(doc: jsPDF, carload: CarLoad, margin: number, startY: number): void {
+  private drawFinancialTable(
+    doc: jsPDF,
+    autoTable: typeof import('jspdf-autotable').default,
+    carload: CarLoad,
+    margin: number,
+    startY: number
+  ): void {
     const spent = Number(carload.totalSpent || 0);
     const earnings = Number(carload.totalEarnings || 0);
     const marginValue = earnings - spent;

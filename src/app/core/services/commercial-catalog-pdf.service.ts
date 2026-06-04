@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import type jsPDF from 'jspdf';
 
 import {CatalogMaterialView, CatalogProductionItem, CatalogView} from '@shared/models/commercial-catalog';
 import {DocumentFilenameService} from '@core/services/document-filename.service';
@@ -12,6 +11,7 @@ import {TranslationService} from '@core/services/translation.service';
 })
 export class CommercialCatalogPdfService {
   private readonly imageCache = new Map<string, string>();
+  private autoTable?: typeof import('jspdf-autotable').default;
 
   constructor(
     private documentFilename: DocumentFilenameService,
@@ -20,7 +20,12 @@ export class CommercialCatalogPdfService {
   }
 
   async download(catalog: CatalogView): Promise<void> {
-    const doc = new jsPDF({orientation: 'portrait', unit: 'mm', format: 'a4'});
+    const [{default: JsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
+    this.autoTable = autoTable;
+    const doc = new JsPDF({orientation: 'portrait', unit: 'mm', format: 'a4'});
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;
@@ -111,7 +116,7 @@ export class CommercialCatalogPdfService {
     this.drawPageTitle(doc, this.t('commercialCatalog.production.kicker'), this.t('commercialCatalog.production.title', {volume: catalog.volumeM3}), margin);
     await this.drawImageCover(doc, catalog.productionImageUrl, margin, 44, pageWidth - margin * 2, 78);
 
-    autoTable(doc, {
+    this.autoTable?.(doc, {
       startY: 136,
       margin: {left: margin, right: margin},
       head: [['Produto', 'Medida', 'Regra de producao', 'Resultado']],
@@ -179,7 +184,7 @@ export class CommercialCatalogPdfService {
     doc.setFontSize(20);
     doc.text(this.t('commercialCatalog.order.title'), margin, 36);
 
-    autoTable(doc, {
+    this.autoTable?.(doc, {
       startY: 62,
       margin: {left: margin, right: margin},
       head: [[this.t('commercialCatalog.order.material'), this.t('commercialCatalog.order.quantity'), this.t('commercialCatalog.order.price')]],
@@ -227,7 +232,7 @@ export class CommercialCatalogPdfService {
     doc.addPage();
     this.drawPageTitle(doc, this.t('commercialCatalog.comparison.kicker'), this.t('commercialCatalog.comparison.title'), margin);
 
-    autoTable(doc, {
+    this.autoTable?.(doc, {
       startY: 54,
       margin: {left: margin, right: margin},
       head: [['Item', 'Quantidade']],

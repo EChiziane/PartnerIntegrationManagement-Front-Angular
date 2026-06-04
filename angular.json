@@ -34,7 +34,10 @@
             "inlineStyleLanguage": "scss",
             "allowedCommonJsDependencies": [
               "html2canvas",
-              "canvg"
+              "canvg",
+              "core-js",
+              "raf",
+              "rgbcolor"
             ],
             "assets": [
               {
