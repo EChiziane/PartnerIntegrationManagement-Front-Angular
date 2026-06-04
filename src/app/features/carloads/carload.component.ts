@@ -144,6 +144,36 @@ export class CarLoadComponent implements OnInit {
     return this.selectedStatusUpper === 'DELIVERED';
   }
 
+  get carloadFormSummary(): string {
+    const customer = this.carLoadForm.get('customerName')?.value || 'Cliente';
+    const destination = this.carLoadForm.get('deliveryDestination')?.value || 'Destino';
+    const material = this.carLoadForm.get('transportedMaterial')?.value || 'Material';
+    return `${customer} -> ${destination} - ${material}`;
+  }
+
+  get carloadDateSummary(): string {
+    const status = this.selectedStatusUpper;
+    const rawDate = status === 'SCHEDULED'
+      ? this.carLoadForm.get('deliveryScheduledDate')?.value
+      : this.carLoadForm.get('deliveryDate')?.value;
+
+    if (!rawDate) {
+      return status === 'SCHEDULED' ? 'Sem data agendada' : 'Sem data de entrega';
+    }
+
+    return this.formatDateTimeLocal(rawDate);
+  }
+
+  get carloadProfitPreview(): number {
+    return Number(this.carLoadForm.get('totalEarnings')?.value || 0) - Number(this.carLoadForm.get('totalSpent')?.value || 0);
+  }
+
+  get carloadProfitTone(): string {
+    if (this.carloadProfitPreview > 0) return 'positive';
+    if (this.carloadProfitPreview < 0) return 'negative';
+    return 'neutral';
+  }
+
   get hasActiveFilters(): boolean {
     return this.filterMode !== 'ALL' || !!this.searchValue.trim();
   }
@@ -217,6 +247,11 @@ export class CarLoadComponent implements OnInit {
     }
 
     this.applyCustomerModeRules();
+  }
+
+  setQuickStatus(status: CarLoadStatus): void {
+    this.carLoadForm.patchValue({deliveryStatus: status});
+    this.applyDateRulesByStatus();
   }
 
   getStatusLabel(status: CarLoadStatus): string {
@@ -805,6 +840,12 @@ export class CarLoadComponent implements OnInit {
     const hh = String(now.getHours()).padStart(2, '0');
     const min = String(now.getMinutes()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+  }
+
+  private formatDateTimeLocal(value: string): string {
+    const [date = '', time = ''] = value.split('T');
+    const [yyyy, mm, dd] = date.split('-');
+    return [dd, mm, yyyy].filter(Boolean).join('/') + (time ? ` ${time.substring(0, 5)}` : '');
   }
 
   private getReportCarloads(mode: CarloadReportMode): CarLoad[] {

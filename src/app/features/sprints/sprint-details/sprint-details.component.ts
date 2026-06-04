@@ -129,6 +129,36 @@ export class SprintDetailsComponent implements OnInit {
     return this.selectedStatusUpper === 'DELIVERED';
   }
 
+  get carloadFormSummary(): string {
+    const customer = this.carloadForm.get('customerName')?.value || 'Cliente';
+    const destination = this.carloadForm.get('deliveryDestination')?.value || 'Destino';
+    const material = this.carloadForm.get('transportedMaterial')?.value || 'Material';
+    return `${customer} -> ${destination} - ${material}`;
+  }
+
+  get carloadDateSummary(): string {
+    const status = this.selectedStatusUpper;
+    const rawDate = status === 'SCHEDULED'
+      ? this.carloadForm.get('deliveryScheduledDate')?.value
+      : this.carloadForm.get('deliveryDate')?.value;
+
+    if (!rawDate) {
+      return status === 'SCHEDULED' ? 'Sem data agendada' : 'Sem data de entrega';
+    }
+
+    return this.formatDateTimeLocal(rawDate);
+  }
+
+  get carloadProfitPreview(): number {
+    return Number(this.carloadForm.get('totalEarnings')?.value || 0) - Number(this.carloadForm.get('totalSpent')?.value || 0);
+  }
+
+  get carloadProfitTone(): string {
+    if (this.carloadProfitPreview > 0) return 'positive';
+    if (this.carloadProfitPreview < 0) return 'negative';
+    return 'neutral';
+  }
+
   get marketingBudget(): number {
     return Number(this.sprint?.marketingBudget || 0);
   }
@@ -263,6 +293,11 @@ export class SprintDetailsComponent implements OnInit {
     });
 
     this.isCarloadDrawerVisible = true;
+    this.applyDateRulesByStatus();
+  }
+
+  setQuickStatus(status: CarLoadStatus): void {
+    this.carloadForm.patchValue({deliveryStatus: status});
     this.applyDateRulesByStatus();
   }
 
@@ -562,6 +597,12 @@ export class SprintDetailsComponent implements OnInit {
     const hh = String(now.getHours()).padStart(2, '0');
     const min = String(now.getMinutes()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+  }
+
+  private formatDateTimeLocal(value: string): string {
+    const [date = '', time = ''] = value.split('T');
+    const [yyyy, mm, dd] = date.split('-');
+    return [dd, mm, yyyy].filter(Boolean).join('/') + (time ? ` ${time.substring(0, 5)}` : '');
   }
 
   private toDatetimeLocalInput(value: string | null | undefined): string {

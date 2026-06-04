@@ -426,8 +426,55 @@
 >
   <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar carrada...">
     <form [formGroup]="carloadForm" class="drawer-form" nz-form>
+      <div class="carload-live-summary">
+        <div>
+          <span>{{ getStatusLabel(carloadForm.get('deliveryStatus')?.value || 'DELIVERED') }}</span>
+          <strong>{{ carloadFormSummary }}</strong>
+          <small>{{ carloadDateSummary }} - Lucro previsto: {{ carloadProfitPreview | number:'1.2-2' }} Mts</small>
+        </div>
+
+        <nz-tag [nzColor]="carloadProfitTone === 'positive' ? 'green' : (carloadProfitTone === 'negative' ? 'red' : 'default')">
+          {{ carloadProfitTone === 'negative' ? 'Atencao' : 'Resumo' }}
+        </nz-tag>
+      </div>
+
       <div class="drawer-section">
-        <h3 class="section-title">{{ 'sprints.drawer.carloadSection' | translate }}</h3>
+        <div class="guided-section-title">
+          <span>1</span>
+          <div>
+            <h3>{{ 'sprints.drawer.carloadSection' | translate }}</h3>
+            <p>Cliente, destino, material e responsaveis.</p>
+          </div>
+        </div>
+
+        <div class="quick-status-group">
+          <button
+            (click)="setQuickStatus('DELIVERED')"
+            [class.active]="selectedStatusUpper === 'DELIVERED'"
+            nz-button
+            nzType="default"
+            type="button">
+            Feita hoje
+          </button>
+          <button
+            (click)="setQuickStatus('SCHEDULED')"
+            [class.active]="selectedStatusUpper === 'SCHEDULED'"
+            nz-button
+            nzType="default"
+            type="button">
+            Agendar
+          </button>
+          <button
+            (click)="setQuickStatus('IN_PROGRESS')"
+            [class.active]="selectedStatusUpper === 'IN_PROGRESS'"
+            nz-button
+            nzType="default"
+            type="button">
+            Em execucao
+          </button>
+        </div>
+
+        <div class="form-subsection-label">Cliente e operacao</div>
 
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
@@ -500,6 +547,8 @@
           </div>
         </div>
 
+        <div class="form-subsection-label">Organizacao e datas</div>
+
         <div [nzGutter]="16" nz-row>
           <div nz-col nzSpan="24">
             <nz-form-item>
@@ -544,6 +593,8 @@
             </nz-form-item>
           </div>
         </div>
+
+        <div class="form-subsection-label">Valores</div>
 
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
