@@ -143,7 +143,7 @@
   <nz-layout class="main-area">
     <nz-header class="topbar">
       <button
-        (click)="isCollapsed = !isCollapsed"
+        (click)="togglePrimaryNavigation()"
         [attr.aria-label]="'layout.topbar.toggleMenu' | translate"
         class="nav-toggle"
         type="button">
@@ -238,3 +238,92 @@
     </nz-content>
   </nz-layout>
 </nz-layout>
+
+<nz-drawer
+  (nzOnClose)="closeMobileMenu()"
+  [nzBodyStyle]="{ padding: '0' }"
+  [nzVisible]="isMobileMenuVisible"
+  class="mobile-navigation-drawer"
+  nzPlacement="left"
+  nzTitle="Transportes Chiziane"
+  nzWidth="320px">
+  <nav *nzDrawerContent class="mobile-navigation" aria-label="Navegacao mobile">
+    <a routerLink="/app/dashboard" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="dashboard"></span>
+      <span>{{ 'layout.menu.dashboard' | translate }}</span>
+    </a>
+
+    <div class="mobile-nav-section">{{ 'layout.menu.carloadsGroup' | translate }}</div>
+
+    <a routerLink="/app/carload" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="unordered-list"></span>
+      <span>{{ 'layout.menu.carloads' | translate }}</span>
+    </a>
+
+    <a routerLink="/app/sprint" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="partition"></span>
+      <span>{{ 'layout.menu.sprints' | translate }}</span>
+    </a>
+
+    <a routerLink="/app/truck" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="truck"></span>
+      <span>Camioes</span>
+    </a>
+
+    <a routerLink="/app/carload-customer" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="team"></span>
+      <span>{{ 'layout.menu.customers' | translate }}</span>
+    </a>
+
+    <a routerLink="/app/commercial-catalogs" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="read"></span>
+      <span>{{ 'layout.menu.commercialCatalogs' | translate }}</span>
+    </a>
+
+    <div class="mobile-nav-section">{{ 'layout.menu.team' | translate }}</div>
+
+    <a routerLink="/app/driver" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="idcard"></span>
+      <span>{{ 'layout.menu.drivers' | translate }}</span>
+    </a>
+
+    <a routerLink="/app/manager" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="user-switch"></span>
+      <span>{{ 'layout.menu.managers' | translate }}</span>
+    </a>
+
+    <div class="mobile-nav-section">{{ 'layout.menu.finance' | translate }}</div>
+
+    <a routerLink="/app/quote" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="file-text"></span>
+      <span>{{ 'layout.menu.quotes' | translate }}</span>
+    </a>
+
+    <a routerLink="/app/invoice" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="file-done"></span>
+      <span>{{ 'layout.menu.invoices' | translate }}</span>
+    </a>
+
+    <a routerLink="/app/payment" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="wallet"></span>
+      <span>Pagamentos</span>
+    </a>
+
+    <a routerLink="/app/product-prices" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="database"></span>
+      <span>Precos</span>
+    </a>
+
+    <div class="mobile-nav-section">Conta</div>
+
+    <a routerLink="/app/users" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="usergroup-add"></span>
+      <span>{{ 'layout.menu.users' | translate }}</span>
+    </a>
+
+    <button (click)="logout()" class="mobile-logout" type="button">
+      <span nz-icon nzType="logout"></span>
+      <span>{{ 'common.actions.logout' | translate }}</span>
+    </button>
+  </nav>
+</nz-drawer>

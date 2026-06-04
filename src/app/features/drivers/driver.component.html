@@ -75,6 +75,82 @@
       Novo Motorista
     </button>
   </div>
+
+  <nz-spin [nzSpinning]="isLoading" class="mobile-driver-spin" nzTip="A carregar motoristas...">
+    <div *ngIf="listOfDisplayData.length; else mobileEmptyDrivers" class="mobile-driver-list">
+      <article *ngFor="let data of listOfDisplayData" class="mobile-driver-card">
+        <div class="mobile-card-topline">
+          <div>
+            <span class="mobile-card-kicker">Motorista</span>
+            <h3>{{ data.Name }}</h3>
+          </div>
+
+          <nz-tag [nzColor]="(data.status === 'ACTIVO' || data.status === 'ATIVO') ? 'green' : 'red'">
+            {{ data.status === 'ACTIVO' ? 'ATIVO' : data.status }}
+          </nz-tag>
+        </div>
+
+        <div class="mobile-contact-row">
+          <span nz-icon nzType="phone"></span>
+          <span>{{ data.Phone || '-' }}</span>
+        </div>
+
+        <div class="mobile-contact-row">
+          <span nz-icon nzType="truck"></span>
+          <span>{{ data.truckId ? formatDriverTruckLabel(data) : (data.CarDescription || '-') }}</span>
+        </div>
+
+        <dl class="mobile-card-facts">
+          <div>
+            <dt>Criado em</dt>
+            <dd>{{ data.createdAt ? (data.createdAt | date:'dd/MM/yyyy') : '-' }}</dd>
+          </div>
+          <div>
+            <dt>Matricula</dt>
+            <dd>{{ data.truckPlateNumber || '-' }}</dd>
+          </div>
+        </dl>
+
+        <div class="mobile-card-actions">
+          <a
+            [href]="phoneHref(data.Phone)"
+            [attr.aria-label]="'Ligar para ' + data.Name"
+            class="mobile-icon-action"
+            nz-button
+            nzType="default">
+            <nz-icon nzTheme="outline" nzType="phone"></nz-icon>
+          </a>
+
+          <button (click)="viewDriver(data)" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+            Ver
+          </button>
+
+          <button (click)="editDriver(data)" nz-button nzType="primary">
+            <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+            Editar
+          </button>
+
+          <button (click)="deleteDriver(data)" nz-button nzDanger nzType="default">
+            <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+          </button>
+        </div>
+      </article>
+    </div>
+  </nz-spin>
+
+  <ng-template #mobileEmptyDrivers>
+    <div *ngIf="!isLoading" class="mobile-empty-state">
+      <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
+      <h3>Nenhum motorista encontrado</h3>
+      <p *ngIf="searchValue">Tenta pesquisar por outro nome, telefone ou camiao.</p>
+      <button (click)="openDriverDrawer()" nz-button nzType="primary">
+        <nz-icon nzTheme="outline" nzType="user-add"></nz-icon>
+        Novo Motorista
+      </button>
+    </div>
+  </ng-template>
+
   <div class="table-wrapper">
     <div class="table-scroll">
 

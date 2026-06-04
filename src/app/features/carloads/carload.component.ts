@@ -306,6 +306,11 @@ export class CarLoadComponent implements OnInit {
     return this.getAvailableStatusTransitions(carload).length > 0;
   }
 
+  phoneHref(phone: string | null | undefined): string {
+    const digits = (phone || '').toString().replace(/[^\d+]/g, '');
+    return digits ? `tel:${digits}` : 'tel:';
+  }
+
   onQuickStatusChange(carload: CarLoad, status: CarLoadStatus): void {
     if (!carload?.id || !status || status === carload.deliveryStatus) {
       return;

@@ -463,6 +463,10 @@
 }
 
 @media (max-width: 900px) {
+  .app-sidebar {
+    display: none;
+  }
+
   .topbar {
     height: 64px;
     padding: 0 14px;
@@ -481,4 +485,64 @@
   .content-area {
     padding: 16px;
   }
+}
+
+::ng-deep .mobile-navigation-drawer .ant-drawer-header {
+  min-height: 64px;
+}
+
+.mobile-navigation {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 10px;
+  background: #f4f8fb;
+}
+
+.mobile-navigation a,
+.mobile-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  width: 100%;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  color: #10212b;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 750;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mobile-navigation a.active,
+.mobile-navigation a:hover,
+.mobile-logout:hover {
+  color: #0e7c72;
+  background: #e7faf5;
+}
+
+.mobile-navigation .anticon,
+.mobile-logout .anticon {
+  width: 20px;
+  color: #607786;
+  font-size: 18px;
+}
+
+.mobile-nav-section {
+  margin: 16px 8px 6px;
+  color: #7a8f9d;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mobile-logout {
+  margin-top: auto;
+  color: #b42318;
 }

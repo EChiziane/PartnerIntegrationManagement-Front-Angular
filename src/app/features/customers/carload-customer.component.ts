@@ -141,6 +141,18 @@ export class CarloadCustomerComponent implements OnInit {
     this.applySearch();
   }
 
+  phoneHref(phone: string | null | undefined): string {
+    const digits = (phone || '').toString().replace(/[^\d+]/g, '');
+    return digits ? `tel:${digits}` : 'tel:';
+  }
+
+  customerAddress(customer: CarloadCustomer): string {
+    return [customer.streetAddress, customer.city, customer.zipCode]
+      .map(value => (value || '').toString().trim())
+      .filter(Boolean)
+      .join(', ') || '-';
+  }
+
   onAddressSearch(value: string): void {
     this.addressSuggestions = this.locationSuggestionService.search(value);
   }

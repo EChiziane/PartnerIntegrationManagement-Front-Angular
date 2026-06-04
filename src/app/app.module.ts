@@ -72,6 +72,7 @@ import {NzEmptyComponent} from 'ng-zorro-antd/empty';
 import {ManagerDetailsComponent} from '@features/managers/manager-details/manager-details.component';
 import {CarloadDetailsComponent} from '@features/carloads/carload-details/carload-details.component';
 import {QuoteComponent} from '@features/quotes/quote.component';
+import {QuatationComponent} from '@features/quotations/quatation.component';
 import {UserDetailComponent} from '@features/users/detail/user-detail.component';
 import {TruckComponent} from '@features/trucks/truck.component';
 import {PaymentComponent} from '@features/payments/payment.component';
@@ -106,6 +107,7 @@ registerLocaleData(en);
     , ManagerDetailsComponent
     , CarloadDetailsComponent,
     QuoteComponent,
+    QuatationComponent,
     UserDetailComponent,
     TruckComponent,
     PaymentComponent,

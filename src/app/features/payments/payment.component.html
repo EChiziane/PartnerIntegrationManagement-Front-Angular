@@ -47,6 +47,97 @@
     <button (click)="reset()" nz-button nzType="default"><nz-icon nzTheme="outline" nzType="reload"></nz-icon>Limpar</button>
   </div>
 
+  <nz-spin [nzSpinning]="isLoading" class="mobile-payment-spin" nzTip="A carregar pagamentos...">
+    <div *ngIf="filteredPayments.length; else mobileEmptyPayments" class="mobile-payment-list">
+      <article *ngFor="let payment of filteredPayments" class="mobile-payment-card" [class.pending-suggestion-card]="isPendingSuggestion(payment)">
+        <div class="mobile-card-topline">
+          <div>
+            <span class="mobile-card-kicker">{{ payment.invoiceCode || payment.carLoadDescription || 'Pagamento' }}</span>
+            <h3>{{ payment.carLoadCustomerName || 'Cliente sem nome' }}</h3>
+          </div>
+
+          <nz-tag [nzColor]="getPaymentStatusColor(payment)">{{ getPaymentStatusLabel(payment) }}</nz-tag>
+        </div>
+
+        <div class="mobile-route">
+          <span nz-icon nzType="environment"></span>
+          <span>{{ payment.deliveryDestination || 'Sem destino associado' }}</span>
+        </div>
+
+        <dl class="mobile-money-grid">
+          <div>
+            <dt>Cliente</dt>
+            <dd>{{ formatMoney(payment.customerAmount) }} Mts</dd>
+          </div>
+          <div>
+            <dt>Recebido</dt>
+            <dd>{{ formatMoney(payment.customerPaidAmount) }} Mts</dd>
+          </div>
+          <div>
+            <dt>Motorista</dt>
+            <dd>{{ formatMoney(payment.driverAmount) }} Mts</dd>
+          </div>
+          <div>
+            <dt>Pago</dt>
+            <dd>{{ formatMoney(payment.driverPaidAmount) }} Mts</dd>
+          </div>
+          <div class="highlight">
+            <dt>Comissao</dt>
+            <dd>{{ formatMoney(payment.companyCommission) }} Mts</dd>
+          </div>
+          <div class="highlight">
+            <dt>Aberto</dt>
+            <dd>{{ formatMoney(getCustomerBalance(payment) + getDriverBalance(payment)) }} Mts</dd>
+          </div>
+        </dl>
+
+        <div class="mobile-payment-meta">
+          <span>
+            <nz-icon nzTheme="outline" nzType="car"></nz-icon>
+            {{ payment.driverName || 'Sem motorista' }}
+          </span>
+          <span>
+            <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
+            {{ payment.paymentDate ? (payment.paymentDate | date:'dd/MM/yyyy HH:mm') : '-' }}
+          </span>
+        </div>
+
+        <div class="mobile-card-actions">
+          <button *ngIf="canReceiveCustomerPayment(payment)" (click)="markClientPaid(payment)" nz-button nzType="primary">
+            <nz-icon nzTheme="outline" nzType="dollar"></nz-icon>
+            Receber
+          </button>
+
+          <button *ngIf="canPayDriver(payment)" (click)="markSettled(payment)" nz-button nzType="primary">
+            <nz-icon nzTheme="outline" nzType="car"></nz-icon>
+            Pagar
+          </button>
+
+          <button (click)="editPayment(payment)" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+            {{ getPaymentActionLabel(payment) }}
+          </button>
+
+          <button *ngIf="payment.id" (click)="deletePayment(payment)" nz-button nzDanger nzType="default">
+            <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+          </button>
+        </div>
+      </article>
+    </div>
+  </nz-spin>
+
+  <ng-template #mobileEmptyPayments>
+    <div *ngIf="!isLoading" class="mobile-empty-state">
+      <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
+      <h3>Nenhum pagamento encontrado</h3>
+      <p>Altera o ciclo, limpa a pesquisa ou cria um novo pagamento.</p>
+      <button (click)="openDrawer()" nz-button nzType="primary">
+        <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
+        Novo Pagamento
+      </button>
+    </div>
+  </ng-template>
+
   <div class="table-wrapper">
     <div class="table-scroll">
       <nz-spin [nzSpinning]="isLoading" nzSize="large" nzTip="A carregar pagamentos...">

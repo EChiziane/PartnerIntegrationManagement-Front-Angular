@@ -175,6 +175,11 @@ export class DriverComponent implements OnInit {
     this.search();
   }
 
+  phoneHref(phone: string | null | undefined): string {
+    const digits = (phone || '').toString().replace(/[^\d+]/g, '');
+    return digits ? `tel:${digits}` : 'tel:';
+  }
+
   openDriverDrawer() {
     this.isEditMode = false;
 

@@ -23,6 +23,7 @@ interface User {
 export class MainLayoutComponent implements OnInit {
 
   isCollapsed = false;
+  isMobileMenuVisible = false;
 
   username: string = 'Utilizador';
   userRole: string = 'Conta autenticada';
@@ -54,6 +55,19 @@ export class MainLayoutComponent implements OnInit {
     return this.currentUserId
       ? ['/app/user-detail', this.currentUserId]
       : ['/app/users'];
+  }
+
+  togglePrimaryNavigation(): void {
+    if (typeof window !== 'undefined' && window.innerWidth <= 900) {
+      this.isMobileMenuVisible = true;
+      return;
+    }
+
+    this.isCollapsed = !this.isCollapsed;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuVisible = false;
   }
 
   private roleLabel(role: User['role'] | undefined): string {
