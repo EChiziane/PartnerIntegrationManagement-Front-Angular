@@ -26,10 +26,14 @@ export class DashboardComponent implements OnInit {
   rangeEnd: Date | null = null;
 
   priorityList: CarLoad[] = [];
+  overdueList: CarLoad[] = [];
+  todayScheduledList: CarLoad[] = [];
   inProgressList: CarLoad[] = [];
   scheduledList: CarLoad[] = [];
+  upcomingList: CarLoad[] = [];
   cancelledList: CarLoad[] = [];
   doneList: CarLoad[] = [];
+  doneTodayList: CarLoad[] = [];
 
   totalCount = 0;
   activeCount = 0;
@@ -44,7 +48,7 @@ export class DashboardComponent implements OnInit {
   estimatedMargin = 0;
 
   showDoneCard = false;
-  showCancelledCard = true;
+  showCancelledCard = false;
 
   constructor(
     private carloadService: CarloadService,
@@ -306,6 +310,14 @@ export class DashboardComponent implements OnInit {
       .filter(carload => this.isScheduled(carload.deliveryStatus))
       .sort((a, b) => this.parseDate(a.deliveryScheduledDate).getTime() - this.parseDate(b.deliveryScheduledDate).getTime());
 
+    this.overdueList = this.scheduledList.filter(carload => this.isOverdue(carload));
+
+    this.todayScheduledList = this.scheduledList.filter(carload => this.isToday(carload));
+
+    this.upcomingList = this.scheduledList.filter(carload =>
+      !this.isOverdue(carload) && !this.isToday(carload)
+    );
+
     this.cancelledList = filteredData
       .filter(carload => this.isCancelled(carload.deliveryStatus))
       .sort((a, b) => this.parseDate(b.deliveryScheduledDate).getTime() - this.parseDate(a.deliveryScheduledDate).getTime());
@@ -314,11 +326,13 @@ export class DashboardComponent implements OnInit {
       .filter(carload => this.isDone(carload.deliveryStatus))
       .sort((a, b) => this.parseDate(b.deliveryDate).getTime() - this.parseDate(a.deliveryDate).getTime());
 
+    this.doneTodayList = this.doneList.filter(carload => this.isToday(carload));
+
     this.priorityList = [
+      ...this.overdueList,
+      ...this.todayScheduledList,
       ...this.inProgressList,
-      ...this.scheduledList.filter(carload => this.isOverdue(carload)),
-      ...this.scheduledList.filter(carload => this.isToday(carload)),
-      ...this.scheduledList.filter(carload => !this.isOverdue(carload) && !this.isToday(carload)).slice(0, 3)
+      ...this.upcomingList.slice(0, 3)
     ].filter((carload, index, list) => list.findIndex(item => item.id === carload.id) === index).slice(0, 8);
 
     this.totalCount = filteredData.length;
@@ -327,8 +341,8 @@ export class DashboardComponent implements OnInit {
     this.cancelledCount = this.cancelledList.length;
     this.doneCount = this.doneList.length;
     this.activeCount = this.inProgressCount + this.scheduledCount;
-    this.todayCount = filteredData.filter(carload => !this.isCancelled(carload.deliveryStatus) && this.isToday(carload)).length;
-    this.overdueCount = this.scheduledList.filter(carload => this.isOverdue(carload)).length;
+    this.todayCount = this.todayScheduledList.length + this.inProgressList.length + this.doneTodayList.length;
+    this.overdueCount = this.overdueList.length;
     this.totalEarnings = filteredData.reduce((total, carload) => total + Number(carload.totalEarnings || 0), 0);
     this.totalSpent = filteredData.reduce((total, carload) => total + Number(carload.totalSpent || 0), 0);
     this.estimatedMargin = this.totalEarnings - this.totalSpent;

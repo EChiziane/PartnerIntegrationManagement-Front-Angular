@@ -58,6 +58,55 @@
         </article>
       </section>
 
+      <section class="customer-ops-grid">
+        <article class="ops-card next" *ngIf="nextScheduledCarload; else noNextCarload">
+          <span class="ops-kicker">Próxima agendada</span>
+          <h2>{{ nextScheduledCarload.customerName }}</h2>
+          <p>{{ nextScheduledCarload.transportedMaterial }} para {{ nextScheduledCarload.deliveryDestination }}</p>
+          <strong>{{ nextScheduledCarload.deliveryScheduledDate | date:'dd/MM/yyyy HH:mm' }}</strong>
+          <button (click)="goToCarload(nextScheduledCarload)" nz-button nzType="primary">
+            <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+            Ver carrada
+          </button>
+        </article>
+
+        <ng-template #noNextCarload>
+          <article class="ops-card quiet">
+            <span class="ops-kicker">Próxima agendada</span>
+            <h2>Sem próxima carrada</h2>
+            <p>Este cliente não tem agendamento futuro neste momento.</p>
+          </article>
+        </ng-template>
+
+        <article class="ops-card live">
+          <span class="ops-kicker">Em execução</span>
+          <h2>{{ inProgressCarloads.length }}</h2>
+          <p *ngIf="inProgressCarloads.length; else noLiveCarload">
+            {{ inProgressCarloads[0].transportedMaterial }} para {{ inProgressCarloads[0].deliveryDestination }}
+          </p>
+          <ng-template #noLiveCarload>
+            <p>Nenhuma carrada deste cliente está em execução.</p>
+          </ng-template>
+        </article>
+
+        <article class="ops-card done">
+          <span class="ops-kicker">Últimas entregues</span>
+          <h2>{{ recentDeliveredCarloads.length }}</h2>
+          <div *ngIf="recentDeliveredCarloads.length; else noRecentDelivered" class="recent-list">
+            <button
+              *ngFor="let carload of recentDeliveredCarloads"
+              (click)="goToCarload(carload)"
+              nz-button
+              nzType="default">
+              {{ carload.deliveryDate | date:'dd/MM' }} · {{ carload.transportedMaterial }}
+            </button>
+          </div>
+          <ng-template #noRecentDelivered>
+            <p>Ainda não há entregas recentes para este cliente.</p>
+          </ng-template>
+        </article>
+      </section>
+
       <section class="content-grid">
         <article class="section-card">
           <header>

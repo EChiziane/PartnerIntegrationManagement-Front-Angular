@@ -26,6 +26,9 @@ export class CarloadCustomerDetailComponent implements OnInit {
   totalEarnings = 0;
   totalSpent = 0;
   estimatedMargin = 0;
+  nextScheduledCarload: CarLoad | null = null;
+  inProgressCarloads: CarLoad[] = [];
+  recentDeliveredCarloads: CarLoad[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -180,6 +183,14 @@ export class CarloadCustomerDetailComponent implements OnInit {
     this.totalEarnings = this.carloads.reduce((sum, item) => sum + Number(item.totalEarnings || 0), 0);
     this.totalSpent = this.carloads.reduce((sum, item) => sum + Number(item.totalSpent || 0), 0);
     this.estimatedMargin = this.totalEarnings - this.totalSpent;
+    this.nextScheduledCarload = this.carloads
+      .filter(item => item.deliveryStatus === 'SCHEDULED' && this.dateValue(item.deliveryScheduledDate) > 0)
+      .sort((a, b) => this.dateValue(a.deliveryScheduledDate) - this.dateValue(b.deliveryScheduledDate))[0] || null;
+    this.inProgressCarloads = this.carloads.filter(item => item.deliveryStatus === 'IN_PROGRESS');
+    this.recentDeliveredCarloads = this.carloads
+      .filter(item => item.deliveryStatus === 'DELIVERED')
+      .sort((a, b) => this.dateValue(b.deliveryDate) - this.dateValue(a.deliveryDate))
+      .slice(0, 3);
   }
 
   private dateValue(value: string | null | undefined): number {

@@ -71,7 +71,7 @@ export class SprintComponent implements OnInit {
   updateDrawer(): void {
     if (window.innerWidth <= 768) {
       this.drawerWidth = '100%';
-      this.drawerPlacement = 'bottom';
+      this.drawerPlacement = 'right';
     } else {
       this.drawerWidth = 720;
       this.drawerPlacement = 'right';

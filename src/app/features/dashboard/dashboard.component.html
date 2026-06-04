@@ -119,16 +119,16 @@
       <section class="operation-panel priority-panel">
         <header>
           <div>
-            <span class="panel-kicker">{{ 'dashboard.panels.priorityKicker' | translate }}</span>
-            <h2>{{ 'dashboard.panels.priorityTitle' | translate }}</h2>
+            <span class="panel-kicker">Precisa de tratamento</span>
+            <h2>Atrasadas</h2>
           </div>
-          <nz-tag nzColor="red">{{ priorityList.length }}</nz-tag>
+          <nz-tag nzColor="red">{{ overdueList.length }}</nz-tag>
         </header>
 
         <div class="panel-body">
-          <ng-container *ngIf="priorityList.length; else emptyPriority">
+          <ng-container *ngIf="overdueList.length; else emptyOverdue">
             <article
-              *ngFor="let c of priorityList; trackBy: trackById"
+              *ngFor="let c of overdueList; trackBy: trackById"
               class="priority-item"
               [ngClass]="priorityClass(c)">
               <div class="priority-main">
@@ -165,10 +165,10 @@
             </article>
           </ng-container>
 
-          <ng-template #emptyPriority>
-            <div class="empty-state">
+          <ng-template #emptyOverdue>
+            <div class="empty-state compact-empty">
               <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
-              <p>{{ 'dashboard.empty.priority' | translate }}</p>
+              <p>Sem atrasadas.</p>
             </div>
           </ng-template>
         </div>
@@ -191,9 +191,9 @@
           </ng-container>
 
           <ng-template #emptyProgress>
-            <div class="empty-state">
+            <div class="empty-state compact-empty">
               <nz-icon nzTheme="outline" nzType="sync"></nz-icon>
-              <p>{{ 'dashboard.empty.progress' | translate }}</p>
+              <p>Sem carradas em execução.</p>
             </div>
           </ng-template>
         </div>
@@ -202,23 +202,73 @@
       <section class="operation-panel">
         <header>
           <div>
-            <span class="panel-kicker">{{ 'dashboard.panels.scheduleKicker' | translate }}</span>
-            <h2>{{ 'dashboard.panels.scheduleTitle' | translate }}</h2>
+            <span class="panel-kicker">Agenda do dia</span>
+            <h2>Para fazer hoje</h2>
           </div>
-          <nz-tag nzColor="orange">{{ scheduledList.length }}</nz-tag>
+          <nz-tag nzColor="orange">{{ todayScheduledList.length }}</nz-tag>
         </header>
 
         <div class="panel-body">
-          <ng-container *ngIf="scheduledList.length; else emptyScheduled">
-            <ng-container *ngFor="let c of scheduledList; trackBy: trackById">
+          <ng-container *ngIf="todayScheduledList.length; else emptyScheduled">
+            <ng-container *ngFor="let c of todayScheduledList; trackBy: trackById">
               <ng-container *ngTemplateOutlet="carloadCard; context: {$implicit: c, mode: 'scheduled'}"></ng-container>
             </ng-container>
           </ng-container>
 
           <ng-template #emptyScheduled>
-            <div class="empty-state">
+            <div class="empty-state compact-empty">
               <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
-              <p>{{ 'dashboard.empty.scheduled' | translate }}</p>
+              <p>Nada marcado para hoje.</p>
+            </div>
+          </ng-template>
+        </div>
+      </section>
+
+      <section class="operation-panel">
+        <header>
+          <div>
+            <span class="panel-kicker">Agenda futura</span>
+            <h2>Próximas</h2>
+          </div>
+          <nz-tag nzColor="blue">{{ upcomingList.length }}</nz-tag>
+        </header>
+
+        <div class="panel-body">
+          <ng-container *ngIf="upcomingList.length; else emptyUpcoming">
+            <ng-container *ngFor="let c of upcomingList; trackBy: trackById">
+              <ng-container *ngTemplateOutlet="carloadCard; context: {$implicit: c, mode: 'scheduled'}"></ng-container>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #emptyUpcoming>
+            <div class="empty-state compact-empty">
+              <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
+              <p>Sem próximas agendadas.</p>
+            </div>
+          </ng-template>
+        </div>
+      </section>
+
+      <section class="operation-panel delivered-panel">
+        <header>
+          <div>
+            <span class="panel-kicker">Fecho do dia</span>
+            <h2>Feitas hoje</h2>
+          </div>
+          <nz-tag nzColor="green">{{ doneTodayList.length }}</nz-tag>
+        </header>
+
+        <div class="panel-body">
+          <ng-container *ngIf="doneTodayList.length; else emptyDoneToday">
+            <ng-container *ngFor="let c of doneTodayList; trackBy: trackById">
+              <ng-container *ngTemplateOutlet="carloadCard; context: {$implicit: c, mode: 'done'}"></ng-container>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #emptyDoneToday>
+            <div class="empty-state compact-empty">
+              <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
+              <p>Ainda nada concluído hoje.</p>
             </div>
           </ng-template>
         </div>

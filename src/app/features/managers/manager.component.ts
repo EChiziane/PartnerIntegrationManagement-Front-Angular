@@ -70,10 +70,10 @@ export class ManagerComponent implements OnInit {
   updateDrawer() {
     if (window.innerWidth <= 768) {
       this.drawerWidth = '100%';
-      this.drawerPlacement = 'bottom';
+      this.drawerPlacement = 'right';
 
       this.detailsDrawerWidth = '100%';
-      this.detailsDrawerPlacement = 'bottom';
+      this.detailsDrawerPlacement = 'right';
     } else {
       this.drawerWidth = 720;
       this.drawerPlacement = 'right';
