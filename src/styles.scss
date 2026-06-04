@@ -140,6 +140,18 @@ body {
   font-weight: 500;
 }
 
+.drawer-footer .ant-btn-primary {
+  border-color: var(--tc-primary) !important;
+  background: var(--tc-primary) !important;
+  box-shadow: 0 8px 18px rgba(14, 124, 114, 0.18) !important;
+}
+
+.drawer-footer .ant-btn-primary:hover,
+.drawer-footer .ant-btn-primary:focus {
+  border-color: var(--tc-primary-dark) !important;
+  background: var(--tc-primary-dark) !important;
+}
+
 .drawer-footer [nz-button][disabled] {
   opacity: 0.72;
 }
@@ -198,14 +210,32 @@ body {
 }
 
 .ant-btn-primary {
-  border-color: var(--tc-primary);
-  background: var(--tc-primary);
+  border-color: var(--tc-primary) !important;
+  background: var(--tc-primary) !important;
 }
 
 .ant-btn-primary:hover,
 .ant-btn-primary:focus {
-  border-color: var(--tc-primary-dark);
-  background: var(--tc-primary-dark);
+  border-color: var(--tc-primary-dark) !important;
+  background: var(--tc-primary-dark) !important;
+}
+
+.ant-btn-primary[disabled],
+.ant-btn-primary[disabled]:hover,
+.ant-btn-primary[disabled]:focus {
+  border-color: var(--tc-line-strong) !important;
+  background: #d8e5e1 !important;
+  color: #6b7f78 !important;
+}
+
+.ant-btn-loading-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.ant-btn-primary .ant-btn-loading-icon,
+.ant-btn-primary .anticon {
+  color: currentColor !important;
 }
 
 .ant-btn-dangerous.ant-btn-primary {
@@ -280,6 +310,40 @@ body {
 
 .ant-message-error .anticon {
   color: var(--tc-danger) !important;
+}
+
+.ant-spin {
+  color: var(--tc-primary) !important;
+}
+
+.ant-spin-dot-item {
+  background-color: var(--tc-primary) !important;
+}
+
+.ant-spin-text {
+  margin-top: 10px !important;
+  color: var(--tc-muted) !important;
+  font-size: 13px !important;
+  font-weight: 750 !important;
+  letter-spacing: 0 !important;
+}
+
+.ant-spin-blur {
+  opacity: 0.42 !important;
+}
+
+.ant-spin-container::after {
+  background: rgba(248, 251, 253, 0.72) !important;
+  backdrop-filter: blur(1.5px);
+}
+
+.ant-drawer .ant-spin-nested-loading,
+.ant-drawer .ant-spin-container {
+  min-height: 100%;
+}
+
+.ant-drawer .ant-spin-spinning {
+  max-height: 100vh;
 }
 
 .ant-pagination-item-active {
