@@ -76,6 +76,11 @@ export class CarloadCustomerDetailComponent implements OnInit {
     return `${Number(value || 0).toFixed(2)} Mts`;
   }
 
+  phoneHref(phone: string | null | undefined): string {
+    const digits = (phone || '').toString().replace(/[^\d+]/g, '');
+    return digits ? `tel:${digits}` : 'tel:';
+  }
+
   statusLabel(status: string | null | undefined): string {
     switch ((status || '').toUpperCase()) {
       case 'SCHEDULED':

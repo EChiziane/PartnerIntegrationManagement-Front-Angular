@@ -228,6 +228,136 @@ p {
   text-align: center;
 }
 
+.mobile-carload-list,
+.mobile-empty-state {
+  display: none;
+}
+
+.mobile-carload-list {
+  gap: 12px;
+  padding: 14px;
+}
+
+.mobile-carload-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #e4e3dc;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(23, 32, 29, 0.06);
+
+  nz-tag {
+    margin: 0;
+  }
+}
+
+.mobile-card-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  h3 {
+    margin: 2px 0 0;
+    color: #17201d;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.25;
+    word-break: break-word;
+  }
+}
+
+.mobile-card-kicker {
+  color: #65716c;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.mobile-contact-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  color: #344054;
+  font-size: 13px;
+
+  span:last-child {
+    overflow-wrap: anywhere;
+  }
+}
+
+.mobile-card-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+
+  div {
+    min-width: 0;
+    padding: 10px;
+    border-radius: 8px;
+    background: #f8f8f4;
+  }
+
+  dt {
+    color: #65716c;
+    font-size: 11px;
+    font-weight: 850;
+  }
+
+  dd {
+    margin: 3px 0 0;
+    color: #17201d;
+    font-size: 13px;
+    font-weight: 850;
+    overflow-wrap: anywhere;
+  }
+}
+
+.mobile-card-actions {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 8px;
+
+  [nz-button] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 42px;
+    margin: 0;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+}
+
+.mobile-icon-action {
+  padding: 0 !important;
+}
+
+.mobile-empty-state {
+  justify-items: center;
+  gap: 8px;
+  padding: 24px 14px;
+  text-align: center;
+
+  h3 {
+    margin: 0;
+    color: #17201d;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  p {
+    margin: 0;
+    color: #65716c;
+  }
+}
+
 @media (max-width: 900px) {
   .hero-card,
   .hero-main {
@@ -238,5 +368,90 @@ p {
   .summary-grid,
   .content-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-page {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .page-breadcrumb {
+    display: none;
+  }
+
+  .hero-card {
+    padding: 16px;
+  }
+
+  .hero-main {
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 18px;
+  }
+
+  h1 {
+    font-size: 24px;
+    line-height: 1.15;
+    word-break: break-word;
+  }
+
+  .tag-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions {
+    width: 100%;
+
+    button[nz-button] {
+      width: 100%;
+      min-height: 42px;
+      margin: 0;
+    }
+  }
+
+  .summary-grid article {
+    padding: 14px;
+  }
+
+  .kv-list {
+    padding: 12px;
+
+    div {
+      display: grid;
+      gap: 4px;
+    }
+
+    strong {
+      text-align: left;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .carloads-card {
+    ::ng-deep .ant-table-wrapper {
+      display: none;
+    }
+  }
+
+  .mobile-carload-list,
+  .mobile-empty-state {
+    display: grid;
+  }
+}
+
+@media (max-width: 420px) {
+  .mobile-card-topline {
+    flex-direction: column;
+  }
+
+  .mobile-card-facts {
+    grid-template-columns: 1fr 1fr;
   }
 }

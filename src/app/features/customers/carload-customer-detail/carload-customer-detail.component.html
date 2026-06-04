@@ -96,6 +96,74 @@
           <h2>Carradas do cliente</h2>
         </header>
 
+        <div *ngIf="carloads.length; else mobileEmptyCarloads" class="mobile-carload-list">
+          <article *ngFor="let carload of carloads" class="mobile-carload-card">
+            <div class="mobile-card-topline">
+              <div>
+                <span class="mobile-card-kicker">Carrada</span>
+                <h3>{{ carload.transportedMaterial || '-' }}</h3>
+              </div>
+
+              <nz-tag [nzColor]="statusColor(carload.deliveryStatus)">
+                {{ statusLabel(carload.deliveryStatus) }}
+              </nz-tag>
+            </div>
+
+            <div class="mobile-contact-row">
+              <nz-icon nzTheme="outline" nzType="environment"></nz-icon>
+              <span>{{ carload.deliveryDestination || '-' }}</span>
+            </div>
+
+            <div class="mobile-contact-row">
+              <nz-icon nzTheme="outline" nzType="user"></nz-icon>
+              <span>{{ carload.assignedDriverName || '-' }}</span>
+            </div>
+
+            <dl class="mobile-card-facts">
+              <div>
+                <dt>Agendada</dt>
+                <dd>{{ carload.deliveryScheduledDate ? (carload.deliveryScheduledDate | date:'dd/MM HH:mm') : '-' }}</dd>
+              </div>
+              <div>
+                <dt>Receita</dt>
+                <dd>{{ formatMoney(carload.totalEarnings) }}</dd>
+              </div>
+              <div>
+                <dt>Custo</dt>
+                <dd>{{ formatMoney(carload.totalSpent) }}</dd>
+              </div>
+              <div>
+                <dt>Margem</dt>
+                <dd>{{ formatMoney((carload.totalEarnings || 0) - (carload.totalSpent || 0)) }}</dd>
+              </div>
+            </dl>
+
+            <div class="mobile-card-actions">
+              <a
+                [href]="phoneHref(customer.phoneNumber)"
+                [attr.aria-label]="'Ligar para ' + customer.name"
+                class="mobile-icon-action"
+                nz-button
+                nzType="default">
+                <nz-icon nzTheme="outline" nzType="phone"></nz-icon>
+              </a>
+
+              <button (click)="goToCarload(carload)" nz-button nzType="primary">
+                <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
+                Ver carrada
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <ng-template #mobileEmptyCarloads>
+          <div class="mobile-empty-state">
+            <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
+            <h3>Sem carradas registadas</h3>
+            <p>Quando este cliente tiver carradas, elas aparecem aqui.</p>
+          </div>
+        </ng-template>
+
         <nz-table
           #carloadTable
           [nzData]="carloads"
