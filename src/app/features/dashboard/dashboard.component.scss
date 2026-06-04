@@ -551,6 +551,8 @@
 
 @media (max-width: 640px) {
   .dashboard-page {
+    display: grid;
+    gap: 12px;
     padding: 12px;
   }
 
@@ -561,17 +563,74 @@
   }
 
   .dashboard-hero {
+    gap: 16px;
     padding: 18px;
+    background-position: center;
   }
 
   .hero-copy h1 {
-    font-size: 28px;
+    font-size: 26px;
+    line-height: 1.12;
+    word-break: break-word;
+  }
+
+  .hero-copy p {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 8px;
   }
 
   .hero-actions button,
   .toolbar-actions button,
   .quick-filters button {
     width: 100%;
+    min-height: 42px;
+    margin: 0;
+  }
+
+  .metric-grid {
+    gap: 8px;
+    margin: 0;
+  }
+
+  .metric-card {
+    min-height: 0;
+    padding: 14px;
+
+    strong {
+      font-size: 26px;
+    }
+
+    small {
+      font-size: 12px;
+    }
+  }
+
+  .toolbar {
+    gap: 8px;
+    margin-bottom: 0;
+    padding: 10px;
+  }
+
+  .search-box {
+    flex-basis: 100%;
+
+    input {
+      min-height: 42px;
+    }
+  }
+
+  .quick-filters {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .quick-filters,
@@ -584,11 +643,100 @@
     width: 100%;
   }
 
+  .toolbar-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .operations-grid {
+    gap: 10px;
+  }
+
+  .operation-panel {
+    min-height: 0;
+
+    header {
+      padding: 12px;
+
+      h2 {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .panel-body {
+    padding: 10px;
+    overflow: visible;
+  }
+
   .priority-item {
     grid-template-columns: 1fr;
+    padding: 12px;
   }
 
   .priority-actions {
-    justify-content: flex-end;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: stretch;
+
+    button[nz-button] {
+      min-height: 36px;
+      margin: 0;
+    }
+  }
+
+  .carload-card {
+    padding: 12px;
+  }
+
+  .card-topline {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    strong,
+    span {
+      white-space: normal;
+    }
+  }
+
+  .card-route span:last-child,
+  .card-meta span {
+    white-space: normal;
+  }
+
+  .card-money {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .card-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+
+    button[nz-button] {
+      min-height: 36px;
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: 420px) {
+  .dashboard-hero {
+    padding: 14px;
+  }
+
+  .hero-copy h1 {
+    font-size: 23px;
+  }
+
+  .quick-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .priority-actions,
+  .card-actions {
+    grid-template-columns: 1fr;
   }
 }
