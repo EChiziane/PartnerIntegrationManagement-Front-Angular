@@ -131,6 +131,11 @@ export class ListuserComponent {
     this.search();
   }
 
+  phoneHref(phone: string | null | undefined): string {
+    const digits = (phone || '').toString().replace(/[^\d+]/g, '');
+    return digits ? `tel:${digits}` : 'tel:';
+  }
+
 
   open(): void {
     this.visible1 = true;
