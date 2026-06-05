@@ -397,7 +397,7 @@ export class DriverComponent implements OnInit {
         this.isSaving = false;
         this.getDrivers();
         this.loadTrucks();
-        this.message.warning('Motorista gravado, mas nao foi possivel criar o camiao associado.');
+        this.message.warning('Motorista gravado, mas nao foi possivel criar o camião associado.');
       }
     });
   }

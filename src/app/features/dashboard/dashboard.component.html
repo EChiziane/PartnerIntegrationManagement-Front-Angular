@@ -50,6 +50,28 @@
     </article>
   </div>
 
+  <div class="operator-strip" aria-label="Atalhos operacionais">
+    <button (click)="scrollToPanel('progress')" nz-button nzType="default">
+      <nz-icon nzTheme="outline" nzType="sync"></nz-icon>
+      Agora <strong>{{ inProgressList.length }}</strong>
+    </button>
+
+    <button (click)="scrollToPanel('today')" nz-button nzType="default">
+      <nz-icon nzTheme="outline" nzType="clock-circle"></nz-icon>
+      Hoje <strong>{{ todayScheduledList.length }}</strong>
+    </button>
+
+    <button (click)="scrollToPanel('overdue')" class="danger" nz-button nzType="default">
+      <nz-icon nzTheme="outline" nzType="stop"></nz-icon>
+      Atrasadas <strong>{{ overdueList.length }}</strong>
+    </button>
+
+    <button (click)="scrollToPanel('done')" nz-button nzType="default">
+      <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
+      Feitas <strong>{{ doneTodayList.length }}</strong>
+    </button>
+  </div>
+
   <div class="toolbar">
     <div class="search-box">
       <input
@@ -110,7 +132,7 @@
 
   <nz-spin [nzSpinning]="isLoading" [nzTip]="'dashboard.loading' | translate">
     <div class="operations-grid">
-      <section class="operation-panel priority-panel">
+      <section id="operation-overdue" class="operation-panel priority-panel">
         <header>
           <div>
             <span class="panel-kicker">Precisa de tratamento</span>
@@ -163,12 +185,13 @@
             <div class="empty-state compact-empty">
               <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
               <p>Sem atrasadas.</p>
+              <button (click)="scrollToPanel('today')" nz-button nzSize="small" nzType="default">Ver agenda de hoje</button>
             </div>
           </ng-template>
         </div>
       </section>
 
-      <section class="operation-panel">
+      <section id="operation-progress" class="operation-panel">
         <header>
           <div>
             <span class="panel-kicker">{{ 'dashboard.panels.liveKicker' | translate }}</span>
@@ -188,12 +211,13 @@
             <div class="empty-state compact-empty">
               <nz-icon nzTheme="outline" nzType="sync"></nz-icon>
               <p>Sem carradas em execução.</p>
+              <button (click)="scrollToPanel('today')" nz-button nzSize="small" nzType="default">Ver agendadas</button>
             </div>
           </ng-template>
         </div>
       </section>
 
-      <section class="operation-panel">
+      <section id="operation-today" class="operation-panel">
         <header>
           <div>
             <span class="panel-kicker">Agenda do dia</span>
@@ -213,12 +237,13 @@
             <div class="empty-state compact-empty">
               <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
               <p>Nada marcado para hoje.</p>
+              <button (click)="goToCarloads()" nz-button nzSize="small" nzType="primary">Criar agendamento</button>
             </div>
           </ng-template>
         </div>
       </section>
 
-      <section class="operation-panel">
+      <section id="operation-upcoming" class="operation-panel">
         <header>
           <div>
             <span class="panel-kicker">Agenda futura</span>
@@ -238,12 +263,13 @@
             <div class="empty-state compact-empty">
               <nz-icon nzTheme="outline" nzType="calendar"></nz-icon>
               <p>Sem próximas agendadas.</p>
+              <button (click)="goToCarloads()" nz-button nzSize="small" nzType="primary">Adicionar carrada</button>
             </div>
           </ng-template>
         </div>
       </section>
 
-      <section class="operation-panel delivered-panel">
+      <section id="operation-done" class="operation-panel delivered-panel">
         <header>
           <div>
             <span class="panel-kicker">Fecho do dia</span>
@@ -263,6 +289,7 @@
             <div class="empty-state compact-empty">
               <nz-icon nzTheme="outline" nzType="check-circle"></nz-icon>
               <p>Ainda nada concluído hoje.</p>
+              <button (click)="scrollToPanel('progress')" nz-button nzSize="small" nzType="default">Ver em execução</button>
             </div>
           </ng-template>
         </div>

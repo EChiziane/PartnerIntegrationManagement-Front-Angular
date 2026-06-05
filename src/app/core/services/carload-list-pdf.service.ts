@@ -29,7 +29,7 @@ export class CarloadListPdfService {
     this.drawHeader(doc, pageWidth, margin, scopeLabel);
     this.drawMetric(doc, margin, 52, 52, 'Carradas', String(carloads.length), [14, 124, 114]);
     this.drawMetric(doc, margin + 61, 52, 52, 'Agendadas', String(this.countByStatus(carloads, 'SCHEDULED')), [59, 130, 246]);
-    this.drawMetric(doc, margin + 122, 52, 52, 'Em execucao', String(this.countByStatus(carloads, 'IN_PROGRESS')), [234, 179, 8]);
+    this.drawMetric(doc, margin + 122, 52, 52, 'Em execução', String(this.countByStatus(carloads, 'IN_PROGRESS')), [234, 179, 8]);
     this.drawMetric(doc, margin + 183, 52, 52, 'Entregues', String(this.countByStatus(carloads, 'DELIVERED')), [34, 197, 94]);
     this.drawMetric(doc, margin + 244, 52, 39, 'Canceladas', String(this.countByStatus(carloads, 'CANCELLED')), [239, 68, 68]);
 
@@ -199,7 +199,7 @@ export class CarloadListPdfService {
   private statusLabel(status: string | null | undefined): string {
     const value = (status || '').toUpperCase();
     if (value === 'SCHEDULED') return 'Agendada';
-    if (value === 'IN_PROGRESS') return 'Em execucao';
+    if (value === 'IN_PROGRESS') return 'Em execução';
     if (value === 'DELIVERED') return 'Entregue';
     if (value === 'CANCELLED') return 'Cancelada';
     return status || '-';

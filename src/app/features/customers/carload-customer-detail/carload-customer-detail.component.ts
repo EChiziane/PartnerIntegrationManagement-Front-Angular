@@ -89,7 +89,7 @@ export class CarloadCustomerDetailComponent implements OnInit {
       case 'SCHEDULED':
         return 'Agendada';
       case 'IN_PROGRESS':
-        return 'Em execucao';
+        return 'Em execução';
       case 'DELIVERED':
         return 'Entregue';
       case 'CANCELLED':
@@ -114,6 +114,10 @@ export class CarloadCustomerDetailComponent implements OnInit {
 
   goToCustomers(): void {
     this.router.navigate(['/app/carload-customer']);
+  }
+
+  goToCarloads(): void {
+    this.router.navigate(['/app/carload']);
   }
 
   goToCarload(carload: CarLoad): void {

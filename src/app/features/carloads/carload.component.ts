@@ -33,6 +33,8 @@ type CarloadReportPreset = 'TODAY' | 'THIS_WEEK' | 'THIS_MONTH' | 'LAST_MONTH' |
   styleUrls: ['./carload.component.scss']
 })
 export class CarLoadComponent implements OnInit {
+  private readonly filterStorageKey = 'tc-carload-filters';
+
   dataSource: CarLoad[] = [];
   listOfDisplayData: CarLoad[] = [];
 
@@ -194,6 +196,7 @@ export class CarLoadComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.restoreFilters();
     this.getCarLoads();
     this.loadLookups();
 
@@ -286,7 +289,7 @@ export class CarLoadComponent implements OnInit {
   get selectedDriverTruckLabel(): string {
     const truck = this.selectedDriverTruck;
     if (!truck) {
-      return 'Sem camiao associado ao motorista';
+      return 'Sem camião associado ao motorista';
     }
 
     const plate = truck.plateNumber || truck.description || 'Camiao sem matricula';
@@ -404,7 +407,7 @@ export class CarLoadComponent implements OnInit {
         this.productPrices = data || [];
         this.materials = Array.from(new Set(this.productPrices.map(item => item.materialName))).sort();
       },
-      error: () => this.message.warning('Catalogo de precos indisponivel. A usar materiais locais.')
+      error: () => this.message.warning('Catálogo de preços indisponivel. A usar materiais locais.')
     });
 
     setTimeout(() => (this.isLoadingLookups = false), 500);
@@ -461,6 +464,7 @@ export class CarLoadComponent implements OnInit {
     }
 
     this.listOfDisplayData = data;
+    this.persistFilters();
   }
 
   search(): void {
@@ -1020,6 +1024,30 @@ export class CarLoadComponent implements OnInit {
     } catch {
       return '';
     }
+  }
+
+  private restoreFilters(): void {
+    if (typeof localStorage === 'undefined') return;
+
+    try {
+      const raw = localStorage.getItem(this.filterStorageKey);
+      if (!raw) return;
+
+      const saved = JSON.parse(raw) as Partial<{ searchValue: string; filterMode: FilterMode }>;
+      this.searchValue = saved.searchValue || '';
+      this.filterMode = saved.filterMode || 'ALL';
+    } catch {
+      localStorage.removeItem(this.filterStorageKey);
+    }
+  }
+
+  private persistFilters(): void {
+    if (typeof localStorage === 'undefined') return;
+
+    localStorage.setItem(this.filterStorageKey, JSON.stringify({
+      searchValue: this.searchValue,
+      filterMode: this.filterMode
+    }));
   }
 
   private resolveMoneyValue(primary: unknown, fallback: unknown): number {

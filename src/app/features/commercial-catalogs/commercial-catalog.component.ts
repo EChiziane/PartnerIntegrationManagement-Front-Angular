@@ -157,7 +157,7 @@ export class CommercialCatalogComponent implements OnInit {
         this.saving = false;
       },
       error: () => {
-        this.errorMessage = 'Nao foi possivel gravar o catalogo agora.';
+        this.errorMessage = 'Nao foi possivel gravar o catálogo agora.';
         this.saving = false;
       }
     });

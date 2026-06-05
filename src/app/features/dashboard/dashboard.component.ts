@@ -7,6 +7,7 @@ import {CarloadService} from '@core/services/carload.service';
 import {TranslationService} from '@core/services/translation.service';
 
 type FilterMode = 'ALL' | 'TODAY' | 'RANGE';
+type OperationPanelId = 'overdue' | 'progress' | 'today' | 'upcoming' | 'done';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,8 @@ type FilterMode = 'ALL' | 'TODAY' | 'RANGE';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  private readonly filterStorageKey = 'tc-dashboard-filters';
+
   dataSource: CarLoad[] = [];
   filteredData: CarLoad[] = [];
   isLoading = false;
@@ -57,7 +60,18 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.restoreFilters();
     this.load();
+  }
+
+  scrollToPanel(panelId: OperationPanelId): void {
+    if (typeof document === 'undefined') return;
+
+    document.getElementById(`operation-${panelId}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest'
+    });
   }
 
   get operationHeadline(): string {
@@ -100,10 +114,12 @@ export class DashboardComponent implements OnInit {
 
   toggleDoneCard(): void {
     this.showDoneCard = !this.showDoneCard;
+    this.persistFilters();
   }
 
   toggleCancelledCard(): void {
     this.showCancelledCard = !this.showCancelledCard;
+    this.persistFilters();
   }
 
   filterAll(): void {
@@ -292,6 +308,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.filteredData = filteredData;
+    this.persistFilters();
 
     this.inProgressList = filteredData
       .filter(carload => this.isInProgress(carload.deliveryStatus))
@@ -451,6 +468,46 @@ export class DashboardComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  private restoreFilters(): void {
+    if (typeof localStorage === 'undefined') return;
+
+    try {
+      const raw = localStorage.getItem(this.filterStorageKey);
+      if (!raw) return;
+
+      const saved = JSON.parse(raw) as Partial<{
+        searchValue: string;
+        filterMode: FilterMode;
+        rangeStart: string | null;
+        rangeEnd: string | null;
+        showDoneCard: boolean;
+        showCancelledCard: boolean;
+      }>;
+
+      this.searchValue = saved.searchValue || '';
+      this.filterMode = saved.filterMode || 'ALL';
+      this.rangeStart = saved.rangeStart ? new Date(saved.rangeStart) : null;
+      this.rangeEnd = saved.rangeEnd ? new Date(saved.rangeEnd) : null;
+      this.showDoneCard = !!saved.showDoneCard;
+      this.showCancelledCard = !!saved.showCancelledCard;
+    } catch {
+      localStorage.removeItem(this.filterStorageKey);
+    }
+  }
+
+  private persistFilters(): void {
+    if (typeof localStorage === 'undefined') return;
+
+    localStorage.setItem(this.filterStorageKey, JSON.stringify({
+      searchValue: this.searchValue,
+      filterMode: this.filterMode,
+      rangeStart: this.rangeStart ? this.rangeStart.toISOString() : null,
+      rangeEnd: this.rangeEnd ? this.rangeEnd.toISOString() : null,
+      showDoneCard: this.showDoneCard,
+      showCancelledCard: this.showCancelledCard
+    }));
   }
 
   private nextScheduled(): CarLoad | null {

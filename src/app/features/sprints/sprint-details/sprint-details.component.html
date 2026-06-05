@@ -10,7 +10,7 @@
   <div class="page-header">
     <div class="header-left">
       <p>{{ 'sprints.detailsTitle' | translate }}</p>
-      <span *ngIf="sprintName" class="sprint-name">— {{ sprintName }}</span>
+      <span *ngIf="sprintName" class="sprint-name">â€” {{ sprintName }}</span>
     </div>
 
     <div class="header-actions">
@@ -35,10 +35,10 @@
       <strong>{{ sprint.materialFocus || '-' }}</strong>
     </div>
     <div>
-      <span class="panel-label">Período</span>
+      <span class="panel-label">Per&iacute;odo</span>
       <strong>
         {{ sprint.startDate ? (sprint.startDate | date:'dd/MM/yyyy') : '-' }}
-        até
+        at?
         {{ sprint.expectedEndDate ? (sprint.expectedEndDate | date:'dd/MM/yyyy') : '-' }}
       </strong>
     </div>
@@ -164,7 +164,7 @@
               <nz-icon nzTheme="outline" nzType="calculator"></nz-icon>
             </div>
             <div class="summary-content">
-              <span class="title">Lucro líquido</span>
+              <span class="title">Lucro l&iacute;quido</span>
               <p>{{ netProfit | number:'1.2-2' }} Mts</p>
             </div>
           </div>
@@ -364,7 +364,7 @@
             <th class="col-date">{{ 'common.table.delivered' | translate }}</th>
             <th class="col-money">{{ 'common.table.earnings' | translate }}</th>
             <th class="col-money">{{ 'common.table.spent' | translate }}</th>
-            <th class="col-actions">Ações</th>
+            <th class="col-actions">A&ccedil;&otilde;es</th>
           </tr>
           </thead>
 
@@ -470,7 +470,7 @@
             nz-button
             nzType="default"
             type="button">
-            Em execucao
+            Em execução
           </button>
         </div>
 
@@ -567,7 +567,7 @@
               <nz-form-control>
                 <nz-select formControlName="deliveryStatus">
                   <nz-option [nzLabel]="'dashboard.status.scheduled' | translate" nzValue="SCHEDULED"></nz-option>
-                  <nz-option nzLabel="Em execucao" nzValue="IN_PROGRESS"></nz-option>
+                  <nz-option nzLabel="Em execução" nzValue="IN_PROGRESS"></nz-option>
                   <nz-option [nzLabel]="'dashboard.status.delivered' | translate" nzValue="DELIVERED"></nz-option>
                   <nz-option [nzLabel]="'dashboard.status.cancelled' | translate" nzValue="CANCELLED"></nz-option>
                 </nz-select>
@@ -628,7 +628,7 @@
       <button (click)="submitCarload()" [disabled]="carloadForm.invalid || isSaving" class="btn-save" nz-button
               nzType="primary">
         <ng-container *ngIf="!isSaving; else savingTpl">
-          {{ isEditMode ? 'Salvar' : (isCopyMode ? 'Criar Cópia' : 'Criar') }}
+          {{ isEditMode ? 'Salvar' : (isCopyMode ? 'Criar Copia' : 'Criar') }}
         </ng-container>
 
         <ng-template #savingTpl>

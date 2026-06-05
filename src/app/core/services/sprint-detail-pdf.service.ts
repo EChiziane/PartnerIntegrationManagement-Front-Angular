@@ -43,7 +43,7 @@ export class SprintDetailPdfService {
 
     this.drawHeader(doc, pageWidth, margin);
     this.drawInfoPanel(doc, margin, 46, contentWidth, 36, [
-      ['Codigo', campaignCode],
+      ['Código', campaignCode],
       ['Campanha', sprintName || '-'],
       ['Canal', sprint?.campaignChannel || '-'],
       ['Material foco', sprint?.materialFocus || '-'],
@@ -233,7 +233,7 @@ export class SprintDetailPdfService {
   private statusLabel(status: string | null | undefined): string {
     const value = (status || '').toUpperCase();
     if (value === 'SCHEDULED') return 'Agendada';
-    if (value === 'IN_PROGRESS') return 'Em execucao';
+    if (value === 'IN_PROGRESS') return 'Em execução';
     if (value === 'DELIVERED') return 'Entregue';
     if (value === 'CANCELLED') return 'Cancelada';
     return status || '-';

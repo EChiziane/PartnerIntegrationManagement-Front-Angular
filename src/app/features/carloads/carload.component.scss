@@ -557,7 +557,7 @@ textarea[nz-input] {
 
 .mobile-card-actions {
   display: grid;
-  grid-template-columns: 44px repeat(3, minmax(0, 1fr));
+  grid-template-columns: 44px minmax(0, 1fr) minmax(92px, auto);
   gap: 8px;
 
   [nz-button] {
@@ -692,6 +692,10 @@ textarea[nz-input] {
   }
 
   .mobile-card-actions {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 44px minmax(0, 1fr);
+
+    button[nz-dropdown] {
+      grid-column: 1 / -1;
+    }
   }
 }

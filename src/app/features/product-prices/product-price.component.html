@@ -1,11 +1,11 @@
 <div class="content-wrapper compact-list-layout">
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
-    <nz-breadcrumb-item>Catalogo de Precos</nz-breadcrumb-item>
+    <nz-breadcrumb-item>Catálogo de Preços</nz-breadcrumb-item>
   </nz-breadcrumb>
 
   <div class="page-header">
-    <p>Catalogo de Precos</p>
+    <p>Catálogo de Preços</p>
     <span (click)="onBack()" class="back-arrow"><nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon></span>
   </div>
 
@@ -45,7 +45,7 @@
     <button (click)="resetFilters()" nz-button nzType="default"><nz-icon nzTheme="outline" nzType="reload"></nz-icon>Limpar</button>
   </div>
 
-  <nz-spin [nzSpinning]="isLoading" class="mobile-price-spin" nzTip="A carregar catalogo...">
+  <nz-spin [nzSpinning]="isLoading" class="mobile-price-spin" nzTip="A carregar catálogo...">
     <div *ngIf="filteredPrices.length; else mobileEmptyPrices" class="mobile-price-list">
       <article *ngFor="let price of filteredPrices" class="mobile-price-card">
         <div class="mobile-card-topline">
@@ -108,7 +108,7 @@
 
   <div class="table-wrapper">
     <div class="table-scroll">
-      <nz-spin [nzSpinning]="isLoading" nzSize="large" nzTip="A carregar catalogo...">
+      <nz-spin [nzSpinning]="isLoading" nzSize="large" nzTip="A carregar catálogo...">
         <nz-table #nzTable [nzData]="filteredPrices" [nzScroll]="{ y: '440px' }" nzTableLayout="fixed">
           <thead>
           <tr>

@@ -173,20 +173,32 @@
             <nz-icon nzTheme="outline" nzType="phone"></nz-icon>
           </a>
 
-          <button [routerLink]="['/app/carload-details', data.id]" nz-button nzType="default">
+          <button [routerLink]="['/app/carload-details', data.id]" nz-button nzType="primary">
             <nz-icon nzTheme="outline" nzType="eye"></nz-icon>
             Ver
           </button>
 
-          <button (click)="copyCarLoad(data)" nz-button nzType="default">
-            <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
-            Copiar
+          <button [nzDropdownMenu]="mobileActionsMenu" nz-button nz-dropdown nzTrigger="click" nzType="default">
+            <nz-icon nzTheme="outline" nzType="unordered-list"></nz-icon>
+            A&ccedil;&otilde;es
           </button>
 
-          <button (click)="editCarLoad(data)" nz-button nzType="primary">
-            <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
-            Editar
-          </button>
+          <nz-dropdown-menu #mobileActionsMenu="nzDropdownMenu">
+            <ul nz-menu>
+              <li (click)="editCarLoad(data)" nz-menu-item>
+                <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+                Editar
+              </li>
+              <li (click)="copyCarLoad(data)" nz-menu-item>
+                <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
+                Copiar
+              </li>
+              <li (click)="deleteCarLoad(data)" nz-menu-item nzDanger>
+                <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+                Eliminar
+              </li>
+            </ul>
+          </nz-dropdown-menu>
         </div>
       </article>
     </div>
@@ -227,7 +239,7 @@
             <th class="col-date">{{ 'common.table.scheduled' | translate }}</th>
             <th class="col-date">{{ 'common.table.delivered' | translate }}</th>
             <th class="col-money">{{ 'common.table.earnings' | translate }}</th>
-            <th class="actions-column">Ações</th>
+            <th class="actions-column">A&ccedil;&otilde;es</th>
           </tr>
           </thead>
 
@@ -324,8 +336,8 @@
           <div class="table-empty-state">
             <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
             <h3>{{ isLoading ? 'A carregar carradas...' : 'Nenhuma carrada encontrada' }}</h3>
-            <p *ngIf="!isLoading && hasActiveFilters">Nao ha carradas para os filtros atuais. Limpa os filtros ou tenta outro estado.</p>
-            <p *ngIf="!isLoading && !hasActiveFilters">Comeca criando a primeira carrada para acompanhar agendamentos, execucao e entregas.</p>
+            <p *ngIf="!isLoading && hasActiveFilters">N&atilde;o h&aacute; carradas para os filtros atuais. Limpa os filtros ou tenta outro estado.</p>
+            <p *ngIf="!isLoading && !hasActiveFilters">Come&ccedil;a criando a primeira carrada para acompanhar agendamentos, execução e entregas.</p>
             <div class="filter-chip-bar" *ngIf="!isLoading">
               <button *ngIf="hasActiveFilters" (click)="reset()" nz-button nzType="default">
                 <nz-icon nzTheme="outline" nzType="reload"></nz-icon>
@@ -493,7 +505,7 @@
             nz-button
             nzType="default"
             type="button">
-            Em execucao
+            Em execução
           </button>
         </div>
 
@@ -694,7 +706,7 @@
               <nz-form-control>
                 <nz-select formControlName="deliveryStatus">
                   <nz-option [nzLabel]="'dashboard.status.scheduled' | translate" nzValue="SCHEDULED"></nz-option>
-                  <nz-option nzLabel="Em execucao" nzValue="IN_PROGRESS"></nz-option>
+                  <nz-option nzLabel="Em execução" nzValue="IN_PROGRESS"></nz-option>
                   <nz-option [nzLabel]="'dashboard.status.delivered' | translate" nzValue="DELIVERED"></nz-option>
                   <nz-option [nzLabel]="'dashboard.status.cancelled' | translate" nzValue="CANCELLED"></nz-option>
                 </nz-select>
@@ -755,7 +767,7 @@
       <button (click)="saveCarLoad()" [disabled]="carLoadForm.invalid || isSaving" class="btn-save"
               nz-button nzType="primary">
         <ng-container *ngIf="!isSaving; else savingTpl">
-          {{ isEditMode ? 'Salvar' : (isCopyMode ? 'Criar Cópia' : 'Criar') }}
+          {{ isEditMode ? 'Salvar' : (isCopyMode ? 'Criar Copia' : 'Criar') }}
         </ng-container>
 
         <ng-template #savingTpl>

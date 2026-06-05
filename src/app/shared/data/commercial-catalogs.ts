@@ -19,7 +19,7 @@ export const COMMERCIAL_CATALOGS: CommercialCatalog[] = [
     wheelbarrowImageUrl: '/catalogs/sinotruk-24m/wheelbarrow.svg',
     contactImageUrl: '/catalogs/sinotruk-24m/areia-vermelha-hero.png',
     heroLine: 'Solucoes para estaleiros, fabricas de blocos e construcao civil',
-    promise: 'Uma unica viagem pode abastecer dias de producao.',
+    promise: 'Uma unica viagem pode abastecer dias de produção.',
     materials: [
       {
         i18nKey: 'commercialCatalog.materials.coarseSand',
@@ -76,7 +76,7 @@ export const COMMERCIAL_CATALOGS: CommercialCatalog[] = [
         materialName: 'Pedra Sarrisca',
         title: 'Sarrisca',
         subtitle: 'Compactacao, lajes e estabilidade.',
-        originNote: 'A sarrisca e um material granular versatil para compactacao, producao, bases e trabalhos de betao em zonas que precisam de estabilidade.',
+        originNote: 'A sarrisca e um material granular versatil para compactacao, produção, bases e trabalhos de betao em zonas que precisam de estabilidade.',
         imageTone: 'stone',
         imageUrl: '/catalogs/sinotruk-24m/pedra-34-hero.png',
         fallbackPrice: 26000,
@@ -129,7 +129,7 @@ export const COMMERCIAL_CATALOGS: CommercialCatalog[] = [
     wheelbarrowImageUrl: '/catalogs/tata-22m/wheelbarrow.svg',
     contactImageUrl: '/catalogs/tata-22m/red-sand-detail.png',
     heroLine: 'Entrega forte para estaleiros, obras e fabricas de blocos',
-    promise: 'Uma carga equilibrada para abastecer a producao com rapidez e controlo de custo.',
+    promise: 'Uma carga equilibrada para abastecer a produção com rapidez e controlo de custo.',
     materials: [
       {
         i18nKey: 'commercialCatalog.materials.coarseSand',
@@ -187,7 +187,7 @@ export const COMMERCIAL_CATALOGS: CommercialCatalog[] = [
         materialName: 'Pedra Sarrisca',
         title: 'Sarrisca',
         subtitle: 'Compactacao, lajes e estabilidade.',
-        originNote: 'A sarrisca e um material granular versatil para compactacao, producao, bases e trabalhos de betao em zonas que precisam de estabilidade.',
+        originNote: 'A sarrisca e um material granular versatil para compactacao, produção, bases e trabalhos de betao em zonas que precisam de estabilidade.',
         imageTone: 'stone',
         imageUrl: '/catalogs/tata-22m/stone-detail.png',
         fallbackPrice: 26000,

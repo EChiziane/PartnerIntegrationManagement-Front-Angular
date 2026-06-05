@@ -143,7 +143,7 @@
     <div *ngIf="!isLoading" class="mobile-empty-state">
       <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
       <h3>Nenhum motorista encontrado</h3>
-      <p *ngIf="searchValue">Tenta pesquisar por outro nome, telefone ou camiao.</p>
+      <p *ngIf="searchValue">Tenta pesquisar por outro nome, telefone ou camião.</p>
       <button (click)="openDriverDrawer()" nz-button nzType="primary">
         <nz-icon nzTheme="outline" nzType="user-add"></nz-icon>
         Novo Motorista
@@ -277,7 +277,7 @@
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item>
-              <nz-form-label>Origem do camiao</nz-form-label>
+              <nz-form-label>Origem do camião</nz-form-label>
               <nz-form-control>
                 <nz-radio-group
                   [ngModel]="truckMode"
@@ -311,7 +311,7 @@
                   [nzDisabled]="isSaving"
                   formControlName="truckId"
                   nzAllowClear
-                  nzPlaceHolder="Selecionar camiao"
+                  nzPlaceHolder="Selecionar camião"
                   nzShowSearch>
                   <nz-option
                     *ngFor="let truck of availableTrucks"

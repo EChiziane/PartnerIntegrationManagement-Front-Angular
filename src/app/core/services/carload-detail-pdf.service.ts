@@ -67,7 +67,7 @@ export class CarloadDetailPdfService {
       ['Gestor', manager?.name || carload.logisticsManagerName || '-'],
       ['Contacto gestor', manager?.contact || '-'],
       ['Sprint', sprint?.name || carload.carloadBatchName || '-'],
-      ['Codigo sprint', sprint?.code || '-'],
+      ['Código sprint', sprint?.code || '-'],
       ['Criado em', this.formatDateTime(carload.createdAt)]
     ]);
 
@@ -213,7 +213,7 @@ export class CarloadDetailPdfService {
   private statusLabel(status: string | null | undefined): string {
     const value = (status || '').toUpperCase();
     if (value === 'SCHEDULED') return 'Agendada';
-    if (value === 'IN_PROGRESS') return 'Em execucao';
+    if (value === 'IN_PROGRESS') return 'Em execução';
     if (value === 'DELIVERED') return 'Entregue';
     if (value === 'CANCELLED') return 'Cancelada';
     return status || '-';

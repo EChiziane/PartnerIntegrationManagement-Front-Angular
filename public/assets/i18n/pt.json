@@ -38,7 +38,7 @@
     "home": "Home",
     "details": "Detalhe",
     "status": "Status",
-    "code": "C?digo",
+    "code": "Código",
     "name": "Nome",
     "phone": "Telefone",
     "email": "Email",
@@ -60,7 +60,7 @@
       "delivered": "Entregue",
       "earnings": "Ganhos",
       "spent": "Gastos",
-      "actions": "A??es"
+      "actions": "Ações"
     },
     "placeholders": {
       "search": "Pesquisar...",
@@ -77,12 +77,12 @@
       "destination": "Destino de entrega"
     },
     "validation": {
-      "required": "Campo obrigat?rio.",
+      "required": "Campo obrigatório.",
       "scheduledDate": "Informe a data agendada",
       "deliveryDate": "Informe a data de entrega"
     },
     "yes": "Sim",
-    "no": "N?o",
+    "no": "Não",
     "entities": {
       "carload": "carrada",
       "customer": "cliente",
@@ -91,9 +91,9 @@
       "sprint": "campanha",
       "user": "utilizador",
       "payment": "pagamento",
-      "truck": "camiao",
+      "truck": "camião",
       "invoice": "fatura",
-      "quote": "cotacao"
+      "quote": "cotação"
     },
     "confirmation": {
       "deleteTitle": "Tem certeza de que deseja eliminar {{ entity }} {{ name }}?",
@@ -120,7 +120,7 @@
       "quotes": "Cotações",
       "invoices": "Faturas",
       "users": "Utilizadores",
-      "commercialCatalogs": "Catalogos"
+      "commercialCatalogs": "Catálogos"
     },
     "footer": {
       "title": "Sistema ativo",
@@ -249,33 +249,33 @@
     "title": "Lista de Carradas",
     "breadcrumb": "Lista de Carradas",
     "new": "Nova Carrada",
-    "report": "Relat?rio",
+    "report": "Relatório",
     "metrics": {
       "scheduled": "Agendadas",
-      "progress": "Em execu??o",
+      "progress": "Em execução",
       "delivered": "Entregues"
     },
     "search": "Pesquisar cliente, destino, material, motorista...",
     "reportDrawer": {
-      "title": "Relat?rio de Carradas",
-      "section": "Dados do relat?rio",
+      "title": "Relatório de Carradas",
+      "section": "Dados do relatório",
       "type": "Tipo",
       "quantity": "Quantidade",
-      "period": "Per?odo",
-      "start": "In?cio",
+      "period": "Período",
+      "start": "Início",
       "end": "Fim",
       "latest": "?ltimas carradas",
-      "preset": "Per?odo r?pido",
-      "customPeriod": "Por per?odo",
+      "preset": "Período rápido",
+      "customPeriod": "Por período",
       "all": "Todas",
       "today": "Hoje",
       "thisWeek": "Esta semana",
-      "thisMonth": "Este m?s",
-      "lastMonth": "?ltimo m?s",
+      "thisMonth": "Este mês",
+      "lastMonth": "?ltimo mês",
       "last30Days": "?ltimos 30 dias",
-      "latestHint": "Imprime as carradas mais recentes, por data de entrega, agendamento ou cria??o.",
-      "presetHint": "Usa um per?odo r?pido para relat?rios comuns do dia, semana ou m?s.",
-      "periodHint": "Filtra pela data operacional da carrada: entrega, agendamento ou cria??o.",
+      "latestHint": "Imprime as carradas mais recentes, por data de entrega, agendamento ou criação.",
+      "presetHint": "Usa um período rápido para relatórios comuns do dia, semana ou mês.",
+      "periodHint": "Filtra pela data operacional da carrada: entrega, agendamento ou criação.",
       "allHint": "Inclui todas as carradas carregadas no sistema."
     },
     "drawer": {
@@ -306,8 +306,8 @@
       "loadSprintsError": "Erro ao carregar sprints.",
       "loadCustomersError": "Erro ao carregar clientes.",
       "loadError": "Erro ao carregar carradas.",
-      "emptyReport": "N?o h? carradas para gerar neste relat?rio.",
-      "required": "Preencha todos os campos obrigat?rios!",
+      "emptyReport": "Não há carradas para gerar neste relatório.",
+      "required": "Preencha todos os campos obrigatórios!",
       "updated": "Carrada atualizada com sucesso!",
       "copied": "Carrada copiada e criada com sucesso!",
       "created": "Carrada criada com sucesso!",
@@ -331,11 +331,11 @@
       "withEmail": "Com Email",
       "withoutEmail": "Sem Email"
     },
-    "search": "Pesquisar nome/c?digo/email/telefone",
+    "search": "Pesquisar nome/código/email/telefone",
     "drawer": {
       "createTitle": "Criar Cliente",
       "editTitle": "Editar Cliente",
-      "section": "Informa??o do Cliente"
+      "section": "Informação do Cliente"
     },
     "messages": {
       "deleteTitle": "Eliminar cliente?",
@@ -343,7 +343,7 @@
       "deleteError": "Erro ao eliminar cliente",
       "fieldUpdated": "Campo {{ field }} atualizado com sucesso!",
       "fieldError": "Erro ao atualizar campo",
-      "required": "Preencha Nome e Telefone (obrigat?rios).",
+      "required": "Preencha Nome e Telefone (obrigatórios).",
       "created": "Cliente criado com sucesso!",
       "updated": "Cliente atualizado com sucesso!",
       "saveError": "Erro ao gravar cliente.",
@@ -362,13 +362,13 @@
     "drawer": {
       "createTitle": "Criar Motorista",
       "editTitle": "Editar Motorista",
-      "section": "Informa??o do Motorista",
+      "section": "Informação do Motorista",
       "car": "Carro",
       "activity": "Atividade"
     },
     "messages": {
       "loadError": "Erro ao carregar motoristas.",
-      "required": "Preencha todos os campos obrigat?rios!",
+      "required": "Preencha todos os campos obrigatórios!",
       "saved": "Motorista guardado com sucesso!",
       "created": "Motorista criado com sucesso!",
       "updated": "Motorista atualizado com sucesso!",
@@ -390,11 +390,11 @@
     "drawer": {
       "createTitle": "Criar Gestor",
       "editTitle": "Editar Gestor",
-      "section": "Informa??o do Gestor"
+      "section": "Informação do Gestor"
     },
     "messages": {
       "loadError": "Erro ao carregar gestores.",
-      "required": "Preencha todos os campos obrigat?rios!",
+      "required": "Preencha todos os campos obrigatórios!",
       "created": "Gestor criado com sucesso!",
       "updated": "Gestor atualizado com sucesso!",
       "saveError": "Erro ao gravar gestor.",
@@ -410,17 +410,17 @@
     "metrics": {
       "totalCarloads": "Total Carradas",
       "delivered": "Entregues",
-      "progress": "Em execu??o",
+      "progress": "Em execução",
       "scheduled": "Agendadas",
       "investment": "Investimento",
       "revenue": "Receita",
-      "profit": "Lucro l?quido",
+      "profit": "Lucro líquido",
       "roi": "ROI"
     },
     "fields": {
       "channel": "Canal",
       "focusMaterial": "Material foco",
-      "period": "Per?odo",
+      "period": "Período",
       "promotedVolumes": "Volumes promovidos",
       "createdBy": "Criada por",
       "closedBy": "Encerrada por",
@@ -440,7 +440,7 @@
       "loadCarloadsError": "Erro ao carregar carradas desta sprint.",
       "loadDriversError": "Erro ao carregar motoristas.",
       "loadManagersError": "Erro ao carregar gestores.",
-      "required": "Preencha todos os campos obrigat?rios.",
+      "required": "Preencha todos os campos obrigatórios.",
       "updated": "Carrada atualizada com sucesso.",
       "copied": "Carrada copiada e criada com sucesso.",
       "created": "Carrada criada com sucesso.",
@@ -451,27 +451,27 @@
     }
   },
   "users": {
-    "title": "Lista de Usu?rios",
-    "new": "Novo Usu?rio",
-    "edit": "Editar Usu?rio",
-    "register": "Registrar Usu?rio",
+    "title": "Lista de Usuários",
+    "new": "Novo Usuário",
+    "edit": "Editar Usuário",
+    "register": "Registrar Usuário",
     "detailTitle": "Perfil do utilizador",
     "mainData": "Dados principais",
     "access": "Acesso",
-    "notFound": "Utilizador n?o encontrado",
-    "notFoundHint": "Volte ? lista e selecione um utilizador v?lido.",
+    "notFound": "Utilizador não encontrado",
+    "notFoundHint": "Volte à lista e selecione um utilizador válido.",
     "goToUsers": "Ir para utilizadores",
     "fields": {
       "state": "Estado",
       "role": "Papel",
-      "function": "Fun??o",
-      "permissions": "Permiss?es operacionais",
+      "function": "Função",
+      "permissions": "Permissões operacionais",
       "accessControl": "Controlo de acesso ao sistema",
-      "total": "Total Usu?rios"
+      "total": "Total Usuários"
     },
     "messages": {
-      "missing": "Utilizador n?o informado.",
-      "notFound": "Utilizador n?o encontrado.",
+      "missing": "Utilizador não informado.",
+      "notFound": "Utilizador não encontrado.",
       "loadError": "Erro ao carregar utilizador."
     },
     "status": {
@@ -495,15 +495,15 @@
       "forgot": "Esqueceu a senha?",
       "enter": "Entrar no painel",
       "entering": "A entrar...",
-      "noAccount": "N?o tem conta?",
+      "noAccount": "Não tem conta?",
       "createAccount": "Criar conta",
-      "brandKicker": "Gest?o de cargas e entregas",
-      "brandTitle": "Entre no painel e continue a opera??o com clareza.",
-      "brandText": "Acompanhe clientes, motoristas, cargas, cota??es e faturas num ambiente organizado para o trabalho di?rio.",
+      "brandKicker": "Gestão de cargas e entregas",
+      "brandTitle": "Entre no painel e continue a operação com clareza.",
+      "brandText": "Acompanhe clientes, motoristas, cargas, cotações e faturas num ambiente organizado para o trabalho diário.",
       "organizedData": "Dados organizados",
       "authenticatedAccess": "Acesso autenticado",
       "newAccess": "Novo acesso",
-      "registerHint": "Registe um utilizador para aceder ao sistema de gest?o."
+      "registerHint": "Registe um utilizador para aceder ao sistema de gestão."
     },
     "recovery": {
       "title": "Recuperar senha",
@@ -514,29 +514,29 @@
       "step2": "Passo 2",
       "step3": "Passo 3",
       "findAccount": "Encontre a sua conta",
-      "findHint": "Introduza o WhatsApp associado ao utilizador para iniciarmos a recupera??o.",
-      "phoneRequired": "Informe o n?mero.",
+      "findHint": "Introduza o WhatsApp associado ao utilizador para iniciarmos a recuperação.",
+      "phoneRequired": "Informe o número.",
       "confirmData": "Confirme os dados",
-      "confirmHint": "Verifique se esta ? a conta correta antes de enviarmos o c?digo.",
-      "sendCode": "Enviar c?digo",
+      "confirmHint": "Verifique se esta ? a conta correta antes de enviarmos o código.",
+      "sendCode": "Enviar código",
       "definePassword": "Defina uma nova senha",
-      "defineHint": "Use o c?digo recebido e escolha uma senha com pelo menos 6 caracteres.",
-      "code": "C?digo",
-      "codeRequired": "Informe o c?digo.",
-      "minPassword": "M?nimo 6 caracteres.",
+      "defineHint": "Use o código recebido e escolha uma senha com pelo menos 6 caracteres.",
+      "code": "Código",
+      "codeRequired": "Informe o código.",
+      "minPassword": "Mínimo 6 caracteres.",
       "confirmPassword": "Confirmar senha",
       "confirmPasswordTip": "Confirme a senha.",
-      "resendCode": "Reenviar c?digo",
+      "resendCode": "Reenviar código",
       "messages": {
-        "invalidLogin": "Login inv?lido",
-        "whatsappRequired": "Informe o n?mero de WhatsApp.",
-        "accountNotFound": "N?o foi poss?vel localizar a conta com esse WhatsApp.",
-        "codeSent": "Envi?mos um c?digo para o WhatsApp e email associados.",
-        "sendError": "N?o foi poss?vel iniciar o envio do c?digo.",
-        "fillCodePassword": "Preencha o c?digo e a nova senha.",
-        "passwordMismatch": "As senhas n?o coincidem.",
+        "invalidLogin": "Login inválido",
+        "whatsappRequired": "Informe o número de WhatsApp.",
+        "accountNotFound": "Não foi possível localizar a conta com esse WhatsApp.",
+        "codeSent": "Enviámos um código para o WhatsApp e email associados.",
+        "sendError": "Não foi possível iniciar o envio do código.",
+        "fillCodePassword": "Preencha o código e a nova senha.",
+        "passwordMismatch": "As senhas não coincidem.",
         "passwordChanged": "Senha alterada com sucesso. J? pode entrar.",
-        "invalidCode": "C?digo inv?lido ou expirado."
+        "invalidCode": "Código inválido ou expirado."
       }
     }
   },
@@ -544,14 +544,14 @@
     "title": "Criar conta",
     "subtitle": "Preencha os dados para registar um utilizador",
     "nameRequired": "Informe o nome.",
-    "emailInvalid": "Email inv?lido.",
+    "emailInvalid": "Email inválido.",
     "phoneRequired": "Informe o telefone.",
-    "phoneHint": "O n?mero ser? guardado como +258 seguido do teu contacto.",
+    "phoneHint": "O número será guardado como +258 seguido do teu contacto.",
     "loginRequired": "Informe o login.",
     "passwordRequired": "Informe a senha.",
     "passwordPlaceholder": "Crie uma senha",
-    "role": "Fun??o",
-    "roleRequired": "Selecione a fun??o.",
+    "role": "Função",
+    "roleRequired": "Selecione a função.",
     "select": "Selecione",
     "submit": "Registrar"
   },
@@ -563,19 +563,19 @@
     "search": "Pesquisar fatura/item...",
     "selectCustomer": "Selecionar cliente",
     "dateRange": "Intervalo de datas",
-    "customerInfo": "Informa??o do Cliente",
-    "invoiceCode": "C?digo da Fatura",
+    "customerInfo": "Informação do Cliente",
+    "invoiceCode": "Código da Fatura",
     "items": "Itens da Fatura",
     "item": "Item",
     "selectItem": "Selecione o item",
     "qty": "Qtd",
-    "unitPrice": "Pre?o Unit.",
+    "unitPrice": "Preço Unit.",
     "subtotal": "Subtotal",
     "totals": "Totais",
     "taxRate": "Taxa (decimal)",
     "tax": "Taxa",
     "messages": {
-      "required": "Preencha os campos obrigat?rios.",
+      "required": "Preencha os campos obrigatórios.",
       "created": "Fatura criada com sucesso!",
       "createError": "Erro ao criar fatura",
       "deleteTitle": "Eliminar fatura?",
@@ -607,7 +607,7 @@
     },
     "messages": {
       "deleted": "Camiao eliminado com sucesso.",
-      "deleteError": "Erro ao eliminar camiao."
+      "deleteError": "Erro ao eliminar camião."
     }
   },
   "quotes": {
@@ -617,23 +617,23 @@
     },
     "messages": {
       "deleted": "Cotacao eliminada com sucesso!",
-      "deleteError": "Erro ao eliminar a cotacao."
+      "deleteError": "Erro ao eliminar a cotação."
     },
     "confirmation": {
-      "approveTitle": "Aprovar cotacao e gerar carradas?",
-      "approveContent": "A cotacao <strong>{{ code }}</strong> vai gerar carradas conforme as quantidades dos itens. Depois podes atribuir motorista e camiao em Carradas.",
+      "approveTitle": "Aprovar cotação e gerar carradas?",
+      "approveContent": "A cotação <strong>{{ code }}</strong> vai gerar carradas conforme as quantidades dos itens. Depois podes atribuir motorista e camião em Carradas.",
       "approveOk": "Gerar carradas"
     }
   },
   "commercialCatalog": {
     "page": {
       "title": "Apresentacao profissional para clientes",
-      "subtitle": "Catalogos por camiao, com fotos, capacidade, materiais, producao e contactos.",
-      "kicker": "Catalogo comercial",
-      "vehicleKicker": "Conheca o camiao"
+      "subtitle": "Catálogos por camião, com fotos, capacidade, materiais, produção e contactos.",
+      "kicker": "Catálogo comercial",
+      "vehicleKicker": "Conheca o camião"
     },
     "messages": {
-      "priceError": "Nao foi possivel carregar os precos atualizados. O catalogo abriu com os precos comerciais padrao."
+      "priceError": "Nao foi possivel carregar os preços atualizados. O catálogo abriu com os preços comerciais padrao."
     },
     "metrics": {
       "capacity": "Capacidade",
@@ -650,10 +650,10 @@
     "production": {
       "kicker": "Producao para estaleiros",
       "title": "Quanto pode render uma carga de {{ volume }}m3?",
-      "reference": "Referencia de producao para estaleiros"
+      "reference": "Referencia de produção para estaleiros"
     },
     "materialLabels": {
-      "centralPrice": "Preco comercial do catalogo",
+      "centralPrice": "Preco comercial do catálogo",
       "idealFor": "Ideal para",
       "benefits": "Beneficios"
     },
@@ -662,7 +662,7 @@
       "title": "Uma viagem. Mais material. Menos interrupcoes.",
       "noteLabel": "Principal referencia",
       "noteValue": "122 carrinhos",
-      "statement": "O numero de carrinhos de mao e a referencia principal para o cliente calcular a sua producao."
+      "statement": "O numero de carrinhos de mao e a referencia principal para o cliente calcular a sua produção."
     },
     "contact": {
       "kicker": "Contactos",
@@ -676,14 +676,14 @@
         "vehicleName": "Sinotruk HOWO",
         "audience": "Estaleiros, fabricas de blocos e construcao civil",
         "heroLine": "Solucoes para estaleiros, fabricas de blocos e construcao civil",
-        "promise": "Uma unica viagem pode abastecer dias de producao."
+        "promise": "Uma unica viagem pode abastecer dias de produção."
       },
       "tata22m": {
         "title": "Tata Signa 22m3",
         "vehicleName": "Tata Signa",
         "audience": "Estaleiros, fabricas de blocos e obras de medio e grande porte",
         "heroLine": "Entrega forte para estaleiros, obras e fabricas de blocos",
-        "promise": "Uma carga equilibrada para abastecer a producao com rapidez e controlo de custo."
+        "promise": "Uma carga equilibrada para abastecer a produção com rapidez e controlo de custo."
       }
     },
     "materials": {
@@ -718,7 +718,7 @@
       "sarrisca": {
         "title": "Sarrisca",
         "subtitle": "Compactacao, lajes e estabilidade.",
-        "originNote": "A sarrisca e um material granular versatil para compactacao, producao, bases e trabalhos de betao em zonas que precisam de estabilidade.",
+        "originNote": "A sarrisca e um material granular versatil para compactacao, produção, bases e trabalhos de betao em zonas que precisam de estabilidade.",
         "applications": "Compactacao|Lajes|Vigas|Preparacao de pisos|Producao de blocos|Producao de paves|Bases rodoviarias",
         "benefits": "Excelente compactacao|Boa estabilidade estrutural|Boa drenagem"
       },
@@ -740,8 +740,8 @@
       "fastDeliveryValue": "Rapida",
       "targetLabel": "Ideal para",
       "targetValue": "Estaleiros",
-      "whyTitle": "Porque este catalogo ajuda a comprar melhor",
-      "why1": "Precos claros por carga de 24m3",
+      "whyTitle": "Porque este catálogo ajuda a comprar melhor",
+      "why1": "Preços claros por carga de 24m3",
       "why2": "Referencia em carrinhos de mao",
       "why3": "Materiais explicados por uso na obra",
       "why4": "Contacto direto para encomendar"
@@ -755,7 +755,7 @@
       "step1": "Escolha o material e confirme o destino da descarga.",
       "step2": "Envie mensagem ou ligue para confirmar disponibilidade e horario.",
       "step3": "Receba a carga no estaleiro e pague na descarga.",
-      "salesLine": "Guarde este catalogo no estaleiro: quando precisar de areia ou pedra, a encomenda fica a uma chamada de distancia.",
+      "salesLine": "Guarde este catálogo no estaleiro: quando precisar de areia ou pedra, a encomenda fica a uma chamada de distancia.",
       "callNow": "ENCOMENDAR"
     }
   }

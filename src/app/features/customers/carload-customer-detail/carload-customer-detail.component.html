@@ -42,19 +42,19 @@
         <article>
           <span>Total carradas</span>
           <strong>{{ totalCarloads }}</strong>
-          <small>{{ scheduledCount }} agendadas, {{ inProgressCount }} em execucao</small>
+          <small>{{ scheduledCount }} agendadas, {{ inProgressCount }} em execução</small>
+        </article>
+
+        <article class="active-summary">
+          <span>Ativas agora</span>
+          <strong>{{ scheduledCount + inProgressCount }}</strong>
+          <small>{{ inProgressCount }} em execução, {{ scheduledCount }} na agenda</small>
         </article>
 
         <article>
           <span>Entregues</span>
           <strong>{{ deliveredCount }}</strong>
           <small>{{ cancelledCount }} canceladas</small>
-        </article>
-
-        <article>
-          <span>Margem estimada</span>
-          <strong>{{ formatMoney(estimatedMargin) }}</strong>
-          <small>Receitas {{ formatMoney(totalEarnings) }}</small>
         </article>
       </section>
 
@@ -75,6 +75,10 @@
             <span class="ops-kicker">Próxima agendada</span>
             <h2>Sem próxima carrada</h2>
             <p>Este cliente não tem agendamento futuro neste momento.</p>
+            <button (click)="goToCarloads()" nz-button nzType="primary">
+              <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
+              Criar agendamento
+            </button>
           </article>
         </ng-template>
 
@@ -116,7 +120,7 @@
 
           <div class="kv-list">
             <div><span>Nome</span><strong>{{ customer.name }}</strong></div>
-            <div><span>Codigo</span><strong>{{ customer.customerCode || '-' }}</strong></div>
+            <div><span>Código</span><strong>{{ customer.customerCode || '-' }}</strong></div>
             <div><span>NUIT</span><strong>{{ customer.nuitNumber || '-' }}</strong></div>
             <div><span>Telefone</span><strong>{{ customer.phoneNumber || '-' }}</strong></div>
             <div><span>Email</span><strong>{{ customer.emailAddress || '-' }}</strong></div>
@@ -127,13 +131,13 @@
         <article class="section-card">
           <header>
             <span nz-icon nzTheme="outline" nzType="environment"></span>
-            <h2>Endereco</h2>
+            <h2>Endereço</h2>
           </header>
 
           <div class="kv-list">
             <div><span>Morada</span><strong>{{ customer.streetAddress || '-' }}</strong></div>
             <div><span>Cidade</span><strong>{{ customer.city || '-' }}</strong></div>
-            <div><span>Codigo postal</span><strong>{{ customer.zipCode || '-' }}</strong></div>
+            <div><span>Código postal</span><strong>{{ customer.zipCode || '-' }}</strong></div>
             <div><span>Registado por</span><strong>{{ customer.createdByName || 'Sistema' }}</strong></div>
           </div>
         </article>
@@ -226,7 +230,7 @@
             <th class="col-status">Estado</th>
             <th class="col-date">Agendada</th>
             <th class="col-money">Receita</th>
-            <th class="col-actions">Accoes</th>
+            <th class="col-actions">Ações</th>
           </tr>
           </thead>
 
@@ -257,8 +261,8 @@
     <ng-template #emptyCustomer>
       <div class="empty-state">
         <nz-icon nzTheme="outline" nzType="inbox"></nz-icon>
-        <h2>Cliente nao encontrado</h2>
-        <p>Volte a lista e selecione um cliente valido.</p>
+        <h2>Cliente não encontrado</h2>
+        <p>Volte a lista e selecione um cliente válido.</p>
         <button (click)="goToCustomers()" nz-button nzType="primary">Ir para clientes</button>
       </div>
     </ng-template>

@@ -94,7 +94,7 @@ export class ProductPriceComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        this.message.error('Erro ao carregar catalogo de precos.');
+        this.message.error('Erro ao carregar catálogo de preços.');
       }
     });
   }
@@ -211,7 +211,7 @@ export class ProductPriceComponent implements OnInit {
     this.confirmationDialog.confirmDelete({
       entity: 'preco',
       name: price.label,
-      details: 'Esta acao remove o produto do catalogo. Documentos antigos nao serao alterados.',
+      details: 'Esta acao remove o produto do catálogo. Documentos antigos nao serao alterados.',
       onOk: () => this.priceService.deletePrice(price.id).subscribe({
         next: () => {
           this.loadPrices();
@@ -228,7 +228,7 @@ export class ProductPriceComponent implements OnInit {
 
   printPriceList(): void {
     if (!this.filteredPrices.length) {
-      this.message.warning('Nao ha precos para imprimir.');
+      this.message.warning('Nao ha preços para imprimir.');
       return;
     }
 

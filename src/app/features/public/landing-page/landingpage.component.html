@@ -6,7 +6,7 @@
         <span>{{ companyName }}</span>
       </a>
 
-      <nav class="desktop-nav" aria-label="Navegacao principal">
+      <nav class="desktop-nav" aria-label="Navegação principal">
         <a (click)="scrollTo('materiais')">Materiais</a>
         <a (click)="scrollTo('como-funciona')">Como funciona</a>
         <a (click)="scrollTo('contactos')">Contactos</a>
@@ -37,13 +37,13 @@
     [nzVisible]="menuVisible"
     nzPlacement="right"
     nzTitle="Transportes Chiziane">
-    <nav *nzDrawerContent class="mobile-nav" aria-label="Navegacao movel">
+    <nav *nzDrawerContent class="mobile-nav" aria-label="Navegação movel">
       <a (click)="menuVisible = false; scrollTo('materiais')">Materiais</a>
       <a (click)="menuVisible = false; scrollTo('como-funciona')">Como funciona</a>
       <a (click)="menuVisible = false; scrollTo('contactos')">Contactos</a>
       <a (click)="menuVisible = false; scrollTo('localizacao')">Onde estamos</a>
       <button (click)="showQuoteModal(); menuVisible = false" nz-button nzBlock nzType="primary">
-        Pedir cotacao
+        Pedir cota&ccedil;&atilde;o
       </button>
       <button (click)="goToLogin(); menuVisible = false" nz-button nzBlock>
         Area do Sistema
@@ -59,12 +59,12 @@
         <p class="hero-kicker">Materiais de construcao com entrega local</p>
         <h1>{{ companyName }}</h1>
         <p class="hero-copy">
-          Fornecimento de areia, pedra e po de pedra com cotacao rapida, frota preparada e entrega em Maputo e arredores.
+          Fornecimento de areia, pedra e po de pedra com cota&ccedil;&atilde;o rapida, frota preparada e entrega em Maputo e arredores.
         </p>
 
         <div class="hero-actions">
           <button (click)="showQuoteModal()" class="primary-cta" nz-button nzType="primary">
-            Pedir cotacao
+            Pedir cota&ccedil;&atilde;o
             <span nz-icon nzType="arrow-right"></span>
           </button>
 
@@ -94,7 +94,7 @@
       <div class="section-grid">
         <div>
           <span class="section-label">Operacao</span>
-          <h2>Entrega coordenada para obras que nao podem ficar paradas.</h2>
+          <h2>Entrega coordenada para obras que não podem ficar paradas.</h2>
         </div>
 
         <p>
@@ -106,7 +106,7 @@
     <section id="materiais" class="materials-band">
       <div class="section-heading">
         <span class="section-label">Materiais</span>
-        <h2>Catalogo directo para cotacao e encomenda.</h2>
+        <h2>Catálogo directo para cota&ccedil;&atilde;o e encomenda.</h2>
       </div>
 
       <div class="material-grid">
@@ -166,7 +166,7 @@
     <section id="contactos" class="contact-band">
       <div class="contact-content">
         <span class="section-label">Contactos</span>
-        <h2>Peça a sua cotacao e confirme disponibilidade.</h2>
+        <h2>Pe&ccedil;a a sua cota&ccedil;&atilde;o e confirme disponibilidade.</h2>
 
         <div class="contact-list">
           <a href="tel:+258845098583">
@@ -197,7 +197,7 @@
           Local de entrega
           <input [(ngModel)]="quoteLocation" name="landingQuoteLocation" placeholder="Ex: Matola" type="text">
         </label>
-        <button (click)="showQuoteModal()" nz-button nzType="primary" type="button">Continuar cotacao</button>
+        <button (click)="showQuoteModal()" nz-button nzType="primary" type="button">Continuar cota&ccedil;&atilde;o</button>
       </form>
     </section>
 
@@ -219,7 +219,7 @@
   </nz-content>
 
   <nz-footer class="footer">
-    <span>© 2026 {{ companyName }}. Todos os direitos reservados.</span>
+    <span>? 2026 {{ companyName }}. Todos os direitos reservados.</span>
     <button (click)="goToLogin()" nz-button nzType="default">Area do Sistema</button>
   </nz-footer>
 

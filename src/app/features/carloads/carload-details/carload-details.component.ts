@@ -45,7 +45,7 @@ export class CarloadDetailsComponent {
   get statusLabel(): string {
     const status = (this.carload?.deliveryStatus || '').toUpperCase();
     if (status === 'SCHEDULED') return 'Agendada';
-    if (status === 'IN_PROGRESS') return 'Em execucao';
+    if (status === 'IN_PROGRESS') return 'Em execução';
     if (status === 'DELIVERED') return 'Entregue';
     if (status === 'CANCELLED') return 'Cancelada';
     return this.carload?.deliveryStatus || '';

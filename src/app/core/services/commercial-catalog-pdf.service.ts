@@ -119,7 +119,7 @@ export class CommercialCatalogPdfService {
     this.autoTable?.(doc, {
       startY: 136,
       margin: {left: margin, right: margin},
-      head: [['Produto', 'Medida', 'Regra de producao', 'Resultado']],
+      head: [['Produto', 'Medida', 'Regra de produção', 'Resultado']],
       body: catalog.production.map(item => [item.title, item.measure, item.ratio, item.output]),
       theme: 'grid',
       styles: {fontSize: 9, cellPadding: 3, textColor: [41, 55, 70]},

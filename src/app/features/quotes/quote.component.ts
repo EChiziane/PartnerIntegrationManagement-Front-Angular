@@ -423,13 +423,13 @@ export class QuoteComponent implements OnInit {
         this.modal.info({
           nzCentered: true,
           nzClassName: 'tc-confirm-info',
-          nzTitle: `Versoes da cotacao ${quote.quoteCode}`,
+          nzTitle: `Versoes da cotação ${quote.quoteCode}`,
           nzContent: `<ul>${rows || '<li>Sem historico de versoes.</li>'}</ul>`,
           nzOkText: 'Fechar'
         });
       },
       error: () => {
-        this.message.error('Erro ao carregar versoes da cotacao.');
+        this.message.error('Erro ao carregar versoes da cotação.');
       }
     });
   }
@@ -448,10 +448,10 @@ export class QuoteComponent implements OnInit {
         this.quoteService.approveAndGenerateCarloads(quote.id as string).subscribe({
           next: carloads => {
             this.loadQuotes();
-            this.message.success(`${carloads.length} carrada(s) gerada(s) a partir da cotacao.`);
+            this.message.success(`${carloads.length} carrada(s) gerada(s) a partir da cotação.`);
           },
           error: () => {
-            this.message.error('Erro ao gerar carradas da cotacao.');
+            this.message.error('Erro ao gerar carradas da cotação.');
           }
         });
       }
@@ -763,7 +763,7 @@ export class QuoteComponent implements OnInit {
         }, {} as { [key: string]: number });
         this.itemsOptions = Object.keys(this.itemsPrices);
       },
-      error: () => this.message.warning('Catalogo de precos indisponivel. A usar precos locais.')
+      error: () => this.message.warning('Catálogo de preços indisponivel. A usar preços locais.')
     });
   }
 

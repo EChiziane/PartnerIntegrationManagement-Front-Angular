@@ -235,11 +235,11 @@ export class TruckComponent implements OnInit {
         this.loadTrucks();
         this.loadDrivers();
         this.closeDrawer();
-        this.message.success(this.isEditMode ? 'Camiao atualizado com sucesso.' : (this.isCopyMode ? 'Copia do camiao criada com sucesso.' : 'Camiao criado com sucesso.'));
+        this.message.success(this.isEditMode ? 'Camiao atualizado com sucesso.' : (this.isCopyMode ? 'Copia do camião criada com sucesso.' : 'Camiao criado com sucesso.'));
       },
       error: () => {
         this.isSaving = false;
-        this.message.error('Erro ao gravar camiao.');
+        this.message.error('Erro ao gravar camião.');
       }
     });
   }

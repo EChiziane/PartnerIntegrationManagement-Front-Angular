@@ -536,6 +536,12 @@
   nz-icon {
     font-size: 22px;
   }
+
+  button[nz-button] {
+    margin-top: 4px;
+    border-radius: 8px;
+    font-weight: 750;
+  }
 }
 
 @media (max-width: 1400px) {
@@ -564,6 +570,7 @@
   }
 
   .metric-grid,
+  .operator-strip,
   .operations-grid {
     grid-template-columns: 1fr;
   }

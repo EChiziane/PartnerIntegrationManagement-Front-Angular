@@ -34,7 +34,7 @@ export class CarloadCustomerDetailPdfService {
 
     this.drawSectionTitle(doc, 'Dados do cliente', margin, 92);
     this.drawInfoPanel(doc, margin, 98, contentWidth, [
-      ['Codigo', customer.customerCode || '-'],
+      ['Código', customer.customerCode || '-'],
       ['Nome', customer.name || '-'],
       ['NUIT', customer.nuitNumber || '-'],
       ['Telefone', customer.phoneNumber || '-'],
@@ -209,7 +209,7 @@ export class CarloadCustomerDetailPdfService {
   private statusLabel(status: string | null | undefined): string {
     const value = (status || '').toUpperCase();
     if (value === 'SCHEDULED') return 'Agendada';
-    if (value === 'IN_PROGRESS') return 'Em execucao';
+    if (value === 'IN_PROGRESS') return 'Em execução';
     if (value === 'DELIVERED') return 'Entregue';
     if (value === 'CANCELLED') return 'Cancelada';
     return status || '-';

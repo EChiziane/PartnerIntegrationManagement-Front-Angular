@@ -33,7 +33,7 @@ export class ProductPriceListPdfService {
       ['Gerado em', generatedAt]
     ]);
 
-    this.drawSectionTitle(doc, 'Lista de precos', margin, 82);
+    this.drawSectionTitle(doc, 'Lista de preços', margin, 82);
 
     autoTable(doc, {
       startY: 88,
@@ -46,7 +46,7 @@ export class ProductPriceListPdfService {
           this.formatDateTime(item.updatedAt),
           item.updatedByName || 'Sistema'
         ])
-        : [['-', 'Sem precos registados', '-', '-']],
+        : [['-', 'Sem preços registados', '-', '-']],
       theme: 'grid',
       styles: {
         fontSize: 8.5,
@@ -90,7 +90,7 @@ export class ProductPriceListPdfService {
     doc.text('LISTA DE PRECOS', 38, 18);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
-    doc.text('Catalogo comercial centralizado', 38, 25);
+    doc.text('Catálogo comercial centralizado', 38, 25);
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');

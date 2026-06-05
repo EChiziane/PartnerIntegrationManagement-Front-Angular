@@ -1,11 +1,11 @@
 <div class="content-wrapper compact-list-layout">
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item><a routerLink="/app">Home</a></nz-breadcrumb-item>
-    <nz-breadcrumb-item>Camioes</nz-breadcrumb-item>
+    <nz-breadcrumb-item>Camiões</nz-breadcrumb-item>
   </nz-breadcrumb>
 
   <div class="page-header">
-    <p>Gestao de Camioes</p>
+    <p>Gestão de Camiões</p>
     <span (click)="onBack()" class="back-arrow">
       <nz-icon nzTheme="outline" nzType="arrow-left"></nz-icon>
     </span>
@@ -41,7 +41,7 @@
   </div>
 
   <div class="filters-panel">
-    <input (ngModelChange)="search()" [(ngModel)]="searchValue" nz-input placeholder="Pesquisar camiao, motorista..." type="text"/>
+    <input (ngModelChange)="search()" [(ngModel)]="searchValue" nz-input placeholder="Pesquisar camião, motorista..." type="text"/>
     <button (click)="openDrawer()" nz-button nzType="primary">
       <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
       Novo Camiao
@@ -109,7 +109,7 @@
   <ng-template #mobileEmptyTrucks>
     <div *ngIf="!isLoading" class="mobile-empty-state">
       <nz-empty nzNotFoundImage="simple" nzNotFoundContent=""></nz-empty>
-      <h3>Nenhum camiao encontrado</h3>
+      <h3>Nenhum camião encontrado</h3>
       <p *ngIf="searchValue">Tenta pesquisar por outra matricula, tamanho ou motorista.</p>
       <button (click)="openDrawer()" nz-button nzType="primary">
         <nz-icon nzTheme="outline" nzType="plus"></nz-icon>
@@ -144,7 +144,7 @@
             <td>{{ truck.assignedDriverName || '-' }}</td>
             <td>{{ truck.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
             <td>
-              <button (click)="copyTruck(truck)" nz-button nzSize="small" nzType="link" nz-tooltip nzTooltipTitle="Copiar camiao">
+              <button (click)="copyTruck(truck)" nz-button nzSize="small" nzType="link" nz-tooltip nzTooltipTitle="Copiar camião">
                 <nz-icon nzTheme="outline" nzType="copy"></nz-icon>
               </button>
               <button (click)="editTruck(truck)" nz-button nzSize="small" nzType="link">
@@ -171,7 +171,7 @@
   [nzTitle]="drawerTitle"
   [nzVisible]="isDrawerVisible"
   [nzWidth]="drawerWidth">
-  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar camiao...">
+  <nz-spin *nzDrawerContent [nzSpinning]="isSaving" nzTip="A gravar camião...">
     <form [formGroup]="truckForm" class="drawer-form" nz-form>
       <div class="drawer-section">
         <h3 class="section-title">Informacao do Camiao</h3>
@@ -203,7 +203,7 @@
           <div nz-col nzMd="12" nzSm="24" nzXs="24">
             <nz-form-item><nz-form-label>Disponibilidade</nz-form-label><nz-form-control>
               <nz-select formControlName="availabilityStatus">
-                <nz-option nzLabel="Disponivel" nzValue="AVAILABLE"></nz-option>
+                <nz-option nzLabel="Disponível" nzValue="AVAILABLE"></nz-option>
                 <nz-option nzLabel="Manutencao" nzValue="IN_MAINTENANCE"></nz-option>
                 <nz-option nzLabel="Inativo" nzValue="INACTIVE"></nz-option>
               </nz-select>

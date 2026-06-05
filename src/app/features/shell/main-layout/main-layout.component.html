@@ -53,7 +53,7 @@
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/truck">
               <span nz-icon nzType="truck"></span>
-              <span>Camioes</span>
+              <span>Camiões</span>
             </a>
           </li>
 
@@ -117,7 +117,7 @@
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/app/product-prices">
               <span nz-icon nzType="database"></span>
-              <span>Precos</span>
+              <span>Preços</span>
             </a>
           </li>
         </ul>
@@ -181,7 +181,7 @@
               <span class="language-option-code">{{ languageShortLabel(language.code) }}</span>
               <span class="language-option-copy">
                 <strong>{{ language.label }}</strong>
-                <small>{{ language.code === currentLanguage ? 'Ativo' : 'Disponivel' }}</small>
+                <small>{{ language.code === currentLanguage ? 'Ativo' : 'Disponível' }}</small>
               </span>
               <span *ngIf="language.code === currentLanguage" class="language-check" nz-icon nzType="check"></span>
             </li>
@@ -247,7 +247,7 @@
   nzPlacement="left"
   nzTitle="Transportes Chiziane"
   nzWidth="320px">
-  <nav *nzDrawerContent class="mobile-navigation" aria-label="Navegacao mobile">
+  <nav *nzDrawerContent class="mobile-navigation" aria-label="Navegação mobile">
     <a routerLink="/app/dashboard" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="dashboard"></span>
       <span>{{ 'layout.menu.dashboard' | translate }}</span>
@@ -267,7 +267,7 @@
 
     <a routerLink="/app/truck" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="truck"></span>
-      <span>Camioes</span>
+      <span>Camiões</span>
     </a>
 
     <a routerLink="/app/carload-customer" routerLinkActive="active" (click)="closeMobileMenu()">
@@ -311,7 +311,7 @@
 
     <a routerLink="/app/product-prices" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="database"></span>
-      <span>Precos</span>
+      <span>Preços</span>
     </a>
 
     <div class="mobile-nav-section">Conta</div>

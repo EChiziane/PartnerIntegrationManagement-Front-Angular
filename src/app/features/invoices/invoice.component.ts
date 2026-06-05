@@ -927,7 +927,7 @@ export class InvoiceComponent implements OnInit {
           return acc;
         }, {} as { [key: string]: number });
       },
-      error: () => this.message.warning('Catalogo de precos indisponivel. A usar precos locais.')
+      error: () => this.message.warning('Catálogo de preços indisponivel. A usar preços locais.')
     });
   }
 
