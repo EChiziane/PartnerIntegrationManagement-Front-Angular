@@ -69,6 +69,48 @@
     </div>
   </div>
 
+  <div class="mobile-sprint-overview" *ngIf="sprint">
+    <section>
+      <span class="overview-title">Operação</span>
+      <div>
+        <span>Total carradas</span>
+        <strong>{{ totalCarloads }}</strong>
+      </div>
+      <div>
+        <span>Entregues</span>
+        <strong>{{ totalEntregue }}</strong>
+      </div>
+      <div>
+        <span>Em execução</span>
+        <strong>{{ totalEmExecucao }}</strong>
+      </div>
+      <div>
+        <span>Agendadas</span>
+        <strong>{{ totalAgendados }}</strong>
+      </div>
+    </section>
+
+    <section>
+      <span class="overview-title">Resultado</span>
+      <div>
+        <span>Investimento</span>
+        <strong>{{ marketingBudget | number:'1.2-2' }} Mts</strong>
+      </div>
+      <div>
+        <span>Receita</span>
+        <strong>{{ totalRevenue | number:'1.2-2' }} Mts</strong>
+      </div>
+      <div>
+        <span>Lucro líquido</span>
+        <strong>{{ netProfit | number:'1.2-2' }} Mts</strong>
+      </div>
+      <div>
+        <span>ROI</span>
+        <strong>{{ roi | number:'1.0-1' }}%</strong>
+      </div>
+    </section>
+  </div>
+
   <div class="summary-section">
     <div [nzGutter]="8" nz-row>
       <div [nzSpan]="6" nz-col>

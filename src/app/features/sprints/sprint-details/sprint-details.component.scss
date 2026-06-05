@@ -116,6 +116,10 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.mobile-sprint-overview {
+  display: none;
+}
+
 .volume-panel {
   display: flex;
   gap: 10px;
@@ -657,17 +661,7 @@ textarea[nz-input] {
   }
 
   .summary-section {
-    margin-bottom: 0;
-
-    nz-row {
-      display: grid !important;
-      grid-template-columns: 1fr !important;
-      gap: 8px !important;
-    }
-
-    nz-col {
-      min-width: 0 !important;
-    }
+    display: none;
   }
 
   .quick-filters {
