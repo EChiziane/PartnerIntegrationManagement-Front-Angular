@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper sprint-detail-page">
   <nz-breadcrumb class="page-breadcrumb">
     <nz-breadcrumb-item><a routerLink="/app">{{ 'common.home' | translate }}</a></nz-breadcrumb-item>
     <nz-breadcrumb-item>
@@ -10,7 +10,7 @@
   <div class="page-header">
     <div class="header-left">
       <p>{{ 'sprints.detailsTitle' | translate }}</p>
-      <span *ngIf="sprintName" class="sprint-name">â€” {{ sprintName }}</span>
+      <span *ngIf="sprintName" class="sprint-name">- {{ sprintName }}</span>
     </div>
 
     <div class="header-actions">
@@ -38,7 +38,7 @@
       <span class="panel-label">Per&iacute;odo</span>
       <strong>
         {{ sprint.startDate ? (sprint.startDate | date:'dd/MM/yyyy') : '-' }}
-        at?
+        at&eacute;
         {{ sprint.expectedEndDate ? (sprint.expectedEndDate | date:'dd/MM/yyyy') : '-' }}
       </strong>
     </div>
@@ -434,7 +434,7 @@
         </div>
 
         <nz-tag [nzColor]="carloadProfitTone === 'positive' ? 'green' : (carloadProfitTone === 'negative' ? 'red' : 'default')">
-          {{ carloadProfitTone === 'negative' ? 'Atencao' : 'Resumo' }}
+          {{ carloadProfitTone === 'negative' ? 'Atenção' : 'Resumo' }}
         </nz-tag>
       </div>
 
@@ -443,7 +443,7 @@
           <span>1</span>
           <div>
             <h3>{{ 'sprints.drawer.carloadSection' | translate }}</h3>
-            <p>Cliente, destino, material e responsaveis.</p>
+            <p>Cliente, destino, material e responsáveis.</p>
           </div>
         </div>
 
@@ -474,7 +474,7 @@
           </button>
         </div>
 
-        <div class="form-subsection-label">Cliente e operacao</div>
+        <div class="form-subsection-label">Cliente e opera&ccedil;&atilde;o</div>
 
         <div [nzGutter]="16" nz-row>
           <div nz-col nzMd="12" nzSm="24" nzXs="24">

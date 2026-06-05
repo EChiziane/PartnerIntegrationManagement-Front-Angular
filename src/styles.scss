@@ -1192,6 +1192,122 @@ body {
     white-space: nowrap !important;
   }
 
+  .sprint-detail-page .page-header {
+    padding: 12px !important;
+  }
+
+  .sprint-detail-page .header-left {
+    min-width: 0 !important;
+  }
+
+  .sprint-detail-page .page-header p {
+    font-size: 17px !important;
+    font-weight: 850 !important;
+    line-height: 1.2 !important;
+  }
+
+  .sprint-detail-page .sprint-name {
+    font-size: 12px !important;
+  }
+
+  .sprint-detail-page .campaign-panel,
+  .sprint-detail-page .goal-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    padding: 10px !important;
+    box-shadow: none !important;
+  }
+
+  .sprint-detail-page .audit-panel {
+    display: none !important;
+  }
+
+  .sprint-detail-page .goal-panel {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sprint-detail-page .campaign-panel strong,
+  .sprint-detail-page .goal-panel strong {
+    font-size: 12px !important;
+  }
+
+  .sprint-detail-page .campaign-panel .panel-label,
+  .sprint-detail-page .campaign-panel span,
+  .sprint-detail-page .goal-panel .panel-label,
+  .sprint-detail-page .goal-panel span {
+    margin-bottom: 2px !important;
+    font-size: 10px !important;
+  }
+
+  .sprint-detail-page .summary-section {
+    padding: 0 !important;
+  }
+
+  .sprint-detail-page .summary-section nz-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .sprint-detail-page .summary-section nz-col {
+    display: block !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    flex: none !important;
+  }
+
+  .sprint-detail-page .summary-section nz-card {
+    border-radius: 8px !important;
+    box-shadow: none !important;
+  }
+
+  .sprint-detail-page .summary-section nz-card .ant-card-body {
+    padding: 10px !important;
+  }
+
+  .sprint-detail-page .finance-row {
+    margin-top: 8px !important;
+  }
+
+  .sprint-detail-page .summary-card {
+    min-height: 58px !important;
+    gap: 0 !important;
+  }
+
+  .sprint-detail-page .summary-card .icon-wrapper {
+    display: none !important;
+  }
+
+  .sprint-detail-page .summary-content {
+    min-width: 0 !important;
+  }
+
+  .sprint-detail-page .summary-content .title {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    text-transform: uppercase !important;
+  }
+
+  .sprint-detail-page .summary-content p {
+    margin-top: 4px !important;
+    font-size: 16px !important;
+    line-height: 1.15 !important;
+    word-break: break-word !important;
+  }
+
+  .sprint-detail-page .volume-panel {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    overflow: visible !important;
+  }
+
+  .sprint-detail-page .volume-panel div {
+    min-width: 0 !important;
+    padding: 9px !important;
+    box-shadow: none !important;
+  }
+
   .carload-live-summary {
     position: static;
     display: grid;

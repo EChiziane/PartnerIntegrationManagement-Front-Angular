@@ -650,7 +650,6 @@ textarea[nz-input] {
   .goal-panel {
     grid-template-columns: 1fr;
     margin-bottom: 0;
-    padding: 12px;
 
     strong {
       white-space: normal;
@@ -661,13 +660,13 @@ textarea[nz-input] {
     margin-bottom: 0;
 
     nz-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
     }
 
     nz-col {
-      min-width: 0;
+      min-width: 0 !important;
     }
   }
 
