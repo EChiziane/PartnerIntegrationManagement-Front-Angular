@@ -8,68 +8,85 @@
 
   <ng-container *nzDrawerContent>
     <ng-container *ngIf="manager; else emptyState">
-      <div class="details-header">
-        <nz-avatar [nzText]="initials" class="avatar" nzSize="large"></nz-avatar>
+      <section class="details-shell">
+        <div class="details-hero">
+          <nz-avatar [nzText]="initials" class="avatar" nzSize="large"></nz-avatar>
 
-        <div class="title-block">
-          <div class="name">{{ manager.name }}</div>
+          <div class="title-block">
+            <span class="eyebrow">Gestor</span>
+            <div class="name">{{ manager.name }}</div>
 
-          <div class="meta-row">
-            <nz-tag [nzColor]="statusColor">{{ statusLabel }}</nz-tag>
-            <span class="pill">{{ manager.address }}</span>
-          </div>
-        </div>
-      </div>
-      <div class="actions">
-        <button (click)="onEdit()" nz-button nzType="primary">
-          <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
-          Editar
-        </button>
-
-        <button (click)="onDelete()" nz-button nzDanger>
-          <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
-          Eliminar
-        </button>
-
-        <button (click)="close()" nz-button nzType="default">
-          Fechar
-        </button>
-      </div>
-      <div class="section">
-        <h3 class="section-title">Informação do Gestor</h3>
-
-        <div class="grid">
-          <div class="info-card">
-            <div class="label">Contacto</div>
-            <div class="value">{{ manager.contact }}</div>
-          </div>
-
-          <div class="info-card">
-            <div class="label">Email</div>
-            <div class="value">{{ manager.address }}</div>
-          </div>
-
-          <div class="info-card">
-            <div class="label">Status</div>
-            <div class="value">
+            <div class="meta-row">
               <nz-tag [nzColor]="statusColor">{{ statusLabel }}</nz-tag>
+              <span class="pill">{{ manager.address || 'Sem endereco' }}</span>
             </div>
           </div>
+        </div>
 
-          <div class="info-card">
-            <div class="label">Criado em</div>
-            <div class="value">{{ manager.createdAt | date:'yyyy-MM-dd HH:mm' }}</div>
+        <div class="quick-actions">
+          <a [href]="'tel:' + manager.contact" class="call-action" nz-button nzType="default">
+            <nz-icon nzTheme="outline" nzType="phone"></nz-icon>
+            Ligar
+          </a>
+
+          <button (click)="onEdit()" nz-button nzType="primary">
+            <nz-icon nzTheme="outline" nzType="edit"></nz-icon>
+            Editar
+          </button>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">Informacao do gestor</h3>
+
+          <div class="info-list">
+            <div class="info-row">
+              <span class="label">Contacto</span>
+              <a [href]="'tel:' + manager.contact" class="value">{{ manager.contact || '-' }}</a>
+            </div>
+
+            <div class="info-row">
+              <span class="label">Endereco</span>
+              <strong class="value">{{ manager.address || '-' }}</strong>
+            </div>
+
+            <div class="info-row">
+              <span class="label">Status</span>
+              <span class="value">
+                <nz-tag [nzColor]="statusColor">{{ statusLabel }}</nz-tag>
+              </span>
+            </div>
+
+            <div class="info-row">
+              <span class="label">Criado em</span>
+              <strong class="value">{{ manager.createdAt | date:'dd/MM/yyyy HH:mm' }}</strong>
+            </div>
+
+            <div class="info-row" *ngIf="manager.createdByName">
+              <span class="label">Criado por</span>
+              <strong class="value">{{ manager.createdByName }}</strong>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="section">
-        <h3 class="section-title">Atividade</h3>
 
-        <div class="placeholder">
-          <nz-empty nzNotFoundContent="Sem atividade para mostrar (por enquanto)."></nz-empty>
+        <div class="section compact-empty">
+          <h3 class="section-title">Atividade</h3>
+
+          <div class="placeholder">
+            <nz-empty nzNotFoundContent="Sem atividade para mostrar."></nz-empty>
+          </div>
         </div>
-      </div>
 
+        <div class="actions">
+          <button (click)="close()" nz-button nzType="default">
+            Fechar
+          </button>
+
+          <button (click)="onDelete()" nz-button nzDanger>
+            <nz-icon nzTheme="outline" nzType="delete"></nz-icon>
+            Eliminar
+          </button>
+        </div>
+      </section>
     </ng-container>
 
     <ng-template #emptyState>
