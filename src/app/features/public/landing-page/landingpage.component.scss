@@ -106,26 +106,75 @@
 .mobile-menu-btn {
   display: none;
   color: #17201d;
+  border-radius: 8px;
+}
+
+.mobile-menu-btn.active {
+  color: #ffffff;
+  background: #17201d;
 }
 
 nz-content {
   padding-top: 72px;
 }
 
+.mobile-access-panel {
+  position: fixed;
+  inset: 82px 14px auto;
+  z-index: 21;
+  display: none;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 18px 44px rgba(23, 32, 29, 0.2);
+}
+
+.mobile-access-head {
+  strong {
+    color: #17201d;
+    font-size: 18px;
+    font-weight: 900;
+  }
+}
+
+.mobile-system-action,
+.mobile-whatsapp-action,
+.mobile-quote-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 46px;
+  border-radius: 8px;
+  font-weight: 850;
+}
+
+.mobile-system-action {
+  color: #17201d;
+  background: #e4ad54;
+  border-color: #e4ad54;
+}
+
 .mobile-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 2px;
 
   a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 10px;
     color: #17201d;
-    font-weight: 750;
-    text-decoration: none;
-  }
-
-  button {
+    background: #f5f6f2;
+    border: 1px solid #e3e2da;
     border-radius: 8px;
     font-weight: 750;
+    text-decoration: none;
   }
 }
 
@@ -628,6 +677,16 @@ nz-content {
 
   .mobile-menu-btn {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mobile-access-panel {
+    display: grid;
   }
 
   .hero-section {
@@ -681,6 +740,10 @@ nz-content {
 
   nz-content {
     padding-top: 64px;
+  }
+
+  .mobile-access-panel {
+    top: 74px;
   }
 
   .hero-section {

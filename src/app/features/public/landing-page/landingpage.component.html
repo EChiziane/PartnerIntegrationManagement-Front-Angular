@@ -21,35 +21,47 @@
         </button>
 
         <button
-          (click)="menuVisible = true"
+          (click)="toggleMenu()"
+          [class.active]="menuVisible"
+          [attr.aria-expanded]="menuVisible"
           class="mobile-menu-btn"
           nz-button
           nzType="text"
-          aria-label="Abrir menu">
-          <span nz-icon nzType="menu"></span>
+          aria-label="Abrir acesso rapido">
+          <span nz-icon [nzType]="menuVisible ? 'clear' : 'menu'"></span>
         </button>
       </div>
     </div>
   </nz-header>
 
-  <nz-drawer
-    (nzOnClose)="menuVisible = false"
-    [nzVisible]="menuVisible"
-    nzPlacement="right"
-    nzTitle="Transportes Chiziane">
-    <nav *nzDrawerContent class="mobile-nav" aria-label="Navegação movel">
-      <a (click)="menuVisible = false; scrollTo('materiais')">Materiais</a>
-      <a (click)="menuVisible = false; scrollTo('como-funciona')">Como funciona</a>
-      <a (click)="menuVisible = false; scrollTo('contactos')">Contactos</a>
-      <a (click)="menuVisible = false; scrollTo('localizacao')">Onde estamos</a>
-      <button (click)="showQuoteModal(); menuVisible = false" nz-button nzBlock nzType="primary">
-        Pedir cota&ccedil;&atilde;o
-      </button>
-      <button (click)="goToLogin(); menuVisible = false" nz-button nzBlock>
-        Area do Sistema
-      </button>
+  <section *ngIf="menuVisible" class="mobile-access-panel" aria-label="Acesso rapido mobile">
+    <div class="mobile-access-head">
+      <span class="section-label">Acesso rapido</span>
+      <strong>O que pretende fazer?</strong>
+    </div>
+
+    <button (click)="goToLogin()" class="mobile-system-action" nz-button nzType="primary">
+      <span nz-icon nzType="lock"></span>
+      Area do Sistema
+      <span nz-icon nzType="arrow-right"></span>
+    </button>
+
+    <button (click)="quickWhatsAppDirect(); closeMenu()" class="mobile-whatsapp-action" nz-button nzType="default">
+      <span nz-icon nzType="message"></span>
+      WhatsApp directo
+    </button>
+
+    <nav class="mobile-nav" aria-label="Navegacao movel">
+      <a (click)="closeMenu(); scrollTo('materiais')">Materiais</a>
+      <a (click)="closeMenu(); scrollTo('como-funciona')">Como funciona</a>
+      <a (click)="closeMenu(); scrollTo('contactos')">Contactos</a>
+      <a (click)="closeMenu(); scrollTo('localizacao')">Onde estamos</a>
     </nav>
-  </nz-drawer>
+
+    <button (click)="showQuoteModal(); closeMenu()" class="mobile-quote-action" nz-button nzType="default">
+      Pedir cotacao
+    </button>
+  </section>
 
   <nz-content>
     <section id="inicio" class="hero-section">

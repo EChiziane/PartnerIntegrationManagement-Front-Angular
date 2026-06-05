@@ -95,7 +95,16 @@ export class LandingPageComponent {
   }
 
   goToLogin(): void {
+    this.closeMenu();
     this.router.navigate(['/login']);
+  }
+
+  toggleMenu(): void {
+    this.menuVisible = !this.menuVisible;
+  }
+
+  closeMenu(): void {
+    this.menuVisible = false;
   }
 
   scrollTo(id: string): void {
