@@ -149,8 +149,9 @@
             <nz-icon nzTheme="outline" nzType="partition"></nz-icon>
           </button>
 
-          <button (click)="downloadQuote(quote)" nz-button nzType="default">
+          <button (click)="downloadQuote(quote)" class="download-action" nz-button nzType="default">
             <nz-icon nzTheme="outline" nzType="download"></nz-icon>
+            Descarregar PDF
           </button>
 
           <button (click)="openQuotePreview(quote)" nz-button nzType="default">
@@ -274,7 +275,8 @@
                 nz-button
                 nz-tooltip
                 nzSize="small"
-                nzTooltipTitle="Baixar PDF"
+                class="download-icon-action"
+                nzTooltipTitle="Descarregar PDF"
                 nzType="link"
               >
                 <nz-icon nzTheme="outline" nzType="download"></nz-icon>
@@ -411,9 +413,9 @@
   <ng-template #quotePreviewFooter>
     <div class="drawer-footer preview-footer" *ngIf="selectedQuote as quote">
       <button (click)="closeQuotePreview()" nz-button nzType="default">Fechar</button>
-      <button (click)="downloadQuote(quote)" nz-button nzType="default">
+      <button (click)="downloadQuote(quote)" class="download-action" nz-button nzType="default">
         <nz-icon nzTheme="outline" nzType="download"></nz-icon>
-        Baixar
+        Descarregar PDF
       </button>
       <button (click)="editPreviewedQuote()" nz-button nzType="primary">
         <nz-icon nzTheme="outline" nzType="edit"></nz-icon>

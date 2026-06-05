@@ -13,9 +13,9 @@
       <button (click)="printPage()" class="ghost-action" type="button" title="Imprimir">
         <span nz-icon nzType="printer"></span>
       </button>
-      <button (click)="downloadCatalog()" [disabled]="!catalogView" class="primary-action" type="button">
+      <button (click)="downloadCatalog()" [disabled]="!catalogView" class="primary-action download-action" type="button">
         <span nz-icon nzType="download"></span>
-        {{ 'common.actions.download' | translate }} PDF
+        Descarregar PDF
       </button>
     </div>
   </header>

@@ -152,6 +152,58 @@ body {
   background: var(--tc-primary-dark) !important;
 }
 
+.download-action {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  min-height: 36px !important;
+  border-radius: var(--tc-radius) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+}
+
+.download-action.ant-btn-default {
+  color: var(--tc-primary) !important;
+  border-color: var(--tc-line-strong) !important;
+  background: #ffffff !important;
+}
+
+.download-action.ant-btn-default:hover,
+.download-action.ant-btn-default:focus {
+  color: var(--tc-primary-dark) !important;
+  border-color: var(--tc-primary) !important;
+  background: var(--tc-primary-soft) !important;
+}
+
+.download-action.ant-btn-primary {
+  border-color: var(--tc-primary) !important;
+  background: var(--tc-primary) !important;
+  box-shadow: 0 8px 18px rgba(14, 124, 114, 0.18) !important;
+}
+
+.download-action.ant-btn-primary:hover,
+.download-action.ant-btn-primary:focus {
+  border-color: var(--tc-primary-dark) !important;
+  background: var(--tc-primary-dark) !important;
+}
+
+.download-action .anticon,
+.download-action [nz-icon] {
+  color: currentColor !important;
+}
+
+.download-icon-action {
+  color: var(--tc-primary) !important;
+}
+
+.download-icon-action:hover,
+.download-icon-action:focus {
+  color: var(--tc-primary-dark) !important;
+  background: var(--tc-primary-soft) !important;
+}
+
 .drawer-footer [nz-button][disabled] {
   opacity: 0.72;
 }

@@ -12,7 +12,7 @@
     </div>
 
     <div class="header-actions">
-      <button (click)="downloadPdf()" [disabled]="!carload || isDownloadingPdf" nz-button nzType="primary">
+      <button (click)="downloadPdf()" [disabled]="!carload || isDownloadingPdf" class="download-action" nz-button nzType="primary">
         <nz-icon nzTheme="outline" nzType="download"></nz-icon>
         {{ isDownloadingPdf ? 'A gerar PDF...' : 'Descarregar PDF' }}
       </button>

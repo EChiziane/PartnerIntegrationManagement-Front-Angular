@@ -166,9 +166,9 @@
             Ver
           </button>
 
-          <button (click)="downloadInvoice(invoice)" nz-button nzType="primary">
+          <button (click)="downloadInvoice(invoice)" class="download-action" nz-button nzType="primary">
             <nz-icon nzTheme="outline" nzType="download"></nz-icon>
-            Baixar
+            Descarregar PDF
           </button>
 
           <button (click)="copyInvoice(invoice)" nz-button nzType="default">
@@ -250,7 +250,8 @@
                   nz-button
                   nz-tooltip
                   nzSize="small"
-                  nzTooltipTitle="Baixar fatura"
+                  class="download-icon-action"
+                  nzTooltipTitle="Descarregar PDF"
                   nzType="link"
                 >
                   <nz-icon nzTheme="outline" nzType="download"></nz-icon>
@@ -383,9 +384,9 @@
   <ng-template #invoicePreviewFooter>
     <div class="drawer-footer preview-footer" *ngIf="selectedInvoice as invoice">
       <button (click)="closeInvoicePreview()" nz-button nzType="default">Fechar</button>
-      <button (click)="downloadInvoice(invoice)" nz-button nzType="default">
+      <button (click)="downloadInvoice(invoice)" class="download-action" nz-button nzType="default">
         <nz-icon nzTheme="outline" nzType="download"></nz-icon>
-        Baixar
+        Descarregar PDF
       </button>
       <button (click)="copyPreviewedInvoice()" nz-button nzType="primary">
         <nz-icon nzTheme="outline" nzType="copy"></nz-icon>

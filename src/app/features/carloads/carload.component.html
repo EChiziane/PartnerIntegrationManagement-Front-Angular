@@ -98,9 +98,9 @@
       Nova Carrada
     </button>
 
-    <button (click)="openReportDrawer()" nz-button nzType="default">
-      <nz-icon nzTheme="outline" nzType="printer"></nz-icon>
-      Relatório
+    <button (click)="openReportDrawer()" class="download-action" nz-button nzType="default">
+      <nz-icon nzTheme="outline" nzType="download"></nz-icon>
+      Relatório PDF
     </button>
   </div>
 
@@ -437,8 +437,9 @@
         Cancelar
       </button>
 
-      <button (click)="generateCarloadReport()" [disabled]="reportForm.invalid" class="btn-save" nz-button nzType="primary">
-        Gerar PDF
+      <button (click)="generateCarloadReport()" [disabled]="reportForm.invalid" class="btn-save download-action" nz-button nzType="primary">
+        <nz-icon nzTheme="outline" nzType="download"></nz-icon>
+        Descarregar PDF
       </button>
     </div>
   </ng-template>
