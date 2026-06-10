@@ -14,9 +14,10 @@
   }
 
   .material-filter {
-    flex: 0 1 190px;
-    width: 190px;
-    min-width: 170px;
+    flex: 1 1 240px;
+    width: 240px;
+    min-width: 210px;
+    max-width: 340px;
   }
 
   button[nz-button] {
@@ -24,18 +25,21 @@
   }
 }
 
-:host ::ng-deep .price-filters .volume-filter .ant-select-selector {
+:host ::ng-deep .price-filters .volume-filter .ant-select-selector,
+:host ::ng-deep .price-filters .material-filter .ant-select-selector {
   height: auto !important;
   min-height: 32px !important;
   padding: 1px 6px !important;
 }
 
-:host ::ng-deep .price-filters .volume-filter .ant-select-selection-overflow {
+:host ::ng-deep .price-filters .volume-filter .ant-select-selection-overflow,
+:host ::ng-deep .price-filters .material-filter .ant-select-selection-overflow {
   flex-wrap: wrap;
   gap: 2px 0;
 }
 
-:host ::ng-deep .price-filters .volume-filter .ant-select-selection-item {
+:host ::ng-deep .price-filters .volume-filter .ant-select-selection-item,
+:host ::ng-deep .price-filters .material-filter .ant-select-selection-item {
   max-width: none;
 }
 

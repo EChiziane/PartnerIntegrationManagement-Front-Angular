@@ -43,10 +43,11 @@
     </nz-select>
     <nz-select
       (ngModelChange)="onMaterialFilterChange($event)"
-      [(ngModel)]="selectedMaterial"
+      [(ngModel)]="selectedMaterials"
       class="material-filter"
-      nzPlaceHolder="Material">
-      <nz-option nzLabel="Todos materiais" nzValue="ALL"></nz-option>
+      nzAllowClear
+      nzMode="multiple"
+      nzPlaceHolder="Todos materiais">
       <nz-option *ngFor="let material of materials" [nzLabel]="material" [nzValue]="material"></nz-option>
     </nz-select>
     <button (click)="openDrawer()" nz-button nzType="primary"><nz-icon nzTheme="outline" nzType="plus"></nz-icon>Novo Produto</button>

@@ -19,7 +19,7 @@ export class ProductPriceComponent implements OnInit {
   isSaving = false;
   searchValue = '';
   selectedVolumes: string[] = [];
-  selectedMaterial = 'ALL';
+  selectedMaterials: string[] = [];
   isDrawerVisible = false;
   isEditMode = false;
   selectedPriceId: string | null = null;
@@ -108,7 +108,7 @@ export class ProductPriceComponent implements OnInit {
         || (item.label || '').toLowerCase().includes(query)
         || (item.materialName || '').toLowerCase().includes(query);
       const matchesVolume = !this.selectedVolumes.length || this.selectedVolumes.includes(item.truckVolume);
-      const matchesMaterial = this.selectedMaterial === 'ALL' || item.materialName === this.selectedMaterial;
+      const matchesMaterial = !this.selectedMaterials.length || this.selectedMaterials.includes(item.materialName);
 
       return matchesSearch && matchesVolume && matchesMaterial;
     });
@@ -119,15 +119,15 @@ export class ProductPriceComponent implements OnInit {
     this.applyFilters();
   }
 
-  onMaterialFilterChange(value: string): void {
-    this.selectedMaterial = value;
+  onMaterialFilterChange(values: string[]): void {
+    this.selectedMaterials = values || [];
     this.applyFilters();
   }
 
   resetFilters(): void {
     this.searchValue = '';
     this.selectedVolumes = [];
-    this.selectedMaterial = 'ALL';
+    this.selectedMaterials = [];
     this.applyFilters();
   }
 
