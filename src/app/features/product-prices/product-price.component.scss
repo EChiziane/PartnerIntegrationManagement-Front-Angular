@@ -1,11 +1,42 @@
 @use '../managers/manager.component.scss';
 
 .price-filters {
-  grid-template-columns: minmax(220px, 1fr) 170px 220px auto auto auto;
-
-  nz-select {
-    min-width: 0;
+  input[nz-input] {
+    flex: 1 1 220px;
+    min-width: 220px;
   }
+
+  .volume-filter {
+    flex: 1 1 220px;
+    width: 220px;
+    min-width: 190px;
+    max-width: 300px;
+  }
+
+  .material-filter {
+    flex: 0 1 190px;
+    width: 190px;
+    min-width: 170px;
+  }
+
+  button[nz-button] {
+    flex: 0 0 auto;
+  }
+}
+
+:host ::ng-deep .price-filters .volume-filter .ant-select-selector {
+  height: auto !important;
+  min-height: 32px !important;
+  padding: 1px 6px !important;
+}
+
+:host ::ng-deep .price-filters .volume-filter .ant-select-selection-overflow {
+  flex-wrap: wrap;
+  gap: 2px 0;
+}
+
+:host ::ng-deep .price-filters .volume-filter .ant-select-selection-item {
+  max-width: none;
 }
 
 .price-product-cell {
@@ -97,7 +128,13 @@
 
 @media (max-width: 900px) {
   .price-filters {
-    grid-template-columns: 1fr;
+    input[nz-input],
+    .volume-filter,
+    .material-filter {
+      flex: 1 1 100%;
+      width: 100%;
+      max-width: none;
+    }
   }
 }
 

@@ -35,12 +35,17 @@
     <nz-select
       (ngModelChange)="onVolumeFilterChange($event)"
       [(ngModel)]="selectedVolumes"
+      class="volume-filter"
       nzAllowClear
       nzMode="multiple"
       nzPlaceHolder="Todos volumes">
       <nz-option *ngFor="let volume of volumes" [nzLabel]="volume" [nzValue]="volume"></nz-option>
     </nz-select>
-    <nz-select (ngModelChange)="onMaterialFilterChange($event)" [(ngModel)]="selectedMaterial" nzPlaceHolder="Material">
+    <nz-select
+      (ngModelChange)="onMaterialFilterChange($event)"
+      [(ngModel)]="selectedMaterial"
+      class="material-filter"
+      nzPlaceHolder="Material">
       <nz-option nzLabel="Todos materiais" nzValue="ALL"></nz-option>
       <nz-option *ngFor="let material of materials" [nzLabel]="material" [nzValue]="material"></nz-option>
     </nz-select>
