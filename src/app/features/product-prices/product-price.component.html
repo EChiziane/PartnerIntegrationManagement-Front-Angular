@@ -32,8 +32,12 @@
 
   <div class="filters-panel price-filters">
     <input (ngModelChange)="applyFilters()" [(ngModel)]="searchValue" nz-input placeholder="Pesquisar produto" type="text"/>
-    <nz-select (ngModelChange)="onVolumeFilterChange($event)" [(ngModel)]="selectedVolume" nzPlaceHolder="Volume">
-      <nz-option nzLabel="Todos volumes" nzValue="ALL"></nz-option>
+    <nz-select
+      (ngModelChange)="onVolumeFilterChange($event)"
+      [(ngModel)]="selectedVolumes"
+      nzAllowClear
+      nzMode="multiple"
+      nzPlaceHolder="Todos volumes">
       <nz-option *ngFor="let volume of volumes" [nzLabel]="volume" [nzValue]="volume"></nz-option>
     </nz-select>
     <nz-select (ngModelChange)="onMaterialFilterChange($event)" [(ngModel)]="selectedMaterial" nzPlaceHolder="Material">
