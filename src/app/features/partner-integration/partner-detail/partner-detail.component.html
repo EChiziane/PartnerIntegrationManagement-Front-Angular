@@ -25,25 +25,34 @@
   </section>
 
   <section *ngIf="activeRequest" class="panel active-request-panel">
-    <header>
+    <header class="active-request-header">
       <div>
         <span class="panel-kicker">Active request</span>
-        <h2>{{ partnerIntegration.typeLabel(activeRequest.type) }}</h2>
+        <h2>{{ activeRequest.title || partnerIntegration.typeLabel(activeRequest.type) }}</h2>
       </div>
-      <nz-tag [nzColor]="partnerIntegration.statusColor(activeRequest.currentStatus)">
-        {{ partnerIntegration.statusLabel(activeRequest.currentStatus) }}
-      </nz-tag>
+      <button (click)="openRequest(activeRequest)" nz-button nzType="default">Open Full Request</button>
     </header>
 
-    <div class="next-step">
-      <div>
-        <span>Current owner</span>
-        <strong>{{ activeRequest.currentOwner }}</strong>
+    <div class="status-focus">
+      <div
+        class="current-status-card"
+        [class.status-waiting]="activeRequest.currentStatus.startsWith('WAITING')"
+        [class.status-risk]="activeRequest.currentStatus === 'TROUBLESHOOTING'"
+        [class.status-testing]="activeRequest.currentStatus === 'CONNECTIVITY_TEST' || activeRequest.currentStatus === 'UAT_IN_PROGRESS'">
+        <span>Current status</span>
+        <strong>{{ partnerIntegration.statusLabel(activeRequest.currentStatus) }}</strong>
       </div>
       <div>
         <span>Next action</span>
         <strong>{{ activeRequest.nextAction }}</strong>
       </div>
+      <div>
+        <span>Current owner</span>
+        <strong>{{ activeRequest.currentOwner }}</strong>
+      </div>
+    </div>
+
+    <div class="next-step">
       <div>
         <span>Priority</span>
         <strong>{{ activeRequest.priority }}</strong>
@@ -165,8 +174,6 @@
         nzDanger>
         Mark Issue
       </button>
-
-      <button (click)="openRequest(activeRequest)" nz-button nzType="default">Open Full Request</button>
     </div>
   </section>
 
