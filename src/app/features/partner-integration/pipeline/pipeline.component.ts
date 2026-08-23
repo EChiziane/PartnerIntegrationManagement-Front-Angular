@@ -4,6 +4,12 @@ import {PartnerIntegrationService} from '@core/services/partner-integration.serv
 import {Partner, PartnerRequest, WorkflowStatus} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 
+interface WorkflowStage {
+  label: string;
+  tone: 'neutral' | 'waiting' | 'ready' | 'work' | 'risk' | 'done';
+  statuses: WorkflowStatus[];
+}
+
 @Component({
   selector: 'app-pipeline',
   standalone: false,
@@ -33,6 +39,15 @@ export class PipelineComponent implements OnInit {
     'CLOSED'
   ];
 
+  readonly workflowStages: WorkflowStage[] = [
+    {label: 'Intake', tone: 'neutral', statuses: ['NEW', 'WAITING_FORM', 'FORM_VALIDATION', 'READY_STATEMENT']},
+    {label: 'Approval', tone: 'waiting', statuses: ['READY_IMPLEMENTATION', 'WAITING_SIGNATURES']},
+    {label: 'Implementation', tone: 'work', statuses: ['IMPLEMENTATION', 'READY_CONNECTIVITY']},
+    {label: 'Testing', tone: 'ready', statuses: ['CONNECTIVITY_TEST', 'READY_UAT', 'UAT_IN_PROGRESS', 'READY_HANDOVER']},
+    {label: 'Exception', tone: 'risk', statuses: ['BLOCKED', 'TROUBLESHOOTING']},
+    {label: 'Closed', tone: 'done', statuses: ['CLOSED']}
+  ];
+
   constructor(
     public partnerIntegration: PartnerIntegrationService,
     private pdf: PartnerIntegrationPdfService,
@@ -55,6 +70,23 @@ export class PipelineComponent implements OnInit {
 
   partnerName(partnerId: string): string {
     return this.partners.find(partner => partner.id === partnerId)?.name || 'Unknown Institution';
+  }
+
+  countByStage(stage: WorkflowStage): number {
+    return stage.statuses.reduce((total, status) => total + this.countByStatus(status), 0);
+  }
+
+  countByStatus(status: WorkflowStatus): number {
+    return this.requests.filter(request => request.currentStatus === status).length;
+  }
+
+  stageForStatus(status: WorkflowStatus): WorkflowStage {
+    return this.workflowStages.find(stage => stage.statuses.includes(status)) || this.workflowStages[0];
+  }
+
+  selectStage(stage: WorkflowStage): void {
+    const firstStatusWithRequests = stage.statuses.find(status => this.countByStatus(status) > 0);
+    this.selectedStatus = firstStatusWithRequests || stage.statuses[0];
   }
 
   requestTitle(request: PartnerRequest): string {

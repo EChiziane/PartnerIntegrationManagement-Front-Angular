@@ -129,17 +129,21 @@
       <button (click)="goPipeline()" nz-button nzType="default">Open Request Pipeline</button>
     </header>
 
-    <div class="status-grid">
-      <button
-        *ngFor="let status of statuses"
-        (click)="goPipeline(status)"
-        class="status-card"
-        type="button">
-        <nz-tag [nzColor]="partnerIntegration.statusColor(status)">
-          {{ partnerIntegration.statusLabel(status) }}
-        </nz-tag>
-        <strong>{{ countByStatus(status) }}</strong>
-      </button>
+    <div class="workflow-stage-grid">
+      <article *ngFor="let stage of workflowStages" class="workflow-stage-card" [class]="'tone-' + stage.tone">
+        <button (click)="goPipeline()" class="stage-summary" type="button">
+          <span>{{ stage.label }}</span>
+          <strong>{{ countByStage(stage) }}</strong>
+          <small>{{ stage.description }}</small>
+        </button>
+
+        <div class="stage-status-list">
+          <button *ngFor="let status of stage.statuses" (click)="goPipeline(status)" type="button">
+            <span>{{ partnerIntegration.statusLabel(status) }}</span>
+            <strong>{{ countByStatus(status) }}</strong>
+          </button>
+        </div>
+      </article>
     </div>
   </section>
 

@@ -3,6 +3,13 @@ import {Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 import {Partner, PartnerConnection, PartnerRequest, RequestType, WorkflowStatus, WorkflowTask} from '@shared/models/partner-integration';
 
+interface WorkflowStage {
+  label: string;
+  description: string;
+  tone: 'neutral' | 'waiting' | 'ready' | 'work' | 'risk' | 'done';
+  statuses: WorkflowStatus[];
+}
+
 @Component({
   selector: 'app-partner-dashboard',
   standalone: false,
@@ -31,6 +38,45 @@ export class PartnerDashboardComponent implements OnInit {
     'UAT_IN_PROGRESS',
     'READY_HANDOVER',
     'CLOSED'
+  ];
+
+  readonly workflowStages: WorkflowStage[] = [
+    {
+      label: 'Intake',
+      description: 'Request opened and form validation',
+      tone: 'neutral',
+      statuses: ['NEW', 'WAITING_FORM', 'FORM_VALIDATION', 'READY_STATEMENT']
+    },
+    {
+      label: 'Approval',
+      description: 'Statement and signatures',
+      tone: 'waiting',
+      statuses: ['READY_IMPLEMENTATION', 'WAITING_SIGNATURES']
+    },
+    {
+      label: 'Implementation',
+      description: 'IP Core, IT and readiness',
+      tone: 'work',
+      statuses: ['IMPLEMENTATION', 'READY_CONNECTIVITY']
+    },
+    {
+      label: 'Testing',
+      description: 'VPN, connectivity and UAT',
+      tone: 'ready',
+      statuses: ['CONNECTIVITY_TEST', 'READY_UAT', 'UAT_IN_PROGRESS', 'READY_HANDOVER']
+    },
+    {
+      label: 'Exception',
+      description: 'Blocked or troubleshooting',
+      tone: 'risk',
+      statuses: ['BLOCKED', 'TROUBLESHOOTING']
+    },
+    {
+      label: 'Closed',
+      description: 'Request archived',
+      tone: 'done',
+      statuses: ['CLOSED']
+    }
   ];
 
   readonly requestTypes: RequestType[] = [
@@ -125,6 +171,10 @@ export class PartnerDashboardComponent implements OnInit {
 
   countByStatus(status: WorkflowStatus): number {
     return this.requests.filter(request => request.currentStatus === status).length;
+  }
+
+  countByStage(stage: WorkflowStage): number {
+    return stage.statuses.reduce((total, status) => total + this.countByStatus(status), 0);
   }
 
   countByType(type: RequestType): number {

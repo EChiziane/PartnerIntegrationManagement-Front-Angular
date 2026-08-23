@@ -18,15 +18,27 @@
     </button>
   </section>
 
+  <section class="stage-strip" aria-label="Workflow stages">
+    <button
+      *ngFor="let stage of workflowStages"
+      (click)="selectStage(stage)"
+      [class]="'stage-chip tone-' + stage.tone"
+      type="button">
+      <span>{{ stage.label }}</span>
+      <strong>{{ countByStage(stage) }}</strong>
+    </button>
+  </section>
+
   <section class="request-list">
     <article *ngFor="let request of filteredRequests" class="request-card">
       <div>
         <strong>{{ requestTitle(request) }}</strong>
         <span>{{ partnerName(request.partnerId) }} - {{ partnerIntegration.typeLabel(request.type) }}</span>
       </div>
-      <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
-        {{ partnerIntegration.statusLabel(request.currentStatus) }}
-      </nz-tag>
+      <div [class]="'request-status tone-' + stageForStatus(request.currentStatus).tone">
+        <span>{{ stageForStatus(request.currentStatus).label }}</span>
+        <strong>{{ partnerIntegration.statusLabel(request.currentStatus) }}</strong>
+      </div>
       <div class="request-meta">
         <span>Owner: {{ request.currentOwner }}</span>
         <span>Next: {{ request.nextAction }}</span>

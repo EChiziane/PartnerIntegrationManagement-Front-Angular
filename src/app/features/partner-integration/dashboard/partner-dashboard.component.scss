@@ -180,28 +180,96 @@ h2 {
   font-weight: 750;
 }
 
-.status-grid {
+.workflow-stage-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
-.status-card {
-  display: flex;
-  min-height: 88px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 12px;
+.workflow-stage-card {
   border: 1px solid #e4edf3;
   border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.stage-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3px 12px;
+  width: 100%;
+  min-height: 76px;
+  padding: 14px;
+  border: 0;
+  border-left: 4px solid #9aaebb;
   background: #f8fbfd;
+  text-align: left;
   cursor: pointer;
 }
 
-.status-card strong {
+.stage-summary span,
+.stage-status-list span {
+  color: #526b7b;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.stage-summary strong {
+  grid-row: span 2;
+  align-self: center;
   color: #0f1f2a;
-  font-size: 24px;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.stage-summary small {
+  color: #6d8190;
+  font-size: 12px;
+}
+
+.stage-status-list {
+  display: grid;
+  gap: 1px;
+  padding: 8px;
+}
+
+.stage-status-list button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.stage-status-list button:hover {
+  background: #f1f6f8;
+}
+
+.stage-status-list strong {
+  color: #0f1f2a;
+  font-size: 14px;
+}
+
+.tone-waiting .stage-summary {
+  border-left-color: #d97706;
+}
+
+.tone-ready .stage-summary,
+.tone-done .stage-summary {
+  border-left-color: #0e7c72;
+}
+
+.tone-work .stage-summary {
+  border-left-color: #2563eb;
+}
+
+.tone-risk .stage-summary {
+  border-left-color: #dc2626;
 }
 
 .two-column {
@@ -264,15 +332,16 @@ h2 {
 }
 
 @media (max-width: 1180px) {
-  .status-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  .workflow-stage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 1000px) {
   .metric-grid,
   .control-grid,
-  .two-column {
+  .two-column,
+  .workflow-stage-grid {
     grid-template-columns: 1fr;
   }
 
