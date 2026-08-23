@@ -239,6 +239,26 @@ export class PartnersComponent implements OnInit {
     return formData.partnerServerIp || '-';
   }
 
+  connectionPeersLabel(partner: Partner): string {
+    const connection = this.connectionForPartner(partner);
+    return connection?.publicPeerIps?.length ? connection.publicPeerIps.join(', ') : connection?.publicIp || '-';
+  }
+
+  connectionEndpointsLabel(partner: Partner): string {
+    const connection = this.connectionForPartner(partner);
+    if (connection?.privateEndpoints?.length) {
+      return connection.privateEndpoints
+        .map(endpoint => `${endpoint.environment}: ${endpoint.ip || '-'}:${endpoint.port || '-'}`)
+        .join(' | ');
+    }
+
+    return connection?.partnerServerIp || '-';
+  }
+
+  integrationName(partner: Partner): string {
+    return `eMola - ${partner.name}`;
+  }
+
   portsLabel(partner: Partner): string {
     const formData = this.requestFormDataForPartner(partner);
     if (formData.privateEndpoints?.length) {
@@ -308,6 +328,10 @@ export class PartnersComponent implements OnInit {
   }
 
   mostUrgentStatus(partnerId: string): WorkflowStatus | null {
+    return this.urgentRequest(partnerId)?.currentStatus || null;
+  }
+
+  urgentRequest(partnerId: string): PartnerRequest | null {
     const openRequests = this.requestsForPartner(partnerId).filter(request => request.currentStatus !== 'CLOSED');
     if (!openRequests.length) return null;
 
@@ -328,7 +352,7 @@ export class PartnersComponent implements OnInit {
 
     return [...openRequests].sort((a, b) =>
       (score[a.currentStatus] || 20) - (score[b.currentStatus] || 20)
-    )[0].currentStatus;
+    )[0];
   }
 
   nextAction(partnerId: string): string {

@@ -65,45 +65,46 @@
 
   <section class="partners-table" aria-label="Institution list">
     <div class="table-head">
-      <span>Institution</span>
-      <span>Service / Contact</span>
-      <span>Integration endpoints</span>
-      <span>Connection / Requests</span>
+      <span>Inst.</span>
+      <span>Service</span>
+      <span>Integration status</span>
+      <span>Integration</span>
       <span>Urgent request</span>
-      <span>Last Activity</span>
+      <span>Date</span>
       <span>Actions</span>
     </div>
 
     <article *ngFor="let partner of filteredPartners" class="partner-row" [class.needs-attention]="hasAttention(partner.id)">
       <div class="partner-identity">
         <strong>{{ partner.name }}</strong>
-        <span>{{ partner.businessOwner || 'No business owner' }}</span>
+        <span>{{ partner.representativeName || partner.businessOwner || 'No representative' }}</span>
       </div>
 
       <div class="cell-stack">
-        <strong>{{ requestFormDataForPartner(partner).serviceApi || '-' }}</strong>
-        <span>{{ pdf.partnerCategory(partner) }} · {{ requestFormDataForPartner(partner).technicalContact || '-' }}</span>
+        <strong>{{ connectionForPartner(partner)?.serviceApi || partner.serviceApi || '-' }}</strong>
+        <span>{{ pdf.partnerCategory(partner) }} · {{ connectionForPartner(partner)?.environment || partner.environment }}</span>
       </div>
 
-      <div class="cell-stack compact">
-        <span>Peer: {{ publicPeersLabel(partner) }}</span>
-        <span>Private: {{ privateEndpointsLabel(partner) }}</span>
-        <span>Ports: {{ portsLabel(partner) }}</span>
-      </div>
-
-      <div class="cell-stack">
-        <strong>{{ requestSummary(partner.id) }}</strong>
-        <span>{{ requestFormDataForPartner(partner).environment }}</span>
+      <div class="cell-stack status-cell">
         <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connectionForPartner(partner)?.health)">
           {{ partnerIntegration.connectionHealthLabel(connectionForPartner(partner)?.health) }}
         </nz-tag>
+        <span>{{ connectionForPartner(partner)?.vpnStatus || 'NOT_STARTED' }} · UAT {{ connectionForPartner(partner)?.connectivityUat || 'NOT_TESTED' }} · PRD {{ connectionForPartner(partner)?.connectivityPrd || 'NOT_TESTED' }}</span>
+      </div>
+
+      <div class="cell-stack compact">
+        <strong>{{ integrationName(partner) }}</strong>
+        <span>Peer: {{ connectionPeersLabel(partner) }}</span>
+        <span>Private: {{ connectionEndpointsLabel(partner) }}</span>
       </div>
 
       <div>
-        <nz-tag *ngIf="mostUrgentStatus(partner.id) as urgentStatus; else noStatus"
-                [nzColor]="partnerIntegration.statusColor(urgentStatus)">
-          {{ partnerIntegration.statusLabel(urgentStatus) }}
-        </nz-tag>
+        <ng-container *ngIf="urgentRequest(partner.id) as request; else noStatus">
+          <strong class="urgent-title">{{ partnerIntegration.requestDisplayTitle(request, partner) }}</strong>
+          <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
+            {{ partnerIntegration.statusLabel(request.currentStatus) }}
+          </nz-tag>
+        </ng-container>
         <ng-template #noStatus>
           <nz-tag nzColor="default">Clear</nz-tag>
         </ng-template>
