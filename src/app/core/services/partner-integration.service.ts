@@ -85,6 +85,23 @@ export class PartnerIntegrationService {
     return created;
   }
 
+  updatePartner(partnerId: string, patch: Partial<Partner>): Partner {
+    const state = this.state();
+    const index = state.partners.findIndex(partner => partner.id === partnerId);
+    if (index < 0) throw new Error('Partner not found');
+
+    const updated: Partner = {
+      ...state.partners[index],
+      ...patch,
+      id: partnerId,
+      lastActivity: this.today()
+    };
+
+    state.partners[index] = updated;
+    this.save(state);
+    return updated;
+  }
+
   createRequest(partnerId: string, type: RequestType): PartnerRequest {
     const state = this.state();
     const request = this.recalculateRequest({

@@ -1,22 +1,252 @@
 <div *ngIf="partner" class="partner-detail">
   <section class="detail-header">
     <div>
-      <span class="eyebrow">Partner Detail</span>
+      <span class="eyebrow">Partner cockpit</span>
       <h1>{{ partner.name }}</h1>
-      <p>{{ partner.serviceApi }} · {{ partner.environment }}</p>
+      <p>{{ partner.serviceApi || 'Service/API not defined' }} - {{ partner.environment }}</p>
     </div>
 
-    <div class="new-request">
+    <div class="header-actions">
       <button (click)="downloadProfile()" nz-button nzType="default">
         <span nz-icon nzType="download"></span>
         Download Profile
       </button>
 
-      <button (click)="startUpdateFlow()" nz-button nzType="default">
+      <button (click)="editProfile()" nz-button nzType="default">
         <span nz-icon nzType="edit"></span>
-        Start Update Flow
+        Edit Data
       </button>
 
+      <button (click)="startUpdateFlow()" nz-button nzType="primary">
+        <span nz-icon nzType="sync"></span>
+        Start Update Flow
+      </button>
+    </div>
+  </section>
+
+  <section *ngIf="activeRequest" class="panel active-request-panel">
+    <header>
+      <div>
+        <span class="panel-kicker">Active request</span>
+        <h2>{{ partnerIntegration.typeLabel(activeRequest.type) }}</h2>
+      </div>
+      <nz-tag [nzColor]="partnerIntegration.statusColor(activeRequest.currentStatus)">
+        {{ partnerIntegration.statusLabel(activeRequest.currentStatus) }}
+      </nz-tag>
+    </header>
+
+    <div class="next-step">
+      <div>
+        <span>Current owner</span>
+        <strong>{{ activeRequest.currentOwner }}</strong>
+      </div>
+      <div>
+        <span>Next action</span>
+        <strong>{{ activeRequest.nextAction }}</strong>
+      </div>
+      <div>
+        <span>Priority</span>
+        <strong>{{ activeRequest.priority }}</strong>
+      </div>
+      <div>
+        <span>Open requests</span>
+        <strong>{{ openRequestsCount }}</strong>
+      </div>
+    </div>
+
+    <div class="step-actions">
+      <button
+        *ngIf="activeRequest.currentStatus === 'NEW'"
+        (click)="action('Form and API Spec Sent', {formSent: true})"
+        nz-button
+        nzType="primary">
+        Send Form/API Spec
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'WAITING_FORM'"
+        (click)="action('Partner Form Received', {formReceived: true})"
+        nz-button
+        nzType="primary">
+        Mark Form Received
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'FORM_VALIDATION'"
+        (click)="action('Form Validated', {formValidated: true})"
+        nz-button
+        nzType="primary">
+        Validate Form
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'READY_STATEMENT'"
+        (click)="action('Statement Created', {statementCreated: true})"
+        nz-button
+        nzType="primary">
+        Statement Created
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'READY_IMPLEMENTATION'"
+        (click)="action('Submitted to IP Core and IT', {ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'})"
+        nz-button
+        nzType="primary">
+        Submit IP Core + IT
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'WAITING_SIGNATURES'"
+        (click)="action('Approval / Signatures Complete', {signaturesComplete: true})"
+        nz-button
+        nzType="primary">
+        Approval Complete
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION'"
+        (click)="action('IP Core and IT Done', {ipCoreStatus: 'DONE', itStatus: 'DONE'})"
+        nz-button
+        nzType="primary">
+        IP Core + IT Done
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'READY_CONNECTIVITY'"
+        (click)="action('Connectivity Passed', {vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS'})"
+        nz-button
+        nzType="primary">
+        Connectivity PASS
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'READY_UAT'"
+        (click)="action('API Test Credentials Provided', {credentialsProvided: true, uatStatus: 'IN_PROGRESS'})"
+        nz-button
+        nzType="primary">
+        Provide Test Credentials
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'UAT_IN_PROGRESS'"
+        (click)="action('UAT Passed', {uatStatus: 'PASS'})"
+        nz-button
+        nzType="primary">
+        UAT PASS
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'READY_HANDOVER'"
+        (click)="action('Handover Complete', {handoverComplete: true})"
+        nz-button
+        nzType="primary">
+        Close Request
+      </button>
+
+      <button
+        (click)="action('Issue / Blocker Registered', {connectivityUat: 'FAIL', blocker: 'Needs investigation'})"
+        nz-button
+        nzDanger>
+        Mark Issue
+      </button>
+
+      <button (click)="openRequest(activeRequest)" nz-button nzType="default">Open Full Request</button>
+    </div>
+  </section>
+
+  <div class="detail-grid">
+    <section class="panel">
+      <header>
+        <div>
+          <span class="panel-kicker">Identity</span>
+          <h2>Partner profile</h2>
+        </div>
+      </header>
+
+      <div *ngIf="!isEditingProfile" class="facts">
+        <div><span>Business Owner</span><strong>{{ partner.businessOwner || '-' }}</strong></div>
+        <div><span>Technical Contact</span><strong>{{ partner.technicalContact || '-' }}</strong></div>
+        <div><span>Phone</span><strong>{{ partner.phone || '-' }}</strong></div>
+        <div><span>Email</span><strong>{{ partner.email || '-' }}</strong></div>
+        <div><span>Service/API</span><strong>{{ partner.serviceApi || '-' }}</strong></div>
+        <div><span>Environment</span><strong>{{ partner.environment || '-' }}</strong></div>
+        <div><span>Status</span><strong>{{ partner.status }}</strong></div>
+        <div><span>Last Activity</span><strong>{{ partner.lastActivity || '-' }}</strong></div>
+      </div>
+
+      <div *ngIf="isEditingProfile" class="edit-form">
+        <label>Partner Name <input [(ngModel)]="partnerDraft.name" nz-input/></label>
+        <label>Business Owner <input [(ngModel)]="partnerDraft.businessOwner" nz-input/></label>
+        <label>Technical Contact <input [(ngModel)]="partnerDraft.technicalContact" nz-input/></label>
+        <label>Phone <input [(ngModel)]="partnerDraft.phone" nz-input/></label>
+        <label>Email <input [(ngModel)]="partnerDraft.email" nz-input/></label>
+        <label>Service/API <input [(ngModel)]="partnerDraft.serviceApi" nz-input/></label>
+        <label>
+          Environment
+          <nz-select [(ngModel)]="partnerDraft.environment">
+            <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
+            <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
+            <nz-option nzValue="UAT + PRD" nzLabel="UAT + PRD"></nz-option>
+          </nz-select>
+        </label>
+        <label>
+          Status
+          <nz-select [(ngModel)]="partnerDraft.status">
+            <nz-option nzValue="ACTIVE" nzLabel="ACTIVE"></nz-option>
+            <nz-option nzValue="INACTIVE" nzLabel="INACTIVE"></nz-option>
+          </nz-select>
+        </label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <header>
+        <div>
+          <span class="panel-kicker">Form and API</span>
+          <h2>Technical data</h2>
+        </div>
+      </header>
+
+      <div *ngIf="!isEditingProfile" class="facts">
+        <div><span>Public IP</span><strong>{{ partner.publicIp || '-' }}</strong></div>
+        <div><span>Server IP</span><strong>{{ partner.partnerServerIp || '-' }}</strong></div>
+        <div><span>UAT Port</span><strong>{{ partner.uatPort || '-' }}</strong></div>
+        <div><span>PRD Port</span><strong>{{ partner.prdPort || '-' }}</strong></div>
+        <div><span>UAT Base URL</span><strong>{{ partner.apiBaseUrlUat || '-' }}</strong></div>
+        <div><span>PRD Base URL</span><strong>{{ partner.apiBaseUrlPrd || '-' }}</strong></div>
+        <div><span>Callback URL</span><strong>{{ partner.callbackUrl || '-' }}</strong></div>
+        <div><span>Auth Method</span><strong>{{ partner.authMethod || '-' }}</strong></div>
+        <div class="wide"><span>Form Reference</span><strong>{{ partner.formReference || '-' }}</strong></div>
+        <div class="wide"><span>Form Notes</span><strong>{{ partner.formNotes || '-' }}</strong></div>
+      </div>
+
+      <div *ngIf="isEditingProfile" class="edit-form">
+        <label>Public IP <input [(ngModel)]="partnerDraft.publicIp" nz-input/></label>
+        <label>Partner Server IP <input [(ngModel)]="partnerDraft.partnerServerIp" nz-input/></label>
+        <label>UAT Port <input [(ngModel)]="partnerDraft.uatPort" nz-input/></label>
+        <label>PRD Port <input [(ngModel)]="partnerDraft.prdPort" nz-input/></label>
+        <label>UAT Base URL <input [(ngModel)]="partnerDraft.apiBaseUrlUat" nz-input/></label>
+        <label>PRD Base URL <input [(ngModel)]="partnerDraft.apiBaseUrlPrd" nz-input/></label>
+        <label>Callback URL <input [(ngModel)]="partnerDraft.callbackUrl" nz-input/></label>
+        <label>Auth Method <input [(ngModel)]="partnerDraft.authMethod" nz-input placeholder="API Key, Basic, OAuth, mTLS..."/></label>
+        <label class="wide">Form Reference <input [(ngModel)]="partnerDraft.formReference" nz-input placeholder="File name, ticket, email reference..."/></label>
+        <label class="wide">Form Notes <textarea [(ngModel)]="partnerDraft.formNotes" nz-input rows="4"></textarea></label>
+      </div>
+
+      <div *ngIf="isEditingProfile" class="form-actions">
+        <button (click)="cancelProfileEdit()" nz-button nzType="default">Cancel</button>
+        <button (click)="saveProfile()" nz-button nzType="primary">Save Partner Data</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <header>
+      <span class="panel-kicker">Requests</span>
+      <h2>Open and historical requests</h2>
+    </header>
+
+    <div class="new-request">
       <nz-select [(ngModel)]="requestType">
         <nz-option nzValue="NEW_INTEGRATION" nzLabel="New Integration"></nz-option>
         <nz-option nzValue="UPDATE_INTEGRATION" nzLabel="Update Integration"></nz-option>
@@ -27,30 +257,6 @@
 
       <button (click)="createRequest()" nz-button nzType="primary">Open Request</button>
     </div>
-  </section>
-
-  <section class="panel">
-    <header>
-      <span class="panel-kicker">Identity and connectivity</span>
-      <h2>Partner profile</h2>
-    </header>
-    <div class="facts">
-      <div><span>Business Owner</span><strong>{{ partner.businessOwner || '-' }}</strong></div>
-      <div><span>Technical Contact</span><strong>{{ partner.technicalContact || '-' }}</strong></div>
-      <div><span>Phone</span><strong>{{ partner.phone || '-' }}</strong></div>
-      <div><span>Email</span><strong>{{ partner.email || '-' }}</strong></div>
-      <div><span>Public IP</span><strong>{{ partner.publicIp || '-' }}</strong></div>
-      <div><span>Server IP</span><strong>{{ partner.partnerServerIp || '-' }}</strong></div>
-      <div><span>UAT Port</span><strong>{{ partner.uatPort || '-' }}</strong></div>
-      <div><span>PRD Port</span><strong>{{ partner.prdPort || '-' }}</strong></div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <header>
-      <span class="panel-kicker">Requests</span>
-      <h2>Open and historical requests</h2>
-    </header>
 
     <article *ngFor="let request of requests" class="request-row">
       <div>

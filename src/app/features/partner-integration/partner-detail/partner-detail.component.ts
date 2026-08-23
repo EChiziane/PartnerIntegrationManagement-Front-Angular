@@ -12,9 +12,11 @@ import {PartnerIntegrationPdfService} from '@core/services/partner-integration-p
 })
 export class PartnerDetailComponent implements OnInit {
   partner: Partner | undefined;
+  partnerDraft: Partial<Partner> = {};
   requests: PartnerRequest[] = [];
   events: TimelineEvent[] = [];
   requestType: RequestType = 'NEW_INTEGRATION';
+  isEditingProfile = false;
 
   constructor(
     public partnerIntegration: PartnerIntegrationService,
@@ -31,8 +33,17 @@ export class PartnerDetailComponent implements OnInit {
   load(): void {
     const id = this.route.snapshot.paramMap.get('id') || '';
     this.partner = this.partnerIntegration.getPartner(id);
+    this.partnerDraft = this.partner ? {...this.partner} : {};
     this.requests = this.partnerIntegration.getRequests().filter(request => request.partnerId === id);
     this.events = this.requests.flatMap(request => this.partnerIntegration.getEvents(request.id));
+  }
+
+  get activeRequest(): PartnerRequest | undefined {
+    return this.requests.find(request => request.currentStatus !== 'CLOSED') || this.requests[0];
+  }
+
+  get openRequestsCount(): number {
+    return this.requests.filter(request => request.currentStatus !== 'CLOSED').length;
   }
 
   openRequest(request: PartnerRequest): void {
@@ -49,6 +60,32 @@ export class PartnerDetailComponent implements OnInit {
     if (!this.partner) return;
     const request = this.partnerIntegration.createRequest(this.partner.id, 'UPDATE_INTEGRATION');
     this.router.navigate(['/app/request', request.id]);
+  }
+
+  editProfile(): void {
+    if (!this.partner) return;
+    this.partnerDraft = {...this.partner};
+    this.isEditingProfile = true;
+  }
+
+  cancelProfileEdit(): void {
+    this.partnerDraft = this.partner ? {...this.partner} : {};
+    this.isEditingProfile = false;
+  }
+
+  saveProfile(): void {
+    if (!this.partner) return;
+    this.partner = this.partnerIntegration.updatePartner(this.partner.id, this.partnerDraft);
+    this.partnerDraft = {...this.partner};
+    this.isEditingProfile = false;
+    this.load();
+  }
+
+  action(label: string, patch: Partial<PartnerRequest>): void {
+    const request = this.activeRequest;
+    if (!request) return;
+    this.partnerIntegration.updateRequest(request.id, patch, label);
+    this.load();
   }
 
   downloadProfile(): void {
