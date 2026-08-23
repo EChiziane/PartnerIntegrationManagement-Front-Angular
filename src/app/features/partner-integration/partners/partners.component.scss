@@ -222,6 +222,25 @@ p {
   margin-top: 6px;
 }
 
+.import-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.import-strip button {
+  border-radius: 8px;
+  font-weight: 750;
+}
+
+.import-strip span {
+  color: #607786;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .drawer-section {
   margin: 12px 14px 0;
   padding: 16px;

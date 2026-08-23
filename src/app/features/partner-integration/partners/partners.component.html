@@ -138,6 +138,14 @@
       <span class="eyebrow">Partner registration</span>
       <h2>Create partner profile</h2>
       <p>Register the business owner, technical contact, connectivity details and document folder.</p>
+      <div class="import-strip">
+        <input #partnerFormInput (change)="importPartnerForm($event)" accept=".xls,.xlsx" hidden type="file"/>
+        <button (click)="partnerFormInput.click()" nz-button nzType="default">
+          <span nz-icon nzType="upload"></span>
+          Import Excel Form
+        </button>
+        <span *ngIf="importNotice">{{ importNotice }}</span>
+      </div>
     </section>
 
     <section class="drawer-section">

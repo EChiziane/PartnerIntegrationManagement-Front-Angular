@@ -38,6 +38,7 @@ export class PartnersComponent implements OnInit {
 
   requestType: RequestType = 'NEW_INTEGRATION';
   isCreateVisible = false;
+  importNotice = '';
   readonly businessOwnerSuggestions = [
     'Business Development',
     'Financial Services',
@@ -129,6 +130,7 @@ export class PartnersComponent implements OnInit {
 
   openCreate(): void {
     this.resetDraft();
+    this.importNotice = '';
     this.isCreateVisible = true;
   }
 
@@ -143,6 +145,48 @@ export class PartnersComponent implements OnInit {
 
   closeCreate(): void {
     this.isCreateVisible = false;
+  }
+
+  async importPartnerForm(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    try {
+      const XLSX = await import('xlsx');
+      const workbook = XLSX.read(await file.arrayBuffer(), {type: 'array'});
+      const vpnRows = this.sheetRows(XLSX, workbook, 'IPSEC VPN Template');
+      const rulesRows = this.sheetRows(XLSX, workbook, 'Rules & Policies');
+      const fileHints = this.fileHints(file.name);
+      const partnerName = this.partnerCell(vpnRows, 'Description') || fileHints.partnerName;
+      const technicalContact = this.partnerCell(vpnRows, 'Name');
+      const email = this.partnerCell(vpnRows, 'Email Address');
+      const phone = this.partnerCell(vpnRows, 'Cell Phone');
+      const publicPeers = this.splitValues(this.partnerCell(vpnRows, 'VPN Peer Address'));
+      const partnerDomainIp = this.firstIp(this.partnerCell(vpnRows, 'Encryption domain'));
+      const privateEndpoints = this.privateEndpointsFromRules(rulesRows, partnerDomainIp);
+
+      this.draft = {
+        ...this.draft,
+        name: this.cleanPlaceholder(partnerName, 'Partner Name'),
+        businessOwner: fileHints.businessOwner || this.draft.businessOwner,
+        technicalContact: technicalContact || this.draft.technicalContact,
+        phone: phone || this.draft.phone,
+        email: email || this.draft.email,
+        serviceApi: fileHints.serviceApi || this.draft.serviceApi,
+        environment: privateEndpoints.length ? this.environmentFromEndpoints(privateEndpoints) : this.draft.environment,
+        publicPeerIpsText: publicPeers.length ? publicPeers.join('\n') : this.draft.publicPeerIpsText,
+        privateEndpoints: privateEndpoints.length ? privateEndpoints : this.draft.privateEndpoints,
+        authMethod: this.partnerCell(vpnRows, 'Authentication Method') || this.draft.authMethod
+      };
+
+      this.importNotice = `Imported ${file.name}: ${privateEndpoints.length} endpoint(s), ${publicPeers.length} peer IP(s).`;
+    } catch (error) {
+      console.error('Partner form import failed', error);
+      this.importNotice = 'Could not import this Excel form. Please check if the file is the partner VPN form.';
+    } finally {
+      input.value = '';
+    }
   }
 
   createRequest(partner: Partner): void {
@@ -260,6 +304,104 @@ export class PartnersComponent implements OnInit {
       ownCloudFolderUrl: '',
       formNotes: ''
     };
+  }
+
+  private sheetRows(
+    XLSX: typeof import('xlsx'),
+    workbook: import('xlsx').WorkBook,
+    sheetNamePart: string
+  ): string[][] {
+    const sheetName = workbook.SheetNames.find(name => name.toLowerCase().includes(sheetNamePart.toLowerCase()));
+    if (!sheetName) return [];
+    return XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header: 1, blankrows: false, defval: ''})
+      .map(row => (row as unknown[]).map(value => String(value ?? '').trim()));
+  }
+
+  private partnerCell(rows: string[][], label: string): string {
+    const row = rows.find(item => item[0]?.toLowerCase().replace(/\s+/g, ' ').trim() === label.toLowerCase());
+    return this.cleanPlaceholder(row?.[2] || row?.[1] || '', label);
+  }
+
+  private fileHints(fileName: string): { businessOwner: string; serviceApi: ServiceOption | ''; partnerName: string } {
+    const baseName = fileName.replace(/\.[^.]+$/, '');
+    const parts = baseName.split('_').map(part => part.trim()).filter(Boolean);
+    const servicePart = parts.find(part => /push\s*ussd/i.test(part)) || '';
+    const ownerPart = parts.find(part => /m-?mola/i.test(part)) || '';
+    const partnerPart = parts.find(part => !/^vpn$/i.test(part)
+      && !/^mvt$/i.test(part)
+      && !/m-?mola/i.test(part)
+      && !/push\s*ussd/i.test(part)
+      && !/^\d+$/.test(part)) || '';
+
+    return {
+      businessOwner: ownerPart ? ownerPart.toUpperCase().replace('MMOLA', 'M-MOLA') : '',
+      serviceApi: servicePart ? 'Push USSD' : '',
+      partnerName: this.cleanPlaceholder(partnerPart, 'PartnerName')
+    };
+  }
+
+  private privateEndpointsFromRules(rows: string[][], partnerDomainIp: string): PartnerPrivateEndpoint[] {
+    const endpoints: PartnerPrivateEndpoint[] = [];
+
+    rows
+      .filter(row => /^rule\s+\d+/i.test(row[0] || ''))
+      .forEach(row => {
+        const sourceIps = this.splitValues(row[1]);
+        const destinationIps = this.splitValues(row[3]);
+        const ports = this.portsFromService(row[5]);
+        const environment = this.environmentFromPurpose(row[7]);
+        const endpointIps = partnerDomainIp
+          ? [partnerDomainIp]
+          : this.endpointIpsFromRule(row[7], sourceIps, destinationIps);
+
+        endpointIps.forEach(ip => {
+          ports.forEach(port => endpoints.push({environment, ip, port}));
+        });
+      });
+
+    return endpoints.filter((endpoint, index, list) =>
+      list.findIndex(item => item.environment === endpoint.environment
+        && item.ip === endpoint.ip
+        && item.port === endpoint.port) === index
+    );
+  }
+
+  private environmentFromPurpose(value: string): PartnerEnvironment {
+    const normalized = value.toUpperCase();
+    if (normalized.includes('UAT') && normalized.includes('PRD')) return 'UAT+PRD';
+    if (normalized.includes('PRD')) return 'PRD';
+    return 'UAT';
+  }
+
+  private environmentFromEndpoints(endpoints: PartnerPrivateEndpoint[]): PartnerEnvironment {
+    const environments = new Set(endpoints.map(endpoint => endpoint.environment));
+    if (environments.has('UAT+PRD') || (environments.has('UAT') && environments.has('PRD'))) return 'UAT+PRD';
+    if (environments.has('PRD')) return 'PRD';
+    return 'UAT';
+  }
+
+  private endpointIpsFromRule(purpose: string, sourceIps: string[], destinationIps: string[]): string[] {
+    return /callback/i.test(purpose) ? destinationIps : sourceIps;
+  }
+
+  private portsFromService(value: string): string[] {
+    return [...String(value || '').matchAll(/\d{2,5}/g)].map(match => match[0]);
+  }
+
+  private splitValues(value: string): string[] {
+    return String(value || '')
+      .split(/[\n,;]+/)
+      .map(item => item.trim().replace(/\/32$/, ''))
+      .filter(Boolean);
+  }
+
+  private firstIp(value: string): string {
+    return this.splitValues(value).find(item => /\d+\.\d+\.\d+\.\d+/.test(item)) || '';
+  }
+
+  private cleanPlaceholder(value: string, placeholder: string): string {
+    const clean = String(value || '').trim();
+    return clean.toLowerCase().replace(/\s+/g, '') === placeholder.toLowerCase().replace(/\s+/g, '') ? '' : clean;
   }
 
   private buildPartnerPayload(): Omit<Partner, 'id' | 'lastActivity' | 'status'> {
