@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-23.prod.4",
+  "version": "2026-08-23.prod.5",
   "partners": [
     {
       "groupLink": "",
