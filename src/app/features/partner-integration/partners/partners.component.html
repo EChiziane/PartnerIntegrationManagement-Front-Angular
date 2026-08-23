@@ -1,13 +1,13 @@
 <div class="list-page">
   <section class="page-header">
     <div>
-      <span class="eyebrow">Institutions</span>
-      <h1>Institution registry</h1>
+      <span class="eyebrow">Partners</span>
+      <h1>Partner registry</h1>
       <p>Search company profiles, inspect the current integration, and open controlled requests.</p>
     </div>
     <button (click)="openCreate()" nz-button nzType="primary">
       <span nz-icon nzType="plus"></span>
-      New Institution
+      New Partner
     </button>
     <button (click)="downloadList()" nz-button nzType="default">
       <span nz-icon nzType="download"></span>
@@ -18,7 +18,7 @@
   <section class="toolbar">
     <label class="search-control">
       <span nz-icon nzType="search"></span>
-      <input [(ngModel)]="searchValue" nz-input placeholder="Search by institution, representative, service, peer IP or private endpoint"/>
+      <input [(ngModel)]="searchValue" nz-input placeholder="Search by partner, representative, service, peer IP or private endpoint"/>
     </label>
 
     <div class="filter-strip">
@@ -39,7 +39,7 @@
 
   <section class="request-toolbar">
     <div class="toolbar-field">
-      <span>Institution category</span>
+      <span>Partner category</span>
       <nz-select [(ngModel)]="categoryFilter">
         <nz-option nzValue="ALL" nzLabel="All categories"></nz-option>
         <nz-option nzValue="Payment API" nzLabel="Payment API"></nz-option>
@@ -63,7 +63,7 @@
     </div>
   </section>
 
-  <section class="partners-table" aria-label="Institution list">
+  <section class="partners-table" aria-label="Partner list">
     <div class="table-head">
       <span>Inst.</span>
       <span>Service</span>
@@ -124,7 +124,7 @@
 
     <div *ngIf="!filteredPartners.length" class="empty-state">
       <span nz-icon nzType="search"></span>
-      <strong>No institutions found</strong>
+      <strong>No partners found</strong>
       <p>Try a different search or clear the active filter.</p>
     </div>
   </section>
@@ -136,11 +136,11 @@
   [nzWidth]="720"
   [nzBodyStyle]="{ padding: '0' }"
   nzPlacement="right"
-  nzTitle="New Institution">
+  nzTitle="New Partner">
   <div *nzDrawerContent class="partner-drawer">
     <section class="drawer-intro">
-      <span class="eyebrow">Institution registration</span>
-      <h2>Create institution profile</h2>
+      <span class="eyebrow">Partner registration</span>
+      <h2>Create partner profile</h2>
       <p>Register the company profile, request form data, current integration details and document folder.</p>
       <div class="import-strip">
         <input #partnerFormInput (change)="importPartnerForm($event)" accept=".xls,.xlsx" hidden type="file"/>
@@ -156,7 +156,7 @@
       <div class="section-heading">
         <span>1</span>
         <div>
-          <h3>Institution identity</h3>
+          <h3>Partner identity</h3>
           <p>Company, ownership and representative information.</p>
         </div>
       </div>
@@ -276,7 +276,7 @@
 
     <footer class="drawer-actions">
       <button (click)="closeCreate()" nz-button nzType="default">Cancel</button>
-      <button (click)="createPartner()" [disabled]="!draft.name.trim()" nz-button nzType="primary">Create Institution</button>
+      <button (click)="createPartner()" [disabled]="!draft.name.trim()" nz-button nzType="primary">Create Partner</button>
     </footer>
   </div>
 </nz-drawer>

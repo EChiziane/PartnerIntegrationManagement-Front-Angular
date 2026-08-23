@@ -182,7 +182,7 @@ export class PartnerDashboardComponent implements OnInit {
   }
 
   partnerName(partnerId: string): string {
-    return this.partners.find(partner => partner.id === partnerId)?.name || 'Institution';
+    return this.partners.find(partner => partner.id === partnerId)?.name || 'Partner';
   }
 
   goPipeline(status?: WorkflowStatus): void {

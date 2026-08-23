@@ -108,7 +108,7 @@ export class PartnerIntegrationService {
   updatePartner(partnerId: string, patch: Partial<Partner>): Partner {
     const state = this.state();
     const index = state.partners.findIndex(partner => partner.id === partnerId);
-    if (index < 0) throw new Error('Institution not found');
+    if (index < 0) throw new Error('Partner not found');
 
     const updated: Partner = {
       ...state.partners[index],
@@ -131,7 +131,7 @@ export class PartnerIntegrationService {
     const request = this.recalculateRequest({
       id: requestId,
       partnerId,
-      title: this.defaultRequestTitle(type, partner?.name || 'Unknown Institution'),
+      title: this.defaultRequestTitle(type, partner?.name || 'Unknown Partner'),
       environment: partner?.environment || 'UAT+PRD',
       formData: {...baseFormData, ...(safePatch.formData || {})},
       type,
@@ -230,7 +230,7 @@ export class PartnerIntegrationService {
           id: `task-${request.id}`,
           partnerId: request.partnerId,
           requestId: request.id,
-          partnerName: partner?.name || 'Unknown Institution',
+          partnerName: partner?.name || 'Unknown Partner',
           requestType: request.type,
           title: request.title || request.nextAction,
           owner: request.currentOwner,
@@ -250,7 +250,7 @@ export class PartnerIntegrationService {
     return this.getRequests()
       .filter(request => request.currentStatus !== 'CLOSED')
       .flatMap(request => {
-        const partnerName = partners.find(partner => partner.id === request.partnerId)?.name || 'Unknown Institution';
+        const partnerName = partners.find(partner => partner.id === request.partnerId)?.name || 'Unknown Partner';
         const items: ScanItem[] = [];
 
         if (request.currentStatus === 'WAITING_SIGNATURES') {
@@ -290,7 +290,7 @@ export class PartnerIntegrationService {
   }
 
   requestDisplayTitle(request: PartnerRequest, partner?: Partner): string {
-    return request.title || this.defaultRequestTitle(request.type, partner?.name || 'Unknown Institution');
+    return request.title || this.defaultRequestTitle(request.type, partner?.name || 'Unknown Partner');
   }
 
   connectionHealthLabel(health: PartnerConnection['health'] | undefined): string {
@@ -367,7 +367,7 @@ export class PartnerIntegrationService {
     const map: Record<WorkflowStatus, { owner: string; action: string }> = {
       BLOCKED: {owner: 'Blocked', action: 'Resolve blocker or unblock request'},
       NEW: {owner: 'Me', action: 'Send Introduction + VPN Form + API Spec'},
-      WAITING_FORM: {owner: 'Institution', action: 'Follow up VPN integration form'},
+      WAITING_FORM: {owner: 'Partner', action: 'Follow up VPN integration form'},
       FORM_VALIDATION: {owner: 'Me', action: 'Validate Form'},
       READY_STATEMENT: {owner: 'Me', action: 'Create Statement'},
       WAITING_SIGNATURES: {owner: 'vOffice / Signers', action: 'Follow up signatures'},
@@ -375,9 +375,9 @@ export class PartnerIntegrationService {
       IMPLEMENTATION: {owner: 'IP Core / IT', action: 'Follow up implementation'},
       READY_CONNECTIVITY: {owner: 'Me', action: 'Coordinate Connectivity Test'},
       CONNECTIVITY_TEST: {owner: 'Me', action: 'Run connectivity tests'},
-      TROUBLESHOOTING: {owner: 'Technical Team / Institution', action: 'Troubleshoot integration / identify owner / next action'},
+      TROUBLESHOOTING: {owner: 'Technical Team / Partner', action: 'Troubleshoot integration / identify owner / next action'},
       READY_UAT: {owner: 'Me', action: 'Provide API Test Credentials'},
-      UAT_IN_PROGRESS: {owner: 'Institution', action: 'Follow up institution UAT/API testing'},
+      UAT_IN_PROGRESS: {owner: 'Partner', action: 'Follow up partner UAT/API testing'},
       READY_HANDOVER: {owner: 'Me', action: 'Handover to Business/Product'},
       CLOSED: {owner: 'Closed', action: 'Archive evidence and keep integration active'}
     };
@@ -385,7 +385,7 @@ export class PartnerIntegrationService {
   }
 
   private defaultRequestTitle(type: RequestType, partnerName: string): string {
-    const name = partnerName.trim() || 'Unknown Institution';
+    const name = partnerName.trim() || 'Unknown Partner';
     const titles: Record<RequestType, string> = {
       NEW_INTEGRATION: `Create connection between eMola and ${name}`,
       UPDATE_INTEGRATION: `Update connection between eMola and ${name}`,
@@ -928,7 +928,7 @@ export class PartnerIntegrationService {
       base('request-c', 'partner-c', 'UPDATE_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true}),
       base('request-d', 'partner-d', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'IN_PROGRESS'}),
       base('request-e', 'partner-e', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'IN_PROGRESS', connectivityUat: 'IN_PROGRESS', connectivityPrd: 'IN_PROGRESS'}),
-      base('request-f', 'partner-f', 'CONNECTIVITY_SUPPORT', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'DOWN', connectivityUat: 'FAIL', blocker: 'Institution reports VPN down'}),
+      base('request-f', 'partner-f', 'CONNECTIVITY_SUPPORT', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'DOWN', connectivityUat: 'FAIL', blocker: 'Partner reports VPN down'}),
       base('request-g', 'partner-g', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS', credentialsProvided: true, uatStatus: 'IN_PROGRESS'}),
       base('request-h', 'partner-h', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS', credentialsProvided: true, uatStatus: 'PASS', handoverComplete: true, closeDate: this.today()})
     ];

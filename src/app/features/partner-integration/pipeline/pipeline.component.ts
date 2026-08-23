@@ -69,7 +69,7 @@ export class PipelineComponent implements OnInit {
   }
 
   partnerName(partnerId: string): string {
-    return this.partners.find(partner => partner.id === partnerId)?.name || 'Unknown Institution';
+    return this.partners.find(partner => partner.id === partnerId)?.name || 'Unknown Partner';
   }
 
   countByStage(stage: WorkflowStage): number {

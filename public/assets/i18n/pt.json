@@ -12,10 +12,10 @@
       "pipeline": "Pipeline de Pedidos",
       "tasks": "Execucao",
       "scan": "Controlo",
-      "partners": "Instituicoes"
+      "partners": "Partners"
     },
     "topbar": {
-      "subtitle": "Instituicoes, integracoes e pedidos"
+      "subtitle": "Partners, integracoes e pedidos"
     },
     "status": {
       "demoData": "Dados demo ativos"

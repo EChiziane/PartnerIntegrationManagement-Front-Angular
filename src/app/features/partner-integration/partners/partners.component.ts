@@ -139,7 +139,7 @@ export class PartnersComponent implements OnInit {
       this.searchValue.trim() ? `SEARCH_${this.searchValue.trim()}` : ''
     ].filter(Boolean).join(' / ');
 
-    this.pdf.downloadPartnerList(this.filteredPartners, this.requests, scope || 'All Institutions');
+    this.pdf.downloadPartnerList(this.filteredPartners, this.requests, scope || 'All Partners');
   }
 
   openPartner(partner: Partner): void {
@@ -166,7 +166,7 @@ export class PartnersComponent implements OnInit {
       formValidated: hasTechnicalData,
       notes: hasTechnicalData
         ? 'Created automatically from imported and validated VPN integration form.'
-        : 'Created from quick institution registration. Waiting for VPN integration form.'
+        : 'Created from quick partner registration. Waiting for VPN integration form.'
     });
 
     this.isCreateVisible = false;

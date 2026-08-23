@@ -12,10 +12,10 @@
       "pipeline": "Request Pipeline",
       "tasks": "Execution",
       "scan": "Control",
-      "partners": "Institutions"
+      "partners": "Partners"
     },
     "topbar": {
-      "subtitle": "Institutions, integrations and requests"
+      "subtitle": "Partners, integrations and requests"
     },
     "status": {
       "demoData": "Demo data enabled"

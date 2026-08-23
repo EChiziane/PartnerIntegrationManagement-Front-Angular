@@ -1,7 +1,7 @@
 <div *ngIf="partner" class="partner-detail">
   <section class="detail-header">
     <div>
-      <span class="eyebrow">Institution cockpit</span>
+      <span class="eyebrow">Partner cockpit</span>
       <h1>{{ partner.name }}</h1>
       <p>{{ partner.serviceApi || 'Service/API not defined' }} - {{ partner.environment }}</p>
     </div>
@@ -20,7 +20,7 @@
 
       <button (click)="editProfile()" nz-button nzType="default">
         <span nz-icon nzType="edit"></span>
-        Edit Institution
+        Edit Partner
       </button>
 
       <button (click)="startUpdateFlow()" nz-button nzType="primary">
@@ -35,7 +35,7 @@
       <header>
         <div>
           <span class="panel-kicker">Identity</span>
-          <h2>Institution profile</h2>
+          <h2>Partner profile</h2>
         </div>
       </header>
 
@@ -70,7 +70,7 @@
 
       <div *ngIf="isEditingProfile" class="form-actions">
         <button (click)="cancelProfileEdit()" nz-button nzType="default">Cancel</button>
-        <button (click)="saveProfile()" nz-button nzType="primary">Save Institution Data</button>
+        <button (click)="saveProfile()" nz-button nzType="primary">Save Partner Data</button>
       </div>
     </section>
 
@@ -125,7 +125,7 @@
     <header>
       <div>
         <span class="panel-kicker">Integration status</span>
-        <h2>State of the connection we have with this institution</h2>
+        <h2>State of the connection we have with this partner</h2>
       </div>
       <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection?.health)">
         {{ partnerIntegration.connectionHealthLabel(connection?.health) }}
@@ -218,7 +218,7 @@
         <span class="panel-kicker">Test credentials</span>
         <h3>Paste the credentials provided to {{ partner.name }}.</h3>
       </div>
-      <textarea [(ngModel)]="credentialsDraft" nz-input rows="7" placeholder="Paste UAT URL, username, password, API key, test MSISDNs or any instructions shared with the institution"></textarea>
+      <textarea [(ngModel)]="credentialsDraft" nz-input rows="7" placeholder="Paste UAT URL, username, password, API key, test MSISDNs or any instructions shared with the partner"></textarea>
       <div class="credentials-actions">
         <button (click)="cancelCredentialsEditor()" nz-button nzType="default">Cancel</button>
         <button (click)="saveCredentials()" [disabled]="!credentialsDraft.trim()" nz-button nzType="primary">Save & Mark Provided</button>
@@ -277,7 +277,7 @@
   <section class="panel">
     <header>
       <span class="panel-kicker">History</span>
-      <h2>Institution and integration history</h2>
+      <h2>Partner and integration history</h2>
     </header>
 
     <article *ngFor="let event of events" class="history-row">

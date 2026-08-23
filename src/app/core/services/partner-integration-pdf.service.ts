@@ -35,7 +35,7 @@ export class PartnerIntegrationPdfService {
 
     this.drawHeader(doc, 'INSTITUTION / INTEGRATION LIST', scopeLabel);
     this.drawSummaryTable(doc, autoTable, margin, 26, [
-      ['Institutions', String(partners.length)],
+      ['Partners', String(partners.length)],
       ['Open Requests', String(this.openRequestCount(requests))],
       ['Attention', String(this.attentionCount(requests))],
       ['Active Profiles', String(partners.filter(item => item.status === 'ACTIVE').length)]
@@ -45,7 +45,7 @@ export class PartnerIntegrationPdfService {
       startY: 44,
       margin: {left: margin, right: margin, bottom: 20},
       head: [[
-        'Institution',
+        'Partner',
         'Category / Health',
         'Business Owner',
         'Technical Contact',
@@ -107,7 +107,7 @@ export class PartnerIntegrationPdfService {
       startY: 44,
       margin: {left: margin, right: margin, bottom: 20},
       head: [[
-        'Institution',
+        'Partner',
         'Request',
         'Status',
         'Owner',
@@ -187,7 +187,7 @@ export class PartnerIntegrationPdfService {
       ['OwnCloud Folder', profileFormData.ownCloudFolderUrl || partner.ownCloudFolderUrl || '-'],
       ['Form Notes', profileFormData.formNotes || partner.formNotes || '-'],
       ['Last Activity', partner.lastActivity || '-'],
-      ['Institution ID', partner.id || '-']
+      ['Partner ID', partner.id || '-']
       ]),
       theme: 'grid',
       styles: this.tableStyles(),

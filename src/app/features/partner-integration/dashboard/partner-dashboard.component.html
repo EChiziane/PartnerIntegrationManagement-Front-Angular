@@ -2,9 +2,9 @@
   <section class="dashboard-hero">
     <div class="hero-copy">
       <span class="eyebrow">Integration Command Center</span>
-      <h1>Control every institution, integration and request.</h1>
+      <h1>Control every partner, integration and request.</h1>
       <p>
-        Follow the institution profile, the live connection, and every request
+        Follow the partner profile, the live connection, and every request
         that changes or repairs that integration.
       </p>
     </div>
@@ -12,7 +12,7 @@
     <div class="hero-actions">
       <button (click)="goPartners()" nz-button nzType="primary">
         <span nz-icon nzType="team"></span>
-        Institutions
+        Partners
       </button>
       <button (click)="goPipeline()" nz-button nzType="default">
         <span nz-icon nzType="partition"></span>
@@ -27,7 +27,7 @@
 
   <div class="metric-grid">
     <button (click)="goPartners()" class="metric-card portfolio" type="button">
-      <span>Institution portfolio</span>
+      <span>Partner portfolio</span>
       <strong>{{ partners.length }}</strong>
       <small>Registered company profiles</small>
     </button>

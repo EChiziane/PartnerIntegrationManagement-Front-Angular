@@ -128,7 +128,7 @@ export class PartnerDetailComponent implements OnInit {
     if (this.activeRequest?.currentStatus === 'BLOCKED') {
       this.modal.confirm({
         nzTitle: 'Create another request?',
-        nzContent: 'This institution already has a blocked request. Create a new request only if the blocked work cannot continue.',
+        nzContent: 'This partner already has a blocked request. Create a new request only if the blocked work cannot continue.',
         nzOkText: 'Create new request',
         nzCancelText: 'Open blocked request',
         nzOnOk: () => this.createRequestNow(),
@@ -277,7 +277,7 @@ export class PartnerDetailComponent implements OnInit {
 
     this.modal.confirm({
       nzTitle: 'Confirm workflow update',
-      nzContent: `This will register "${label}" for ${this.partner?.name || 'this institution'} and may move the request from ${this.partnerIntegration.statusLabel(request.currentStatus)} to the next status.`,
+      nzContent: `This will register "${label}" for ${this.partner?.name || 'this partner'} and may move the request from ${this.partnerIntegration.statusLabel(request.currentStatus)} to the next status.`,
       nzOkText: 'Confirm update',
       nzCancelText: 'Cancel',
       nzOnOk: () => this.applyAction(label, patch)
@@ -339,7 +339,7 @@ export class PartnerDetailComponent implements OnInit {
 
     this.modal.confirm({
       nzTitle: 'Include test credentials?',
-      nzContent: 'This institution has recorded test credentials. Hide them unless this PDF really needs to include sensitive details.',
+      nzContent: 'This partner has recorded test credentials. Hide them unless this PDF really needs to include sensitive details.',
       nzOkText: 'Include credentials',
       nzCancelText: 'Hide credentials',
       nzOnOk: () => this.pdf.downloadPartnerProfile(this.partner!, this.requests, this.events, {includeCredentials: true}),
