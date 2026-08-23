@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {firstValueFrom} from 'rxjs';
 import {
   Partner,
+  PartnerEnvironment,
   PartnerRequest,
   RequestType,
   ScanItem,
@@ -59,7 +60,8 @@ export class PartnerIntegrationService {
   }
 
   getRequests(): PartnerRequest[] {
-    return this.state().requests.map(request => this.recalculateRequest(request));
+    const state = this.state();
+    return state.requests.map(request => this.recalculateRequest(this.withRequestEnvironment(request, state.partners)));
   }
 
   getRequest(id: string): PartnerRequest | undefined {
@@ -105,11 +107,13 @@ export class PartnerIntegrationService {
 
   createRequest(partnerId: string, type: RequestType, patch: Partial<PartnerRequest> = {}): PartnerRequest {
     const state = this.state();
+    const partner = state.partners.find(item => item.id === partnerId);
     const requestId = this.id('request');
     const {id: _id, partnerId: _partnerId, type: _type, ...safePatch} = patch;
     const request = this.recalculateRequest({
       id: requestId,
       partnerId,
+      environment: partner?.environment || 'UAT+PRD',
       type,
       openDate: this.today(),
       currentStatus: 'NEW',
@@ -151,7 +155,7 @@ export class PartnerIntegrationService {
     if (index < 0) throw new Error('Request not found');
 
     const previous = state.requests[index];
-    const updated = this.recalculateRequest({...previous, ...patch});
+    const updated = this.recalculateRequest(this.withRequestEnvironment({...previous, ...patch}, state.partners));
     const statusChanged = previous.currentStatus !== updated.currentStatus;
 
     state.requests[index] = updated;
@@ -268,8 +272,8 @@ export class PartnerIntegrationService {
     if (request.uatStatus === 'PASS') return 'READY_HANDOVER';
     if (request.uatStatus === 'IN_PROGRESS' || request.credentialsProvided) return 'UAT_IN_PROGRESS';
     if (request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL' || request.uatStatus === 'ISSUE') return 'TROUBLESHOOTING';
-    if (request.connectivityUat === 'PASS' && request.connectivityPrd === 'PASS') return 'READY_UAT';
-    if (request.connectivityUat === 'IN_PROGRESS' || request.connectivityPrd === 'IN_PROGRESS' || request.vpnStatus === 'IN_PROGRESS') return 'CONNECTIVITY_TEST';
+    if (this.requiredConnectivityPassed(request)) return 'READY_UAT';
+    if (this.connectivityStarted(request)) return 'CONNECTIVITY_TEST';
     if (request.ipCoreStatus === 'DONE' && request.itStatus === 'DONE') return 'READY_CONNECTIVITY';
     if (request.signaturesComplete && (request.ipCoreStatus !== 'DONE' || request.itStatus !== 'DONE')) return 'IMPLEMENTATION';
     if (request.statementSent && !request.signaturesComplete) return 'WAITING_SIGNATURES';
@@ -316,6 +320,30 @@ export class PartnerIntegrationService {
     if (this.daysBetween(request.followUpDate, this.today()) > 0) return 'P2';
     if (request.currentOwner === 'Me') return 'P3';
     return 'P4';
+  }
+
+  private requiredConnectivityPassed(request: PartnerRequest): boolean {
+    if (request.vpnStatus !== 'UP') return false;
+    if (this.requiresUat(request.environment) && request.connectivityUat !== 'PASS') return false;
+    if (this.requiresPrd(request.environment) && request.connectivityPrd !== 'PASS') return false;
+    return true;
+  }
+
+  private connectivityStarted(request: PartnerRequest): boolean {
+    return request.vpnStatus === 'IN_PROGRESS'
+      || request.vpnStatus === 'UP'
+      || request.connectivityUat === 'IN_PROGRESS'
+      || request.connectivityPrd === 'IN_PROGRESS'
+      || request.connectivityUat === 'PASS'
+      || request.connectivityPrd === 'PASS';
+  }
+
+  private requiresUat(environment: PartnerEnvironment | undefined): boolean {
+    return environment !== 'PRD';
+  }
+
+  private requiresPrd(environment: PartnerEnvironment | undefined): boolean {
+    return environment !== 'UAT';
   }
 
   private state(): PartnerState {
@@ -404,11 +432,19 @@ export class PartnerIntegrationService {
   }
 
   private normalizeSourceState(source: PartnerSourceState): PartnerSourceState {
+    const partners = source.partners || [];
     return {
       version: source.version || 'unversioned-source',
-      partners: source.partners || [],
-      requests: (source.requests || []).map(request => this.recalculateRequest(request)),
+      partners,
+      requests: (source.requests || []).map(request => this.recalculateRequest(this.withRequestEnvironment(request, partners))),
       events: source.events || []
+    };
+  }
+
+  private withRequestEnvironment(request: PartnerRequest, partners: Partner[]): PartnerRequest {
+    return {
+      ...request,
+      environment: request.environment || partners.find(partner => partner.id === request.partnerId)?.environment || 'UAT+PRD'
     };
   }
 

@@ -111,16 +111,11 @@ export class RequestDetailComponent implements OnInit {
       IMPLEMENTATION: this.implementationActions(),
       READY_CONNECTIVITY: [{
         label: 'Start Connectivity Test',
-        description: 'Marks connectivity testing as in progress. Use this while VPN/routes/firewall are being tested.',
-        patch: {vpnStatus: 'IN_PROGRESS', connectivityUat: 'IN_PROGRESS', connectivityPrd: 'IN_PROGRESS'},
+        description: 'Starts the connectivity validation. VPN must be confirmed before environment tests are passed.',
+        patch: {vpnStatus: 'IN_PROGRESS', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'},
         tone: 'primary'
       }],
-      CONNECTIVITY_TEST: [{
-        label: 'Connectivity PASS',
-        description: 'Confirms connectivity tests passed and moves the request to Ready UAT.',
-        patch: {vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS'},
-        tone: 'primary'
-      }],
+      CONNECTIVITY_TEST: this.connectivityActions(),
       READY_UAT: [{
         label: 'Provide Test Credentials',
         description: 'Moves the request to UAT in progress.',
@@ -183,6 +178,50 @@ export class RequestDetailComponent implements OnInit {
     }
 
     return actions;
+  }
+
+  private connectivityActions(): WorkflowAction[] {
+    if (!this.request) return [];
+
+    const actions: WorkflowAction[] = [];
+
+    if (this.request.vpnStatus !== 'UP') {
+      actions.push({
+        label: 'VPN UP',
+        description: 'Confirms the VPN tunnel is up. Environment connectivity can be passed after this.',
+        patch: {vpnStatus: 'UP'},
+        tone: 'primary'
+      });
+      return actions;
+    }
+
+    if (this.requiresUat() && this.request.connectivityUat !== 'PASS') {
+      actions.push({
+        label: 'UAT Connectivity PASS',
+        description: 'Confirms UAT connectivity for this partner.',
+        patch: {connectivityUat: 'PASS'},
+        tone: 'primary'
+      });
+    }
+
+    if (this.requiresPrd() && this.request.connectivityPrd !== 'PASS') {
+      actions.push({
+        label: 'PRD Connectivity PASS',
+        description: 'Confirms PRD connectivity for this partner.',
+        patch: {connectivityPrd: 'PASS'},
+        tone: 'primary'
+      });
+    }
+
+    return actions;
+  }
+
+  private requiresUat(): boolean {
+    return this.partner?.environment !== 'PRD';
+  }
+
+  private requiresPrd(): boolean {
+    return this.partner?.environment !== 'UAT';
   }
 
   get previousAction(): WorkflowAction | null {

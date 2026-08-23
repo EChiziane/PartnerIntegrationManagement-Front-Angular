@@ -62,6 +62,7 @@ export interface PartnerRequest {
   id: string;
   partnerId: string;
   title?: string;
+  environment?: PartnerEnvironment;
   type: RequestType;
   openDate: string;
   currentStatus: WorkflowStatus;

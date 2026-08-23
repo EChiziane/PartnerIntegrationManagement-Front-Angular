@@ -68,6 +68,14 @@ export class PartnerDetailComponent implements OnInit {
     return endpoints;
   }
 
+  requiresUat(): boolean {
+    return this.partner?.environment !== 'PRD';
+  }
+
+  requiresPrd(): boolean {
+    return this.partner?.environment !== 'UAT';
+  }
+
   openRequest(request: PartnerRequest): void {
     this.router.navigate(['/app/request', request.id]);
   }

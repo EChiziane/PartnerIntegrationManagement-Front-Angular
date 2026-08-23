@@ -130,18 +130,34 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'READY_CONNECTIVITY'"
-        (click)="confirmAction('Connectivity Test Started', {vpnStatus: 'IN_PROGRESS', connectivityUat: 'IN_PROGRESS', connectivityPrd: 'IN_PROGRESS'})"
+        (click)="confirmAction('Connectivity Test Started', {vpnStatus: 'IN_PROGRESS', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'})"
         nz-button
         nzType="primary">
         Start Connectivity Test
       </button>
 
       <button
-        *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST'"
-        (click)="confirmAction('Connectivity Passed', {vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS'})"
+        *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus !== 'UP'"
+        (click)="confirmAction('VPN UP', {vpnStatus: 'UP'})"
         nz-button
         nzType="primary">
-        Connectivity PASS
+        VPN UP
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus === 'UP' && requiresUat() && activeRequest.connectivityUat !== 'PASS'"
+        (click)="confirmAction('UAT Connectivity Passed', {connectivityUat: 'PASS'})"
+        nz-button
+        nzType="primary">
+        UAT Connectivity PASS
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus === 'UP' && requiresPrd() && activeRequest.connectivityPrd !== 'PASS'"
+        (click)="confirmAction('PRD Connectivity Passed', {connectivityPrd: 'PASS'})"
+        nz-button
+        nzType="primary">
+        PRD Connectivity PASS
       </button>
 
       <button
