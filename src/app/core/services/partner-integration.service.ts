@@ -547,8 +547,13 @@ export class PartnerIntegrationService {
   private normalizeConnections(state: PartnerState, partners: Partner[]): PartnerConnection[] {
     const existing = state.connections || [];
     return partners.map(partner => {
-      const current = existing.find(connection => connection.partnerId === partner.id);
       const request = this.integrationDrivingRequest(partner.id, state.requests || []);
+      const current = this.effectiveConnectionBeforeRequest(
+        partner,
+        state.requests || [],
+        request,
+        existing.find(connection => connection.partnerId === partner.id)
+      );
       return this.connectionFromPartnerAndRequest(partner, request, current);
     });
   }
@@ -654,6 +659,35 @@ export class PartnerIntegrationService {
       || request.uatStatus === 'ISSUE') return false;
     if (this.connectivityStarted(request) || request.uatStatus === 'PASS') return false;
     return true;
+  }
+
+  private effectiveConnectionBeforeRequest(
+    partner: Partner,
+    requests: PartnerRequest[],
+    drivingRequest?: PartnerRequest,
+    fallback?: PartnerConnection
+  ): PartnerConnection | undefined {
+    const effectiveRequest = this.latestRequest(
+      requests
+        .filter(request => request.partnerId === partner.id && request.id !== drivingRequest?.id)
+        .map(request => this.recalculateRequest(this.withRequestFormData(request, partner)))
+        .filter(request => this.requestHasEffectiveConnectionState(request))
+    );
+
+    if (effectiveRequest) {
+      return this.connectionFromPartnerAndRequest(partner, effectiveRequest, fallback);
+    }
+
+    return fallback;
+  }
+
+  private requestHasEffectiveConnectionState(request: PartnerRequest): boolean {
+    if (request.type === 'BLOCK_VPN' && request.currentStatus === 'CLOSED') return true;
+    if (request.vpnStatus === 'DOWN' || request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL') return true;
+    if (request.currentStatus === 'TROUBLESHOOTING' || request.uatStatus === 'ISSUE') return true;
+    if (request.vpnStatus === 'UP' && this.requiredConnectivityPassed(request)) return true;
+    if (request.currentStatus === 'CLOSED' && this.hasTechnicalData(request.formData)) return true;
+    return false;
   }
 
   private integrationDrivingRequest(partnerId: string, requests: PartnerRequest[]): PartnerRequest | undefined {
