@@ -198,6 +198,75 @@ p {
   text-align: center;
 }
 
+.partner-drawer {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  background: #f4f8fb;
+}
+
+.drawer-intro {
+  padding: 20px 22px;
+  border-bottom: 1px solid #dfe8ef;
+  background: #ffffff;
+}
+
+.drawer-intro h2 {
+  margin: 4px 0 0;
+  color: #10212b;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.drawer-intro p {
+  margin-top: 6px;
+}
+
+.drawer-section {
+  margin: 12px 14px 0;
+  padding: 16px;
+  border: 1px solid #dfe8ef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.section-heading > span {
+  display: grid;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #0e7c72;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.section-heading h3,
+.section-heading p {
+  margin: 0;
+}
+
+.section-heading h3 {
+  color: #10212b;
+  font-size: 15px;
+  font-weight: 850;
+}
+
+.section-heading p {
+  margin-top: 3px;
+  color: #607786;
+  font-size: 12px;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -208,7 +277,37 @@ p {
   display: grid;
   gap: 6px;
   color: #455d6d;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.form-grid .wide {
+  grid-column: 1 / -1;
+}
+
+.form-grid input,
+.form-grid textarea,
+.form-grid nz-select {
+  width: 100%;
+}
+
+.drawer-actions {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: auto;
+  padding: 14px;
+  border-top: 1px solid #dfe8ef;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+}
+
+.drawer-actions button {
+  min-width: 128px;
+  border-radius: 8px;
+  font-weight: 750;
 }
 
 @media (max-width: 1000px) {
@@ -238,5 +337,19 @@ p {
 
   .row-actions {
     justify-content: flex-start;
+  }
+
+  .drawer-section {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  .drawer-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .drawer-actions button {
+    width: 100%;
   }
 }

@@ -34,7 +34,10 @@ export class PartnersComponent implements OnInit {
     publicIp: '',
     partnerServerIp: '',
     uatPort: '',
-    prdPort: ''
+    prdPort: '',
+    authMethod: '',
+    ownCloudFolderUrl: '',
+    formNotes: ''
   };
 
   constructor(
@@ -101,6 +104,7 @@ export class PartnersComponent implements OnInit {
   }
 
   openCreate(): void {
+    this.resetDraft();
     this.isCreateVisible = true;
   }
 
@@ -108,8 +112,13 @@ export class PartnersComponent implements OnInit {
     if (!this.draft.name.trim()) return;
     const partner = this.partnerIntegration.createPartner({...this.draft});
     this.isCreateVisible = false;
+    this.resetDraft();
     this.reload();
     this.router.navigate(['/app/partner', partner.id]);
+  }
+
+  closeCreate(): void {
+    this.isCreateVisible = false;
   }
 
   createRequest(partner: Partner): void {
@@ -173,5 +182,24 @@ export class PartnersComponent implements OnInit {
 
   private requestsForPartner(partnerId: string): PartnerRequest[] {
     return this.requests.filter(request => request.partnerId === partnerId);
+  }
+
+  private resetDraft(): void {
+    this.draft = {
+      name: '',
+      businessOwner: '',
+      technicalContact: '',
+      phone: '',
+      email: '',
+      serviceApi: '',
+      environment: 'UAT + PRD',
+      publicIp: '',
+      partnerServerIp: '',
+      uatPort: '',
+      prdPort: '',
+      authMethod: '',
+      ownCloudFolderUrl: '',
+      formNotes: ''
+    };
   }
 }

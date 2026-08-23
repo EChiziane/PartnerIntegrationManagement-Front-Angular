@@ -126,25 +126,96 @@
   </section>
 </div>
 
-<nz-modal
-  [(nzVisible)]="isCreateVisible"
-  (nzOnCancel)="isCreateVisible = false"
-  (nzOnOk)="createPartner()"
-  nzTitle="Create Partner"
-  nzOkText="Create"
-  nzWidth="720">
-  <ng-container *nzModalContent>
-    <div class="form-grid">
-      <label>Partner Name <input [(ngModel)]="draft.name" nz-input/></label>
-      <label>Business Owner <input [(ngModel)]="draft.businessOwner" nz-input/></label>
-      <label>Technical Contact <input [(ngModel)]="draft.technicalContact" nz-input/></label>
-      <label>Phone <input [(ngModel)]="draft.phone" nz-input/></label>
-      <label>Email <input [(ngModel)]="draft.email" nz-input/></label>
-      <label>Service/API <input [(ngModel)]="draft.serviceApi" nz-input/></label>
-      <label>Public IP <input [(ngModel)]="draft.publicIp" nz-input/></label>
-      <label>Partner Server IP <input [(ngModel)]="draft.partnerServerIp" nz-input/></label>
-      <label>UAT Port <input [(ngModel)]="draft.uatPort" nz-input/></label>
-      <label>PRD Port <input [(ngModel)]="draft.prdPort" nz-input/></label>
-    </div>
-  </ng-container>
-</nz-modal>
+<nz-drawer
+  [nzVisible]="isCreateVisible"
+  (nzOnClose)="closeCreate()"
+  [nzWidth]="720"
+  [nzBodyStyle]="{ padding: '0' }"
+  nzPlacement="right"
+  nzTitle="New Partner">
+  <div *nzDrawerContent class="partner-drawer">
+    <section class="drawer-intro">
+      <span class="eyebrow">Partner registration</span>
+      <h2>Create partner profile</h2>
+      <p>Register the business owner, technical contact, connectivity details and document folder.</p>
+    </section>
+
+    <section class="drawer-section">
+      <div class="section-heading">
+        <span>1</span>
+        <div>
+          <h3>Identity</h3>
+          <p>Basic partner and ownership information.</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <label class="wide">Partner Name <input [(ngModel)]="draft.name" nz-input placeholder="Ex: Wiremit"/></label>
+        <label>Business Owner <input [(ngModel)]="draft.businessOwner" nz-input placeholder="Business owner or department"/></label>
+        <label>Service/API <input [(ngModel)]="draft.serviceApi" nz-input placeholder="Push USSD, Payment API, Remittance..."/></label>
+        <label>
+          Environment
+          <nz-select [(ngModel)]="draft.environment">
+            <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
+            <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
+            <nz-option nzValue="UAT + PRD" nzLabel="UAT + PRD"></nz-option>
+          </nz-select>
+        </label>
+        <label>Auth Method <input [(ngModel)]="draft.authMethod" nz-input placeholder="API Key, Basic, OAuth, mTLS..."/></label>
+      </div>
+    </section>
+
+    <section class="drawer-section">
+      <div class="section-heading">
+        <span>2</span>
+        <div>
+          <h3>Contacts</h3>
+          <p>People to follow for business and technical execution.</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <label>Technical Contact <input [(ngModel)]="draft.technicalContact" nz-input placeholder="Name or team"/></label>
+        <label>Phone <input [(ngModel)]="draft.phone" nz-input placeholder="+258 ..."/></label>
+        <label class="wide">Email <input [(ngModel)]="draft.email" nz-input placeholder="partner@example.com"/></label>
+      </div>
+    </section>
+
+    <section class="drawer-section">
+      <div class="section-heading">
+        <span>3</span>
+        <div>
+          <h3>Connectivity</h3>
+          <p>Network data from the partner form.</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <label>Public IP <input [(ngModel)]="draft.publicIp" nz-input placeholder="Public IP"/></label>
+        <label>Partner Server IP <input [(ngModel)]="draft.partnerServerIp" nz-input placeholder="Server/private IP"/></label>
+        <label>UAT Port <input [(ngModel)]="draft.uatPort" nz-input placeholder="UAT port"/></label>
+        <label>PRD Port <input [(ngModel)]="draft.prdPort" nz-input placeholder="PRD port"/></label>
+      </div>
+    </section>
+
+    <section class="drawer-section">
+      <div class="section-heading">
+        <span>4</span>
+        <div>
+          <h3>Documents</h3>
+          <p>Central folder for form, statement, evidences and approvals.</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <label class="wide">OwnCloud Folder <input [(ngModel)]="draft.ownCloudFolderUrl" nz-input placeholder="https://owncloud.../partner-folder"/></label>
+        <label class="wide">Notes <textarea [(ngModel)]="draft.formNotes" nz-input rows="4" placeholder="Important notes from the form or onboarding context"></textarea></label>
+      </div>
+    </section>
+
+    <footer class="drawer-actions">
+      <button (click)="closeCreate()" nz-button nzType="default">Cancel</button>
+      <button (click)="createPartner()" [disabled]="!draft.name.trim()" nz-button nzType="primary">Create Partner</button>
+    </footer>
+  </div>
+</nz-drawer>
