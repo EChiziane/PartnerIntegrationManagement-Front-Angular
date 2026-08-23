@@ -30,7 +30,16 @@ export type TestStatus = 'NOT_TESTED' | 'IN_PROGRESS' | 'PASS' | 'FAIL';
 export type UatStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'PASS' | 'ISSUE' | 'WAITING_PARTNER';
 export type TaskPriority = 'P1' | 'P2' | 'P3' | 'P4';
 export type PartnerEnvironment = 'UAT' | 'PRD' | 'UAT+PRD';
-export type ConnectionHealth = 'NOT_ESTABLISHED' | 'HEALTHY' | 'DEGRADED' | 'DOWN';
+export type ConnectionHealth =
+  | 'NOT_ESTABLISHED'
+  | 'PENDING_SETUP'
+  | 'IMPLEMENTING'
+  | 'TESTING'
+  | 'HEALTHY'
+  | 'DEGRADED'
+  | 'DOWN'
+  | 'BLOCKED'
+  | 'DISABLED';
 
 export interface PartnerPrivateEndpoint {
   environment: PartnerEnvironment;
@@ -96,6 +105,8 @@ export interface PartnerConnection extends RequestFormData {
   connectivityPrd: TestStatus;
   uatStatus: UatStatus;
   lastRequestId?: string;
+  lastRequestStatus?: WorkflowStatus;
+  lastRequestType?: RequestType;
   lastUpdated: string;
 }
 

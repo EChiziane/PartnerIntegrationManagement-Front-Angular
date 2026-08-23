@@ -72,6 +72,7 @@ p,
 .facts span,
 .next-step span,
 .request-row span,
+.request-row small,
 .history-row span,
 .empty-history {
   color: #607786;
@@ -397,6 +398,10 @@ p,
 
 .request-row strong {
   color: #0f1f2a;
+}
+
+.request-row small {
+  font-size: 12px;
 }
 
 .history-row span,

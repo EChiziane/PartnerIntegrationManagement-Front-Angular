@@ -39,7 +39,9 @@ export class PartnerDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id') || '';
     this.partner = this.partnerIntegration.getPartner(id);
     this.partnerDraft = this.partner ? {...this.partner} : {};
-    this.requests = this.partnerIntegration.getRequests().filter(request => request.partnerId === id);
+    this.requests = this.partnerIntegration.getRequests()
+      .filter(request => request.partnerId === id)
+      .sort((a, b) => this.requestTimestamp(b) - this.requestTimestamp(a));
     this.events = this.requests.flatMap(request => this.partnerIntegration.getEvents(request.id));
   }
 
@@ -64,6 +66,11 @@ export class PartnerDetailComponent implements OnInit {
 
   get connection(): PartnerConnection | undefined {
     return this.partner ? this.partnerIntegration.getPartnerConnection(this.partner.id) : undefined;
+  }
+
+  get integrationDrivingRequest(): PartnerRequest | undefined {
+    return this.requests.find(request => request.id === this.connection?.lastRequestId)
+      || this.activeRequest;
   }
 
   get openRequestsCount(): number {
@@ -439,5 +446,9 @@ export class PartnerDetailComponent implements OnInit {
       || !!formData.partnerServerIp
       || !!formData.publicPeerIps?.length
       || !!formData.privateEndpoints?.length;
+  }
+
+  private requestTimestamp(request: PartnerRequest): number {
+    return new Date(request.closeDate || request.stageStartDate || request.openDate || 0).getTime() || 0;
   }
 }

@@ -76,7 +76,9 @@ export class PartnerIntegrationService {
   }
 
   getConnections(): PartnerConnection[] {
-    return this.state().connections || [];
+    const state = this.state();
+    const requests = state.requests.map(request => this.recalculateRequest(this.withRequestData(request, state.partners)));
+    return this.normalizeConnections({...state, requests}, state.partners);
   }
 
   getPartnerConnection(partnerId: string): PartnerConnection | undefined {
@@ -289,17 +291,23 @@ export class PartnerIntegrationService {
   connectionHealthLabel(health: PartnerConnection['health'] | undefined): string {
     const labels: Record<PartnerConnection['health'], string> = {
       NOT_ESTABLISHED: 'Not Established',
+      PENDING_SETUP: 'Pending Setup',
+      IMPLEMENTING: 'Implementing',
+      TESTING: 'Testing',
       HEALTHY: 'Healthy',
       DEGRADED: 'Degraded',
-      DOWN: 'Down'
+      DOWN: 'Down',
+      BLOCKED: 'Blocked',
+      DISABLED: 'Disabled'
     };
     return health ? labels[health] : 'Not Established';
   }
 
   connectionHealthColor(health: PartnerConnection['health'] | undefined): string {
     if (health === 'HEALTHY') return 'green';
+    if (health === 'PENDING_SETUP' || health === 'IMPLEMENTING' || health === 'TESTING') return 'blue';
     if (health === 'DEGRADED') return 'orange';
-    if (health === 'DOWN') return 'red';
+    if (health === 'DOWN' || health === 'BLOCKED') return 'red';
     return 'default';
   }
 
@@ -523,12 +531,8 @@ export class PartnerIntegrationService {
     const existing = state.connections || [];
     return partners.map(partner => {
       const current = existing.find(connection => connection.partnerId === partner.id);
-      if (current) return current;
-      const request = (state.requests || [])
-        .filter(item => item.partnerId === partner.id)
-        .find(item => item.currentStatus === 'CLOSED')
-        || (state.requests || []).find(item => item.partnerId === partner.id);
-      return this.connectionFromPartnerAndRequest(partner, request);
+      const request = this.integrationDrivingRequest(partner.id, state.requests || []);
+      return {...current, ...this.connectionFromPartnerAndRequest(partner, request)};
     });
   }
 
@@ -563,18 +567,40 @@ export class PartnerIntegrationService {
       connectivityPrd: request?.connectivityPrd || 'NOT_TESTED',
       uatStatus: request?.uatStatus || 'NOT_STARTED',
       lastRequestId: request?.id || '',
+      lastRequestStatus: request?.currentStatus,
+      lastRequestType: request?.type,
       lastUpdated: request?.closeDate || request?.stageStartDate || partner.lastActivity || this.today()
     };
   }
 
   private connectionHealth(request?: PartnerRequest): PartnerConnection['health'] {
     if (!request) return 'NOT_ESTABLISHED';
+    if (request.type === 'BLOCK_VPN' && request.currentStatus === 'CLOSED') return 'DISABLED';
+    if (request.currentStatus === 'BLOCKED') return 'BLOCKED';
     if (request.vpnStatus === 'DOWN' || request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL') return 'DOWN';
-    if (this.hasTechnicalData(request.formData) && request.vpnStatus !== 'UP') return 'DOWN';
     if (request.currentStatus === 'TROUBLESHOOTING' || request.uatStatus === 'ISSUE') return 'DEGRADED';
     if (request.vpnStatus === 'UP' && this.requiredConnectivityPassed(request) && request.uatStatus === 'PASS') return 'HEALTHY';
     if (!this.hasTechnicalData(request.formData) && request.vpnStatus !== 'UP') return 'NOT_ESTABLISHED';
+    if (['NEW', 'WAITING_FORM', 'FORM_VALIDATION', 'READY_STATEMENT', 'READY_IMPLEMENTATION', 'WAITING_SIGNATURES'].includes(request.currentStatus)) return 'PENDING_SETUP';
+    if (request.currentStatus === 'IMPLEMENTATION' || request.currentStatus === 'READY_CONNECTIVITY') return 'IMPLEMENTING';
+    if (request.currentStatus === 'CONNECTIVITY_TEST' || request.currentStatus === 'READY_UAT' || request.currentStatus === 'UAT_IN_PROGRESS' || request.currentStatus === 'READY_HANDOVER') return 'TESTING';
     return 'DEGRADED';
+  }
+
+  private integrationDrivingRequest(partnerId: string, requests: PartnerRequest[]): PartnerRequest | undefined {
+    const partnerRequests = requests
+      .filter(request => request.partnerId === partnerId)
+      .map(request => this.recalculateRequest(request));
+    const openRequests = partnerRequests.filter(request => request.currentStatus !== 'CLOSED');
+    return this.latestRequest(openRequests) || this.latestRequest(partnerRequests);
+  }
+
+  private latestRequest(requests: PartnerRequest[]): PartnerRequest | undefined {
+    return [...requests].sort((a, b) => this.requestTimestamp(b) - this.requestTimestamp(a))[0];
+  }
+
+  private requestTimestamp(request: PartnerRequest): number {
+    return new Date(request.closeDate || request.stageStartDate || request.openDate || 0).getTime() || 0;
   }
 
   private hasTechnicalData(formData?: RequestFormData): boolean {
