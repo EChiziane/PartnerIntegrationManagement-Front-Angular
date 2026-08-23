@@ -578,16 +578,19 @@ export class PartnerIntegrationService {
     const formData = this.shouldApplyRequestFormToConnection(request, current)
       ? requestFormData
       : currentFormData;
+    const operationalSource = this.shouldUseRequestOperationalState(request, current)
+      ? request
+      : current;
 
     return {
       id: `connection-${partner.id}`,
       partnerId: partner.id,
       ...formData,
-      health: this.connectionHealth(request),
-      vpnStatus: request?.vpnStatus || 'NOT_STARTED',
-      connectivityUat: request?.connectivityUat || 'NOT_TESTED',
-      connectivityPrd: request?.connectivityPrd || 'NOT_TESTED',
-      uatStatus: request?.uatStatus || 'NOT_STARTED',
+      health: this.connectionHealth(request, current),
+      vpnStatus: operationalSource?.vpnStatus || 'NOT_STARTED',
+      connectivityUat: operationalSource?.connectivityUat || 'NOT_TESTED',
+      connectivityPrd: operationalSource?.connectivityPrd || 'NOT_TESTED',
+      uatStatus: operationalSource?.uatStatus || 'NOT_STARTED',
       lastRequestId: request?.id || '',
       lastRequestStatus: request?.currentStatus,
       lastRequestType: request?.type,
@@ -606,10 +609,31 @@ export class PartnerIntegrationService {
     return false;
   }
 
-  private connectionHealth(request?: PartnerRequest): PartnerConnection['health'] {
-    if (!request) return 'NOT_ESTABLISHED';
+  private shouldUseRequestOperationalState(request: PartnerRequest | undefined, current?: PartnerConnection): boolean {
+    if (!request) return false;
+    if (!current || !this.hasTechnicalData(current)) return true;
+    if (request.type === 'NEW_INTEGRATION') return true;
+    if (request.type === 'CONNECTIVITY_SUPPORT') return true;
+    if (request.type === 'BLOCK_VPN' || request.type === 'UNBLOCK_VPN') return request.currentStatus === 'CLOSED' || this.connectivityStarted(request);
+    if (request.type === 'UPDATE_INTEGRATION') {
+      return this.connectivityStarted(request)
+        || request.vpnStatus === 'DOWN'
+        || request.connectivityUat === 'FAIL'
+        || request.connectivityPrd === 'FAIL'
+        || request.uatStatus === 'ISSUE'
+        || request.uatStatus === 'PASS'
+        || request.currentStatus === 'CLOSED';
+    }
+    return false;
+  }
+
+  private connectionHealth(request?: PartnerRequest, current?: PartnerConnection): PartnerConnection['health'] {
+    if (!request) return current?.health || 'NOT_ESTABLISHED';
+    if (this.shouldKeepCurrentConnectionHealth(request, current)) {
+      return current?.health || 'HEALTHY';
+    }
     if (request.type === 'BLOCK_VPN' && request.currentStatus === 'CLOSED') return 'DISABLED';
-    if (request.currentStatus === 'BLOCKED') return 'BLOCKED';
+    if (request.currentStatus === 'BLOCKED') return current?.health || 'BLOCKED';
     if (request.vpnStatus === 'DOWN' || request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL') return 'DOWN';
     if (request.currentStatus === 'TROUBLESHOOTING' || request.uatStatus === 'ISSUE') return 'DEGRADED';
     if (request.vpnStatus === 'UP' && this.requiredConnectivityPassed(request) && request.uatStatus === 'PASS') return 'HEALTHY';
@@ -618,6 +642,18 @@ export class PartnerIntegrationService {
     if (request.currentStatus === 'IMPLEMENTATION' || request.currentStatus === 'READY_CONNECTIVITY') return 'IMPLEMENTING';
     if (request.currentStatus === 'CONNECTIVITY_TEST' || request.currentStatus === 'READY_UAT' || request.currentStatus === 'UAT_IN_PROGRESS' || request.currentStatus === 'READY_HANDOVER') return 'TESTING';
     return 'DEGRADED';
+  }
+
+  private shouldKeepCurrentConnectionHealth(request: PartnerRequest, current?: PartnerConnection): boolean {
+    if (!current || !this.hasTechnicalData(current)) return false;
+    if (request.type !== 'UPDATE_INTEGRATION') return false;
+    if (request.currentStatus === 'CLOSED') return false;
+    if (request.vpnStatus === 'DOWN'
+      || request.connectivityUat === 'FAIL'
+      || request.connectivityPrd === 'FAIL'
+      || request.uatStatus === 'ISSUE') return false;
+    if (this.connectivityStarted(request) || request.uatStatus === 'PASS') return false;
+    return true;
   }
 
   private integrationDrivingRequest(partnerId: string, requests: PartnerRequest[]): PartnerRequest | undefined {
