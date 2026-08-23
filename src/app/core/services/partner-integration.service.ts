@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {firstValueFrom} from 'rxjs';
 import {
   Partner,
+  PartnerConnection,
   PartnerEnvironment,
   PartnerRequest,
   RequestFormData,
@@ -17,6 +18,7 @@ import {environment} from '@env/environment';
 
 interface PartnerState {
   partners: Partner[];
+  connections?: PartnerConnection[];
   requests: PartnerRequest[];
   events: TimelineEvent[];
 }
@@ -71,6 +73,14 @@ export class PartnerIntegrationService {
 
   getRequestFormData(request: PartnerRequest, partner?: Partner): RequestFormData {
     return this.withRequestFormData(request, partner || this.getPartner(request.partnerId)).formData!;
+  }
+
+  getConnections(): PartnerConnection[] {
+    return this.state().connections || [];
+  }
+
+  getPartnerConnection(partnerId: string): PartnerConnection | undefined {
+    return this.getConnections().find(connection => connection.partnerId === partnerId);
   }
 
   getEvents(requestId: string): TimelineEvent[] {
@@ -193,6 +203,7 @@ export class PartnerIntegrationService {
     const statusChanged = previous.currentStatus !== updated.currentStatus;
 
     state.requests[index] = updated;
+    this.syncConnectionFromRequest(state, updated);
     state.events.unshift(this.event(updated.id, eventTitle, statusChanged
       ? `${this.statusLabel(previous.currentStatus)} -> ${this.statusLabel(updated.currentStatus)}`
       : updated.nextAction));
@@ -272,6 +283,23 @@ export class PartnerIntegrationService {
       CONNECTIVITY_SUPPORT: 'Connectivity Support'
     };
     return labels[type];
+  }
+
+  connectionHealthLabel(health: PartnerConnection['health'] | undefined): string {
+    const labels: Record<PartnerConnection['health'], string> = {
+      NOT_ESTABLISHED: 'Not Established',
+      HEALTHY: 'Healthy',
+      DEGRADED: 'Degraded',
+      DOWN: 'Down'
+    };
+    return health ? labels[health] : 'Not Established';
+  }
+
+  connectionHealthColor(health: PartnerConnection['health'] | undefined): string {
+    if (health === 'HEALTHY') return 'green';
+    if (health === 'DEGRADED') return 'orange';
+    if (health === 'DOWN') return 'red';
+    return 'default';
   }
 
   statusColor(status: WorkflowStatus): string {
@@ -475,6 +503,7 @@ export class PartnerIntegrationService {
       version: source.version || 'unversioned-source',
       partners,
       requests: (source.requests || []).map(request => this.recalculateRequest(this.withRequestData(request, partners))),
+      connections: this.normalizeConnections(source, partners),
       events: source.events || []
     };
   }
@@ -484,8 +513,61 @@ export class PartnerIntegrationService {
     return {
       partners,
       requests: (state.requests || []).map(request => this.recalculateRequest(this.withRequestData(request, partners))),
+      connections: this.normalizeConnections(state, partners),
       events: state.events || []
     };
+  }
+
+  private normalizeConnections(state: PartnerState, partners: Partner[]): PartnerConnection[] {
+    const existing = state.connections || [];
+    return partners.map(partner => {
+      const current = existing.find(connection => connection.partnerId === partner.id);
+      if (current) return current;
+      const request = (state.requests || [])
+        .filter(item => item.partnerId === partner.id)
+        .find(item => item.currentStatus === 'CLOSED')
+        || (state.requests || []).find(item => item.partnerId === partner.id);
+      return this.connectionFromPartnerAndRequest(partner, request);
+    });
+  }
+
+  private syncConnectionFromRequest(state: PartnerState, request: PartnerRequest): void {
+    if (request.currentStatus !== 'CLOSED' || request.type === 'CONNECTIVITY_SUPPORT') return;
+    const partner = state.partners.find(item => item.id === request.partnerId);
+    if (!partner) return;
+    const connections = state.connections || this.normalizeConnections(state, state.partners);
+    const nextConnection = this.connectionFromPartnerAndRequest(partner, request);
+    const index = connections.findIndex(connection => connection.partnerId === request.partnerId);
+    if (index >= 0) {
+      connections[index] = {...connections[index], ...nextConnection};
+    } else {
+      connections.unshift(nextConnection);
+    }
+    state.connections = connections;
+  }
+
+  private connectionFromPartnerAndRequest(partner: Partner, request?: PartnerRequest): PartnerConnection {
+    const formData = request ? this.getRequestFormData(request, partner) : this.formDataFromPartner(partner);
+    return {
+      id: `connection-${partner.id}`,
+      partnerId: partner.id,
+      ...formData,
+      health: this.connectionHealth(request),
+      vpnStatus: request?.vpnStatus || 'NOT_STARTED',
+      connectivityUat: request?.connectivityUat || 'NOT_TESTED',
+      connectivityPrd: request?.connectivityPrd || 'NOT_TESTED',
+      uatStatus: request?.uatStatus || 'NOT_STARTED',
+      lastRequestId: request?.id || '',
+      lastUpdated: request?.closeDate || request?.stageStartDate || partner.lastActivity || this.today()
+    };
+  }
+
+  private connectionHealth(request?: PartnerRequest): PartnerConnection['health'] {
+    if (!request) return 'NOT_ESTABLISHED';
+    if (request.vpnStatus === 'DOWN' || request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL') return 'DOWN';
+    if (request.currentStatus === 'TROUBLESHOOTING' || request.uatStatus === 'ISSUE') return 'DEGRADED';
+    if (request.vpnStatus === 'UP' && this.requiredConnectivityPassed(request) && request.uatStatus === 'PASS') return 'HEALTHY';
+    return 'DEGRADED';
   }
 
   private withRequestData(request: PartnerRequest, partners: Partner[]): PartnerRequest {
@@ -548,6 +630,7 @@ export class PartnerIntegrationService {
   private cloneState(source: PartnerSourceState): PartnerState {
     return {
       partners: structuredClone(source.partners),
+      connections: structuredClone(source.connections || []),
       requests: structuredClone(source.requests),
       events: structuredClone(source.events)
     };

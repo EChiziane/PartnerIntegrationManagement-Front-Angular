@@ -30,6 +30,7 @@ export type TestStatus = 'NOT_TESTED' | 'IN_PROGRESS' | 'PASS' | 'FAIL';
 export type UatStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'PASS' | 'ISSUE' | 'WAITING_PARTNER';
 export type TaskPriority = 'P1' | 'P2' | 'P3' | 'P4';
 export type PartnerEnvironment = 'UAT' | 'PRD' | 'UAT+PRD';
+export type ConnectionHealth = 'NOT_ESTABLISHED' | 'HEALTHY' | 'DEGRADED' | 'DOWN';
 
 export interface PartnerPrivateEndpoint {
   environment: PartnerEnvironment;
@@ -82,6 +83,18 @@ export interface RequestFormData {
   formNotes?: string;
   importedFileName?: string;
   importedAt?: string;
+}
+
+export interface PartnerConnection extends RequestFormData {
+  id: string;
+  partnerId: string;
+  health: ConnectionHealth;
+  vpnStatus: VpnStatus;
+  connectivityUat: TestStatus;
+  connectivityPrd: TestStatus;
+  uatStatus: UatStatus;
+  lastRequestId?: string;
+  lastUpdated: string;
 }
 
 export interface PartnerRequest {

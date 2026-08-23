@@ -24,6 +24,27 @@
     </div>
   </section>
 
+  <section class="panel connection-panel">
+    <header>
+      <div>
+        <span class="panel-kicker">Current connection</span>
+        <h2>Operational health</h2>
+      </div>
+      <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection?.health)">
+        {{ partnerIntegration.connectionHealthLabel(connection?.health) }}
+      </nz-tag>
+    </header>
+
+    <div class="facts">
+      <div><span>VPN</span><strong>{{ connection?.vpnStatus || 'NOT_STARTED' }}</strong></div>
+      <div><span>UAT Connectivity</span><strong>{{ connection?.connectivityUat || 'NOT_TESTED' }}</strong></div>
+      <div><span>PRD Connectivity</span><strong>{{ connection?.connectivityPrd || 'NOT_TESTED' }}</strong></div>
+      <div><span>UAT/API</span><strong>{{ connection?.uatStatus || 'NOT_STARTED' }}</strong></div>
+      <div><span>Current Peer</span><strong>{{ connection?.publicPeerIps?.join(', ') || connection?.publicIp || '-' }}</strong></div>
+      <div><span>Last Updated</span><strong>{{ connection?.lastUpdated || '-' }}</strong></div>
+    </div>
+  </section>
+
   <section *ngIf="activeRequest" class="panel active-request-panel">
     <header class="active-request-header">
       <div>

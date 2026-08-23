@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
-import {Partner, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestFormData, RequestType, WorkflowStatus} from '@shared/models/partner-integration';
+import {Partner, PartnerConnection, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestFormData, RequestType, WorkflowStatus} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 
 type PartnerFilter = 'ALL' | 'ACTIVE' | 'OPEN_REQUESTS' | 'ATTENTION';
@@ -10,6 +10,8 @@ type ServiceOption = 'Business Code' | 'Push USSD';
 
 interface PartnerDraft {
   name: string;
+  eMolaAccountOtp: string;
+  representativeName: string;
   businessOwner: string;
   technicalContact: string;
   phone: string;
@@ -51,6 +53,8 @@ export class PartnersComponent implements OnInit {
 
   draft: PartnerDraft = {
     name: '',
+    eMolaAccountOtp: '',
+    representativeName: '',
     businessOwner: '',
     technicalContact: '',
     phone: '',
@@ -173,9 +177,12 @@ export class PartnersComponent implements OnInit {
       const vpnRows = this.sheetRows(XLSX, workbook, 'IPSEC VPN Template');
       const rulesRows = this.sheetRows(XLSX, workbook, 'Rules & Policies');
       const fileHints = this.fileHints(file.name);
-      const partnerName = this.partnerCell(vpnRows, 'Description') || fileHints.partnerName;
+      const partnerName = this.partnerCell(vpnRows, 'Company Name') || this.partnerCell(vpnRows, 'Description') || fileHints.partnerName;
+      const representativeName = this.partnerCell(vpnRows, 'Representative Name');
+      const institutionEmail = this.partnerCell(vpnRows, 'Email Address');
+      const institutionPhone = this.partnerCell(vpnRows, 'Contact Phone Number');
       const technicalContact = this.partnerCell(vpnRows, 'Name');
-      const email = this.partnerCell(vpnRows, 'Email Address');
+      const email = institutionEmail || this.partnerCell(vpnRows, 'Email Address');
       const phone = this.partnerCell(vpnRows, 'Cell Phone');
       const publicPeers = this.splitValues(this.partnerCell(vpnRows, 'VPN Peer Address'));
       const partnerDomainIp = this.firstIp(this.partnerCell(vpnRows, 'Encryption domain'));
@@ -184,9 +191,11 @@ export class PartnersComponent implements OnInit {
       this.draft = {
         ...this.draft,
         name: this.cleanPlaceholder(partnerName, 'Partner Name'),
+        eMolaAccountOtp: this.partnerCell(vpnRows, 'e-Mola Account (OTP)') || this.draft.eMolaAccountOtp,
+        representativeName: representativeName || this.draft.representativeName,
         businessOwner: fileHints.businessOwner || this.draft.businessOwner,
         technicalContact: technicalContact || this.draft.technicalContact,
-        phone: phone || this.draft.phone,
+        phone: institutionPhone || phone || this.draft.phone,
         email: email || this.draft.email,
         serviceApi: fileHints.serviceApi || this.draft.serviceApi,
         environment: privateEndpoints.length ? this.environmentFromEndpoints(privateEndpoints) : this.draft.environment,
@@ -273,6 +282,10 @@ export class PartnersComponent implements OnInit {
       }, partner);
   }
 
+  connectionForPartner(partner: Partner): PartnerConnection | undefined {
+    return this.partnerIntegration.getPartnerConnection(partner.id);
+  }
+
   addPrivateEndpoint(): void {
     this.draft.privateEndpoints.push({environment: 'UAT+PRD', ip: '', port: ''});
   }
@@ -347,6 +360,8 @@ export class PartnersComponent implements OnInit {
   private resetDraft(): void {
     this.draft = {
       name: '',
+      eMolaAccountOtp: '',
+      representativeName: '',
       businessOwner: '',
       technicalContact: '',
       phone: '',
@@ -467,8 +482,8 @@ export class PartnersComponent implements OnInit {
     const formData = this.buildRequestFormDataFromDraft(this.draft.name.trim());
     return {
       name: this.draft.name.trim(),
-      eMolaAccountOtp: '',
-      representativeName: this.draft.technicalContact.trim(),
+      eMolaAccountOtp: this.draft.eMolaAccountOtp.trim(),
+      representativeName: this.draft.representativeName.trim(),
       businessOwner: this.draft.businessOwner.trim(),
       technicalContact: formData.technicalContact,
       phone: formData.phone,
@@ -505,8 +520,8 @@ export class PartnersComponent implements OnInit {
 
     return {
       companyName,
-      eMolaAccountOtp: '',
-      representativeName: this.draft.technicalContact.trim(),
+      eMolaAccountOtp: this.draft.eMolaAccountOtp.trim(),
+      representativeName: this.draft.representativeName.trim(),
       businessOwner: this.draft.businessOwner.trim(),
       technicalContact: this.draft.technicalContact.trim(),
       phone: this.draft.phone.trim(),

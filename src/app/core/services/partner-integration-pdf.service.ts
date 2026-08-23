@@ -61,10 +61,11 @@ export class PartnerIntegrationPdfService {
         const urgent = this.mostUrgentStatus(partnerRequests);
         const next = partnerRequests.find(request => request.currentStatus === urgent)?.nextAction || '-';
         const formData = this.latestFormData(partner, partnerRequests);
+        const connection = this.partnerIntegration.getPartnerConnection(partner.id);
 
         return [
           partner.name || '-',
-          this.partnerCategoryFromValue(`${formData.serviceApi || partner.serviceApi || ''} ${partner.name || ''}`),
+          `${this.partnerCategoryFromValue(`${formData.serviceApi || partner.serviceApi || ''} ${partner.name || ''}`)} / ${this.partnerIntegration.connectionHealthLabel(connection?.health)}`,
           partner.businessOwner || '-',
           formData.technicalContact || partner.technicalContact || '-',
           formData.environment || partner.environment || '-',
@@ -162,6 +163,7 @@ export class PartnerIntegrationPdfService {
       ['Category', this.partnerCategory(partner)]
     ]);
     const profileFormData = this.latestFormData(partner, requests);
+    const connection = this.partnerIntegration.getPartnerConnection(partner.id);
 
     autoTable(doc, {
       startY: 44,
@@ -196,6 +198,24 @@ export class PartnerIntegrationPdfService {
 
     autoTable(doc, {
       startY: profileFinalY + 8,
+      margin: {left: margin, right: margin, bottom: 20},
+      head: [['Connection Health', 'VPN', 'UAT Connectivity', 'PRD Connectivity', 'UAT/API', 'Last Updated']],
+      body: [[
+        this.partnerIntegration.connectionHealthLabel(connection?.health),
+        connection?.vpnStatus || 'NOT_STARTED',
+        connection?.connectivityUat || 'NOT_TESTED',
+        connection?.connectivityPrd || 'NOT_TESTED',
+        connection?.uatStatus || 'NOT_STARTED',
+        connection?.lastUpdated || '-'
+      ]],
+      theme: 'grid',
+      styles: this.tableStyles(),
+      headStyles: this.headStyles(),
+      didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
+    });
+
+    autoTable(doc, {
+      startY: ((doc as any).lastAutoTable?.finalY || profileFinalY) + 8,
       margin: {left: margin, right: margin, bottom: 20},
       head: [['Request Type', 'Status', 'Service/API', 'Environment', 'Technical Contact', 'Owner', 'Next Action', 'Open Date', 'Credentials', 'Blocker']],
       body: requests.map(request => [

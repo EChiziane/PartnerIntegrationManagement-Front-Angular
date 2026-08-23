@@ -94,6 +94,9 @@
       <div class="cell-stack">
         <strong>{{ requestSummary(partner.id) }}</strong>
         <span>{{ requestFormDataForPartner(partner).environment }}</span>
+        <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connectionForPartner(partner)?.health)">
+          {{ partnerIntegration.connectionHealthLabel(connectionForPartner(partner)?.health) }}
+        </nz-tag>
       </div>
 
       <div>
@@ -158,7 +161,9 @@
       </div>
 
       <div class="form-grid">
-        <label class="wide">Partner Name <input [(ngModel)]="draft.name" nz-input placeholder="Ex: Wiremit"/></label>
+        <label class="wide">Company Name <input [(ngModel)]="draft.name" nz-input placeholder="Ex: Alpha Connect, Lda"/></label>
+        <label>e-Mola Account (OTP) <input [(ngModel)]="draft.eMolaAccountOtp" nz-input placeholder="OTP account if applicable"/></label>
+        <label>Representative Name <input [(ngModel)]="draft.representativeName" nz-input placeholder="Company representative"/></label>
         <label>
           Business Owner
           <input [(ngModel)]="draft.businessOwner" [attr.list]="'business-owner-suggestions'" nz-input placeholder="Start typing the owner or department"/>

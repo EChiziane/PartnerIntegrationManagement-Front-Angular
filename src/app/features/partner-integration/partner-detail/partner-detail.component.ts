@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
-import {Partner, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestFormData, RequestType, TimelineEvent} from '@shared/models/partner-integration';
+import {Partner, PartnerConnection, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestFormData, RequestType, TimelineEvent} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 import {NzModalService} from 'ng-zorro-antd/modal';
 
@@ -60,6 +60,10 @@ export class PartnerDetailComponent implements OnInit {
     const request = this.activeRequest;
     if (!request || !this.partner) return undefined;
     return this.partnerIntegration.getRequestFormData(request, this.partner);
+  }
+
+  get connection(): PartnerConnection | undefined {
+    return this.partner ? this.partnerIntegration.getPartnerConnection(this.partner.id) : undefined;
   }
 
   get openRequestsCount(): number {
@@ -190,6 +194,13 @@ export class PartnerDetailComponent implements OnInit {
 
     try {
       const formData = await this.readPartnerForm(file, this.partner.name);
+      this.partnerIntegration.updatePartner(this.partner.id, {
+        name: formData.companyName || this.partner.name,
+        eMolaAccountOtp: formData.eMolaAccountOtp || this.partner.eMolaAccountOtp || '',
+        representativeName: formData.representativeName || this.partner.representativeName || '',
+        phone: formData.phone || this.partner.phone,
+        email: formData.email || this.partner.email
+      });
       this.partnerIntegration.updateRequest(request.id, {formData}, 'Request Form Data Updated');
       this.importNotice = `Imported ${file.name}: request form data updated.`;
       this.load();
@@ -321,15 +332,17 @@ export class PartnerDetailComponent implements OnInit {
     const partnerDomainIp = this.firstIp(this.partnerCell(vpnRows, 'Encryption domain'));
     const privateEndpoints = this.privateEndpointsFromRules(rulesRows, partnerDomainIp);
     const current = this.activeFormData;
+    const institutionEmail = this.partnerCell(vpnRows, 'Email Address');
+    const institutionPhone = this.partnerCell(vpnRows, 'Contact Phone Number');
 
     return {
-      companyName,
-      eMolaAccountOtp: current?.eMolaAccountOtp || this.partner?.eMolaAccountOtp || '',
-      representativeName: this.partnerCell(vpnRows, 'Name') || current?.representativeName || this.partner?.representativeName || '',
+      companyName: this.partnerCell(vpnRows, 'Company Name') || companyName,
+      eMolaAccountOtp: this.partnerCell(vpnRows, 'e-Mola Account (OTP)') || current?.eMolaAccountOtp || this.partner?.eMolaAccountOtp || '',
+      representativeName: this.partnerCell(vpnRows, 'Representative Name') || current?.representativeName || this.partner?.representativeName || '',
       businessOwner: current?.businessOwner || this.partner?.businessOwner || '',
       technicalContact: this.partnerCell(vpnRows, 'Name') || current?.technicalContact || this.partner?.technicalContact || '',
-      phone: this.partnerCell(vpnRows, 'Cell Phone') || current?.phone || this.partner?.phone || '',
-      email: this.partnerCell(vpnRows, 'Email Address') || current?.email || this.partner?.email || '',
+      phone: institutionPhone || this.partnerCell(vpnRows, 'Cell Phone') || current?.phone || this.partner?.phone || '',
+      email: institutionEmail || current?.email || this.partner?.email || '',
       serviceApi: current?.serviceApi || this.partner?.serviceApi || '',
       environment: privateEndpoints.length ? this.environmentFromEndpoints(privateEndpoints) : current?.environment || this.partner?.environment || 'UAT+PRD',
       publicIp: publicPeerIps[0] || current?.publicIp || this.partner?.publicIp || '',

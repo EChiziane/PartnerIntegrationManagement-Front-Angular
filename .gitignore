@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
+/.codex-spreadsheet-work
 
 # Node
 /node_modules

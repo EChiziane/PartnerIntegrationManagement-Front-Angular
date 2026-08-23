@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-23.dev.2",
+  "version": "2026-08-23.dev.3",
   "partners": [
     {
       "eMolaAccountOtp": "",
@@ -299,6 +299,124 @@
       "date": "2026-08-20T08:00:00.000Z",
       "title": "Development Seed",
       "description": "Troubleshooting"
+    }
+  ],
+  "connections": [
+    {
+      "id": "connection-partner-dev-alpha",
+      "partnerId": "partner-dev-alpha",
+      "companyName": "DEV ALPHA PAY",
+      "eMolaAccountOtp": "",
+      "representativeName": "Carlos Alpha",
+      "businessOwner": "Business Development",
+      "technicalContact": "Carlos Alpha",
+      "phone": "+258 84 100 2001",
+      "email": "alpha.dev@example.com",
+      "serviceApi": "Business Code",
+      "environment": "UAT+PRD",
+      "publicIp": "139.84.234.187",
+      "publicPeerIps": [
+        "139.84.234.187"
+      ],
+      "partnerServerIp": "10.177.0.10",
+      "uatPort": "8520",
+      "prdPort": "9921",
+      "privateEndpoints": [
+        {
+          "environment": "UAT",
+          "ip": "10.177.0.10",
+          "port": "8520"
+        },
+        {
+          "environment": "PRD",
+          "ip": "10.177.0.10",
+          "port": "9921"
+        }
+      ],
+      "authMethod": "",
+      "ownCloudFolderUrl": "https://owncloud.example.com/dev-alpha",
+      "formNotes": "Development sample partner.",
+      "health": "DEGRADED",
+      "vpnStatus": "NOT_STARTED",
+      "connectivityUat": "NOT_TESTED",
+      "connectivityPrd": "NOT_TESTED",
+      "uatStatus": "NOT_STARTED",
+      "lastRequestId": "request-dev-alpha",
+      "lastUpdated": "2026-08-21"
+    },
+    {
+      "id": "connection-partner-dev-beta",
+      "partnerId": "partner-dev-beta",
+      "companyName": "DEV BETA PUSH",
+      "eMolaAccountOtp": "",
+      "representativeName": "Ana Beta",
+      "businessOwner": "M-MOLA Business",
+      "technicalContact": "Ana Beta",
+      "phone": "+258 84 100 2002",
+      "email": "beta.dev@example.com",
+      "serviceApi": "Push USSD",
+      "environment": "UAT",
+      "publicIp": "72.61.147.82",
+      "publicPeerIps": [
+        "72.61.147.82"
+      ],
+      "partnerServerIp": "10.177.0.20",
+      "uatPort": "8600",
+      "prdPort": "",
+      "privateEndpoints": [
+        {
+          "environment": "UAT",
+          "ip": "10.177.0.20",
+          "port": "8600"
+        }
+      ],
+      "authMethod": "",
+      "ownCloudFolderUrl": "https://owncloud.example.com/dev-beta",
+      "formNotes": "Development sample waiting approval.",
+      "health": "DEGRADED",
+      "vpnStatus": "NOT_STARTED",
+      "connectivityUat": "NOT_TESTED",
+      "connectivityPrd": "NOT_TESTED",
+      "uatStatus": "NOT_STARTED",
+      "lastRequestId": "request-dev-beta",
+      "lastUpdated": "2026-08-20"
+    },
+    {
+      "id": "connection-partner-dev-trouble",
+      "partnerId": "partner-dev-trouble",
+      "companyName": "DEV TROUBLESHOOT",
+      "eMolaAccountOtp": "",
+      "representativeName": "Support Desk",
+      "businessOwner": "VAS and Digital Channels",
+      "technicalContact": "Support Desk",
+      "phone": "+258 84 100 2003",
+      "email": "support.dev@example.com",
+      "serviceApi": "Push USSD",
+      "environment": "PRD",
+      "publicIp": "102.207.223.37",
+      "publicPeerIps": [
+        "102.207.223.37"
+      ],
+      "partnerServerIp": "10.0.1.12",
+      "uatPort": "",
+      "prdPort": "8685",
+      "privateEndpoints": [
+        {
+          "environment": "PRD",
+          "ip": "10.0.1.12",
+          "port": "8685"
+        }
+      ],
+      "authMethod": "",
+      "ownCloudFolderUrl": "https://owncloud.example.com/dev-trouble",
+      "formNotes": "Development sample with connectivity issue.",
+      "health": "DOWN",
+      "vpnStatus": "DOWN",
+      "connectivityUat": "FAIL",
+      "connectivityPrd": "FAIL",
+      "uatStatus": "NOT_STARTED",
+      "lastRequestId": "request-dev-trouble",
+      "lastUpdated": "2026-08-20"
     }
   ]
 }
