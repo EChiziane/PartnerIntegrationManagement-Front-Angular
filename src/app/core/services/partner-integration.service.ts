@@ -552,7 +552,7 @@ export class PartnerIntegrationService {
         partner,
         state.requests || [],
         request,
-        existing.find(connection => connection.partnerId === partner.id)
+        this.cleanStoredConnection(existing.find(connection => connection.partnerId === partner.id))
       );
       return this.connectionFromPartnerAndRequest(partner, request, current);
     });
@@ -563,7 +563,7 @@ export class PartnerIntegrationService {
     if (!partner) return;
     const connections = state.connections || this.normalizeConnections(state, state.partners);
     const index = connections.findIndex(connection => connection.partnerId === request.partnerId);
-    const current = index >= 0 ? connections[index] : undefined;
+    const current = this.effectiveConnectionBeforeRequest(partner, state.requests || [], request);
     const nextConnection = this.connectionFromPartnerAndRequest(partner, request, current);
     if (index >= 0) {
       connections[index] = nextConnection;
@@ -633,14 +633,15 @@ export class PartnerIntegrationService {
   }
 
   private connectionHealth(request?: PartnerRequest, current?: PartnerConnection): PartnerConnection['health'] {
-    if (!request) return current?.health || 'NOT_ESTABLISHED';
+    if (!request) return this.connectionSnapshotHealth(current);
     if (this.shouldKeepCurrentConnectionHealth(request, current)) {
-      return current?.health || 'HEALTHY';
+      return this.connectionSnapshotHealth(current);
     }
     if (request.type === 'BLOCK_VPN' && request.currentStatus === 'CLOSED') return 'DISABLED';
-    if (request.currentStatus === 'BLOCKED') return current?.health || 'BLOCKED';
+    if (request.currentStatus === 'BLOCKED') return current ? this.connectionSnapshotHealth(current) : 'BLOCKED';
     if (request.vpnStatus === 'DOWN' || request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL') return 'DOWN';
     if (request.currentStatus === 'TROUBLESHOOTING' || request.uatStatus === 'ISSUE') return 'DEGRADED';
+    if (request.currentStatus === 'CLOSED' && this.requiredConnectivityPassed(request)) return 'HEALTHY';
     if (request.vpnStatus === 'UP' && this.requiredConnectivityPassed(request) && request.uatStatus === 'PASS') return 'HEALTHY';
     if (!this.hasTechnicalData(request.formData) && request.vpnStatus !== 'UP') return 'NOT_ESTABLISHED';
     if (['NEW', 'WAITING_FORM', 'FORM_VALIDATION', 'READY_STATEMENT', 'READY_IMPLEMENTATION', 'WAITING_SIGNATURES'].includes(request.currentStatus)) return 'PENDING_SETUP';
@@ -661,6 +662,40 @@ export class PartnerIntegrationService {
     return true;
   }
 
+  private connectionSnapshotHealth(current?: PartnerConnection): PartnerConnection['health'] {
+    if (!current || !this.hasTechnicalData(current)) return 'NOT_ESTABLISHED';
+    if (current.health === 'DISABLED' || current.health === 'BLOCKED') return current.health;
+    if (current.vpnStatus === 'DOWN' || current.connectivityUat === 'FAIL' || current.connectivityPrd === 'FAIL') return 'DOWN';
+    if (current.uatStatus === 'ISSUE') return 'DEGRADED';
+    if (current.vpnStatus === 'NOT_STARTED'
+      && current.connectivityUat === 'NOT_TESTED'
+      && current.connectivityPrd === 'NOT_TESTED'
+      && current.uatStatus === 'NOT_STARTED') {
+      return current.health === 'IMPLEMENTING' ? 'IMPLEMENTING' : 'PENDING_SETUP';
+    }
+    if (current.vpnStatus === 'UP'
+      && (!this.requiresUat(current.environment) || current.connectivityUat === 'PASS')
+      && (!this.requiresPrd(current.environment) || current.connectivityPrd === 'PASS')) {
+      return 'HEALTHY';
+    }
+    if (current.vpnStatus === 'IN_PROGRESS'
+      || current.connectivityUat === 'IN_PROGRESS'
+      || current.connectivityPrd === 'IN_PROGRESS'
+      || current.uatStatus === 'IN_PROGRESS') {
+      return 'TESTING';
+    }
+    if (current.health && current.health !== 'PENDING_SETUP') return current.health;
+    return 'DEGRADED';
+  }
+
+  private cleanStoredConnection(current?: PartnerConnection): PartnerConnection | undefined {
+    if (!current) return undefined;
+    return {
+      ...current,
+      health: this.connectionSnapshotHealth(current)
+    };
+  }
+
   private effectiveConnectionBeforeRequest(
     partner: Partner,
     requests: PartnerRequest[],
@@ -675,10 +710,10 @@ export class PartnerIntegrationService {
     );
 
     if (effectiveRequest) {
-      return this.connectionFromPartnerAndRequest(partner, effectiveRequest, fallback);
+      return this.connectionFromPartnerAndRequest(partner, effectiveRequest, this.cleanStoredConnection(fallback));
     }
 
-    return fallback;
+    return this.cleanStoredConnection(fallback);
   }
 
   private requestHasEffectiveConnectionState(request: PartnerRequest): boolean {
@@ -686,7 +721,7 @@ export class PartnerIntegrationService {
     if (request.vpnStatus === 'DOWN' || request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL') return true;
     if (request.currentStatus === 'TROUBLESHOOTING' || request.uatStatus === 'ISSUE') return true;
     if (request.vpnStatus === 'UP' && this.requiredConnectivityPassed(request)) return true;
-    if (request.currentStatus === 'CLOSED' && this.hasTechnicalData(request.formData)) return true;
+    if (request.currentStatus === 'CLOSED' && request.vpnStatus === 'UP' && this.hasTechnicalData(request.formData)) return true;
     return false;
   }
 
