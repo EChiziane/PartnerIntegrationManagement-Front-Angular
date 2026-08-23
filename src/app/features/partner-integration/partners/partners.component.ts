@@ -35,9 +35,17 @@ interface PartnerDraft {
 export class PartnersComponent implements OnInit {
   partners: Partner[] = [];
   requests: PartnerRequest[] = [];
+  connections: PartnerConnection[] = [];
   searchValue = '';
   activeFilter: PartnerFilter = 'ALL';
   categoryFilter: PartnerCategory = 'ALL';
+  private requestsByPartnerId = new Map<string, PartnerRequest[]>();
+  private connectionByPartnerId = new Map<string, PartnerConnection>();
+  private formDataByPartnerId = new Map<string, RequestFormData>();
+  private urgentRequestByPartnerId = new Map<string, PartnerRequest>();
+  private openRequestCountByPartnerId = new Map<string, number>();
+  private attentionByPartnerId = new Map<string, boolean>();
+  private categoryByPartnerId = new Map<string, string>();
 
   requestType: RequestType = 'NEW_INTEGRATION';
   isCreateVisible = false;
@@ -85,18 +93,19 @@ export class PartnersComponent implements OnInit {
     const query = this.searchValue.trim().toLowerCase();
 
     return this.partners.filter(partner => {
+      const formData = this.requestFormDataForPartner(partner);
       const matchesQuery = !query
         || partner.name.toLowerCase().includes(query)
-        || this.requestFormDataForPartner(partner).serviceApi.toLowerCase().includes(query)
-        || this.requestFormDataForPartner(partner).technicalContact.toLowerCase().includes(query)
+        || formData.serviceApi.toLowerCase().includes(query)
+        || formData.technicalContact.toLowerCase().includes(query)
         || partner.businessOwner.toLowerCase().includes(query)
-        || this.requestFormDataForPartner(partner).publicIp.toLowerCase().includes(query)
-        || this.requestFormDataForPartner(partner).partnerServerIp.toLowerCase().includes(query)
+        || formData.publicIp.toLowerCase().includes(query)
+        || formData.partnerServerIp.toLowerCase().includes(query)
         || this.publicPeersLabel(partner).toLowerCase().includes(query)
         || this.privateEndpointsLabel(partner).toLowerCase().includes(query);
 
       if (!matchesQuery) return false;
-      if (this.categoryFilter !== 'ALL' && this.pdf.partnerCategory(partner) !== this.categoryFilter) return false;
+      if (this.categoryFilter !== 'ALL' && this.categoryForPartner(partner) !== this.categoryFilter) return false;
       if (this.activeFilter === 'ACTIVE') return partner.status === 'ACTIVE';
       if (this.activeFilter === 'OPEN_REQUESTS') return this.openRequestCount(partner.id) > 0;
       if (this.activeFilter === 'ATTENTION') return this.hasAttention(partner.id);
@@ -115,6 +124,8 @@ export class PartnersComponent implements OnInit {
   reload(): void {
     this.partners = this.partnerIntegration.getPartners();
     this.requests = this.partnerIntegration.getRequests();
+    this.connections = this.partnerIntegration.getConnections();
+    this.rebuildIndexes();
   }
 
   setFilter(filter: PartnerFilter): void {
@@ -271,43 +282,18 @@ export class PartnersComponent implements OnInit {
   }
 
   requestFormDataForPartner(partner: Partner): RequestFormData {
+    const cached = this.formDataByPartnerId.get(partner.id);
+    if (cached) return cached;
+
     const request = this.requestsForPartner(partner.id).find(item => item.currentStatus !== 'CLOSED')
       || this.requestsForPartner(partner.id)[0];
     return request
       ? this.partnerIntegration.getRequestFormData(request, partner)
-      : this.partnerIntegration.getRequestFormData({
-        id: '',
-        partnerId: partner.id,
-        type: 'NEW_INTEGRATION',
-        openDate: '',
-        currentStatus: 'NEW',
-        currentOwner: '',
-        nextAction: '',
-        priority: 'P4',
-        followUpDate: '',
-        stageStartDate: '',
-        blocker: '',
-        formSent: false,
-        formReceived: false,
-        formValidated: false,
-        statementCreated: false,
-        statementSent: false,
-        signaturesComplete: false,
-        ipCoreStatus: 'NOT_SUBMITTED',
-        itStatus: 'NOT_SUBMITTED',
-        vpnStatus: 'NOT_STARTED',
-        connectivityUat: 'NOT_TESTED',
-        connectivityPrd: 'NOT_TESTED',
-        credentialsProvided: false,
-        uatStatus: 'NOT_STARTED',
-        handoverComplete: false,
-        closeDate: null,
-        notes: ''
-      }, partner);
+      : this.emptyRequestFormData(partner);
   }
 
   connectionForPartner(partner: Partner): PartnerConnection | undefined {
-    return this.partnerIntegration.getPartnerConnection(partner.id);
+    return this.connectionByPartnerId.get(partner.id);
   }
 
   addPrivateEndpoint(): void {
@@ -324,7 +310,7 @@ export class PartnersComponent implements OnInit {
   }
 
   openRequestCount(partnerId: string): number {
-    return this.requestsForPartner(partnerId).filter(request => request.currentStatus !== 'CLOSED').length;
+    return this.openRequestCountByPartnerId.get(partnerId) || 0;
   }
 
   mostUrgentStatus(partnerId: string): WorkflowStatus | null {
@@ -332,9 +318,76 @@ export class PartnersComponent implements OnInit {
   }
 
   urgentRequest(partnerId: string): PartnerRequest | null {
-    const openRequests = this.requestsForPartner(partnerId).filter(request => request.currentStatus !== 'CLOSED');
-    if (!openRequests.length) return null;
+    return this.urgentRequestByPartnerId.get(partnerId) || null;
+  }
 
+  nextAction(partnerId: string): string {
+    return this.urgentRequest(partnerId)?.nextAction || 'No open request';
+  }
+
+  requestSummary(partnerId: string): string {
+    const open = this.openRequestCount(partnerId);
+    if (!open) return 'No open requests';
+    return `${open} open request${open === 1 ? '' : 's'}`;
+  }
+
+  hasAttention(partnerId: string): boolean {
+    return this.attentionByPartnerId.get(partnerId) || false;
+  }
+
+  categoryForPartner(partner: Partner): string {
+    return this.categoryByPartnerId.get(partner.id) || this.pdf.partnerCategory(partner);
+  }
+
+  trackByPartnerId(_index: number, partner: Partner): string {
+    return partner.id;
+  }
+
+  ageDays(date: string): number {
+    if (!date) return 0;
+    return Math.max(0, Math.floor((Date.now() - new Date(date).getTime()) / 86400000));
+  }
+
+  private rebuildIndexes(): void {
+    this.connectionByPartnerId = new Map(this.connections.map(connection => [connection.partnerId, connection]));
+    this.requestsByPartnerId = new Map();
+    this.formDataByPartnerId = new Map();
+    this.urgentRequestByPartnerId = new Map();
+    this.openRequestCountByPartnerId = new Map();
+    this.attentionByPartnerId = new Map();
+    this.categoryByPartnerId = new Map();
+
+    for (const request of this.requests) {
+      this.requestsByPartnerId.set(request.partnerId, [
+        ...(this.requestsByPartnerId.get(request.partnerId) || []),
+        request
+      ]);
+    }
+
+    for (const partner of this.partners) {
+      const partnerRequests = this.requestsForPartner(partner.id);
+      const openRequests = partnerRequests.filter(request => request.currentStatus !== 'CLOSED');
+      const activeFormRequest = openRequests[0] || partnerRequests[0];
+      const formData = activeFormRequest
+        ? this.partnerIntegration.getRequestFormData(activeFormRequest, partner)
+        : this.emptyRequestFormData(partner);
+
+      this.formDataByPartnerId.set(partner.id, formData);
+      this.openRequestCountByPartnerId.set(partner.id, openRequests.length);
+      this.categoryByPartnerId.set(partner.id, this.pdf.partnerCategory(partner));
+      this.attentionByPartnerId.set(partner.id, openRequests.some(request =>
+        request.currentStatus === 'TROUBLESHOOTING'
+        || request.priority === 'P1'
+        || this.ageDays(request.stageStartDate) >= 3
+      ));
+
+      const urgent = this.pickUrgentRequest(openRequests);
+      if (urgent) this.urgentRequestByPartnerId.set(partner.id, urgent);
+    }
+  }
+
+  private pickUrgentRequest(openRequests: PartnerRequest[]): PartnerRequest | null {
+    if (!openRequests.length) return null;
     const score: Partial<Record<WorkflowStatus, number>> = {
       TROUBLESHOOTING: 1,
       READY_CONNECTIVITY: 2,
@@ -355,34 +408,40 @@ export class PartnersComponent implements OnInit {
     )[0];
   }
 
-  nextAction(partnerId: string): string {
-    const status = this.mostUrgentStatus(partnerId);
-    const request = this.requestsForPartner(partnerId).find(item => item.currentStatus === status);
-    return request?.nextAction || 'No open request';
-  }
-
-  requestSummary(partnerId: string): string {
-    const open = this.openRequestCount(partnerId);
-    if (!open) return 'No open requests';
-    return `${open} open request${open === 1 ? '' : 's'}`;
-  }
-
-  hasAttention(partnerId: string): boolean {
-    return this.requestsForPartner(partnerId).some(request =>
-      request.currentStatus !== 'CLOSED'
-      && (request.currentStatus === 'TROUBLESHOOTING'
-        || request.priority === 'P1'
-        || this.ageDays(request.stageStartDate) >= 3)
-    );
-  }
-
-  ageDays(date: string): number {
-    if (!date) return 0;
-    return Math.max(0, Math.floor((Date.now() - new Date(date).getTime()) / 86400000));
-  }
-
   private requestsForPartner(partnerId: string): PartnerRequest[] {
-    return this.requests.filter(request => request.partnerId === partnerId);
+    return this.requestsByPartnerId.get(partnerId) || [];
+  }
+
+  private emptyRequestFormData(partner: Partner): RequestFormData {
+    return this.partnerIntegration.getRequestFormData({
+      id: '',
+      partnerId: partner.id,
+      type: 'NEW_INTEGRATION',
+      openDate: '',
+      currentStatus: 'NEW',
+      currentOwner: '',
+      nextAction: '',
+      priority: 'P4',
+      followUpDate: '',
+      stageStartDate: '',
+      blocker: '',
+      formSent: false,
+      formReceived: false,
+      formValidated: false,
+      statementCreated: false,
+      statementSent: false,
+      signaturesComplete: false,
+      ipCoreStatus: 'NOT_SUBMITTED',
+      itStatus: 'NOT_SUBMITTED',
+      vpnStatus: 'NOT_STARTED',
+      connectivityUat: 'NOT_TESTED',
+      connectivityPrd: 'NOT_TESTED',
+      credentialsProvided: false,
+      uatStatus: 'NOT_STARTED',
+      handoverComplete: false,
+      closeDate: null,
+      notes: ''
+    }, partner);
   }
 
   private resetDraft(): void {

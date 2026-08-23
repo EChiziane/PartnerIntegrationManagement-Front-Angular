@@ -74,7 +74,7 @@
       <span>Actions</span>
     </div>
 
-    <article *ngFor="let partner of filteredPartners" class="partner-row" [class.needs-attention]="hasAttention(partner.id)">
+    <article *ngFor="let partner of filteredPartners; trackBy: trackByPartnerId" class="partner-row" [class.needs-attention]="hasAttention(partner.id)">
       <div class="partner-identity">
         <strong>{{ partner.name }}</strong>
         <span>{{ partner.representativeName || partner.businessOwner || 'No representative' }}</span>
@@ -82,7 +82,7 @@
 
       <div class="cell-stack">
         <strong>{{ connectionForPartner(partner)?.serviceApi || partner.serviceApi || '-' }}</strong>
-        <span>{{ pdf.partnerCategory(partner) }} · {{ connectionForPartner(partner)?.environment || partner.environment }}</span>
+        <span>{{ categoryForPartner(partner) }} · {{ connectionForPartner(partner)?.environment || partner.environment }}</span>
       </div>
 
       <div class="cell-stack status-cell">
