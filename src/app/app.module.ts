@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserModule, provideClientHydration, withEventReplay} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
@@ -36,6 +36,7 @@ import {ScanComponent} from '@features/partner-integration/scan/scan.component';
 import {RequestDetailComponent} from '@features/partner-integration/request-detail/request-detail.component';
 import {PartnerDetailComponent} from '@features/partner-integration/partner-detail/partner-detail.component';
 import {TranslatePipe} from '@shared/pipes/translate.pipe';
+import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 
 registerLocaleData(en);
 
@@ -80,7 +81,13 @@ registerLocaleData(en);
     provideClientHydration(withEventReplay()),
     provideNzI18n(en_US),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch(), withInterceptorsFromDi())
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [PartnerIntegrationService],
+      useFactory: (partnerIntegration: PartnerIntegrationService) => () => partnerIntegration.loadFromTextFiles()
+    }
   ],
   bootstrap: [AppComponent]
 })

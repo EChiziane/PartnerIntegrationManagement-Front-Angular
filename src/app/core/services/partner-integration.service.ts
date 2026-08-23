@@ -1,4 +1,6 @@
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {firstValueFrom} from 'rxjs';
 import {
   Partner,
   PartnerRequest,
@@ -16,9 +18,36 @@ interface PartnerState {
   events: TimelineEvent[];
 }
 
+interface PartnerSourceState extends PartnerState {
+  version: string;
+}
+
+interface PartnerStorageEnvelope {
+  sourceVersion: string;
+  state: PartnerState;
+}
+
 @Injectable({providedIn: 'root'})
 export class PartnerIntegrationService {
   private readonly storageKey = 'partner-integration-v1-state';
+  private readonly dataSourcePath = 'data/partner-state.txt';
+  private sourceState: PartnerSourceState | null = null;
+
+  constructor(private http: HttpClient) {
+  }
+
+  async loadFromTextFiles(): Promise<void> {
+    try {
+      const raw = await firstValueFrom(this.http.get(this.dataSourcePath, {responseType: 'text'}));
+      this.sourceState = this.normalizeSourceState(JSON.parse(raw) as PartnerSourceState);
+    } catch (error) {
+      console.warn('Partner text data could not be loaded. Falling back to bundled seed data.', error);
+      this.sourceState = this.normalizeSourceState({
+        version: 'fallback-seed',
+        ...this.seedState()
+      });
+    }
+  }
 
   getPartners(): Partner[] {
     return this.state().partners;
@@ -250,16 +279,32 @@ export class PartnerIntegrationService {
   }
 
   private state(): PartnerState {
+    const source = this.getSourceState();
     const raw = localStorage.getItem(this.storageKey);
-    if (raw) return JSON.parse(raw) as PartnerState;
 
-    const seed = this.seedState();
-    this.save(seed);
-    return seed;
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as PartnerStorageEnvelope | PartnerState;
+
+        if (this.isStorageEnvelope(parsed) && parsed.sourceVersion === source.version) {
+          return parsed.state;
+        }
+      } catch {
+        localStorage.removeItem(this.storageKey);
+      }
+    }
+
+    const initialState = this.cloneState(source);
+    this.save(initialState);
+    return initialState;
   }
 
   private save(state: PartnerState): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(state));
+    const envelope: PartnerStorageEnvelope = {
+      sourceVersion: this.getSourceState().version,
+      state
+    };
+    localStorage.setItem(this.storageKey, JSON.stringify(envelope));
   }
 
   private touchPartner(state: PartnerState, partnerId: string): void {
@@ -305,6 +350,41 @@ export class PartnerIntegrationService {
 
   private priorityWeight(priority: TaskPriority): number {
     return {P1: 1, P2: 2, P3: 3, P4: 4}[priority];
+  }
+
+  private getSourceState(): PartnerSourceState {
+    if (!this.sourceState) {
+      this.sourceState = this.normalizeSourceState({
+        version: 'fallback-seed',
+        ...this.seedState()
+      });
+    }
+
+    return this.sourceState;
+  }
+
+  private normalizeSourceState(source: PartnerSourceState): PartnerSourceState {
+    return {
+      version: source.version || 'unversioned-source',
+      partners: source.partners || [],
+      requests: (source.requests || []).map(request => this.recalculateRequest(request)),
+      events: source.events || []
+    };
+  }
+
+  private cloneState(source: PartnerSourceState): PartnerState {
+    return {
+      partners: structuredClone(source.partners),
+      requests: structuredClone(source.requests),
+      events: structuredClone(source.events)
+    };
+  }
+
+  private isStorageEnvelope(value: PartnerStorageEnvelope | PartnerState): value is PartnerStorageEnvelope {
+    return !!value
+      && typeof value === 'object'
+      && 'sourceVersion' in value
+      && 'state' in value;
   }
 
   private seedState(): PartnerState {
