@@ -251,6 +251,16 @@ export class RequestDetailComponent implements OnInit {
     this.load();
   }
 
+  shouldShowCredentialsPanel(): boolean {
+    if (!this.request) return false;
+    return this.request.currentStatus === 'READY_UAT'
+      || this.request.currentStatus === 'UAT_IN_PROGRESS'
+      || this.request.currentStatus === 'READY_HANDOVER'
+      || this.request.currentStatus === 'CLOSED'
+      || this.request.credentialsProvided
+      || !!this.request.testCredentials?.trim();
+  }
+
   get previousAction(): WorkflowAction | null {
     if (!this.request) return null;
 

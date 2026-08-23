@@ -139,6 +139,15 @@ export class PartnerDetailComponent implements OnInit {
     this.load();
   }
 
+  shouldShowCredentialsPanel(request: PartnerRequest): boolean {
+    return request.currentStatus === 'READY_UAT'
+      || request.currentStatus === 'UAT_IN_PROGRESS'
+      || request.currentStatus === 'READY_HANDOVER'
+      || request.currentStatus === 'CLOSED'
+      || request.credentialsProvided
+      || !!request.testCredentials?.trim();
+  }
+
   confirmAction(label: string, patch: Partial<PartnerRequest>): void {
     const request = this.activeRequest;
     if (!request) return;

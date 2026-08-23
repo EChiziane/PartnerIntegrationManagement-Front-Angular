@@ -210,9 +210,16 @@
       </div>
     </div>
 
-    <div *ngIf="activeRequest.testCredentials && !isCredentialsEditorOpen" class="credentials-summary">
-      <span>Credentials Provided</span>
-      <pre>{{ activeRequest.testCredentials }}</pre>
+    <div *ngIf="shouldShowCredentialsPanel(activeRequest) && !isCredentialsEditorOpen" class="credentials-summary" [class.missing]="!activeRequest.testCredentials">
+      <span>{{ activeRequest.testCredentials ? 'Credentials Provided' : 'Credentials Not Recorded' }}</span>
+      <pre *ngIf="activeRequest.testCredentials; else activeNoCredentials">{{ activeRequest.testCredentials }}</pre>
+      <ng-template #activeNoCredentials>
+        <p *ngIf="activeRequest.credentialsProvided; else activeNotProvidedYet">Marked as provided, but no credential details were recorded.</p>
+        <ng-template #activeNotProvidedYet>
+          <p>No credentials have been recorded for this request yet.</p>
+        </ng-template>
+        <button (click)="openCredentialsEditor()" nz-button nzType="default">Add Credentials</button>
+      </ng-template>
     </div>
   </section>
 

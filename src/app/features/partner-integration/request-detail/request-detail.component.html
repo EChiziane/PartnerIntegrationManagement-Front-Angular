@@ -122,12 +122,24 @@
     </section>
   </div>
 
-  <section *ngIf="request.testCredentials" class="panel">
+  <section *ngIf="shouldShowCredentialsPanel()" class="panel">
     <header>
       <span class="panel-kicker">Credentials Provided</span>
       <h2>Partner test credentials</h2>
     </header>
-    <pre class="credentials-output">{{ request.testCredentials }}</pre>
+    <pre *ngIf="request.testCredentials; else noCredentialsRecorded" class="credentials-output">{{ request.testCredentials }}</pre>
+    <ng-template #noCredentialsRecorded>
+      <div class="credentials-empty">
+        <div>
+          <strong>No credentials recorded</strong>
+          <span *ngIf="request.credentialsProvided; else notProvidedYet">This request was marked as provided before credential details were captured.</span>
+          <ng-template #notProvidedYet>
+            <span>This request has reached UAT readiness, but no credentials have been recorded yet.</span>
+          </ng-template>
+        </div>
+        <button (click)="openCredentialsEditor()" nz-button nzType="default">Add Credentials</button>
+      </div>
+    </ng-template>
   </section>
 
   <section class="panel">

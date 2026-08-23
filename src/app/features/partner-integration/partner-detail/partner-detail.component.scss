@@ -235,6 +235,25 @@ p,
   overflow-wrap: anywhere;
 }
 
+.credentials-summary.missing {
+  border-color: #fed7aa;
+  background: #fffaf4;
+}
+
+.credentials-summary.missing > span {
+  color: #92400e;
+}
+
+.credentials-summary p {
+  margin: 0;
+  color: #607786;
+  font-size: 13px;
+}
+
+.credentials-summary button {
+  justify-self: start;
+}
+
 .detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
@@ -368,5 +387,9 @@ p,
 
   .credentials-actions {
     display: grid;
+  }
+
+  .credentials-summary button {
+    width: 100%;
   }
 }

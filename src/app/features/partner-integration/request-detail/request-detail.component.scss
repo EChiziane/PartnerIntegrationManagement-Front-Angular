@@ -176,6 +176,31 @@ p,
   overflow-wrap: anywhere;
 }
 
+.credentials-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px;
+  border: 1px dashed #cbdbe5;
+  border-radius: 8px;
+  background: #f8fbfd;
+}
+
+.credentials-empty div {
+  display: grid;
+  gap: 4px;
+}
+
+.credentials-empty strong {
+  color: #0f1f2a;
+}
+
+.credentials-empty span {
+  color: #607786;
+  font-size: 13px;
+}
+
 .action-card {
   display: flex;
   align-items: center;
@@ -235,6 +260,11 @@ p,
   }
 
   .action-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .credentials-empty {
     align-items: stretch;
     flex-direction: column;
   }
