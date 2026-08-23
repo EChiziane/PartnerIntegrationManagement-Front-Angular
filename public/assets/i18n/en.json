@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "Partner Integration Management",
-    "subtitle": "Business operating desk"
+    "name": "eMola Integration Operations",
+    "subtitle": "Integration operating desk"
   },
   "layout": {
     "sections": {
@@ -9,13 +9,13 @@
     },
     "nav": {
       "home": "Home",
-      "pipeline": "Pipeline",
-      "tasks": "Tasks",
-      "scan": "Scan",
-      "partners": "Partners"
+      "pipeline": "Integrations",
+      "tasks": "Execution",
+      "scan": "Control",
+      "partners": "Institutions"
     },
     "topbar": {
-      "subtitle": "Operational workflow control"
+      "subtitle": "Institutions, integrations and requests"
     },
     "status": {
       "demoData": "Demo data enabled"

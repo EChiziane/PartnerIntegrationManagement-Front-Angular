@@ -13,8 +13,8 @@
       </div>
 
       <div class="brand-copy">
-        <strong>Partner Integration</strong>
-        <span>Management App</span>
+        <strong>eMola Integrations</strong>
+        <span>Operations Desk</span>
       </div>
     </div>
 
@@ -35,7 +35,7 @@
       </li>
 
       <li nz-menu-item nzMatchRouter>
-        <a routerLink="/app/pipeline">
+        <a routerLink="/app/integrations">
           <span nz-icon nzType="partition"></span>
           <span>{{ 'layout.nav.pipeline' | translate }}</span>
         </a>
@@ -168,7 +168,7 @@
   [nzVisible]="isMobileMenuVisible"
   class="mobile-navigation-drawer"
   nzPlacement="left"
-  nzTitle="Partner Integration"
+  nzTitle="eMola Integrations"
   nzWidth="320px">
   <nav *nzDrawerContent class="mobile-navigation" aria-label="Mobile navigation">
     <a routerLink="/app/home" routerLinkActive="active" (click)="closeMobileMenu()">
@@ -176,7 +176,7 @@
       <span>{{ 'layout.nav.home' | translate }}</span>
     </a>
 
-    <a routerLink="/app/pipeline" routerLinkActive="active" (click)="closeMobileMenu()">
+    <a routerLink="/app/integrations" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="partition"></span>
       <span>{{ 'layout.nav.pipeline' | translate }}</span>
     </a>

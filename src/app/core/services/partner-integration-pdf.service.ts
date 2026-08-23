@@ -33,27 +33,27 @@ export class PartnerIntegrationPdfService {
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;
 
-    this.drawHeader(doc, 'PARTNER LIST', scopeLabel);
+    this.drawHeader(doc, 'INSTITUTION / INTEGRATION LIST', scopeLabel);
     this.drawSummaryTable(doc, autoTable, margin, 26, [
-      ['Partners', String(partners.length)],
+      ['Institutions', String(partners.length)],
       ['Open Requests', String(this.openRequestCount(requests))],
       ['Attention', String(this.attentionCount(requests))],
-      ['Active', String(partners.filter(item => item.status === 'ACTIVE').length)]
+      ['Active Profiles', String(partners.filter(item => item.status === 'ACTIVE').length)]
     ]);
 
     autoTable(doc, {
       startY: 44,
       margin: {left: margin, right: margin, bottom: 20},
       head: [[
-        'Partner',
-        'Category',
+        'Institution',
+        'Category / Health',
         'Business Owner',
         'Technical Contact',
         'Environment',
         'Public IP (Peer)',
         'Private Endpoints',
         'Open',
-        'Urgent Status',
+        'Urgent Request',
         'Next Action'
       ]],
       body: partners.map(partner => {
@@ -82,7 +82,7 @@ export class PartnerIntegrationPdfService {
       didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
     });
 
-    doc.save(this.documentFilename.build('PARTNERS', 'LIST', scopeLabel));
+    doc.save(this.documentFilename.build('INSTITUTIONS', 'LIST', scopeLabel));
   }
 
   async downloadPipeline(requests: PartnerRequest[], partners: Partner[], scopeLabel: string): Promise<void> {
@@ -95,7 +95,7 @@ export class PartnerIntegrationPdfService {
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;
 
-    this.drawHeader(doc, 'PIPELINE REPORT', scopeLabel);
+    this.drawHeader(doc, 'INTEGRATION WORK REPORT', scopeLabel);
     this.drawSummaryTable(doc, autoTable, margin, 26, [
       ['Requests', String(requests.length)],
       ['Open', String(this.openRequestCount(requests))],
@@ -107,7 +107,7 @@ export class PartnerIntegrationPdfService {
       startY: 44,
       margin: {left: margin, right: margin, bottom: 20},
       head: [[
-        'Partner',
+        'Institution',
         'Request',
         'Status',
         'Owner',
@@ -138,7 +138,7 @@ export class PartnerIntegrationPdfService {
       didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
     });
 
-    doc.save(this.documentFilename.build('PIPELINE', 'REQUESTS', scopeLabel));
+    doc.save(this.documentFilename.build('INTEGRATION_WORK', 'REQUESTS', scopeLabel));
   }
 
   async downloadPartnerProfile(
@@ -156,11 +156,12 @@ export class PartnerIntegrationPdfService {
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;
 
-    this.drawHeader(doc, 'PARTNER PROFILE', partner.name);
+    this.drawHeader(doc, 'INSTITUTION & INTEGRATION PROFILE', partner.name);
     this.drawSummaryTable(doc, autoTable, margin, 26, [
       ['Status', partner.status],
       ['Open Requests', String(requests.filter(item => item.currentStatus !== 'CLOSED').length)],
-      ['Category', this.partnerCategory(partner)]
+      ['Category', this.partnerCategory(partner)],
+      ['Connection', this.partnerIntegration.connectionHealthLabel(this.partnerIntegration.getPartnerConnection(partner.id)?.health)]
     ]);
     const profileFormData = this.latestFormData(partner, requests);
     const connection = this.partnerIntegration.getPartnerConnection(partner.id);
@@ -176,9 +177,9 @@ export class PartnerIntegrationPdfService {
       ['Business Owner', partner.businessOwner || '-'],
       ['Phone', partner.phone || '-'],
       ['Email', partner.email || '-'],
-      ['Active Request Service/API', profileFormData.serviceApi || partner.serviceApi || '-'],
-      ['Active Request Environment', profileFormData.environment || partner.environment || '-'],
-      ['Active Request Technical Contact', profileFormData.technicalContact || partner.technicalContact || '-'],
+      ['Current Integration Service/API', profileFormData.serviceApi || partner.serviceApi || '-'],
+      ['Current Integration Environment', profileFormData.environment || partner.environment || '-'],
+      ['Request Technical Contact', profileFormData.technicalContact || partner.technicalContact || '-'],
       ['Public IP (Peer)', this.publicPeers(profileFormData, partner)],
       ['Private Endpoints', this.privateEndpoints(profileFormData, partner)],
       ['Auth Method', profileFormData.authMethod || partner.authMethod || '-'],
@@ -186,7 +187,7 @@ export class PartnerIntegrationPdfService {
       ['OwnCloud Folder', profileFormData.ownCloudFolderUrl || partner.ownCloudFolderUrl || '-'],
       ['Form Notes', profileFormData.formNotes || partner.formNotes || '-'],
       ['Last Activity', partner.lastActivity || '-'],
-      ['Partner ID', partner.id || '-']
+      ['Institution ID', partner.id || '-']
       ]),
       theme: 'grid',
       styles: this.tableStyles(),
@@ -252,7 +253,7 @@ export class PartnerIntegrationPdfService {
       didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
     });
 
-    doc.save(this.documentFilename.build('PARTNER_PROFILE', partner.id, partner.name));
+    doc.save(this.documentFilename.build('INSTITUTION_PROFILE', partner.id, partner.name));
   }
 
   partnerCategory(partner: Partner): string {
@@ -281,9 +282,9 @@ export class PartnerIntegrationPdfService {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     doc.setTextColor(74, 85, 99);
-    doc.text(caption || 'Partner Integration Management App', 14, 16);
+    doc.text(caption || 'eMola Integration Operations', 14, 16);
     doc.text(`Generated ${this.formatDateTime(new Date())}`, pageWidth - 14, 11, {align: 'right'});
-    doc.text('Partner Integration Management App', pageWidth - 14, 16, {align: 'right'});
+    doc.text('eMola Integration Operations', pageWidth - 14, 16, {align: 'right'});
   }
 
   private drawSummaryTable(
@@ -321,7 +322,7 @@ export class PartnerIntegrationPdfService {
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     doc.setTextColor(99, 115, 129);
-    doc.text('Partner Integration Management App | Local V1 operational report', 14, pageHeight - 8);
+    doc.text('eMola Integration Operations | Local V1 operational report', 14, pageHeight - 8);
     doc.text(`Page ${pageNumber} of ${doc.getNumberOfPages()}`, pageWidth - 14, pageHeight - 8, {align: 'right'});
   }
 

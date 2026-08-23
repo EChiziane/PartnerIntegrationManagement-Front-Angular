@@ -2,7 +2,7 @@
   <section class="detail-header">
     <button (click)="back()" nz-button nzType="default">
       <span nz-icon nzType="arrow-left"></span>
-      Pipeline
+      Integration Work
     </button>
     <div>
       <span class="eyebrow">{{ partnerIntegration.typeLabel(request.type) }}</span>
@@ -17,7 +17,7 @@
   <div class="detail-grid">
     <section class="panel">
       <header>
-        <span class="panel-kicker">Workflow</span>
+        <span class="panel-kicker">Request workflow</span>
         <h2>Control state</h2>
       </header>
 
@@ -121,8 +121,8 @@
 
     <section class="panel">
       <header>
-        <span class="panel-kicker">Partner</span>
-        <h2>Connectivity data</h2>
+        <span class="panel-kicker">Institution and integration</span>
+        <h2>Form data snapshot</h2>
       </header>
 
       <div class="facts stacked">
@@ -140,8 +140,8 @@
 
   <section *ngIf="shouldShowCredentialsPanel()" class="panel">
     <header>
-      <span class="panel-kicker">Credentials Provided</span>
-      <h2>Partner test credentials</h2>
+      <span class="panel-kicker">Credentials provided</span>
+      <h2>UAT/API test credentials</h2>
     </header>
     <pre *ngIf="request.testCredentials; else noCredentialsRecorded" class="credentials-output">{{ request.testCredentials }}</pre>
     <ng-template #noCredentialsRecorded>

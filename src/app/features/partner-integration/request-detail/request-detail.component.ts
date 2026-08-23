@@ -84,7 +84,7 @@ export class RequestDetailComponent implements OnInit {
 
     this.modal.confirm({
       nzTitle: 'Confirm workflow update',
-      nzContent: `This will register "${label}" for ${this.partner?.name || 'this partner'} and may move the request from ${this.partnerIntegration.statusLabel(this.request.currentStatus)} to the next status.`,
+      nzContent: `This will register "${label}" for ${this.partner?.name || 'this institution'} and may move the request from ${this.partnerIntegration.statusLabel(this.request.currentStatus)} to the next status.`,
       nzOkText: 'Confirm update',
       nzCancelText: 'Cancel',
       nzOnOk: () => this.applyAction(label, patch)
@@ -141,7 +141,7 @@ export class RequestDetailComponent implements OnInit {
       CONNECTIVITY_TEST: this.connectivityActions(),
       READY_UAT: [{
         label: 'Provide Test Credentials',
-        description: 'Paste the credentials or test instructions given to this partner.',
+        description: 'Paste the credentials or test instructions given to this institution.',
         patch: {},
         tone: 'primary',
         requiresCredentialsText: true
@@ -230,7 +230,7 @@ export class RequestDetailComponent implements OnInit {
     if (this.requiresUat() && this.request.connectivityUat !== 'PASS') {
       actions.push({
         label: 'UAT Connectivity PASS',
-        description: 'Confirms UAT connectivity for this partner.',
+        description: 'Confirms UAT connectivity for this institution.',
         patch: {connectivityUat: 'PASS'},
         tone: 'primary'
       });
@@ -239,7 +239,7 @@ export class RequestDetailComponent implements OnInit {
     if (this.requiresPrd() && this.request.connectivityPrd !== 'PASS') {
       actions.push({
         label: 'PRD Connectivity PASS',
-        description: 'Confirms PRD connectivity for this partner.',
+        description: 'Confirms PRD connectivity for this institution.',
         patch: {connectivityPrd: 'PASS'},
         tone: 'primary'
       });
@@ -385,7 +385,7 @@ export class RequestDetailComponent implements OnInit {
 
     this.modal.confirm({
       nzTitle: 'Confirm backwards movement',
-      nzContent: `This will move the request backwards from ${this.partnerIntegration.statusLabel(this.request.currentStatus)}. Reason was requested for control, but it will not be stored in the partner file.`,
+      nzContent: `This will move the request backwards from ${this.partnerIntegration.statusLabel(this.request.currentStatus)}. Reason was requested for control, but it will not be stored in the institution file.`,
       nzOkText: 'Move backwards',
       nzCancelText: 'Cancel',
       nzOnOk: () => this.applyAction(action.label, action.patch)
@@ -434,6 +434,6 @@ export class RequestDetailComponent implements OnInit {
   }
 
   back(): void {
-    this.router.navigate(['/app/pipeline']);
+    this.router.navigate(['/app/integrations']);
   }
 }

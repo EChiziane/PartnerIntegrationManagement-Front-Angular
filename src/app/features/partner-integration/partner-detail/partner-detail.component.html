@@ -1,7 +1,7 @@
 <div *ngIf="partner" class="partner-detail">
   <section class="detail-header">
     <div>
-      <span class="eyebrow">Partner cockpit</span>
+      <span class="eyebrow">Institution cockpit</span>
       <h1>{{ partner.name }}</h1>
       <p>{{ partner.serviceApi || 'Service/API not defined' }} - {{ partner.environment }}</p>
     </div>
@@ -9,7 +9,7 @@
     <div class="header-actions">
       <button (click)="downloadProfile()" nz-button nzType="default">
         <span nz-icon nzType="download"></span>
-        Download Profile
+        Download Profile PDF
       </button>
 
       <button (click)="editProfile()" nz-button nzType="default">
@@ -19,7 +19,7 @@
 
       <button (click)="startUpdateFlow()" nz-button nzType="primary">
         <span nz-icon nzType="sync"></span>
-        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? 'Update Active Request' : 'Start Update Flow' }}
+        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? 'Open Active Request' : 'Start Update Request' }}
       </button>
     </div>
   </section>
@@ -27,8 +27,8 @@
   <section class="panel connection-panel">
     <header>
       <div>
-        <span class="panel-kicker">Current connection</span>
-        <h2>Operational health</h2>
+        <span class="panel-kicker">Current integration</span>
+        <h2>Live technical health</h2>
       </div>
       <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection?.health)">
         {{ partnerIntegration.connectionHealthLabel(connection?.health) }}
@@ -48,7 +48,7 @@
   <section *ngIf="activeRequest" class="panel active-request-panel">
     <header class="active-request-header">
       <div>
-        <span class="panel-kicker">Active request</span>
+        <span class="panel-kicker">Active request on this integration</span>
         <h2>{{ activeRequest.title || partnerIntegration.typeLabel(activeRequest.type) }}</h2>
       </div>
       <button (click)="openRequest(activeRequest)" nz-button nzType="default">Open Full Request</button>
@@ -105,10 +105,10 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'WAITING_FORM'"
-        (click)="confirmAction('Partner Form Received', {formReceived: true})"
+        (click)="confirmAction('VPN Integration Form Received', {formReceived: true})"
         nz-button
         nzType="primary">
-        Mark Form Received
+        Mark VPN Form Received
       </button>
 
       <button
@@ -308,14 +308,14 @@
     <section class="panel">
       <header>
         <div>
-          <span class="panel-kicker">Request form</span>
-          <h2>Technical data snapshot</h2>
+          <span class="panel-kicker">Request form snapshot</span>
+          <h2>Technical data used by this action</h2>
         </div>
         <div class="import-inline">
           <input #requestFormInput (change)="importRequestForm($event)" accept=".xls,.xlsx" hidden type="file"/>
           <button (click)="requestFormInput.click()" [disabled]="!activeRequest" nz-button nzType="default">
             <span nz-icon nzType="upload"></span>
-            Import Form
+            Import VPN Form
           </button>
         </div>
       </header>
@@ -339,7 +339,7 @@
           <span>OwnCloud Folder</span>
           <strong>
             <a *ngIf="activeFormData?.ownCloudFolderUrl || partner.ownCloudFolderUrl; else noFolder" [href]="activeFormData?.ownCloudFolderUrl || partner.ownCloudFolderUrl" target="_blank" rel="noopener">
-              Open partner folder
+              Open integration folder
             </a>
             <ng-template #noFolder>-</ng-template>
           </strong>
@@ -355,14 +355,14 @@
 
   <section class="panel">
     <header>
-      <span class="panel-kicker">Requests</span>
-      <h2>Open and historical requests</h2>
+      <span class="panel-kicker">Integration requests</span>
+      <h2>Actions and history on this connection</h2>
     </header>
 
     <div class="new-request">
       <div *ngIf="hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED'" class="request-guard">
         <strong>Active request already exists</strong>
-        <span>Use updates on the active request instead of opening another one.</span>
+        <span>Continue the active request unless the current work is blocked.</span>
       </div>
 
       <nz-select [(ngModel)]="requestType" [nzDisabled]="hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED'">
@@ -372,7 +372,7 @@
       </nz-select>
 
       <button (click)="createRequest()" nz-button nzType="primary">
-        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? 'Open Active Request' : 'Open Request' }}
+        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? 'Open Active Request' : 'Open Request Action' }}
       </button>
     </div>
 
@@ -391,7 +391,7 @@
   <section class="panel">
     <header>
       <span class="panel-kicker">History</span>
-      <h2>Operational history</h2>
+      <h2>Institution and integration history</h2>
     </header>
 
     <article *ngFor="let event of events" class="history-row">

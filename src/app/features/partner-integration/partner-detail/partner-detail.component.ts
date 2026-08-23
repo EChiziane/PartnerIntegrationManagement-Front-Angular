@@ -117,7 +117,7 @@ export class PartnerDetailComponent implements OnInit {
     if (this.activeRequest?.currentStatus === 'BLOCKED') {
       this.modal.confirm({
         nzTitle: 'Create another request?',
-        nzContent: 'This partner already has a blocked request. Create a new request only if the blocked work cannot continue.',
+        nzContent: 'This institution already has a blocked request. Create a new request only if the blocked work cannot continue.',
         nzOkText: 'Create new request',
         nzCancelText: 'Open blocked request',
         nzOnOk: () => this.createRequestNow(),
@@ -145,7 +145,7 @@ export class PartnerDetailComponent implements OnInit {
     if (this.activeRequest?.currentStatus === 'BLOCKED') {
       this.modal.confirm({
         nzTitle: 'Blocked request exists',
-        nzContent: 'This partner already has a blocked active request. You can unblock it or create a separate update request if this is genuinely new work.',
+        nzContent: 'This integration already has a blocked active request. You can unblock it or create a separate update request if this is genuinely new work.',
         nzOkText: 'Create update request',
         nzCancelText: 'Open blocked request',
         nzOnOk: () => this.createUpdateRequestNow(),
@@ -212,7 +212,7 @@ export class PartnerDetailComponent implements OnInit {
       this.load();
     } catch (error) {
       console.error('Partner form import failed', error);
-      this.importNotice = 'Could not import this Excel form. Please check if the file is the partner VPN form.';
+      this.importNotice = 'Could not import this Excel form. Please check if the file is the VPN integration form.';
     } finally {
       input.value = '';
     }
@@ -259,7 +259,7 @@ export class PartnerDetailComponent implements OnInit {
 
     this.modal.confirm({
       nzTitle: 'Confirm workflow update',
-      nzContent: `This will register "${label}" for ${this.partner?.name || 'this partner'} and may move the request from ${this.partnerIntegration.statusLabel(request.currentStatus)} to the next status.`,
+      nzContent: `This will register "${label}" for ${this.partner?.name || 'this institution'} and may move the request from ${this.partnerIntegration.statusLabel(request.currentStatus)} to the next status.`,
       nzOkText: 'Confirm update',
       nzCancelText: 'Cancel',
       nzOnOk: () => this.applyAction(label, patch)
@@ -321,7 +321,7 @@ export class PartnerDetailComponent implements OnInit {
 
     this.modal.confirm({
       nzTitle: 'Include test credentials?',
-      nzContent: 'This partner has recorded test credentials. Hide them unless this PDF really needs to include sensitive details.',
+      nzContent: 'This institution has recorded test credentials. Hide them unless this PDF really needs to include sensitive details.',
       nzOkText: 'Include credentials',
       nzCancelText: 'Hide credentials',
       nzOnOk: () => this.pdf.downloadPartnerProfile(this.partner!, this.requests, this.events, {includeCredentials: true}),

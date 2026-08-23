@@ -1,22 +1,22 @@
 <div class="partner-page">
   <section class="dashboard-hero">
     <div class="hero-copy">
-      <span class="eyebrow">Partner Integration Command Center</span>
-      <h1>Business control for every partner integration.</h1>
+      <span class="eyebrow">Integration Command Center</span>
+      <h1>Control every institution, integration and request.</h1>
       <p>
-        Monitor onboarding, updates, technical blockers, approvals and handover
-        readiness from one executive workspace.
+        Follow the institution profile, the live connection, and every request
+        that changes or repairs that integration.
       </p>
     </div>
 
     <div class="hero-actions">
       <button (click)="goPartners()" nz-button nzType="primary">
         <span nz-icon nzType="team"></span>
-        Partners
+        Institutions
       </button>
       <button (click)="goPipeline()" nz-button nzType="default">
         <span nz-icon nzType="partition"></span>
-        Pipeline
+        Integration Work
       </button>
       <button (click)="reload()" nz-button nzType="default">
         <span nz-icon nzType="reload"></span>
@@ -27,21 +27,21 @@
 
   <div class="metric-grid">
     <button (click)="goPartners()" class="metric-card portfolio" type="button">
-      <span>Partner portfolio</span>
+      <span>Institution portfolio</span>
       <strong>{{ partners.length }}</strong>
-      <small>Registered business profiles</small>
+      <small>Registered company profiles</small>
     </button>
 
     <button (click)="goPipeline()" class="metric-card active" type="button">
-      <span>Open work</span>
-      <strong>{{ openRequests.length }}</strong>
-      <small>Requests currently in motion</small>
+      <span>Active integrations</span>
+      <strong>{{ activeIntegrationsCount }}</strong>
+      <small>{{ healthyIntegrationsCount }} healthy, {{ degradedIntegrationsCount + downIntegrationsCount }} needing attention</small>
     </button>
 
     <button (click)="goPipeline()" class="metric-card ready" type="button">
-      <span>In testing</span>
+      <span>Requests in testing</span>
       <strong>{{ testingCount }}</strong>
-      <small>Connectivity or API/UAT testing</small>
+      <small>VPN, connectivity or UAT/API testing</small>
     </button>
 
     <button (click)="goPipeline('TROUBLESHOOTING')" class="metric-card risk" type="button">
@@ -57,7 +57,7 @@
       <strong>{{ waitingExternalCount }}</strong>
     </button>
     <button (click)="goTasks()" type="button">
-      <span>My execution queue</span>
+      <span>Execution queue</span>
       <strong>{{ myTasksToday.length }}</strong>
     </button>
     <button (click)="goPipeline('CLOSED')" type="button">
@@ -123,10 +123,10 @@
   <section class="section-panel pipeline-panel">
     <header>
       <div>
-        <span class="panel-kicker">Pipeline health</span>
-        <h2>Requests by status</h2>
+          <span class="panel-kicker">Integration work</span>
+          <h2>Requests by workflow status</h2>
       </div>
-      <button (click)="goPipeline()" nz-button nzType="default">Open Pipeline</button>
+      <button (click)="goPipeline()" nz-button nzType="default">Open Integration Work</button>
     </header>
 
     <div class="status-grid">
@@ -147,7 +147,7 @@
     <section class="section-panel">
       <header>
         <div>
-          <span class="panel-kicker">Business mix</span>
+          <span class="panel-kicker">Request mix</span>
           <h2>Open requests by type</h2>
         </div>
       </header>
@@ -163,8 +163,8 @@
     <section class="section-panel">
       <header>
         <div>
-          <span class="panel-kicker">Live portfolio</span>
-          <h2>Recently active requests</h2>
+          <span class="panel-kicker">Current activity</span>
+          <h2>Recently active integration requests</h2>
         </div>
         <button (click)="goPipeline()" nz-button nzType="default">View all</button>
       </header>

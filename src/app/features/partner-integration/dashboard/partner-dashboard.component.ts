@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
-import {Partner, PartnerRequest, RequestType, WorkflowStatus, WorkflowTask} from '@shared/models/partner-integration';
+import {Partner, PartnerConnection, PartnerRequest, RequestType, WorkflowStatus, WorkflowTask} from '@shared/models/partner-integration';
 
 @Component({
   selector: 'app-partner-dashboard',
@@ -11,6 +11,7 @@ import {Partner, PartnerRequest, RequestType, WorkflowStatus, WorkflowTask} from
 })
 export class PartnerDashboardComponent implements OnInit {
   partners: Partner[] = [];
+  connections: PartnerConnection[] = [];
   requests: PartnerRequest[] = [];
   tasks: WorkflowTask[] = [];
 
@@ -50,12 +51,29 @@ export class PartnerDashboardComponent implements OnInit {
 
   reload(): void {
     this.partners = this.partnerIntegration.getPartners();
+    this.connections = this.partnerIntegration.getConnections();
     this.requests = this.partnerIntegration.getRequests();
     this.tasks = this.partnerIntegration.getTasks();
   }
 
   get openRequests(): PartnerRequest[] {
     return this.requests.filter(request => request.currentStatus !== 'CLOSED');
+  }
+
+  get activeIntegrationsCount(): number {
+    return this.connections.filter(connection => connection.health !== 'NOT_ESTABLISHED').length;
+  }
+
+  get healthyIntegrationsCount(): number {
+    return this.connections.filter(connection => connection.health === 'HEALTHY').length;
+  }
+
+  get degradedIntegrationsCount(): number {
+    return this.connections.filter(connection => connection.health === 'DEGRADED').length;
+  }
+
+  get downIntegrationsCount(): number {
+    return this.connections.filter(connection => connection.health === 'DOWN').length;
   }
 
   get attentionRequests(): PartnerRequest[] {
@@ -114,11 +132,11 @@ export class PartnerDashboardComponent implements OnInit {
   }
 
   partnerName(partnerId: string): string {
-    return this.partners.find(partner => partner.id === partnerId)?.name || 'Partner';
+    return this.partners.find(partner => partner.id === partnerId)?.name || 'Institution';
   }
 
   goPipeline(status?: WorkflowStatus): void {
-    this.router.navigate(['/app/pipeline'], {queryParams: status ? {status} : {}});
+    this.router.navigate(['/app/integrations'], {queryParams: status ? {status} : {}});
   }
 
   goTasks(): void {

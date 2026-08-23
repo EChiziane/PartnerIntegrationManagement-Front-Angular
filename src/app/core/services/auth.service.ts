@@ -99,8 +99,8 @@ export class AuthService {
   private localDemoUser(login: string): User {
     return {
       id: 'demo-user',
-      name: 'Partner Operations',
-      email: 'partner.ops@example.com',
+      name: 'Integration Operations',
+      email: 'integration.ops@example.com',
       status: 'ACTIVE',
       phone: '+258840000000',
       login,

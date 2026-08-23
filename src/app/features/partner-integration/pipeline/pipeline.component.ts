@@ -54,7 +54,7 @@ export class PipelineComponent implements OnInit {
   }
 
   partnerName(partnerId: string): string {
-    return this.partners.find(partner => partner.id === partnerId)?.name || 'Unknown Partner';
+    return this.partners.find(partner => partner.id === partnerId)?.name || 'Unknown Institution';
   }
 
   openRequest(request: PartnerRequest): void {
@@ -63,7 +63,7 @@ export class PipelineComponent implements OnInit {
 
   downloadPipeline(): void {
     const scope = this.selectedStatus === 'ALL'
-      ? 'All Pipeline'
+      ? 'All Integration Work'
       : this.partnerIntegration.statusLabel(this.selectedStatus);
     this.pdf.downloadPipeline(this.filteredRequests, this.partners, scope);
   }

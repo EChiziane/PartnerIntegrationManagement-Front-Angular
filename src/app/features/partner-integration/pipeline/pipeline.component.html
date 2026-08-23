@@ -1,20 +1,20 @@
 <div class="pipeline-page">
   <section class="page-header">
     <div>
-      <span class="eyebrow">Pipeline</span>
+      <span class="eyebrow">Integration work</span>
       <h1>Requests grouped by workflow state</h1>
-      <p>Use this view to see what is waiting, blocked, ready or closed.</p>
+      <p>Use this view to control new integrations, updates, blocks, unblocks and troubleshooting.</p>
     </div>
   </section>
 
   <section class="toolbar">
     <nz-select [(ngModel)]="selectedStatus">
-      <nz-option nzValue="ALL" nzLabel="All Statuses"></nz-option>
+      <nz-option nzValue="ALL" nzLabel="All statuses"></nz-option>
       <nz-option *ngFor="let status of statuses" [nzValue]="status" [nzLabel]="partnerIntegration.statusLabel(status)"></nz-option>
     </nz-select>
     <button (click)="downloadPipeline()" nz-button nzType="default">
       <span nz-icon nzType="download"></span>
-      Download Pipeline
+      Download Integration Work
     </button>
   </section>
 

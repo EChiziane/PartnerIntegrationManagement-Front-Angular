@@ -1,9 +1,9 @@
 <div class="tasks-page">
   <section class="page-header">
     <div>
-      <span class="eyebrow">Tasks</span>
-      <h1>Suggested execution list</h1>
-      <p>Tasks are generated from workflow rules. You still choose the order.</p>
+      <span class="eyebrow">Execution queue</span>
+      <h1>Suggested work list</h1>
+      <p>Work items are generated from request rules. You still choose the order.</p>
     </div>
   </section>
 
@@ -11,9 +11,9 @@
     <nz-select [(ngModel)]="ownerFilter">
       <nz-option nzValue="ALL" nzLabel="All owners"></nz-option>
       <nz-option nzValue="Me" nzLabel="Me"></nz-option>
-      <nz-option nzValue="Partner" nzLabel="Partner"></nz-option>
+      <nz-option nzValue="Institution" nzLabel="Institution"></nz-option>
       <nz-option nzValue="IP Core / IT" nzLabel="IP Core / IT"></nz-option>
-      <nz-option nzValue="Technical Team / Partner" nzLabel="Technical Team / Partner"></nz-option>
+      <nz-option nzValue="Technical Team / Institution" nzLabel="Technical Team / Institution"></nz-option>
     </nz-select>
   </section>
 

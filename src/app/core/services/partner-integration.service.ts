@@ -46,7 +46,7 @@ export class PartnerIntegrationService {
       const raw = await firstValueFrom(this.http.get(this.dataSourcePath, {responseType: 'text'}));
       this.sourceState = this.normalizeSourceState(JSON.parse(raw) as PartnerSourceState);
     } catch (error) {
-      console.warn('Partner text data could not be loaded. Falling back to bundled seed data.', error);
+      console.warn('Integration text data could not be loaded. Falling back to bundled seed data.', error);
       this.sourceState = this.normalizeSourceState({
         version: `fallback-seed-${environment.name}`,
         ...this.seedState()
@@ -106,7 +106,7 @@ export class PartnerIntegrationService {
   updatePartner(partnerId: string, patch: Partial<Partner>): Partner {
     const state = this.state();
     const index = state.partners.findIndex(partner => partner.id === partnerId);
-    if (index < 0) throw new Error('Partner not found');
+    if (index < 0) throw new Error('Institution not found');
 
     const updated: Partner = {
       ...state.partners[index],
@@ -227,7 +227,7 @@ export class PartnerIntegrationService {
           id: `task-${request.id}`,
           partnerId: request.partnerId,
           requestId: request.id,
-          partnerName: partner?.name || 'Unknown Partner',
+          partnerName: partner?.name || 'Unknown Institution',
           requestType: request.type,
           title: request.title || request.nextAction,
           owner: request.currentOwner,
@@ -247,7 +247,7 @@ export class PartnerIntegrationService {
     return this.getRequests()
       .filter(request => request.currentStatus !== 'CLOSED')
       .flatMap(request => {
-        const partnerName = partners.find(partner => partner.id === request.partnerId)?.name || 'Unknown Partner';
+        const partnerName = partners.find(partner => partner.id === request.partnerId)?.name || 'Unknown Institution';
         const items: ScanItem[] = [];
 
         if (request.currentStatus === 'WAITING_SIGNATURES') {
@@ -263,7 +263,7 @@ export class PartnerIntegrationService {
           items.push(this.scan('IT', 'Testes de conectividade UAT/PRD ja passaram?', partnerName, request));
         }
         if (['WAITING_FORM', 'FORM_VALIDATION', 'TROUBLESHOOTING', 'UAT_IN_PROGRESS'].includes(request.currentStatus)) {
-          items.push(this.scan('PARTNER', 'Existe resposta, form, correcao ou resultado do parceiro?', partnerName, request));
+          items.push(this.scan('PARTNER', 'Existe resposta, form, correcao ou resultado da instituicao?', partnerName, request));
         }
 
         return items;
@@ -279,9 +279,9 @@ export class PartnerIntegrationService {
     const labels: Record<RequestType, string> = {
       NEW_INTEGRATION: 'New Integration',
       UPDATE_INTEGRATION: 'Update Integration',
-      BLOCK_VPN: 'Block VPN',
-      UNBLOCK_VPN: 'Unblock VPN',
-      CONNECTIVITY_SUPPORT: 'Connectivity Support'
+      BLOCK_VPN: 'Block Integration VPN',
+      UNBLOCK_VPN: 'Unblock Integration VPN',
+      CONNECTIVITY_SUPPORT: 'Integration Troubleshooting'
     };
     return labels[type];
   }
@@ -354,7 +354,7 @@ export class PartnerIntegrationService {
     const map: Record<WorkflowStatus, { owner: string; action: string }> = {
       BLOCKED: {owner: 'Blocked', action: 'Resolve blocker or unblock request'},
       NEW: {owner: 'Me', action: 'Send Introduction + VPN Form + API Spec'},
-      WAITING_FORM: {owner: 'Partner', action: 'Follow up partner form'},
+      WAITING_FORM: {owner: 'Institution', action: 'Follow up VPN integration form'},
       FORM_VALIDATION: {owner: 'Me', action: 'Validate Form'},
       READY_STATEMENT: {owner: 'Me', action: 'Create Statement'},
       WAITING_SIGNATURES: {owner: 'vOffice / Signers', action: 'Follow up signatures'},
@@ -362,11 +362,11 @@ export class PartnerIntegrationService {
       IMPLEMENTATION: {owner: 'IP Core / IT', action: 'Follow up implementation'},
       READY_CONNECTIVITY: {owner: 'Me', action: 'Coordinate Connectivity Test'},
       CONNECTIVITY_TEST: {owner: 'Me', action: 'Run connectivity tests'},
-      TROUBLESHOOTING: {owner: 'Technical Team / Partner', action: 'Troubleshoot / Identify Owner / Next Action'},
+      TROUBLESHOOTING: {owner: 'Technical Team / Institution', action: 'Troubleshoot integration / identify owner / next action'},
       READY_UAT: {owner: 'Me', action: 'Provide API Test Credentials'},
-      UAT_IN_PROGRESS: {owner: 'Partner', action: 'Follow up UAT/API testing'},
+      UAT_IN_PROGRESS: {owner: 'Institution', action: 'Follow up institution UAT/API testing'},
       READY_HANDOVER: {owner: 'Me', action: 'Handover to Business/Product'},
-      CLOSED: {owner: 'Closed', action: 'Archive evidence and keep partner active'}
+      CLOSED: {owner: 'Closed', action: 'Archive evidence and keep integration active'}
     };
     return map[status];
   }
@@ -728,7 +728,7 @@ export class PartnerIntegrationService {
       base('request-c', 'partner-c', 'UPDATE_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true}),
       base('request-d', 'partner-d', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'IN_PROGRESS'}),
       base('request-e', 'partner-e', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'IN_PROGRESS', connectivityUat: 'IN_PROGRESS', connectivityPrd: 'IN_PROGRESS'}),
-      base('request-f', 'partner-f', 'CONNECTIVITY_SUPPORT', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'DOWN', connectivityUat: 'FAIL', blocker: 'Partner reports VPN down'}),
+      base('request-f', 'partner-f', 'CONNECTIVITY_SUPPORT', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'DOWN', connectivityUat: 'FAIL', blocker: 'Institution reports VPN down'}),
       base('request-g', 'partner-g', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS', credentialsProvided: true, uatStatus: 'IN_PROGRESS'}),
       base('request-h', 'partner-h', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS', credentialsProvided: true, uatStatus: 'PASS', handoverComplete: true, closeDate: this.today()})
     ];

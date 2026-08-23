@@ -24,6 +24,7 @@ const routes: Routes = [
     children: [
       {path: 'home', component: PartnerDashboardComponent},
       {path: 'partners', component: PartnersComponent},
+      {path: 'integrations', component: PipelineComponent},
       {path: 'pipeline', component: PipelineComponent},
       {path: 'tasks', component: TasksComponent},
       {path: 'scan', component: ScanComponent},

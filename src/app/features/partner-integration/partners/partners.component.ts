@@ -128,7 +128,7 @@ export class PartnersComponent implements OnInit {
       this.searchValue.trim() ? `SEARCH_${this.searchValue.trim()}` : ''
     ].filter(Boolean).join(' / ');
 
-    this.pdf.downloadPartnerList(this.filteredPartners, this.requests, scope || 'All Partners');
+    this.pdf.downloadPartnerList(this.filteredPartners, this.requests, scope || 'All Institutions');
   }
 
   openPartner(partner: Partner): void {
@@ -154,8 +154,8 @@ export class PartnersComponent implements OnInit {
       formReceived: hasTechnicalData,
       formValidated: hasTechnicalData,
       notes: hasTechnicalData
-        ? 'Created automatically from imported and validated VPN partner form.'
-        : 'Created from quick partner registration. Waiting for partner form.'
+        ? 'Created automatically from imported and validated VPN integration form.'
+        : 'Created from quick institution registration. Waiting for VPN integration form.'
     });
 
     this.isCreateVisible = false;
@@ -212,7 +212,7 @@ export class PartnersComponent implements OnInit {
       this.importNotice = `Imported ${file.name}: ${privateEndpoints.length} endpoint(s), ${publicPeers.length} peer IP(s). Request will start in Ready Statement.`;
     } catch (error) {
       console.error('Partner form import failed', error);
-      this.importNotice = 'Could not import this Excel form. Please check if the file is the partner VPN form.';
+      this.importNotice = 'Could not import this Excel form. Please check if the file is the VPN integration form.';
     } finally {
       input.value = '';
     }
@@ -382,7 +382,7 @@ export class PartnersComponent implements OnInit {
   }
 
   private importedFormRequestTitle(partnerName: string): string {
-    return `New Integration VPN between eMola and ${partnerName.trim()}`;
+    return `New Integration between eMola and ${partnerName.trim()}`;
   }
 
   private sheetRows(

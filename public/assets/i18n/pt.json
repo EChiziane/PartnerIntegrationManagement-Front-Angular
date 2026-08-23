@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "Partner Integration Management",
-    "subtitle": "Mesa operacional de negocio"
+    "name": "eMola Integration Operations",
+    "subtitle": "Mesa operacional de integracoes"
   },
   "layout": {
     "sections": {
@@ -9,13 +9,13 @@
     },
     "nav": {
       "home": "Inicio",
-      "pipeline": "Pipeline",
-      "tasks": "Tarefas",
-      "scan": "Scan",
-      "partners": "Parceiros"
+      "pipeline": "Integracoes",
+      "tasks": "Execucao",
+      "scan": "Controlo",
+      "partners": "Instituicoes"
     },
     "topbar": {
-      "subtitle": "Controlo operacional do workflow"
+      "subtitle": "Instituicoes, integracoes e pedidos"
     },
     "status": {
       "demoData": "Dados demo ativos"
