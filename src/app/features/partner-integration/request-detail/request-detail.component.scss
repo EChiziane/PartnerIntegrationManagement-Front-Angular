@@ -275,6 +275,20 @@ p,
   resize: vertical;
 }
 
+.fact-with-action {
+  position: relative;
+}
+
+.fact-with-action button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.fact-with-action strong {
+  padding-right: 58px;
+}
+
 .credentials-actions {
   display: flex;
   justify-content: flex-end;

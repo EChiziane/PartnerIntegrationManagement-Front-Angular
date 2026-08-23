@@ -171,6 +171,13 @@
         <span>Current owner</span>
         <strong>{{ activeRequest.currentOwner }}</strong>
       </div>
+      <div class="sr-code-card">
+        <span>CNOC SR Code</span>
+        <strong>{{ activeRequest.srCode || '-' }}</strong>
+        <button (click)="editActiveSrCode()" nz-button nzSize="small" nzType="default">
+          {{ activeRequest.srCode ? 'Edit' : 'Add' }}
+        </button>
+      </div>
     </div>
 
     <div class="next-step">

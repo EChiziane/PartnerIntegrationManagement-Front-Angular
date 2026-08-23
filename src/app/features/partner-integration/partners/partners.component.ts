@@ -431,6 +431,7 @@ export class PartnersComponent implements OnInit {
       statementCreated: false,
       statementSent: false,
       signaturesComplete: false,
+      srCode: '',
       ipCoreStatus: 'NOT_SUBMITTED',
       itStatus: 'NOT_SUBMITTED',
       vpnStatus: 'NOT_STARTED',

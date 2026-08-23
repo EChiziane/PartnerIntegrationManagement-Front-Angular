@@ -216,13 +216,15 @@ export class RequestDetailComponent implements OnInit {
       });
       return;
     }
+    const nextPatch = this.withOptionalSrCode(this.request, patch);
+    if (!nextPatch) return;
 
     this.modal.confirm({
       nzTitle: 'Confirm workflow update',
       nzContent: `This will register "${label}" for ${this.partner?.name || 'this partner'} and may move the request from ${this.partnerIntegration.statusLabel(this.request.currentStatus)} to the next status.`,
       nzOkText: 'Confirm update',
       nzCancelText: 'Cancel',
-      nzOnOk: () => this.applyAction(label, patch)
+      nzOnOk: () => this.applyAction(label, nextPatch)
     });
   }
 
@@ -417,6 +419,17 @@ export class RequestDetailComponent implements OnInit {
     this.load();
   }
 
+  editSrCode(): void {
+    if (!this.request) return;
+    const value = window.prompt('CNOC SR Code (optional)', this.request.srCode || '');
+    if (value === null) return;
+
+    this.partnerIntegration.updateRequest(this.request.id, {
+      srCode: value.trim()
+    }, value.trim() ? 'CNOC SR Code Updated' : 'CNOC SR Code Cleared');
+    this.load();
+  }
+
   shouldShowCredentialsPanel(): boolean {
     if (!this.request) return false;
     return this.request.currentStatus === 'READY_UAT'
@@ -569,6 +582,18 @@ export class RequestDetailComponent implements OnInit {
     if (!this.request) return;
     this.partnerIntegration.updateRequest(this.request.id, patch, label);
     this.load();
+  }
+
+  private withOptionalSrCode(request: PartnerRequest, patch: Partial<PartnerRequest>): Partial<PartnerRequest> | null {
+    const submitsToIpCore = patch.signaturesComplete === true && patch.ipCoreStatus === 'SUBMITTED';
+    if (!submitsToIpCore || request.srCode?.trim()) return patch;
+
+    const value = window.prompt('CNOC SR Code for IP Core submission (optional). Example: SR_MVT_20260813_648534', '');
+    if (value === null) return null;
+    return {
+      ...patch,
+      srCode: value.trim()
+    };
   }
 
   back(): void {

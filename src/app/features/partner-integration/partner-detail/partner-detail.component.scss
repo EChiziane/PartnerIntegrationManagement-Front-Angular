@@ -135,7 +135,7 @@ p,
 
 .status-focus {
   display: grid;
-  grid-template-columns: minmax(220px, 0.8fr) minmax(320px, 1.4fr) minmax(180px, 0.75fr);
+  grid-template-columns: minmax(220px, 0.85fr) minmax(300px, 1.25fr) minmax(170px, 0.7fr) minmax(190px, 0.8fr);
   gap: 10px;
   margin: 14px 0 10px;
 }
@@ -161,6 +161,17 @@ p,
 
 .status-focus div {
   align-content: center;
+}
+
+.status-focus .sr-code-card {
+  position: relative;
+  padding-right: 64px;
+}
+
+.sr-code-card button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .status-focus .current-status-card {

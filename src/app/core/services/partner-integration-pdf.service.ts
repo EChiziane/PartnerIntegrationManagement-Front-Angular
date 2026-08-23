@@ -112,6 +112,7 @@ export class PartnerIntegrationPdfService {
         'Status',
         'Owner',
         'Next Action',
+        'CNOC SR Code',
         'Priority',
         'Open Date',
         'Follow-up',
@@ -125,6 +126,7 @@ export class PartnerIntegrationPdfService {
         this.partnerIntegration.statusLabel(request.currentStatus),
         request.currentOwner || '-',
         request.nextAction || '-',
+        request.srCode || '-',
         request.priority || '-',
         request.openDate || '-',
         request.followUpDate || '-',
@@ -218,7 +220,7 @@ export class PartnerIntegrationPdfService {
     autoTable(doc, {
       startY: ((doc as any).lastAutoTable?.finalY || profileFinalY) + 8,
       margin: {left: margin, right: margin, bottom: 20},
-      head: [['Request Type', 'Status', 'Service/API', 'Environment', 'Technical Contact', 'Owner', 'Next Action', 'Open Date', 'Credentials', 'Blocker']],
+      head: [['Request Type', 'Status', 'Service/API', 'Environment', 'Technical Contact', 'Owner', 'Next Action', 'CNOC SR Code', 'Open Date', 'Credentials', 'Blocker']],
       body: requests.map(request => [
         this.partnerIntegration.requestDisplayTitle(request, partner),
         this.partnerIntegration.statusLabel(request.currentStatus),
@@ -227,6 +229,7 @@ export class PartnerIntegrationPdfService {
         this.partnerIntegration.getRequestFormData(request, partner).technicalContact || '-',
         request.currentOwner || '-',
         request.nextAction || '-',
+        request.srCode || '-',
         request.openDate || '-',
         this.credentialsStatus(request),
         request.blocker || '-'
@@ -394,6 +397,7 @@ export class PartnerIntegrationPdfService {
       statementCreated: false,
       statementSent: false,
       signaturesComplete: false,
+      srCode: '',
       ipCoreStatus: 'NOT_SUBMITTED',
       itStatus: 'NOT_SUBMITTED',
       vpnStatus: 'NOT_STARTED',

@@ -136,6 +136,7 @@ export interface PartnerRequest {
   statementCreated: boolean;
   statementSent: boolean;
   signaturesComplete: boolean;
+  srCode?: string;
   ipCoreStatus: ImplementationStatus;
   itStatus: ImplementationStatus;
   vpnStatus: VpnStatus;

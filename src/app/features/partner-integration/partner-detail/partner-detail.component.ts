@@ -274,14 +274,28 @@ export class PartnerDetailComponent implements OnInit {
       });
       return;
     }
+    const nextPatch = this.withOptionalSrCode(request, patch);
+    if (!nextPatch) return;
 
     this.modal.confirm({
       nzTitle: 'Confirm workflow update',
       nzContent: `This will register "${label}" for ${this.partner?.name || 'this partner'} and may move the request from ${this.partnerIntegration.statusLabel(request.currentStatus)} to the next status.`,
       nzOkText: 'Confirm update',
       nzCancelText: 'Cancel',
-      nzOnOk: () => this.applyAction(label, patch)
+      nzOnOk: () => this.applyAction(label, nextPatch)
     });
+  }
+
+  editActiveSrCode(): void {
+    const request = this.activeRequest;
+    if (!request) return;
+    const value = window.prompt('CNOC SR Code (optional)', request.srCode || '');
+    if (value === null) return;
+
+    this.partnerIntegration.updateRequest(request.id, {
+      srCode: value.trim()
+    }, value.trim() ? 'CNOC SR Code Updated' : 'CNOC SR Code Cleared');
+    this.load();
   }
 
   blockActiveRequest(): void {
@@ -327,6 +341,18 @@ export class PartnerDetailComponent implements OnInit {
 
     this.partnerIntegration.updateRequest(request.id, patch, label);
     this.load();
+  }
+
+  private withOptionalSrCode(request: PartnerRequest, patch: Partial<PartnerRequest>): Partial<PartnerRequest> | null {
+    const submitsToIpCore = patch.signaturesComplete === true && patch.ipCoreStatus === 'SUBMITTED';
+    if (!submitsToIpCore || request.srCode?.trim()) return patch;
+
+    const value = window.prompt('CNOC SR Code for IP Core submission (optional). Example: SR_MVT_20260813_648534', '');
+    if (value === null) return null;
+    return {
+      ...patch,
+      srCode: value.trim()
+    };
   }
 
   downloadProfile(): void {

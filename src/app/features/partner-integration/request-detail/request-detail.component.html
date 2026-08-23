@@ -26,6 +26,13 @@
         <div><span>Priority</span><strong>{{ request.priority }}</strong></div>
         <div><span>Follow-up</span><strong>{{ request.followUpDate || '-' }}</strong></div>
         <div><span>Stage start</span><strong>{{ request.stageStartDate || '-' }}</strong></div>
+        <div class="fact-with-action">
+          <span>CNOC SR Code</span>
+          <strong>{{ request.srCode || '-' }}</strong>
+          <button (click)="editSrCode()" nz-button nzSize="small" nzType="default">
+            {{ request.srCode ? 'Edit' : 'Add' }}
+          </button>
+        </div>
         <div><span>IP Core</span><strong>{{ request.ipCoreStatus }}</strong></div>
         <div><span>IT</span><strong>{{ request.itStatus }}</strong></div>
         <div><span>VPN</span><strong>{{ request.vpnStatus }}</strong></div>
