@@ -57,7 +57,7 @@
     <div class="step-actions">
       <button
         *ngIf="activeRequest.currentStatus === 'NEW'"
-        (click)="action('Form and API Spec Sent', {formSent: true})"
+        (click)="confirmAction('Form and API Spec Sent', {formSent: true})"
         nz-button
         nzType="primary">
         Send Form/API Spec
@@ -65,7 +65,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'WAITING_FORM'"
-        (click)="action('Partner Form Received', {formReceived: true})"
+        (click)="confirmAction('Partner Form Received', {formReceived: true})"
         nz-button
         nzType="primary">
         Mark Form Received
@@ -73,7 +73,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'FORM_VALIDATION'"
-        (click)="action('Form Validated', {formValidated: true})"
+        (click)="confirmAction('Form Validated', {formValidated: true})"
         nz-button
         nzType="primary">
         Validate Form
@@ -81,7 +81,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'READY_STATEMENT'"
-        (click)="action('Statement Created', {statementCreated: true})"
+        (click)="confirmAction('Statement Created', {statementCreated: true})"
         nz-button
         nzType="primary">
         Statement Created
@@ -89,7 +89,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'READY_IMPLEMENTATION'"
-        (click)="action('Submitted to IP Core and IT', {ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'})"
+        (click)="confirmAction('Submitted to IP Core and IT', {ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'})"
         nz-button
         nzType="primary">
         Submit IP Core + IT
@@ -97,7 +97,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'WAITING_SIGNATURES'"
-        (click)="action('Approval / Signatures Complete', {signaturesComplete: true})"
+        (click)="confirmAction('Approval / Signatures Complete', {signaturesComplete: true})"
         nz-button
         nzType="primary">
         Approval Complete
@@ -105,7 +105,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION'"
-        (click)="action('IP Core and IT Done', {ipCoreStatus: 'DONE', itStatus: 'DONE'})"
+        (click)="confirmAction('IP Core and IT Done', {ipCoreStatus: 'DONE', itStatus: 'DONE'})"
         nz-button
         nzType="primary">
         IP Core + IT Done
@@ -113,7 +113,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'READY_CONNECTIVITY'"
-        (click)="action('Connectivity Passed', {vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS'})"
+        (click)="confirmAction('Connectivity Passed', {vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS'})"
         nz-button
         nzType="primary">
         Connectivity PASS
@@ -121,7 +121,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'READY_UAT'"
-        (click)="action('API Test Credentials Provided', {credentialsProvided: true, uatStatus: 'IN_PROGRESS'})"
+        (click)="confirmAction('API Test Credentials Provided', {credentialsProvided: true, uatStatus: 'IN_PROGRESS'})"
         nz-button
         nzType="primary">
         Provide Test Credentials
@@ -129,7 +129,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'UAT_IN_PROGRESS'"
-        (click)="action('UAT Passed', {uatStatus: 'PASS'})"
+        (click)="confirmAction('UAT Passed', {uatStatus: 'PASS'})"
         nz-button
         nzType="primary">
         UAT PASS
@@ -137,14 +137,14 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'READY_HANDOVER'"
-        (click)="action('Handover Complete', {handoverComplete: true})"
+        (click)="confirmAction('Handover Complete', {handoverComplete: true})"
         nz-button
         nzType="primary">
         Close Request
       </button>
 
       <button
-        (click)="action('Issue / Blocker Registered', {connectivityUat: 'FAIL', blocker: 'Needs investigation'})"
+        (click)="confirmAction('Issue / Blocker Registered', {connectivityUat: 'FAIL', blocker: 'Needs investigation'})"
         nz-button
         nzDanger>
         Mark Issue
@@ -212,11 +212,16 @@
         <div><span>Server IP</span><strong>{{ partner.partnerServerIp || '-' }}</strong></div>
         <div><span>UAT Port</span><strong>{{ partner.uatPort || '-' }}</strong></div>
         <div><span>PRD Port</span><strong>{{ partner.prdPort || '-' }}</strong></div>
-        <div><span>UAT Base URL</span><strong>{{ partner.apiBaseUrlUat || '-' }}</strong></div>
-        <div><span>PRD Base URL</span><strong>{{ partner.apiBaseUrlPrd || '-' }}</strong></div>
-        <div><span>Callback URL</span><strong>{{ partner.callbackUrl || '-' }}</strong></div>
         <div><span>Auth Method</span><strong>{{ partner.authMethod || '-' }}</strong></div>
-        <div class="wide"><span>Form Reference</span><strong>{{ partner.formReference || '-' }}</strong></div>
+        <div class="wide">
+          <span>OwnCloud Folder</span>
+          <strong>
+            <a *ngIf="partner.ownCloudFolderUrl; else noFolder" [href]="partner.ownCloudFolderUrl" target="_blank" rel="noopener">
+              Open partner folder
+            </a>
+            <ng-template #noFolder>-</ng-template>
+          </strong>
+        </div>
         <div class="wide"><span>Form Notes</span><strong>{{ partner.formNotes || '-' }}</strong></div>
       </div>
 
@@ -225,11 +230,8 @@
         <label>Partner Server IP <input [(ngModel)]="partnerDraft.partnerServerIp" nz-input/></label>
         <label>UAT Port <input [(ngModel)]="partnerDraft.uatPort" nz-input/></label>
         <label>PRD Port <input [(ngModel)]="partnerDraft.prdPort" nz-input/></label>
-        <label>UAT Base URL <input [(ngModel)]="partnerDraft.apiBaseUrlUat" nz-input/></label>
-        <label>PRD Base URL <input [(ngModel)]="partnerDraft.apiBaseUrlPrd" nz-input/></label>
-        <label>Callback URL <input [(ngModel)]="partnerDraft.callbackUrl" nz-input/></label>
         <label>Auth Method <input [(ngModel)]="partnerDraft.authMethod" nz-input placeholder="API Key, Basic, OAuth, mTLS..."/></label>
-        <label class="wide">Form Reference <input [(ngModel)]="partnerDraft.formReference" nz-input placeholder="File name, ticket, email reference..."/></label>
+        <label class="wide">OwnCloud Folder <input [(ngModel)]="partnerDraft.ownCloudFolderUrl" nz-input placeholder="https://owncloud.../partner-folder"/></label>
         <label class="wide">Form Notes <textarea [(ngModel)]="partnerDraft.formNotes" nz-input rows="4"></textarea></label>
       </div>
 

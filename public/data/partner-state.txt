@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-23.2",
+  "version": "2026-08-23.3",
   "partners": [
     {
       "id": "partner-a",
@@ -14,11 +14,8 @@
       "partnerServerIp": "10.177.0.10",
       "uatPort": "8520",
       "prdPort": "9921",
-      "apiBaseUrlUat": "https://uat.alpha.example/api",
-      "apiBaseUrlPrd": "https://api.alpha.example",
-      "callbackUrl": "https://alpha.example/callbacks/mmola",
       "authMethod": "API Key",
-      "formReference": "VPN_MVT_ALPHA_PUSHUSSD_20260823.xls",
+      "ownCloudFolderUrl": "https://owncloud.example.com/index.php/s/alpha-pay-partner-folder",
       "formNotes": "UAT and PRD requested in the same partner form.",
       "status": "ACTIVE",
       "lastActivity": "2026-08-23"
@@ -36,11 +33,8 @@
       "partnerServerIp": "10.177.0.20",
       "uatPort": "8600",
       "prdPort": "9600",
-      "apiBaseUrlUat": "https://uat.beta.example/gateway",
-      "apiBaseUrlPrd": "https://prd.beta.example/gateway",
-      "callbackUrl": "https://beta.example/mno/callback",
       "authMethod": "Basic Auth",
-      "formReference": "VPN_MVT_BETALOTTO_PUSHUSSD_20260823.xls",
+      "ownCloudFolderUrl": "https://owncloud.example.com/index.php/s/beta-lotto-partner-folder",
       "formNotes": "Waiting statement creation after validated form.",
       "status": "ACTIVE",
       "lastActivity": "2026-08-23"

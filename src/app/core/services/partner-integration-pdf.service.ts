@@ -166,11 +166,8 @@ export class PartnerIntegrationPdfService {
       ['Server IP', partner.partnerServerIp || '-'],
       ['UAT Port', partner.uatPort || '-'],
       ['PRD Port', partner.prdPort || '-'],
-      ['UAT Base URL', partner.apiBaseUrlUat || '-'],
-      ['PRD Base URL', partner.apiBaseUrlPrd || '-'],
-      ['Callback URL', partner.callbackUrl || '-'],
       ['Auth Method', partner.authMethod || '-'],
-      ['Form Reference', partner.formReference || '-'],
+      ['OwnCloud Folder', partner.ownCloudFolderUrl || '-'],
       ['Form Notes', partner.formNotes || '-'],
       ['Last Activity', partner.lastActivity || '-'],
       ['Partner ID', partner.id || '-']

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 import {Partner, PartnerRequest, TimelineEvent} from '@shared/models/partner-integration';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-request-detail',
@@ -16,6 +17,7 @@ export class RequestDetailComponent implements OnInit {
 
   constructor(
     public partnerIntegration: PartnerIntegrationService,
+    private modal: NzModalService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -32,7 +34,19 @@ export class RequestDetailComponent implements OnInit {
     this.events = this.request ? this.partnerIntegration.getEvents(this.request.id) : [];
   }
 
-  action(label: string, patch: Partial<PartnerRequest>): void {
+  confirmAction(label: string, patch: Partial<PartnerRequest>): void {
+    if (!this.request) return;
+
+    this.modal.confirm({
+      nzTitle: 'Confirm workflow update',
+      nzContent: `This will register "${label}" for ${this.partner?.name || 'this partner'} and may move the request from ${this.partnerIntegration.statusLabel(this.request.currentStatus)} to the next status.`,
+      nzOkText: 'Confirm update',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => this.applyAction(label, patch)
+    });
+  }
+
+  private applyAction(label: string, patch: Partial<PartnerRequest>): void {
     if (!this.request) return;
     this.partnerIntegration.updateRequest(this.request.id, patch, label);
     this.load();

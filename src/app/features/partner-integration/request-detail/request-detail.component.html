@@ -29,22 +29,22 @@
       </div>
 
       <div class="actions-grid">
-        <button (click)="action('Send Form & API Spec', {formSent: true})" nz-button>Send Form & API Spec</button>
-        <button (click)="action('Form Received', {formReceived: true})" nz-button>Form Received</button>
-        <button (click)="action('Form Validated', {formValidated: true})" nz-button>Form Validated</button>
-        <button (click)="action('Statement Created', {statementCreated: true})" nz-button>Statement Created</button>
-        <button (click)="action('Send to vOffice', {statementSent: true})" nz-button>Send to vOffice</button>
-        <button (click)="action('Signatures Complete', {signaturesComplete: true})" nz-button>Signatures Complete</button>
-        <button (click)="action('Submit IP Core', {ipCoreStatus: 'SUBMITTED'})" nz-button>Submit IP Core</button>
-        <button (click)="action('Submit IT', {itStatus: 'SUBMITTED'})" nz-button>Submit IT</button>
-        <button (click)="action('Mark IP Core Done', {ipCoreStatus: 'DONE'})" nz-button>Mark IP Core Done</button>
-        <button (click)="action('Mark IT Done', {itStatus: 'DONE'})" nz-button>Mark IT Done</button>
-        <button (click)="action('VPN Up', {vpnStatus: 'UP'})" nz-button>VPN Up</button>
-        <button (click)="action('Connectivity PASS', {connectivityUat: 'PASS', connectivityPrd: 'PASS'})" nz-button nzType="primary">Connectivity PASS</button>
-        <button (click)="action('Connectivity FAIL', {connectivityUat: 'FAIL', blocker: 'Connectivity failed'})" nz-button nzDanger>Connectivity FAIL</button>
-        <button (click)="action('Provide Test Credentials', {credentialsProvided: true, uatStatus: 'IN_PROGRESS'})" nz-button>Provide Test Credentials</button>
-        <button (click)="action('UAT PASS', {uatStatus: 'PASS'})" nz-button>UAT PASS</button>
-        <button (click)="action('Handover Complete', {handoverComplete: true})" nz-button nzType="primary">Handover Complete</button>
+        <button (click)="confirmAction('Send Form & API Spec', {formSent: true})" nz-button>Send Form & API Spec</button>
+        <button (click)="confirmAction('Form Received', {formReceived: true})" nz-button>Form Received</button>
+        <button (click)="confirmAction('Form Validated', {formValidated: true})" nz-button>Form Validated</button>
+        <button (click)="confirmAction('Statement Created', {statementCreated: true})" nz-button>Statement Created</button>
+        <button (click)="confirmAction('Send to vOffice', {statementSent: true})" nz-button>Send to vOffice</button>
+        <button (click)="confirmAction('Signatures Complete', {signaturesComplete: true})" nz-button>Signatures Complete</button>
+        <button (click)="confirmAction('Submit IP Core', {ipCoreStatus: 'SUBMITTED'})" nz-button>Submit IP Core</button>
+        <button (click)="confirmAction('Submit IT', {itStatus: 'SUBMITTED'})" nz-button>Submit IT</button>
+        <button (click)="confirmAction('Mark IP Core Done', {ipCoreStatus: 'DONE'})" nz-button>Mark IP Core Done</button>
+        <button (click)="confirmAction('Mark IT Done', {itStatus: 'DONE'})" nz-button>Mark IT Done</button>
+        <button (click)="confirmAction('VPN Up', {vpnStatus: 'UP'})" nz-button>VPN Up</button>
+        <button (click)="confirmAction('Connectivity PASS', {connectivityUat: 'PASS', connectivityPrd: 'PASS'})" nz-button nzType="primary">Connectivity PASS</button>
+        <button (click)="confirmAction('Connectivity FAIL', {connectivityUat: 'FAIL', blocker: 'Connectivity failed'})" nz-button nzDanger>Connectivity FAIL</button>
+        <button (click)="confirmAction('Provide Test Credentials', {credentialsProvided: true, uatStatus: 'IN_PROGRESS'})" nz-button>Provide Test Credentials</button>
+        <button (click)="confirmAction('UAT PASS', {uatStatus: 'PASS'})" nz-button>UAT PASS</button>
+        <button (click)="confirmAction('Handover Complete', {handoverComplete: true})" nz-button nzType="primary">Handover Complete</button>
       </div>
     </section>
 

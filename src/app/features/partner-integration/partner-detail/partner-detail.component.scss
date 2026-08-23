@@ -10,7 +10,7 @@
   border-radius: 8px;
   background: #ffffff;
   padding: 16px;
-  box-shadow: 0 16px 38px rgba(15, 31, 42, 0.05);
+  box-shadow: none;
 }
 
 .detail-header,
@@ -77,8 +77,8 @@ p,
 }
 
 .active-request-panel {
-  border-color: #bfe8dd;
-  background: linear-gradient(180deg, #ffffff, #f8fffc);
+  border-color: #d6ebe7;
+  background: #ffffff;
 }
 
 .next-step {
@@ -119,6 +119,16 @@ p,
 
 .facts .wide {
   grid-column: 1 / -1;
+}
+
+.facts a {
+  color: #0e7c72;
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.facts a:hover {
+  text-decoration: underline;
 }
 
 .edit-form {

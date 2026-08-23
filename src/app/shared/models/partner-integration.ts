@@ -42,11 +42,8 @@ export interface Partner {
   partnerServerIp: string;
   uatPort: string;
   prdPort: string;
-  apiBaseUrlUat?: string;
-  apiBaseUrlPrd?: string;
-  callbackUrl?: string;
   authMethod?: string;
-  formReference?: string;
+  ownCloudFolderUrl?: string;
   formNotes?: string;
   status: PartnerStatus;
   lastActivity: string;
