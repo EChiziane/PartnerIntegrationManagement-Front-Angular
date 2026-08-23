@@ -1,7 +1,9 @@
 {
-  "version": "2026-08-23.prod.1",
+  "version": "2026-08-23.prod.2",
   "partners": [
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Carlos Alpha",
       "id": "partner-2",
       "name": "ALPHA PAY",
       "businessOwner": "Business Dept",
@@ -35,6 +37,8 @@
       "lastActivity": "2026-08-15"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Ana Beta",
       "id": "partner-3",
       "name": "BETA LOTTO",
       "businessOwner": "Business Dept",
@@ -68,6 +72,8 @@
       "lastActivity": "2026-08-14"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Ousmane",
       "id": "partner-4",
       "name": "Thunes",
       "businessOwner": "Business Dept",
@@ -90,6 +96,8 @@
       "lastActivity": "2026-07-15"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-5",
       "name": "Wiremit",
       "businessOwner": "",
@@ -110,6 +118,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Shan - 869131313",
       "id": "partner-6",
       "name": "OlaLotto",
       "businessOwner": "Business Dept",
@@ -153,6 +163,8 @@
       "lastActivity": "2026-07-15"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Micheal Akinwonmi- 2347038102474",
       "id": "partner-7",
       "name": "AlphaConnect",
       "businessOwner": "Business Dept",
@@ -186,6 +198,8 @@
       "lastActivity": "2026-07-15"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Xefino José - 876337381",
       "id": "partner-8",
       "name": "Onde Tem",
       "businessOwner": "Business Dept",
@@ -219,6 +233,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Jumaa Kiswagara '+25255754378867",
       "id": "partner-9",
       "name": "Bionic",
       "businessOwner": "Business Dept",
@@ -292,6 +308,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "tech@e-davinci.com\n+258 83 673 5250",
       "id": "partner-10",
       "name": "E-Davinci",
       "businessOwner": "Business Dept",
@@ -325,6 +343,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Alirio Figueiredo\n849826065",
       "id": "partner-11",
       "name": "Indicos seguros",
       "businessOwner": "Business Dept",
@@ -358,6 +378,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Ayod Arune\n'877604760",
       "id": "partner-12",
       "name": "Sociedade moçambicana de serviços e transformação digital",
       "businessOwner": "Business Dept",
@@ -391,6 +413,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Angelino Nhampossa\n'+258846532574",
       "id": "partner-13",
       "name": "Ac Tech",
       "businessOwner": "Business Dept",
@@ -424,6 +448,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Gerardio Chiluvane\n878893290",
       "id": "partner-14",
       "name": "Confianca Seguros",
       "businessOwner": "Business Dept",
@@ -487,6 +513,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "+258 82 389 6874\nElton B. Chidjoto",
       "id": "partner-15",
       "name": "AraSul",
       "businessOwner": "Business Dept",
@@ -520,6 +548,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "84 476 4990\nJorge Loureiro",
       "id": "partner-16",
       "name": "Recarga Aki",
       "businessOwner": "Business Dept",
@@ -564,6 +594,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Camiro Fonseca\n'+25870969574",
       "id": "partner-17",
       "name": "Alpha Media",
       "businessOwner": "Business Dept",
@@ -597,6 +629,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Prosperino Acacio António\n+258 870345291",
       "id": "partner-18",
       "name": "Grupo Vim",
       "businessOwner": "Business Dept",
@@ -630,6 +664,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Octávio Magaia\n+258 840 358 010",
       "id": "partner-19",
       "name": "Artec",
       "businessOwner": "Business Dept",
@@ -663,6 +699,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Marin Babara\n'+37369233061",
       "id": "partner-20",
       "name": "Sporty",
       "businessOwner": "Business Dept",
@@ -706,6 +744,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "+258 84 637 9977\nPiedoso Dos Santos",
       "id": "partner-21",
       "name": "Am Creative",
       "businessOwner": "Business Dept",
@@ -726,6 +766,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Mussagy Cassamo\n258 846441124",
       "id": "partner-22",
       "name": "Gesfrota",
       "businessOwner": "Business Dept",
@@ -759,6 +801,8 @@
       "lastActivity": "2026-07-17"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Jeremias Dinis Fondo\n844386747\njeremiasfondo@gmail.com",
       "id": "partner-23",
       "name": "Amor e Desejo",
       "businessOwner": "Business Dept",
@@ -802,6 +846,8 @@
       "lastActivity": "2026-07-18"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Grace Kyeyune\ngrace.kyeyune@888africa.com\n'+256776847346",
       "id": "partner-24",
       "name": "888Bet",
       "businessOwner": "Business Dept",
@@ -835,6 +881,8 @@
       "lastActivity": "2026-07-19"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "William Cossa\nwilliam@unitec.co.mz\n'+258871979615",
       "id": "partner-25",
       "name": "Unitec",
       "businessOwner": "Business Dept",
@@ -878,6 +926,8 @@
       "lastActivity": "2026-07-20"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Iaroslav Gubaev\niaroslav.gubaev@b2tech.com",
       "id": "partner-26",
       "name": "Fidotech",
       "businessOwner": "Business Dept",
@@ -921,6 +971,8 @@
       "lastActivity": "2026-07-21"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Happy\n86 146 9150",
       "id": "partner-27",
       "name": "Aika",
       "businessOwner": "Business Dept",
@@ -954,6 +1006,8 @@
       "lastActivity": "2026-07-22"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Munir Bragança\n258845911289\nmunir.braganca@bragalink.co.mz",
       "id": "partner-28",
       "name": "BragaLink",
       "businessOwner": "Business Dept",
@@ -987,6 +1041,8 @@
       "lastActivity": "2026-07-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-29",
       "name": "Go-hosting",
       "businessOwner": "Business Dept",
@@ -1007,6 +1063,8 @@
       "lastActivity": "2026-07-24"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Adérito Mufume\naderito.muffins@taaqui.co.mz\n'258 858782674",
       "id": "partner-30",
       "name": "TaAqui",
       "businessOwner": "Business Dept",
@@ -1040,6 +1098,8 @@
       "lastActivity": "2026-07-25"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Octavio Cossa\nmtvamosmz@gmail.com\n+258844747755",
       "id": "partner-31",
       "name": "VM VAMOS",
       "businessOwner": "Business Dept",
@@ -1073,6 +1133,8 @@
       "lastActivity": "2026-07-26"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-32",
       "name": "Jm Serviços",
       "businessOwner": "",
@@ -1093,6 +1155,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-33",
       "name": "Tapago",
       "businessOwner": "",
@@ -1113,6 +1177,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-34",
       "name": "Instituto Medio Politecnico de Moçambique",
       "businessOwner": "",
@@ -1133,6 +1199,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-35",
       "name": "BCX",
       "businessOwner": "",
@@ -1153,6 +1221,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-36",
       "name": "Karona 24h",
       "businessOwner": "",
@@ -1173,6 +1243,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-37",
       "name": "Sahara Games",
       "businessOwner": "",
@@ -1193,6 +1265,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-38",
       "name": "EML SERVICE",
       "businessOwner": "",
@@ -1213,6 +1287,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-39",
       "name": "NetHost",
       "businessOwner": "",
@@ -1233,6 +1309,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Yasser Nazir\n+258 862212157",
       "id": "partner-40",
       "name": "VOLET",
       "businessOwner": "",
@@ -1266,6 +1344,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "SAVE MOZ \n258823085756",
       "id": "partner-41",
       "name": "Save Moz",
       "businessOwner": "",
@@ -1309,6 +1389,8 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-42",
       "name": "Hotspot (betpawa)",
       "businessOwner": "",
@@ -1329,6 +1411,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-43",
       "name": "Kendras",
       "businessOwner": "",
@@ -1349,6 +1433,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-44",
       "name": "DKeventos",
       "businessOwner": "",
@@ -1369,6 +1455,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-45",
       "name": "SESPE Project  CEDSIF",
       "businessOwner": "",
@@ -1389,6 +1477,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-46",
       "name": "Thembani",
       "businessOwner": "",
@@ -1409,6 +1499,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-47",
       "name": "Bet77",
       "businessOwner": "",
@@ -1429,6 +1521,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-48",
       "name": "SupremoGo",
       "businessOwner": "",
@@ -1449,6 +1543,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Heitor Ferreira\n'+258842171200",
       "id": "partner-49",
       "name": "UBAZZAR",
       "businessOwner": "",
@@ -1482,6 +1578,8 @@
       "lastActivity": "2026-08-10"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-50",
       "name": "Teledata",
       "businessOwner": "",
@@ -1502,6 +1600,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-51",
       "name": "Cafre Market",
       "businessOwner": "",
@@ -1522,6 +1622,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-52",
       "name": "Hypertech",
       "businessOwner": "",
@@ -1542,6 +1644,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Zelito Atumane Saide\n'842520280\nzelitosaide83@gmail.com",
       "id": "partner-53",
       "name": "ZAAS Tec",
       "businessOwner": "",
@@ -1575,6 +1679,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "OPTIMIZE ADS, E.I.\n258867912790\nnuferdebetino2016@gmail.com",
       "id": "partner-54",
       "name": "OPTIMIZEAds",
       "businessOwner": "",
@@ -1608,6 +1714,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-55",
       "name": "Onca-Fastako",
       "businessOwner": "",
@@ -1628,6 +1736,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "",
       "id": "partner-56",
       "name": "Digitalehealth",
       "businessOwner": "",
@@ -1648,6 +1758,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Gil Macarringue\n+258 82 904 9295",
       "id": "partner-57",
       "name": "Ted",
       "businessOwner": "",
@@ -1681,6 +1793,8 @@
       "lastActivity": "2026-08-10"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Florinda Tembe\n258846248072",
       "id": "partner-",
       "name": "Check Mate",
       "businessOwner": "",
@@ -1742,7 +1856,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": "Simulation: Statement approved; waiting for IP Core."
+      "notes": "Simulation: Statement approved; waiting for IP Core.",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "ALPHA PAY",
+        "eMolaAccountOtp": "",
+        "representativeName": "Carlos Alpha",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Carlos Alpha",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Business Code",
+        "environment": "UAT+PRD",
+        "publicIp": "139.84.234.187",
+        "publicPeerIps": [
+          "139.84.234.187"
+        ],
+        "partnerServerIp": "10.177.0.10",
+        "uatPort": "8520",
+        "prdPort": "9921",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.177.0.10",
+            "port": "8520"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.177.0.10",
+            "port": "9921"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": "Simulation: Statement approved; waiting for IP Core."
+      }
     },
     {
       "id": "request-3",
@@ -1771,7 +1919,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": "Simulation: IP Core and IT/FW complete; should enter Ready for Test."
+      "notes": "Simulation: IP Core and IT/FW complete; should enter Ready for Test.",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "BETA LOTTO",
+        "eMolaAccountOtp": "",
+        "representativeName": "Ana Beta",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Ana Beta",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "72.61.147.82",
+        "publicPeerIps": [
+          "72.61.147.82"
+        ],
+        "partnerServerIp": "10.177.0.20",
+        "uatPort": "8600",
+        "prdPort": "9600",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.177.0.20",
+            "port": "8600"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.177.0.20",
+            "port": "9600"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": "Simulation: IP Core and IT/FW complete; should enter Ready for Test."
+      }
     },
     {
       "id": "request-4",
@@ -1800,7 +1982,30 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Thunes",
+        "eMolaAccountOtp": "",
+        "representativeName": "Ousmane",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Ousmane",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "52.209.193.244",
+        "publicPeerIps": [
+          "52.209.193.244"
+        ],
+        "partnerServerIp": "52.209.248.254",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-5",
@@ -1829,7 +2034,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Wiremit",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-6",
@@ -1858,7 +2084,51 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "OlaLotto",
+        "eMolaAccountOtp": "",
+        "representativeName": "Shan - 869131313",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Shan - 869131313",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "13.245.98.196",
+        "publicPeerIps": [
+          "13.245.98.196"
+        ],
+        "partnerServerIp": "172.31.4.206\n172.31.15.40",
+        "uatPort": "10021",
+        "prdPort": "10020",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "172.31.4.206",
+            "port": "10021"
+          },
+          {
+            "environment": "PRD",
+            "ip": "172.31.4.206",
+            "port": "10020"
+          },
+          {
+            "environment": "UAT",
+            "ip": "172.31.15.40",
+            "port": "10021"
+          },
+          {
+            "environment": "PRD",
+            "ip": "172.31.15.40",
+            "port": "10020"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111433",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-7",
@@ -1887,7 +2157,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "AlphaConnect",
+        "eMolaAccountOtp": "",
+        "representativeName": "Micheal Akinwonmi- 2347038102474",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Micheal Akinwonmi- 2347038102474",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "49.12.211.127",
+        "publicPeerIps": [
+          "49.12.211.127"
+        ],
+        "partnerServerIp": "10.0.0.13",
+        "uatPort": "8080",
+        "prdPort": "8081",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.0.0.13",
+            "port": "8080"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.0.0.13",
+            "port": "8081"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111468",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-8",
@@ -1916,7 +2220,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Onde Tem",
+        "eMolaAccountOtp": "",
+        "representativeName": "Xefino José - 876337381",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Xefino José - 876337381",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "34.1.210.78",
+        "publicPeerIps": [
+          "34.1.210.78"
+        ],
+        "partnerServerIp": "10.218.0.2",
+        "uatPort": "8055",
+        "prdPort": "9055",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.218.0.2",
+            "port": "8055"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.218.0.2",
+            "port": "9055"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111477",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-9",
@@ -1945,7 +2283,81 @@
       "uatStatus": "PASS",
       "handoverComplete": true,
       "closeDate": "2026-08-23",
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Bionic",
+        "eMolaAccountOtp": "",
+        "representativeName": "Jumaa Kiswagara '+25255754378867",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Jumaa Kiswagara '+25255754378867",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "98.172.119.82",
+        "publicPeerIps": [
+          "98.172.119.82"
+        ],
+        "partnerServerIp": "10.212.134.200\n10.212.134.201\n10.212.134.203\n10.212.134.204\n10.212.134.205",
+        "uatPort": "8525",
+        "prdPort": "9820",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.212.134.200",
+            "port": "8525"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.212.134.200",
+            "port": "9820"
+          },
+          {
+            "environment": "UAT",
+            "ip": "10.212.134.201",
+            "port": "8525"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.212.134.201",
+            "port": "9820"
+          },
+          {
+            "environment": "UAT",
+            "ip": "10.212.134.203",
+            "port": "8525"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.212.134.203",
+            "port": "9820"
+          },
+          {
+            "environment": "UAT",
+            "ip": "10.212.134.204",
+            "port": "8525"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.212.134.204",
+            "port": "9820"
+          },
+          {
+            "environment": "UAT",
+            "ip": "10.212.134.205",
+            "port": "8525"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.212.134.205",
+            "port": "9820"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111479",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-10",
@@ -1974,7 +2386,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "E-Davinci",
+        "eMolaAccountOtp": "",
+        "representativeName": "tech@e-davinci.com\n+258 83 673 5250",
+        "businessOwner": "Business Dept",
+        "technicalContact": "tech@e-davinci.com\n+258 83 673 5250",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "197.248.224.119",
+        "publicPeerIps": [
+          "197.248.224.119"
+        ],
+        "partnerServerIp": "197.248.224.119",
+        "uatPort": "8443",
+        "prdPort": "9443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "197.248.224.119",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "197.248.224.119",
+            "port": "9443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111485",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-11",
@@ -2003,7 +2449,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Indicos seguros",
+        "eMolaAccountOtp": "",
+        "representativeName": "Alirio Figueiredo\n849826065",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Alirio Figueiredo\n849826065",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "102.207.223.37",
+        "publicPeerIps": [
+          "102.207.223.37"
+        ],
+        "partnerServerIp": "10.0.1.12",
+        "uatPort": "8686",
+        "prdPort": "8685",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.0.1.12",
+            "port": "8686"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.0.1.12",
+            "port": "8685"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-12",
@@ -2032,7 +2512,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Sociedade moçambicana de serviços e transformação digital",
+        "eMolaAccountOtp": "",
+        "representativeName": "Ayod Arune\n'877604760",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Ayod Arune\n'877604760",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "64.225.105.5",
+        "publicPeerIps": [
+          "64.225.105.5"
+        ],
+        "partnerServerIp": "64.225.105.5",
+        "uatPort": "8054",
+        "prdPort": "7645",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "64.225.105.5",
+            "port": "8054"
+          },
+          {
+            "environment": "PRD",
+            "ip": "64.225.105.5",
+            "port": "7645"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-13",
@@ -2061,7 +2575,41 @@
       "uatStatus": "IN_PROGRESS",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Ac Tech",
+        "eMolaAccountOtp": "",
+        "representativeName": "Angelino Nhampossa\n'+258846532574",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Angelino Nhampossa\n'+258846532574",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "72.61.147.82",
+        "publicPeerIps": [
+          "72.61.147.82"
+        ],
+        "partnerServerIp": "72.61.147.82",
+        "uatPort": "8443",
+        "prdPort": "9443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "72.61.147.82",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "72.61.147.82",
+            "port": "9443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111498",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-14",
@@ -2090,7 +2638,71 @@
       "uatStatus": "PASS",
       "handoverComplete": true,
       "closeDate": "2026-08-23",
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Confianca Seguros",
+        "eMolaAccountOtp": "",
+        "representativeName": "Gerardio Chiluvane\n878893290",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Gerardio Chiluvane\n878893290",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "165.90.79.78",
+        "publicPeerIps": [
+          "165.90.79.78"
+        ],
+        "partnerServerIp": "172.16.250.231 172.16.250.49\n172.16.250.226\n172.16.250.223",
+        "uatPort": "8560",
+        "prdPort": "8555",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "172.16.250.231",
+            "port": "8560"
+          },
+          {
+            "environment": "PRD",
+            "ip": "172.16.250.231",
+            "port": "8555"
+          },
+          {
+            "environment": "UAT",
+            "ip": "172.16.250.49",
+            "port": "8560"
+          },
+          {
+            "environment": "PRD",
+            "ip": "172.16.250.49",
+            "port": "8555"
+          },
+          {
+            "environment": "UAT",
+            "ip": "172.16.250.226",
+            "port": "8560"
+          },
+          {
+            "environment": "PRD",
+            "ip": "172.16.250.226",
+            "port": "8555"
+          },
+          {
+            "environment": "UAT",
+            "ip": "172.16.250.223",
+            "port": "8560"
+          },
+          {
+            "environment": "PRD",
+            "ip": "172.16.250.223",
+            "port": "8555"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111504",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-15",
@@ -2119,7 +2731,41 @@
       "uatStatus": "PASS",
       "handoverComplete": true,
       "closeDate": "2026-08-23",
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "AraSul",
+        "eMolaAccountOtp": "",
+        "representativeName": "+258 82 389 6874\nElton B. Chidjoto",
+        "businessOwner": "Business Dept",
+        "technicalContact": "+258 82 389 6874\nElton B. Chidjoto",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "197.249.14.149",
+        "publicPeerIps": [
+          "197.249.14.149"
+        ],
+        "partnerServerIp": "10.1.1.22",
+        "uatPort": "8000",
+        "prdPort": "80\n443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.1.1.22",
+            "port": "8000"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.1.1.22",
+            "port": "80\n443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111510",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-16",
@@ -2148,7 +2794,52 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Recarga Aki",
+        "eMolaAccountOtp": "",
+        "representativeName": "84 476 4990\nJorge Loureiro",
+        "businessOwner": "Business Dept",
+        "technicalContact": "84 476 4990\nJorge Loureiro",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "192.168.15.3",
+        "publicPeerIps": [
+          "192.168.15.3",
+          "192.168.15.5"
+        ],
+        "partnerServerIp": "192.168.15.3\n192.168.15.5",
+        "uatPort": "8443",
+        "prdPort": "8443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "192.168.15.3",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "192.168.15.3",
+            "port": "8443"
+          },
+          {
+            "environment": "UAT",
+            "ip": "192.168.15.5",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "192.168.15.5",
+            "port": "8443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111516",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-17",
@@ -2177,7 +2868,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Alpha Media",
+        "eMolaAccountOtp": "",
+        "representativeName": "Camiro Fonseca\n'+25870969574",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Camiro Fonseca\n'+25870969574",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "139.84.238.180",
+        "publicPeerIps": [
+          "139.84.238.180"
+        ],
+        "partnerServerIp": "139.84.238.180",
+        "uatPort": "443",
+        "prdPort": "22",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "139.84.238.180",
+            "port": "443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "139.84.238.180",
+            "port": "22"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111522",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-18",
@@ -2206,7 +2931,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Grupo Vim",
+        "eMolaAccountOtp": "",
+        "representativeName": "Prosperino Acacio António\n+258 870345291",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Prosperino Acacio António\n+258 870345291",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "181.215.69.222",
+        "publicPeerIps": [
+          "181.215.69.222"
+        ],
+        "partnerServerIp": "181.215.69.222",
+        "uatPort": "8141",
+        "prdPort": "8130",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "181.215.69.222",
+            "port": "8141"
+          },
+          {
+            "environment": "PRD",
+            "ip": "181.215.69.222",
+            "port": "8130"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111527",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-19",
@@ -2235,7 +2994,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Artec",
+        "eMolaAccountOtp": "",
+        "representativeName": "Octávio Magaia\n+258 840 358 010",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Octávio Magaia\n+258 840 358 010",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "139.84.234.187",
+        "publicPeerIps": [
+          "139.84.234.187"
+        ],
+        "partnerServerIp": "139.84.234.187",
+        "uatPort": "8443",
+        "prdPort": "443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "139.84.234.187",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "139.84.234.187",
+            "port": "443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111536",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-20",
@@ -2264,7 +3057,51 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Sporty",
+        "eMolaAccountOtp": "",
+        "representativeName": "Marin Babara\n'+37369233061",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Marin Babara\n'+37369233061",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "3.64.156.169",
+        "publicPeerIps": [
+          "3.64.156.169"
+        ],
+        "partnerServerIp": "18.158.62.0\n18.158.62.1",
+        "uatPort": "8000",
+        "prdPort": "9000",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "18.158.62.0",
+            "port": "8000"
+          },
+          {
+            "environment": "PRD",
+            "ip": "18.158.62.0",
+            "port": "9000"
+          },
+          {
+            "environment": "UAT",
+            "ip": "18.158.62.1",
+            "port": "8000"
+          },
+          {
+            "environment": "PRD",
+            "ip": "18.158.62.1",
+            "port": "9000"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111543",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-21",
@@ -2293,7 +3130,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Am Creative",
+        "eMolaAccountOtp": "",
+        "representativeName": "+258 84 637 9977\nPiedoso Dos Santos",
+        "businessOwner": "Business Dept",
+        "technicalContact": "+258 84 637 9977\nPiedoso Dos Santos",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-22",
@@ -2322,7 +3180,41 @@
       "uatStatus": "PASS",
       "handoverComplete": true,
       "closeDate": "2026-08-23",
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Gesfrota",
+        "eMolaAccountOtp": "",
+        "representativeName": "Mussagy Cassamo\n258 846441124",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Mussagy Cassamo\n258 846441124",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "178.105.109.89",
+        "publicPeerIps": [
+          "178.105.109.89"
+        ],
+        "partnerServerIp": "178.105.109.89",
+        "uatPort": "18520",
+        "prdPort": "18521",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "178.105.109.89",
+            "port": "18520"
+          },
+          {
+            "environment": "PRD",
+            "ip": "178.105.109.89",
+            "port": "18521"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111549",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-23",
@@ -2351,7 +3243,51 @@
       "uatStatus": "PASS",
       "handoverComplete": true,
       "closeDate": "2026-08-23",
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Amor e Desejo",
+        "eMolaAccountOtp": "",
+        "representativeName": "Jeremias Dinis Fondo\n844386747\njeremiasfondo@gmail.com",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Jeremias Dinis Fondo\n844386747\njeremiasfondo@gmail.com",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "72.61.81.61",
+        "publicPeerIps": [
+          "72.61.81.61"
+        ],
+        "partnerServerIp": "10.2.0.1\n10.2.0.2",
+        "uatPort": "8520",
+        "prdPort": "98\n219\n921",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.2.0.1",
+            "port": "8520"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.2.0.1",
+            "port": "98\n219\n921"
+          },
+          {
+            "environment": "UAT",
+            "ip": "10.2.0.2",
+            "port": "8520"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.2.0.2",
+            "port": "98\n219\n921"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111561",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-24",
@@ -2380,7 +3316,41 @@
       "uatStatus": "IN_PROGRESS",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "888Bet",
+        "eMolaAccountOtp": "",
+        "representativeName": "Grace Kyeyune\ngrace.kyeyune@888africa.com\n'+256776847346",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Grace Kyeyune\ngrace.kyeyune@888africa.com\n'+256776847346",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "91.99.7.62",
+        "publicPeerIps": [
+          "91.99.7.62"
+        ],
+        "partnerServerIp": "10.45.145.5",
+        "uatPort": "3000",
+        "prdPort": "9000",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.45.145.5",
+            "port": "3000"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.45.145.5",
+            "port": "9000"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111645",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-25",
@@ -2409,7 +3379,51 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Unitec",
+        "eMolaAccountOtp": "",
+        "representativeName": "William Cossa\nwilliam@unitec.co.mz\n'+258871979615",
+        "businessOwner": "Business Dept",
+        "technicalContact": "William Cossa\nwilliam@unitec.co.mz\n'+258871979615",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "31.97.196.54",
+        "publicPeerIps": [
+          "31.97.196.54"
+        ],
+        "partnerServerIp": "31.97.196.54\n192.168.1.101",
+        "uatPort": "4201",
+        "prdPort": "3409",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "31.97.196.54",
+            "port": "4201"
+          },
+          {
+            "environment": "PRD",
+            "ip": "31.97.196.54",
+            "port": "3409"
+          },
+          {
+            "environment": "UAT",
+            "ip": "192.168.1.101",
+            "port": "4201"
+          },
+          {
+            "environment": "PRD",
+            "ip": "192.168.1.101",
+            "port": "3409"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111659",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-26",
@@ -2438,7 +3452,51 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Fidotech",
+        "eMolaAccountOtp": "",
+        "representativeName": "Iaroslav Gubaev\niaroslav.gubaev@b2tech.com",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Iaroslav Gubaev\niaroslav.gubaev@b2tech.com",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "3.123.174.100",
+        "publicPeerIps": [
+          "3.123.174.100"
+        ],
+        "partnerServerIp": "172.20.0.10\n172.20.0.11",
+        "uatPort": "443",
+        "prdPort": "443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "172.20.0.10",
+            "port": "443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "172.20.0.10",
+            "port": "443"
+          },
+          {
+            "environment": "UAT",
+            "ip": "172.20.0.11",
+            "port": "443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "172.20.0.11",
+            "port": "443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111666",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-27",
@@ -2467,7 +3525,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Aika",
+        "eMolaAccountOtp": "",
+        "representativeName": "Happy\n86 146 9150",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Happy\n86 146 9150",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "178.105.48.245",
+        "publicPeerIps": [
+          "178.105.48.245"
+        ],
+        "partnerServerIp": "10.10.250.5/32",
+        "uatPort": "7546",
+        "prdPort": "7547",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.10.250.5",
+            "port": "7546"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.10.250.5",
+            "port": "7547"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111425",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-28",
@@ -2496,7 +3588,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "BragaLink",
+        "eMolaAccountOtp": "",
+        "representativeName": "Munir Bragança\n258845911289\nmunir.braganca@bragalink.co.mz",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Munir Bragança\n258845911289\nmunir.braganca@bragalink.co.mz",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "159.223.250.147",
+        "publicPeerIps": [
+          "159.223.250.147"
+        ],
+        "partnerServerIp": "10.50.0.1",
+        "uatPort": "8081",
+        "prdPort": "8082",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.50.0.1",
+            "port": "8081"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.50.0.1",
+            "port": "8082"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111672",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-29",
@@ -2525,7 +3651,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Go-hosting",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "Business Dept",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-30",
@@ -2554,7 +3701,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "TaAqui",
+        "eMolaAccountOtp": "",
+        "representativeName": "Adérito Mufume\naderito.muffins@taaqui.co.mz\n'258 858782674",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Adérito Mufume\naderito.muffins@taaqui.co.mz\n'258 858782674",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "188.166.197.24",
+        "publicPeerIps": [
+          "188.166.197.24"
+        ],
+        "partnerServerIp": "10.104.0.2",
+        "uatPort": "8443",
+        "prdPort": "443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.104.0.2",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.104.0.2",
+            "port": "443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111679",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-31",
@@ -2583,7 +3764,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "VM VAMOS",
+        "eMolaAccountOtp": "",
+        "representativeName": "Octavio Cossa\nmtvamosmz@gmail.com\n+258844747755",
+        "businessOwner": "Business Dept",
+        "technicalContact": "Octavio Cossa\nmtvamosmz@gmail.com\n+258844747755",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "102.208.228.100",
+        "publicPeerIps": [
+          "102.208.228.100"
+        ],
+        "partnerServerIp": "102.208.228.100",
+        "uatPort": "8443",
+        "prdPort": "443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "102.208.228.100",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "102.208.228.100",
+            "port": "443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111684",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-32",
@@ -2612,7 +3827,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Jm Serviços",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-33",
@@ -2641,7 +3877,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Tapago",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-34",
@@ -2670,7 +3927,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Instituto Medio Politecnico de Moçambique",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-35",
@@ -2699,7 +3977,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "BCX",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-36",
@@ -2728,7 +4027,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Karona 24h",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-37",
@@ -2757,7 +4077,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Sahara Games",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-38",
@@ -2786,7 +4127,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "EML SERVICE",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-39",
@@ -2815,7 +4177,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "NetHost",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-40",
@@ -2844,7 +4227,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "VOLET",
+        "eMolaAccountOtp": "",
+        "representativeName": "Yasser Nazir\n+258 862212157",
+        "businessOwner": "",
+        "technicalContact": "Yasser Nazir\n+258 862212157",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "196.3.101.136",
+        "publicPeerIps": [
+          "196.3.101.136"
+        ],
+        "partnerServerIp": "192.168.200.4",
+        "uatPort": "80",
+        "prdPort": "443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "192.168.200.4",
+            "port": "80"
+          },
+          {
+            "environment": "PRD",
+            "ip": "192.168.200.4",
+            "port": "443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111613",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-41",
@@ -2873,7 +4290,51 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Save Moz",
+        "eMolaAccountOtp": "",
+        "representativeName": "SAVE MOZ \n258823085756",
+        "businessOwner": "",
+        "technicalContact": "SAVE MOZ \n258823085756",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "176.58.99.138",
+        "publicPeerIps": [
+          "176.58.99.138"
+        ],
+        "partnerServerIp": "10.16.20.7\n10.16.20.8",
+        "uatPort": "8443",
+        "prdPort": "8443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.16.20.7",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.16.20.7",
+            "port": "8443"
+          },
+          {
+            "environment": "UAT",
+            "ip": "10.16.20.8",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.16.20.8",
+            "port": "8443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111600",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-42",
@@ -2902,7 +4363,28 @@
       "uatStatus": "PASS",
       "handoverComplete": true,
       "closeDate": "2026-08-23",
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Hotspot (betpawa)",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-43",
@@ -2931,7 +4413,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Kendras",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-44",
@@ -2960,7 +4463,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "DKeventos",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-45",
@@ -2989,7 +4513,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "SESPE Project  CEDSIF",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-46",
@@ -3018,7 +4563,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Thembani",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-47",
@@ -3047,7 +4613,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Bet77",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-48",
@@ -3076,7 +4663,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "SupremoGo",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-49",
@@ -3105,7 +4713,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "UBAZZAR",
+        "eMolaAccountOtp": "",
+        "representativeName": "Heitor Ferreira\n'+258842171200",
+        "businessOwner": "",
+        "technicalContact": "Heitor Ferreira\n'+258842171200",
+        "phone": "",
+        "email": "",
+        "serviceApi": "Push USSD",
+        "environment": "UAT+PRD",
+        "publicIp": "167.71.53.50",
+        "publicPeerIps": [
+          "167.71.53.50"
+        ],
+        "partnerServerIp": "10.114.0.2",
+        "uatPort": "8081",
+        "prdPort": "8082",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.114.0.2",
+            "port": "8081"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.114.0.2",
+            "port": "8082"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111591",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-50",
@@ -3134,7 +4776,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Teledata",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-51",
@@ -3163,7 +4826,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Cafre Market",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-52",
@@ -3192,7 +4876,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Hypertech",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-53",
@@ -3221,7 +4926,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "ZAAS Tec",
+        "eMolaAccountOtp": "",
+        "representativeName": "Zelito Atumane Saide\n'842520280\nzelitosaide83@gmail.com",
+        "businessOwner": "",
+        "technicalContact": "Zelito Atumane Saide\n'842520280\nzelitosaide83@gmail.com",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "15.240.80.231",
+        "publicPeerIps": [
+          "15.240.80.231"
+        ],
+        "partnerServerIp": "172.31.12.132",
+        "uatPort": "8443",
+        "prdPort": "8444",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "172.31.12.132",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "172.31.12.132",
+            "port": "8444"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111703",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-54",
@@ -3250,7 +4989,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "OPTIMIZEAds",
+        "eMolaAccountOtp": "",
+        "representativeName": "OPTIMIZE ADS, E.I.\n258867912790\nnuferdebetino2016@gmail.com",
+        "businessOwner": "",
+        "technicalContact": "OPTIMIZE ADS, E.I.\n258867912790\nnuferdebetino2016@gmail.com",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "77.42.87.78",
+        "publicPeerIps": [
+          "77.42.87.78"
+        ],
+        "partnerServerIp": "10.10.10.10",
+        "uatPort": "8443",
+        "prdPort": "443",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.10.10.10",
+            "port": "8443"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.10.10.10",
+            "port": "443"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111697",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-55",
@@ -3279,7 +5052,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Onca-Fastako",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-56",
@@ -3308,7 +5102,28 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Digitalehealth",
+        "eMolaAccountOtp": "",
+        "representativeName": "",
+        "businessOwner": "",
+        "technicalContact": "",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "",
+        "publicPeerIps": [],
+        "partnerServerIp": "",
+        "uatPort": "",
+        "prdPort": "",
+        "privateEndpoints": [],
+        "authMethod": "",
+        "ownCloudFolderUrl": "",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-57",
@@ -3337,7 +5152,41 @@
       "uatStatus": "IN_PROGRESS",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Ted",
+        "eMolaAccountOtp": "",
+        "representativeName": "Gil Macarringue\n+258 82 904 9295",
+        "businessOwner": "",
+        "technicalContact": "Gil Macarringue\n+258 82 904 9295",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "169.255.134.46",
+        "publicPeerIps": [
+          "169.255.134.46"
+        ],
+        "partnerServerIp": "10.177.0.10",
+        "uatPort": "6620",
+        "prdPort": "6621",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.177.0.10",
+            "port": "6620"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.177.0.10",
+            "port": "6621"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111606",
+        "formNotes": ""
+      }
     },
     {
       "id": "request-",
@@ -3366,7 +5215,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": ""
+      "notes": "",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "Check Mate",
+        "eMolaAccountOtp": "",
+        "representativeName": "Florinda Tembe\n258846248072",
+        "businessOwner": "",
+        "technicalContact": "Florinda Tembe\n258846248072",
+        "phone": "",
+        "email": "",
+        "serviceApi": "",
+        "environment": "UAT+PRD",
+        "publicIp": "197.235.29.26",
+        "publicPeerIps": [
+          "197.235.29.26"
+        ],
+        "partnerServerIp": "197.235.29.26",
+        "uatPort": "8800",
+        "prdPort": "9900",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "197.235.29.26",
+            "port": "8800"
+          },
+          {
+            "environment": "PRD",
+            "ip": "197.235.29.26",
+            "port": "9900"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111710",
+        "formNotes": ""
+      }
     }
   ],
   "events": [

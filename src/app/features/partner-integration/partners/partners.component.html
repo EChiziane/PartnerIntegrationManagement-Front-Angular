@@ -81,8 +81,8 @@
       </div>
 
       <div class="cell-stack">
-        <strong>{{ partner.serviceApi || '-' }}</strong>
-        <span>{{ pdf.partnerCategory(partner) }} · {{ partner.technicalContact || '-' }}</span>
+        <strong>{{ requestFormDataForPartner(partner).serviceApi || '-' }}</strong>
+        <span>{{ pdf.partnerCategory(partner) }} · {{ requestFormDataForPartner(partner).technicalContact || '-' }}</span>
       </div>
 
       <div class="cell-stack compact">
@@ -93,7 +93,7 @@
 
       <div class="cell-stack">
         <strong>{{ requestSummary(partner.id) }}</strong>
-        <span>{{ partner.environment }}</span>
+        <span>{{ requestFormDataForPartner(partner).environment }}</span>
       </div>
 
       <div>

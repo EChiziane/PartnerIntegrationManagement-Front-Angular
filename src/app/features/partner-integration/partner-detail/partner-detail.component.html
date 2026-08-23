@@ -14,7 +14,7 @@
 
       <button (click)="editProfile()" nz-button nzType="default">
         <span nz-icon nzType="edit"></span>
-        Edit Data
+        Edit Institution
       </button>
 
       <button (click)="startUpdateFlow()" nz-button nzType="primary">
@@ -245,36 +245,28 @@
       <header>
         <div>
           <span class="panel-kicker">Identity</span>
-          <h2>Partner profile</h2>
+          <h2>Institution profile</h2>
         </div>
       </header>
 
       <div *ngIf="!isEditingProfile" class="facts">
+        <div><span>Company Name</span><strong>{{ partner.name || '-' }}</strong></div>
+        <div><span>e-Mola Account (OTP)</span><strong>{{ partner.eMolaAccountOtp || '-' }}</strong></div>
+        <div><span>Representative</span><strong>{{ partner.representativeName || partner.technicalContact || '-' }}</strong></div>
         <div><span>Business Owner</span><strong>{{ partner.businessOwner || '-' }}</strong></div>
-        <div><span>Technical Contact</span><strong>{{ partner.technicalContact || '-' }}</strong></div>
         <div><span>Phone</span><strong>{{ partner.phone || '-' }}</strong></div>
         <div><span>Email</span><strong>{{ partner.email || '-' }}</strong></div>
-        <div><span>Service/API</span><strong>{{ partner.serviceApi || '-' }}</strong></div>
-        <div><span>Environment</span><strong>{{ partner.environment || '-' }}</strong></div>
         <div><span>Status</span><strong>{{ partner.status }}</strong></div>
         <div><span>Last Activity</span><strong>{{ partner.lastActivity || '-' }}</strong></div>
       </div>
 
       <div *ngIf="isEditingProfile" class="edit-form">
-        <label>Partner Name <input [(ngModel)]="partnerDraft.name" nz-input/></label>
+        <label>Company Name <input [(ngModel)]="partnerDraft.name" nz-input/></label>
+        <label>e-Mola Account (OTP) <input [(ngModel)]="partnerDraft.eMolaAccountOtp" nz-input/></label>
+        <label>Representative <input [(ngModel)]="partnerDraft.representativeName" nz-input/></label>
         <label>Business Owner <input [(ngModel)]="partnerDraft.businessOwner" nz-input/></label>
-        <label>Technical Contact <input [(ngModel)]="partnerDraft.technicalContact" nz-input/></label>
         <label>Phone <input [(ngModel)]="partnerDraft.phone" nz-input/></label>
         <label>Email <input [(ngModel)]="partnerDraft.email" nz-input/></label>
-        <label>Service/API <input [(ngModel)]="partnerDraft.serviceApi" nz-input/></label>
-        <label>
-          Environment
-          <nz-select [(ngModel)]="partnerDraft.environment">
-            <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
-            <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
-            <nz-option nzValue="UAT+PRD" nzLabel="UAT+PRD"></nz-option>
-          </nz-select>
-        </label>
         <label>
           Status
           <nz-select [(ngModel)]="partnerDraft.status">
@@ -283,17 +275,29 @@
           </nz-select>
         </label>
       </div>
+
+      <div *ngIf="isEditingProfile" class="form-actions">
+        <button (click)="cancelProfileEdit()" nz-button nzType="default">Cancel</button>
+        <button (click)="saveProfile()" nz-button nzType="primary">Save Institution Data</button>
+      </div>
     </section>
 
     <section class="panel">
       <header>
         <div>
-          <span class="panel-kicker">Form and API</span>
-          <h2>Technical data</h2>
+          <span class="panel-kicker">Request form</span>
+          <h2>Technical data snapshot</h2>
+        </div>
+        <div class="import-inline">
+          <input #requestFormInput (change)="importRequestForm($event)" accept=".xls,.xlsx" hidden type="file"/>
+          <button (click)="requestFormInput.click()" [disabled]="!activeRequest" nz-button nzType="default">
+            <span nz-icon nzType="upload"></span>
+            Import Form
+          </button>
         </div>
       </header>
 
-      <div *ngIf="!isEditingProfile" class="facts">
+      <div class="facts">
         <div class="wide"><span>Public IP (Peer)</span><strong>{{ publicPeersLabel(partner) }}</strong></div>
         <div class="wide endpoint-facts">
           <span>Private IP endpoints</span>
@@ -304,33 +308,25 @@
           </strong>
           <ng-template #noPrivateEndpoints><strong>-</strong></ng-template>
         </div>
-        <div><span>Auth Method</span><strong>{{ partner.authMethod || '-' }}</strong></div>
+        <div><span>Service/API</span><strong>{{ activeFormData?.serviceApi || partner.serviceApi || '-' }}</strong></div>
+        <div><span>Environment</span><strong>{{ activeFormData?.environment || partner.environment || '-' }}</strong></div>
+        <div><span>Technical Contact</span><strong>{{ activeFormData?.technicalContact || partner.technicalContact || '-' }}</strong></div>
+        <div><span>Auth Method</span><strong>{{ activeFormData?.authMethod || partner.authMethod || '-' }}</strong></div>
         <div class="wide">
           <span>OwnCloud Folder</span>
           <strong>
-            <a *ngIf="partner.ownCloudFolderUrl; else noFolder" [href]="partner.ownCloudFolderUrl" target="_blank" rel="noopener">
+            <a *ngIf="activeFormData?.ownCloudFolderUrl || partner.ownCloudFolderUrl; else noFolder" [href]="activeFormData?.ownCloudFolderUrl || partner.ownCloudFolderUrl" target="_blank" rel="noopener">
               Open partner folder
             </a>
             <ng-template #noFolder>-</ng-template>
           </strong>
         </div>
-        <div class="wide"><span>Form Notes</span><strong>{{ partner.formNotes || '-' }}</strong></div>
+        <div><span>Imported File</span><strong>{{ activeFormData?.importedFileName || '-' }}</strong></div>
+        <div><span>Imported At</span><strong>{{ activeFormData?.importedAt ? (activeFormData?.importedAt | date: 'yyyy-MM-dd HH:mm') : '-' }}</strong></div>
+        <div class="wide"><span>Form Notes</span><strong>{{ activeFormData?.formNotes || partner.formNotes || '-' }}</strong></div>
       </div>
 
-      <div *ngIf="isEditingProfile" class="edit-form">
-        <label>Public IP <input [(ngModel)]="partnerDraft.publicIp" nz-input/></label>
-        <label>Partner Server IP <input [(ngModel)]="partnerDraft.partnerServerIp" nz-input/></label>
-        <label>UAT Port <input [(ngModel)]="partnerDraft.uatPort" nz-input/></label>
-        <label>PRD Port <input [(ngModel)]="partnerDraft.prdPort" nz-input/></label>
-        <label>Auth Method <input [(ngModel)]="partnerDraft.authMethod" nz-input placeholder="API Key, Basic, OAuth, mTLS..."/></label>
-        <label class="wide">OwnCloud Folder <input [(ngModel)]="partnerDraft.ownCloudFolderUrl" nz-input placeholder="https://owncloud.../partner-folder"/></label>
-        <label class="wide">Form Notes <textarea [(ngModel)]="partnerDraft.formNotes" nz-input rows="4"></textarea></label>
-      </div>
-
-      <div *ngIf="isEditingProfile" class="form-actions">
-        <button (click)="cancelProfileEdit()" nz-button nzType="default">Cancel</button>
-        <button (click)="saveProfile()" nz-button nzType="primary">Save Partner Data</button>
-      </div>
+      <p *ngIf="importNotice" class="import-notice">{{ importNotice }}</p>
     </section>
   </div>
 

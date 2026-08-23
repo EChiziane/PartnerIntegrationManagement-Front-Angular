@@ -5,6 +5,7 @@ import {DocumentFilenameService} from '@core/services/document-filename.service'
 import {
   Partner,
   PartnerRequest,
+  RequestFormData,
   TimelineEvent,
   WorkflowStatus
 } from '@shared/models/partner-integration';
@@ -59,15 +60,16 @@ export class PartnerIntegrationPdfService {
         const partnerRequests = requests.filter(request => request.partnerId === partner.id);
         const urgent = this.mostUrgentStatus(partnerRequests);
         const next = partnerRequests.find(request => request.currentStatus === urgent)?.nextAction || '-';
+        const formData = this.latestFormData(partner, partnerRequests);
 
         return [
           partner.name || '-',
-          this.partnerCategory(partner),
+          this.partnerCategoryFromValue(`${formData.serviceApi || partner.serviceApi || ''} ${partner.name || ''}`),
           partner.businessOwner || '-',
-          partner.technicalContact || '-',
-          partner.environment || '-',
-          this.publicPeers(partner),
-          this.privateEndpoints(partner),
+          formData.technicalContact || partner.technicalContact || '-',
+          formData.environment || partner.environment || '-',
+          this.publicPeers(formData, partner),
+          this.privateEndpoints(formData, partner),
           String(partnerRequests.filter(request => request.currentStatus !== 'CLOSED').length),
           urgent ? this.partnerIntegration.statusLabel(urgent) : 'Clear',
           next
@@ -159,24 +161,28 @@ export class PartnerIntegrationPdfService {
       ['Open Requests', String(requests.filter(item => item.currentStatus !== 'CLOSED').length)],
       ['Category', this.partnerCategory(partner)]
     ]);
+    const profileFormData = this.latestFormData(partner, requests);
 
     autoTable(doc, {
       startY: 44,
       margin: {left: margin, right: margin, bottom: 20},
       head: [['Field', 'Value', 'Field', 'Value']],
       body: this.pairRows([
+      ['Company Name', partner.name || '-'],
+      ['e-Mola Account (OTP)', partner.eMolaAccountOtp || '-'],
+      ['Representative', partner.representativeName || partner.technicalContact || '-'],
       ['Business Owner', partner.businessOwner || '-'],
-      ['Technical Contact', partner.technicalContact || '-'],
       ['Phone', partner.phone || '-'],
       ['Email', partner.email || '-'],
-      ['Service/API', partner.serviceApi || '-'],
-      ['Environment', partner.environment || '-'],
-      ['Public IP (Peer)', this.publicPeers(partner)],
-      ['Private Endpoints', this.privateEndpoints(partner)],
-      ['Auth Method', partner.authMethod || '-'],
+      ['Active Request Service/API', profileFormData.serviceApi || partner.serviceApi || '-'],
+      ['Active Request Environment', profileFormData.environment || partner.environment || '-'],
+      ['Active Request Technical Contact', profileFormData.technicalContact || partner.technicalContact || '-'],
+      ['Public IP (Peer)', this.publicPeers(profileFormData, partner)],
+      ['Private Endpoints', this.privateEndpoints(profileFormData, partner)],
+      ['Auth Method', profileFormData.authMethod || partner.authMethod || '-'],
       ['Test Credentials', this.partnerCredentialsSummary(requests, options.includeCredentials)],
-      ['OwnCloud Folder', partner.ownCloudFolderUrl || '-'],
-      ['Form Notes', partner.formNotes || '-'],
+      ['OwnCloud Folder', profileFormData.ownCloudFolderUrl || partner.ownCloudFolderUrl || '-'],
+      ['Form Notes', profileFormData.formNotes || partner.formNotes || '-'],
       ['Last Activity', partner.lastActivity || '-'],
       ['Partner ID', partner.id || '-']
       ]),
@@ -191,15 +197,16 @@ export class PartnerIntegrationPdfService {
     autoTable(doc, {
       startY: profileFinalY + 8,
       margin: {left: margin, right: margin, bottom: 20},
-      head: [['Request Type', 'Status', 'Owner', 'Next Action', 'Priority', 'Open Date', 'Follow-up', 'Credentials', 'Blocker']],
+      head: [['Request Type', 'Status', 'Service/API', 'Environment', 'Technical Contact', 'Owner', 'Next Action', 'Open Date', 'Credentials', 'Blocker']],
       body: requests.map(request => [
         request.title || this.partnerIntegration.typeLabel(request.type),
         this.partnerIntegration.statusLabel(request.currentStatus),
+        this.partnerIntegration.getRequestFormData(request, partner).serviceApi || '-',
+        this.partnerIntegration.getRequestFormData(request, partner).environment || '-',
+        this.partnerIntegration.getRequestFormData(request, partner).technicalContact || '-',
         request.currentOwner || '-',
         request.nextAction || '-',
-        request.priority || '-',
         request.openDate || '-',
-        request.followUpDate || '-',
         this.credentialsStatus(request),
         request.blocker || '-'
       ]),
@@ -229,7 +236,11 @@ export class PartnerIntegrationPdfService {
   }
 
   partnerCategory(partner: Partner): string {
-    const value = `${partner.serviceApi || ''} ${partner.name || ''}`.toLowerCase();
+    return this.partnerCategoryFromValue(`${partner.serviceApi || ''} ${partner.name || ''}`);
+  }
+
+  private partnerCategoryFromValue(raw: string): string {
+    const value = raw.toLowerCase();
     if (value.includes('business code')) return 'Payment API';
     if (value.includes('payment')) return 'Payment API';
     if (value.includes('ussd')) return 'USSD / Push USSD';
@@ -324,21 +335,55 @@ export class PartnerIntegrationPdfService {
     return output;
   }
 
-  private publicPeers(partner: Partner): string {
-    return partner.publicPeerIps?.length ? partner.publicPeerIps.join(', ') : partner.publicIp || '-';
+  private publicPeers(formData: RequestFormData, partner: Partner): string {
+    return formData?.publicPeerIps?.length ? formData.publicPeerIps.join(', ') : formData?.publicIp || partner.publicIp || '-';
   }
 
-  private privateEndpoints(partner: Partner): string {
-    if (partner.privateEndpoints?.length) {
-      return partner.privateEndpoints
+  private privateEndpoints(formData: RequestFormData, partner: Partner): string {
+    const endpoints = formData?.privateEndpoints?.length ? formData.privateEndpoints : partner.privateEndpoints || [];
+    if (endpoints.length) {
+      return endpoints
         .map(endpoint => `${endpoint.environment}: ${endpoint.ip || '-'}:${endpoint.port || '-'}`)
         .join(' | ');
     }
 
     return [
-      partner.uatPort ? `UAT: ${partner.partnerServerIp || '-'}:${partner.uatPort}` : '',
-      partner.prdPort ? `PRD: ${partner.partnerServerIp || '-'}:${partner.prdPort}` : ''
-    ].filter(Boolean).join(' | ') || partner.partnerServerIp || '-';
+      (formData?.uatPort || partner.uatPort) ? `UAT: ${formData?.partnerServerIp || partner.partnerServerIp || '-'}:${formData?.uatPort || partner.uatPort}` : '',
+      (formData?.prdPort || partner.prdPort) ? `PRD: ${formData?.partnerServerIp || partner.partnerServerIp || '-'}:${formData?.prdPort || partner.prdPort}` : ''
+    ].filter(Boolean).join(' | ') || formData?.partnerServerIp || partner.partnerServerIp || '-';
+  }
+
+  private latestFormData(partner: Partner, requests: PartnerRequest[]): RequestFormData {
+    const request = requests.find(item => item.currentStatus !== 'CLOSED') || requests[0];
+    return request ? this.partnerIntegration.getRequestFormData(request, partner) : this.partnerIntegration.getRequestFormData({
+      id: '',
+      partnerId: partner.id,
+      type: 'NEW_INTEGRATION',
+      openDate: '',
+      currentStatus: 'NEW',
+      currentOwner: '',
+      nextAction: '',
+      priority: 'P4',
+      followUpDate: '',
+      stageStartDate: '',
+      blocker: '',
+      formSent: false,
+      formReceived: false,
+      formValidated: false,
+      statementCreated: false,
+      statementSent: false,
+      signaturesComplete: false,
+      ipCoreStatus: 'NOT_SUBMITTED',
+      itStatus: 'NOT_SUBMITTED',
+      vpnStatus: 'NOT_STARTED',
+      connectivityUat: 'NOT_TESTED',
+      connectivityPrd: 'NOT_TESTED',
+      credentialsProvided: false,
+      uatStatus: 'NOT_STARTED',
+      handoverComplete: false,
+      closeDate: null,
+      notes: ''
+    }, partner);
   }
 
   private credentialsStatus(request: PartnerRequest): string {

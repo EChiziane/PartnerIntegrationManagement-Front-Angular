@@ -1,7 +1,9 @@
 {
-  "version": "2026-08-23.dev.1",
+  "version": "2026-08-23.dev.2",
   "partners": [
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Carlos Alpha",
       "id": "partner-dev-alpha",
       "name": "DEV ALPHA PAY",
       "businessOwner": "Business Development",
@@ -35,6 +37,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Ana Beta",
       "id": "partner-dev-beta",
       "name": "DEV BETA PUSH",
       "businessOwner": "M-MOLA Business",
@@ -63,6 +67,8 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "eMolaAccountOtp": "",
+      "representativeName": "Support Desk",
       "id": "partner-dev-trouble",
       "name": "DEV TROUBLESHOOT",
       "businessOwner": "VAS and Digital Channels",
@@ -119,7 +125,41 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": "Development sample ready for connectivity."
+      "notes": "Development sample ready for connectivity.",
+      "environment": "UAT+PRD",
+      "formData": {
+        "companyName": "DEV ALPHA PAY",
+        "eMolaAccountOtp": "",
+        "representativeName": "Carlos Alpha",
+        "businessOwner": "Business Development",
+        "technicalContact": "Carlos Alpha",
+        "phone": "+258 84 100 2001",
+        "email": "alpha.dev@example.com",
+        "serviceApi": "Business Code",
+        "environment": "UAT+PRD",
+        "publicIp": "139.84.234.187",
+        "publicPeerIps": [
+          "139.84.234.187"
+        ],
+        "partnerServerIp": "10.177.0.10",
+        "uatPort": "8520",
+        "prdPort": "9921",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.177.0.10",
+            "port": "8520"
+          },
+          {
+            "environment": "PRD",
+            "ip": "10.177.0.10",
+            "port": "9921"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "https://owncloud.example.com/dev-alpha",
+        "formNotes": "Development sample partner."
+      }
     },
     {
       "id": "request-dev-beta",
@@ -148,7 +188,36 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": "Development sample waiting signatures."
+      "notes": "Development sample waiting signatures.",
+      "environment": "UAT",
+      "formData": {
+        "companyName": "DEV BETA PUSH",
+        "eMolaAccountOtp": "",
+        "representativeName": "Ana Beta",
+        "businessOwner": "M-MOLA Business",
+        "technicalContact": "Ana Beta",
+        "phone": "+258 84 100 2002",
+        "email": "beta.dev@example.com",
+        "serviceApi": "Push USSD",
+        "environment": "UAT",
+        "publicIp": "72.61.147.82",
+        "publicPeerIps": [
+          "72.61.147.82"
+        ],
+        "partnerServerIp": "10.177.0.20",
+        "uatPort": "8600",
+        "prdPort": "",
+        "privateEndpoints": [
+          {
+            "environment": "UAT",
+            "ip": "10.177.0.20",
+            "port": "8600"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "https://owncloud.example.com/dev-beta",
+        "formNotes": "Development sample waiting approval."
+      }
     },
     {
       "id": "request-dev-trouble",
@@ -177,7 +246,36 @@
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
       "closeDate": null,
-      "notes": "Development sample troubleshooting."
+      "notes": "Development sample troubleshooting.",
+      "environment": "PRD",
+      "formData": {
+        "companyName": "DEV TROUBLESHOOT",
+        "eMolaAccountOtp": "",
+        "representativeName": "Support Desk",
+        "businessOwner": "VAS and Digital Channels",
+        "technicalContact": "Support Desk",
+        "phone": "+258 84 100 2003",
+        "email": "support.dev@example.com",
+        "serviceApi": "Push USSD",
+        "environment": "PRD",
+        "publicIp": "102.207.223.37",
+        "publicPeerIps": [
+          "102.207.223.37"
+        ],
+        "partnerServerIp": "10.0.1.12",
+        "uatPort": "",
+        "prdPort": "8685",
+        "privateEndpoints": [
+          {
+            "environment": "PRD",
+            "ip": "10.0.1.12",
+            "port": "8685"
+          }
+        ],
+        "authMethod": "",
+        "ownCloudFolderUrl": "https://owncloud.example.com/dev-trouble",
+        "formNotes": "Development sample with connectivity issue."
+      }
     }
   ],
   "events": [

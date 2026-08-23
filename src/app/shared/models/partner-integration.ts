@@ -40,6 +40,8 @@ export interface PartnerPrivateEndpoint {
 export interface Partner {
   id: string;
   name: string;
+  eMolaAccountOtp?: string;
+  representativeName?: string;
   businessOwner: string;
   technicalContact: string;
   phone: string;
@@ -59,11 +61,35 @@ export interface Partner {
   lastActivity: string;
 }
 
+export interface RequestFormData {
+  companyName: string;
+  eMolaAccountOtp?: string;
+  representativeName?: string;
+  businessOwner: string;
+  technicalContact: string;
+  phone: string;
+  email: string;
+  serviceApi: string;
+  environment: PartnerEnvironment;
+  publicIp: string;
+  publicPeerIps?: string[];
+  partnerServerIp: string;
+  uatPort: string;
+  prdPort: string;
+  privateEndpoints?: PartnerPrivateEndpoint[];
+  authMethod?: string;
+  ownCloudFolderUrl?: string;
+  formNotes?: string;
+  importedFileName?: string;
+  importedAt?: string;
+}
+
 export interface PartnerRequest {
   id: string;
   partnerId: string;
   title?: string;
   environment?: PartnerEnvironment;
+  formData?: RequestFormData;
   type: RequestType;
   openDate: string;
   currentStatus: WorkflowStatus;

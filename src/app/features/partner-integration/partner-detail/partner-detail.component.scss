@@ -25,7 +25,8 @@
 
 .header-actions,
 .form-actions,
-.step-actions {
+.step-actions,
+.import-inline {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -237,6 +238,13 @@ p,
   font-size: 12px;
 }
 
+.import-notice {
+  margin-top: 10px;
+  color: #0e7c72;
+  font-size: 13px;
+  font-weight: 750;
+}
+
 .credentials-editor,
 .credentials-summary {
   display: grid;
@@ -416,7 +424,8 @@ p,
   .new-request,
   .header-actions,
   .form-actions,
-  .step-actions {
+  .step-actions,
+  .import-inline {
     align-items: stretch;
     flex-direction: column;
   }

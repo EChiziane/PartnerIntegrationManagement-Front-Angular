@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
-import {Partner, PartnerRequest, TimelineEvent, WorkflowStatus} from '@shared/models/partner-integration';
+import {Partner, PartnerRequest, RequestFormData, TimelineEvent, WorkflowStatus} from '@shared/models/partner-integration';
 import {NzModalService} from 'ng-zorro-antd/modal';
 
 interface WorkflowAction {
@@ -58,6 +58,25 @@ export class RequestDetailComponent implements OnInit {
     this.request = this.partnerIntegration.getRequest(id);
     this.partner = this.request ? this.partnerIntegration.getPartner(this.request.partnerId) : undefined;
     this.events = this.request ? this.partnerIntegration.getEvents(this.request.id) : [];
+  }
+
+  get formData(): RequestFormData | undefined {
+    if (!this.request || !this.partner) return undefined;
+    return this.partnerIntegration.getRequestFormData(this.request, this.partner);
+  }
+
+  publicPeersLabel(): string {
+    const formData = this.formData;
+    return formData?.publicPeerIps?.length ? formData.publicPeerIps.join(', ') : formData?.publicIp || '-';
+  }
+
+  privateEndpointsLabel(): string {
+    const endpoints = this.formData?.privateEndpoints || [];
+    if (endpoints.length) {
+      return endpoints.map(endpoint => `${endpoint.environment}: ${endpoint.ip || '-'}:${endpoint.port || '-'}`).join(' | ');
+    }
+
+    return this.formData?.partnerServerIp || '-';
   }
 
   confirmAction(label: string, patch: Partial<PartnerRequest>): void {
@@ -230,11 +249,11 @@ export class RequestDetailComponent implements OnInit {
   }
 
   private requiresUat(): boolean {
-    return this.partner?.environment !== 'PRD';
+    return this.formData?.environment !== 'PRD';
   }
 
   private requiresPrd(): boolean {
-    return this.partner?.environment !== 'UAT';
+    return this.formData?.environment !== 'UAT';
   }
 
   openCredentialsEditor(): void {

@@ -5,6 +5,7 @@ import {
   Partner,
   PartnerEnvironment,
   PartnerRequest,
+  RequestFormData,
   RequestType,
   ScanItem,
   TaskPriority,
@@ -61,11 +62,15 @@ export class PartnerIntegrationService {
 
   getRequests(): PartnerRequest[] {
     const state = this.state();
-    return state.requests.map(request => this.recalculateRequest(this.withRequestEnvironment(request, state.partners)));
+    return state.requests.map(request => this.recalculateRequest(this.withRequestData(request, state.partners)));
   }
 
   getRequest(id: string): PartnerRequest | undefined {
     return this.getRequests().find(request => request.id === id);
+  }
+
+  getRequestFormData(request: PartnerRequest, partner?: Partner): RequestFormData {
+    return this.withRequestFormData(request, partner || this.getPartner(request.partnerId)).formData!;
   }
 
   getEvents(requestId: string): TimelineEvent[] {
@@ -110,10 +115,12 @@ export class PartnerIntegrationService {
     const partner = state.partners.find(item => item.id === partnerId);
     const requestId = this.id('request');
     const {id: _id, partnerId: _partnerId, type: _type, ...safePatch} = patch;
+    const baseFormData = this.formDataFromPartner(partner);
     const request = this.recalculateRequest({
       id: requestId,
       partnerId,
       environment: partner?.environment || 'UAT+PRD',
+      formData: {...baseFormData, ...(safePatch.formData || {})},
       type,
       openDate: this.today(),
       currentStatus: 'NEW',
@@ -182,7 +189,7 @@ export class PartnerIntegrationService {
     if (index < 0) throw new Error('Request not found');
 
     const previous = state.requests[index];
-    const updated = this.recalculateRequest(this.withRequestEnvironment({...previous, ...patch}, state.partners));
+    const updated = this.recalculateRequest(this.withRequestData({...previous, ...patch}, state.partners));
     const statusChanged = previous.currentStatus !== updated.currentStatus;
 
     state.requests[index] = updated;
@@ -386,7 +393,7 @@ export class PartnerIntegrationService {
         const parsed = JSON.parse(raw) as PartnerStorageEnvelope | PartnerState;
 
         if (this.isStorageEnvelope(parsed) && parsed.sourceVersion === source.version) {
-          return parsed.state;
+          return this.normalizeState(parsed.state);
         }
       } catch {
         localStorage.removeItem(this.storageKey);
@@ -467,15 +474,74 @@ export class PartnerIntegrationService {
     return {
       version: source.version || 'unversioned-source',
       partners,
-      requests: (source.requests || []).map(request => this.recalculateRequest(this.withRequestEnvironment(request, partners))),
+      requests: (source.requests || []).map(request => this.recalculateRequest(this.withRequestData(request, partners))),
       events: source.events || []
     };
+  }
+
+  private normalizeState(state: PartnerState): PartnerState {
+    const partners = state.partners || [];
+    return {
+      partners,
+      requests: (state.requests || []).map(request => this.recalculateRequest(this.withRequestData(request, partners))),
+      events: state.events || []
+    };
+  }
+
+  private withRequestData(request: PartnerRequest, partners: Partner[]): PartnerRequest {
+    const partner = partners.find(item => item.id === request.partnerId);
+    return this.withRequestFormData(this.withRequestEnvironment(request, partners), partner);
   }
 
   private withRequestEnvironment(request: PartnerRequest, partners: Partner[]): PartnerRequest {
     return {
       ...request,
       environment: request.environment || partners.find(partner => partner.id === request.partnerId)?.environment || 'UAT+PRD'
+    };
+  }
+
+  private withRequestFormData(request: PartnerRequest, partner?: Partner): PartnerRequest {
+    const fallback = this.formDataFromPartner(partner);
+    const formData = request.formData || fallback;
+
+    return {
+      ...request,
+      formData: {
+        ...fallback,
+        ...formData,
+        companyName: formData.companyName || partner?.name || '',
+        businessOwner: formData.businessOwner || partner?.businessOwner || '',
+        technicalContact: formData.technicalContact || partner?.technicalContact || '',
+        phone: formData.phone || partner?.phone || '',
+        email: formData.email || partner?.email || '',
+        serviceApi: formData.serviceApi || partner?.serviceApi || '',
+        environment: formData.environment || request.environment || partner?.environment || 'UAT+PRD',
+        publicPeerIps: formData.publicPeerIps?.length ? formData.publicPeerIps : fallback.publicPeerIps,
+        privateEndpoints: formData.privateEndpoints?.length ? formData.privateEndpoints : fallback.privateEndpoints
+      }
+    };
+  }
+
+  private formDataFromPartner(partner?: Partner): RequestFormData {
+    return {
+      companyName: partner?.name || '',
+      eMolaAccountOtp: partner?.eMolaAccountOtp || '',
+      representativeName: partner?.representativeName || partner?.technicalContact || '',
+      businessOwner: partner?.businessOwner || '',
+      technicalContact: partner?.technicalContact || '',
+      phone: partner?.phone || '',
+      email: partner?.email || '',
+      serviceApi: partner?.serviceApi || '',
+      environment: partner?.environment || 'UAT+PRD',
+      publicIp: partner?.publicIp || '',
+      publicPeerIps: partner?.publicPeerIps || (partner?.publicIp ? [partner.publicIp] : []),
+      partnerServerIp: partner?.partnerServerIp || '',
+      uatPort: partner?.uatPort || '',
+      prdPort: partner?.prdPort || '',
+      privateEndpoints: partner?.privateEndpoints || [],
+      authMethod: partner?.authMethod || '',
+      ownCloudFolderUrl: partner?.ownCloudFolderUrl || '',
+      formNotes: partner?.formNotes || ''
     };
   }
 

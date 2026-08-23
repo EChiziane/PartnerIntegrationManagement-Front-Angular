@@ -126,12 +126,14 @@
       </header>
 
       <div class="facts stacked">
-        <div><span>Service/API</span><strong>{{ partner.serviceApi }}</strong></div>
-        <div><span>Environment</span><strong>{{ partner.environment }}</strong></div>
-        <div><span>Public IP</span><strong>{{ partner.publicIp || '-' }}</strong></div>
-        <div><span>Partner Server IP</span><strong>{{ partner.partnerServerIp || '-' }}</strong></div>
-        <div><span>UAT Port</span><strong>{{ partner.uatPort || '-' }}</strong></div>
-        <div><span>PRD Port</span><strong>{{ partner.prdPort || '-' }}</strong></div>
+        <div><span>Company</span><strong>{{ formData?.companyName || partner.name }}</strong></div>
+        <div><span>Service/API</span><strong>{{ formData?.serviceApi || '-' }}</strong></div>
+        <div><span>Environment</span><strong>{{ formData?.environment || '-' }}</strong></div>
+        <div><span>Technical Contact</span><strong>{{ formData?.technicalContact || '-' }}</strong></div>
+        <div><span>Public IP Peer</span><strong>{{ publicPeersLabel() }}</strong></div>
+        <div><span>Private Endpoints</span><strong>{{ privateEndpointsLabel() }}</strong></div>
+        <div><span>Auth Method</span><strong>{{ formData?.authMethod || '-' }}</strong></div>
+        <div><span>Imported File</span><strong>{{ formData?.importedFileName || '-' }}</strong></div>
       </div>
     </section>
   </div>

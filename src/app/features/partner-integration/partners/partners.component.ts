@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
-import {Partner, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestType, WorkflowStatus} from '@shared/models/partner-integration';
+import {Partner, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestFormData, RequestType, WorkflowStatus} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 
 type PartnerFilter = 'ALL' | 'ACTIVE' | 'OPEN_REQUESTS' | 'ATTENTION';
@@ -81,11 +81,11 @@ export class PartnersComponent implements OnInit {
     return this.partners.filter(partner => {
       const matchesQuery = !query
         || partner.name.toLowerCase().includes(query)
-        || partner.serviceApi.toLowerCase().includes(query)
-        || partner.technicalContact.toLowerCase().includes(query)
+        || this.requestFormDataForPartner(partner).serviceApi.toLowerCase().includes(query)
+        || this.requestFormDataForPartner(partner).technicalContact.toLowerCase().includes(query)
         || partner.businessOwner.toLowerCase().includes(query)
-        || partner.publicIp.toLowerCase().includes(query)
-        || partner.partnerServerIp.toLowerCase().includes(query)
+        || this.requestFormDataForPartner(partner).publicIp.toLowerCase().includes(query)
+        || this.requestFormDataForPartner(partner).partnerServerIp.toLowerCase().includes(query)
         || this.publicPeersLabel(partner).toLowerCase().includes(query)
         || this.privateEndpointsLabel(partner).toLowerCase().includes(query);
 
@@ -142,6 +142,7 @@ export class PartnersComponent implements OnInit {
     const request = this.createRequestFromImportedForm
       ? this.partnerIntegration.createRequest(partner.id, 'NEW_INTEGRATION', {
         title: this.importedFormRequestTitle(partner.name),
+        formData: this.buildRequestFormDataFromDraft(partner.name),
         formSent: true,
         formReceived: true,
         formValidated: false,
@@ -210,27 +211,66 @@ export class PartnersComponent implements OnInit {
   }
 
   publicPeersLabel(partner: Partner): string {
-    return partner.publicPeerIps?.length ? partner.publicPeerIps.join(', ') : partner.publicIp || '-';
+    const formData = this.requestFormDataForPartner(partner);
+    return formData.publicPeerIps?.length ? formData.publicPeerIps.join(', ') : formData.publicIp || '-';
   }
 
   privateEndpointsLabel(partner: Partner): string {
-    if (partner.privateEndpoints?.length) {
-      return partner.privateEndpoints
+    const formData = this.requestFormDataForPartner(partner);
+    if (formData.privateEndpoints?.length) {
+      return formData.privateEndpoints
         .map(endpoint => `${endpoint.environment}: ${endpoint.ip || '-'}:${endpoint.port || '-'}`)
         .join(' | ');
     }
 
-    return partner.partnerServerIp || '-';
+    return formData.partnerServerIp || '-';
   }
 
   portsLabel(partner: Partner): string {
-    if (partner.privateEndpoints?.length) {
-      return partner.privateEndpoints
+    const formData = this.requestFormDataForPartner(partner);
+    if (formData.privateEndpoints?.length) {
+      return formData.privateEndpoints
         .map(endpoint => `${endpoint.environment} ${endpoint.port || '-'}`)
         .join(' / ');
     }
 
-    return `${partner.uatPort || '-'} / ${partner.prdPort || '-'}`;
+    return `${formData.uatPort || '-'} / ${formData.prdPort || '-'}`;
+  }
+
+  requestFormDataForPartner(partner: Partner): RequestFormData {
+    const request = this.requestsForPartner(partner.id).find(item => item.currentStatus !== 'CLOSED')
+      || this.requestsForPartner(partner.id)[0];
+    return request
+      ? this.partnerIntegration.getRequestFormData(request, partner)
+      : this.partnerIntegration.getRequestFormData({
+        id: '',
+        partnerId: partner.id,
+        type: 'NEW_INTEGRATION',
+        openDate: '',
+        currentStatus: 'NEW',
+        currentOwner: '',
+        nextAction: '',
+        priority: 'P4',
+        followUpDate: '',
+        stageStartDate: '',
+        blocker: '',
+        formSent: false,
+        formReceived: false,
+        formValidated: false,
+        statementCreated: false,
+        statementSent: false,
+        signaturesComplete: false,
+        ipCoreStatus: 'NOT_SUBMITTED',
+        itStatus: 'NOT_SUBMITTED',
+        vpnStatus: 'NOT_STARTED',
+        connectivityUat: 'NOT_TESTED',
+        connectivityPrd: 'NOT_TESTED',
+        credentialsProvided: false,
+        uatStatus: 'NOT_STARTED',
+        handoverComplete: false,
+        closeDate: null,
+        notes: ''
+      }, partner);
   }
 
   addPrivateEndpoint(): void {
@@ -424,6 +464,30 @@ export class PartnersComponent implements OnInit {
   }
 
   private buildPartnerPayload(): Omit<Partner, 'id' | 'lastActivity' | 'status'> {
+    const formData = this.buildRequestFormDataFromDraft(this.draft.name.trim());
+    return {
+      name: this.draft.name.trim(),
+      eMolaAccountOtp: '',
+      representativeName: this.draft.technicalContact.trim(),
+      businessOwner: this.draft.businessOwner.trim(),
+      technicalContact: formData.technicalContact,
+      phone: formData.phone,
+      email: formData.email,
+      serviceApi: formData.serviceApi,
+      environment: formData.environment,
+      publicIp: formData.publicIp,
+      publicPeerIps: formData.publicPeerIps,
+      partnerServerIp: formData.partnerServerIp,
+      uatPort: formData.uatPort,
+      prdPort: formData.prdPort,
+      privateEndpoints: formData.privateEndpoints,
+      authMethod: formData.authMethod,
+      ownCloudFolderUrl: formData.ownCloudFolderUrl,
+      formNotes: formData.formNotes
+    };
+  }
+
+  private buildRequestFormDataFromDraft(companyName: string): RequestFormData {
     const publicPeerIps = this.draft.publicPeerIpsText
       .split(/[\n,;]+/)
       .map(value => value.trim())
@@ -440,7 +504,9 @@ export class PartnersComponent implements OnInit {
     const prdPort = privateEndpoints.find(endpoint => endpoint.environment !== 'UAT' && endpoint.port)?.port || '';
 
     return {
-      name: this.draft.name.trim(),
+      companyName,
+      eMolaAccountOtp: '',
+      representativeName: this.draft.technicalContact.trim(),
       businessOwner: this.draft.businessOwner.trim(),
       technicalContact: this.draft.technicalContact.trim(),
       phone: this.draft.phone.trim(),
@@ -455,7 +521,8 @@ export class PartnersComponent implements OnInit {
       privateEndpoints,
       authMethod: this.draft.authMethod.trim(),
       ownCloudFolderUrl: this.draft.ownCloudFolderUrl.trim(),
-      formNotes: this.draft.formNotes.trim()
+      formNotes: this.draft.formNotes.trim(),
+      importedAt: this.createRequestFromImportedForm ? new Date().toISOString() : ''
     };
   }
 }
