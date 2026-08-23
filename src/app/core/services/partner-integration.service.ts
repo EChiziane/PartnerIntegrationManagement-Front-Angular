@@ -525,23 +525,59 @@ export class PartnerIntegrationService {
 
   private normalizeSourceState(source: PartnerSourceState): PartnerSourceState {
     const partners = source.partners || [];
+    const requests = this.normalizeRequests(source.requests || [], partners);
     return {
       version: source.version || 'unversioned-source',
       partners,
-      requests: (source.requests || []).map(request => this.recalculateRequest(this.withRequestData(request, partners))),
-      connections: this.normalizeConnections(source, partners),
+      requests,
+      connections: this.normalizeConnections({...source, requests}, partners),
       events: source.events || []
     };
   }
 
   private normalizeState(state: PartnerState): PartnerState {
     const partners = state.partners || [];
+    const requests = this.normalizeRequests(state.requests || [], partners);
     return {
       partners,
-      requests: (state.requests || []).map(request => this.recalculateRequest(this.withRequestData(request, partners))),
-      connections: this.normalizeConnections(state, partners),
+      requests,
+      connections: this.normalizeConnections({...state, requests}, partners),
       events: state.events || []
     };
+  }
+
+  private normalizeRequests(requests: PartnerRequest[], partners: Partner[]): PartnerRequest[] {
+    return this.removeDuplicateCreationRequests(
+      requests.map(request => this.recalculateRequest(this.withRequestData(request, partners)))
+    );
+  }
+
+  private removeDuplicateCreationRequests(requests: PartnerRequest[]): PartnerRequest[] {
+    const duplicateIds = new Set<string>();
+    const groups = new Map<string, PartnerRequest[]>();
+
+    for (const request of requests) {
+      if (request.type !== 'NEW_INTEGRATION') continue;
+      const key = [
+        request.partnerId,
+        request.type,
+        request.openDate,
+        request.formData?.companyName || '',
+        request.formData?.publicIp || '',
+        request.formData?.partnerServerIp || ''
+      ].join('|');
+      groups.set(key, [...(groups.get(key) || []), request]);
+    }
+
+    groups.forEach(group => {
+      const open = this.latestRequest(group.filter(request => request.currentStatus !== 'CLOSED'));
+      if (!open) return;
+      group
+        .filter(request => request.id !== open.id && request.currentStatus === 'CLOSED')
+        .forEach(request => duplicateIds.add(request.id));
+    });
+
+    return requests.filter(request => !duplicateIds.has(request.id));
   }
 
   private normalizeConnections(state: PartnerState, partners: Partner[]): PartnerConnection[] {
