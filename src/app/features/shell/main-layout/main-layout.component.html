@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="sidebar-section">Operations</div>
+    <div class="sidebar-section">{{ 'layout.sections.operations' | translate }}</div>
 
     <ul
       [nzInlineCollapsed]="isCollapsed"
@@ -30,42 +30,35 @@
       <li nz-menu-item nzMatchRouter>
         <a routerLink="/app/home">
           <span nz-icon nzType="dashboard"></span>
-          <span>Home</span>
+          <span>{{ 'layout.nav.home' | translate }}</span>
         </a>
       </li>
 
       <li nz-menu-item nzMatchRouter>
         <a routerLink="/app/pipeline">
           <span nz-icon nzType="partition"></span>
-          <span>Pipeline</span>
+          <span>{{ 'layout.nav.pipeline' | translate }}</span>
         </a>
       </li>
 
       <li nz-menu-item nzMatchRouter>
         <a routerLink="/app/tasks">
           <span nz-icon nzType="check-square"></span>
-          <span>Tasks</span>
+          <span>{{ 'layout.nav.tasks' | translate }}</span>
         </a>
       </li>
 
       <li nz-menu-item nzMatchRouter>
         <a routerLink="/app/scan">
           <span nz-icon nzType="radar-chart"></span>
-          <span>Scan</span>
+          <span>{{ 'layout.nav.scan' | translate }}</span>
         </a>
       </li>
 
       <li nz-menu-item nzMatchRouter>
         <a routerLink="/app/partners">
           <span nz-icon nzType="team"></span>
-          <span>Partners</span>
-        </a>
-      </li>
-
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/app/users">
-          <span nz-icon nzType="usergroup-add"></span>
-          <span>Users</span>
+          <span>{{ 'layout.nav.partners' | translate }}</span>
         </a>
       </li>
     </ul>
@@ -74,7 +67,7 @@
       <span class="status-dot"></span>
       <div>
         <strong>Local V1</strong>
-        <span>Demo data enabled</span>
+        <span>{{ 'layout.status.demoData' | translate }}</span>
       </div>
     </div>
   </nz-sider>
@@ -90,14 +83,29 @@
       </button>
 
       <div class="topbar-title">
-        <span>Partner Integration Management App</span>
-        <strong>Operational workflow control</strong>
+        <span>{{ 'app.name' | translate }}</span>
+        <strong>{{ 'layout.topbar.subtitle' | translate }}</strong>
       </div>
 
       <div class="topbar-actions">
+        <button
+          [nzDropdownMenu]="languageMenu"
+          class="language-switch"
+          nz-dropdown
+          nzTrigger="click"
+          type="button">
+          <span class="language-icon" nz-icon nzType="global"></span>
+          <span class="language-copy">
+            <small>{{ 'layout.language.label' | translate }}</small>
+            <strong>{{ currentLanguageLabel }}</strong>
+          </span>
+          <span class="language-code">{{ currentLanguageShortLabel }}</span>
+          <span class="language-arrow" nz-icon nzType="down"></span>
+        </button>
+
         <div class="operator-chip">
           <span nz-icon nzType="safety-certificate"></span>
-          <span>Authenticated</span>
+          <span>{{ 'layout.account.authenticated' | translate }}</span>
         </div>
 
         <div [nzDropdownMenu]="userMenu" class="user-menu" nz-dropdown>
@@ -116,16 +124,26 @@
 
       <nz-dropdown-menu #userMenu="nzDropdownMenu">
         <ul nz-menu class="account-menu">
-          <li nz-menu-item>
-            <a routerLink="/app/users">
-              <span nz-icon nzType="setting"></span>
-              Users
-            </a>
-          </li>
-
           <li (click)="logout()" nz-menu-item>
             <span nz-icon nzType="logout"></span>
-            Logout
+            {{ 'layout.account.logout' | translate }}
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+
+      <nz-dropdown-menu #languageMenu="nzDropdownMenu">
+        <ul nz-menu class="language-menu">
+          <li
+            *ngFor="let language of translationService.languages"
+            (click)="changeLanguage(language.code)"
+            [class.active]="language.code === currentLanguage"
+            nz-menu-item>
+            <span class="language-option-code">{{ languageShortLabel(language.code) }}</span>
+            <span class="language-option-copy">
+              <strong>{{ language.label }}</strong>
+              <small>{{ language.code === 'pt' ? 'Interface em Portugues' : 'English interface' }}</small>
+            </span>
+            <span *ngIf="language.code === currentLanguage" class="language-check" nz-icon nzType="check-circle"></span>
           </li>
         </ul>
       </nz-dropdown-menu>
@@ -134,6 +152,11 @@
     <nz-content class="content-area">
       <main class="inner-content">
         <router-outlet></router-outlet>
+        <footer class="page-end-marker">
+          <span></span>
+          <strong>{{ 'layout.pageEnd.title' | translate }}</strong>
+          <small>{{ 'layout.pageEnd.hint' | translate }}</small>
+        </footer>
       </main>
     </nz-content>
   </nz-layout>
@@ -150,32 +173,44 @@
   <nav *nzDrawerContent class="mobile-navigation" aria-label="Mobile navigation">
     <a routerLink="/app/home" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="dashboard"></span>
-      <span>Home</span>
+      <span>{{ 'layout.nav.home' | translate }}</span>
     </a>
 
     <a routerLink="/app/pipeline" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="partition"></span>
-      <span>Pipeline</span>
+      <span>{{ 'layout.nav.pipeline' | translate }}</span>
     </a>
 
     <a routerLink="/app/tasks" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="check-square"></span>
-      <span>Tasks</span>
+      <span>{{ 'layout.nav.tasks' | translate }}</span>
     </a>
 
     <a routerLink="/app/scan" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="radar-chart"></span>
-      <span>Scan</span>
+      <span>{{ 'layout.nav.scan' | translate }}</span>
     </a>
 
     <a routerLink="/app/partners" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="team"></span>
-      <span>Partners</span>
+      <span>{{ 'layout.nav.partners' | translate }}</span>
     </a>
+
+    <div class="mobile-nav-section">{{ 'layout.language.label' | translate }}</div>
+
+    <button
+      *ngFor="let language of translationService.languages"
+      (click)="changeLanguage(language.code); closeMobileMenu()"
+      [class.active-language]="language.code === currentLanguage"
+      class="mobile-language"
+      type="button">
+      <span class="language-option-code">{{ languageShortLabel(language.code) }}</span>
+      <span>{{ language.label }}</span>
+    </button>
 
     <button (click)="logout()" class="mobile-logout" type="button">
       <span nz-icon nzType="logout"></span>
-      <span>Logout</span>
+      <span>{{ 'layout.account.logout' | translate }}</span>
     </button>
   </nav>
 </nz-drawer>

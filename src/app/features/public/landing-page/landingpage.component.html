@@ -1,275 +1,69 @@
-<nz-layout class="landing-shell">
-  <nz-header class="site-header">
-    <div class="header-content">
-      <a (click)="scrollTo('inicio')" class="brand" aria-label="Transportes Chiziane">
-        <span class="brand-mark">TC</span>
-        <span>{{ companyName }}</span>
-      </a>
+<main class="landing-page">
+  <header class="landing-header">
+    <div class="brand">
+      <span>PI</span>
+      <strong>Partner Integration</strong>
+    </div>
 
-      <nav class="desktop-nav" aria-label="Navegação principal">
-        <a (click)="scrollTo('materiais')">Materiais</a>
-        <a (click)="scrollTo('como-funciona')">Como funciona</a>
-        <a (click)="scrollTo('contactos')">Contactos</a>
-        <a (click)="scrollTo('localizacao')">Onde estamos</a>
-      </nav>
+    <button (click)="goToLogin()" nz-button nzType="primary">Open Workspace</button>
+  </header>
 
-      <div class="header-actions">
-        <a class="whatsapp-link" (click)="quickWhatsAppDirect()">WhatsApp</a>
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">Partner Integration Management App</span>
+      <h1>Control every partner request from intake to handover.</h1>
+      <p>
+        A focused operating workspace for partner onboarding, VPN updates,
+        implementation follow-ups, connectivity testing, UAT and closure.
+      </p>
 
-        <button (click)="goToLogin()" class="login-button" nz-button nzType="primary">
-          Area do Sistema
-        </button>
-
-        <button
-          (click)="toggleMenu()"
-          [class.active]="menuVisible"
-          [attr.aria-expanded]="menuVisible"
-          class="mobile-menu-btn"
-          nz-button
-          nzType="text"
-          aria-label="Abrir acesso rapido">
-          <span nz-icon [nzType]="menuVisible ? 'clear' : 'menu'"></span>
+      <div class="hero-actions">
+        <button (click)="goToLogin()" nz-button nzType="primary">
+          Enter App
+          <span nz-icon nzType="arrow-right"></span>
         </button>
       </div>
     </div>
-  </nz-header>
 
-  <section *ngIf="menuVisible" class="mobile-access-panel" aria-label="Acesso rapido mobile">
-    <div class="mobile-access-head">
-      <span class="section-label">Acesso rapido</span>
-      <strong>O que pretende fazer?</strong>
+    <div class="hero-panel">
+      <div>
+        <span>Open Requests</span>
+        <strong>Workflow Status</strong>
+      </div>
+      <div>
+        <span>Dependencies</span>
+        <strong>IP Core · IT · Partner</strong>
+      </div>
+      <div>
+        <span>Outputs</span>
+        <strong>Tasks · Scan · Reports</strong>
+      </div>
     </div>
-
-    <button (click)="goToLogin()" class="mobile-system-action" nz-button nzType="primary">
-      <span nz-icon nzType="lock"></span>
-      Area do Sistema
-      <span nz-icon nzType="arrow-right"></span>
-    </button>
-
-    <button (click)="quickWhatsAppDirect(); closeMenu()" class="mobile-whatsapp-action" nz-button nzType="default">
-      <span nz-icon nzType="message"></span>
-      WhatsApp directo
-    </button>
-
-    <nav class="mobile-nav" aria-label="Navegacao movel">
-      <a (click)="closeMenu(); scrollTo('materiais')">Materiais</a>
-      <a (click)="closeMenu(); scrollTo('como-funciona')">Como funciona</a>
-      <a (click)="closeMenu(); scrollTo('contactos')">Contactos</a>
-      <a (click)="closeMenu(); scrollTo('localizacao')">Onde estamos</a>
-    </nav>
-
-    <button (click)="showQuoteModal(); closeMenu()" class="mobile-quote-action" nz-button nzType="default">
-      Pedir cotacao
-    </button>
   </section>
 
-  <nz-content>
-    <section id="inicio" class="hero-section">
-      <div class="hero-overlay"></div>
+  <section class="capability-grid">
+    <article>
+      <span nz-icon nzType="partition"></span>
+      <h2>Pipeline</h2>
+      <p>Group requests by status and owner so blockers are visible quickly.</p>
+    </article>
 
-      <div class="hero-content">
-        <p class="hero-kicker">Materiais de construcao com entrega local</p>
-        <h1>{{ companyName }}</h1>
-        <p class="hero-copy">
-          Fornecimento de areia, pedra e po de pedra com cota&ccedil;&atilde;o rapida, frota preparada e entrega em Maputo e arredores.
-        </p>
+    <article>
+      <span nz-icon nzType="check-square"></span>
+      <h2>Tasks</h2>
+      <p>Generate next actions from workflow rules while preserving operator choice.</p>
+    </article>
 
-        <div class="hero-actions">
-          <button (click)="showQuoteModal()" class="primary-cta" nz-button nzType="primary">
-            Pedir cota&ccedil;&atilde;o
-            <span nz-icon nzType="arrow-right"></span>
-          </button>
+    <article>
+      <span nz-icon nzType="radar-chart"></span>
+      <h2>Scan</h2>
+      <p>Run AM/PM checks for signatures, IP Core, IT and partner responses.</p>
+    </article>
 
-          <button (click)="scrollTo('materiais')" class="secondary-cta" nz-button>
-            Ver materiais
-          </button>
-        </div>
-      </div>
-
-      <div class="hero-metrics" aria-label="Indicadores do servico">
-        <div>
-          <strong>5</strong>
-          <span>Materiais principais</span>
-        </div>
-        <div>
-          <strong>24m3</strong>
-          <span>Capacidade maxima</span>
-        </div>
-        <div>
-          <strong>+258</strong>
-          <span>Suporte local</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="intro-band">
-      <div class="section-grid">
-        <div>
-          <span class="section-label">Operacao</span>
-          <h2>Entrega coordenada para obras que não podem ficar paradas.</h2>
-        </div>
-
-        <p>
-          A {{ companyName }} ajuda clientes particulares, empreiteiros e equipas de obra a comprar materiais com menos friccao: pedido claro, confirmacao rapida, entrega combinada e pagamento no acto.
-        </p>
-      </div>
-    </section>
-
-    <section id="materiais" class="materials-band">
-      <div class="section-heading">
-        <span class="section-label">Materiais</span>
-        <h2>Catálogo directo para cota&ccedil;&atilde;o e encomenda.</h2>
-      </div>
-
-      <div class="material-grid">
-        <article *ngFor="let item of materials" class="material-card">
-          <span class="material-icon" [nzType]="item.icon" nz-icon></span>
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.subtitle }}</p>
-
-          <ul>
-            <li *ngFor="let highlight of item.highlights">
-              <span nz-icon nzType="check-circle"></span>
-              {{ highlight }}
-            </li>
-          </ul>
-
-          <div class="capacity-row">
-            <span *ngFor="let capacity of capacities">{{ capacity }}</span>
-          </div>
-
-          <button (click)="ctaMaterial(item)" nz-button nzBlock nzType="primary">
-            Pedir este material
-          </button>
-        </article>
-      </div>
-    </section>
-
-    <section id="como-funciona" class="process-band">
-      <div class="section-heading">
-        <span class="section-label">Como funciona</span>
-        <h2>Do pedido a entrega, tudo simples e rastreavel.</h2>
-      </div>
-
-      <div class="process-grid">
-        <article>
-          <span nz-icon nzType="message"></span>
-          <h3>Pedido</h3>
-          <p>Escolha material, quantidade e local de entrega.</p>
-        </article>
-        <article>
-          <span nz-icon nzType="calendar"></span>
-          <h3>Agendamento</h3>
-          <p>Confirmamos disponibilidade, custo e horario.</p>
-        </article>
-        <article>
-          <span nz-icon nzType="truck"></span>
-          <h3>Entrega</h3>
-          <p>A frota segue para o local combinado.</p>
-        </article>
-        <article>
-          <span nz-icon nzType="credit-card"></span>
-          <h3>Pagamento</h3>
-          <p>Pagamento no acto da entrega, conforme combinado.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="contactos" class="contact-band">
-      <div class="contact-content">
-        <span class="section-label">Contactos</span>
-        <h2>Pe&ccedil;a a sua cota&ccedil;&atilde;o e confirme disponibilidade.</h2>
-
-        <div class="contact-list">
-          <a href="tel:+258845098583">
-            <span nz-icon nzType="phone"></span>
-            {{ phoneDisplay }}
-          </a>
-          <button (click)="quickWhatsAppDirect()" class="text-contact" type="button">
-            <span nz-icon nzType="message"></span>
-            WhatsApp directo
-          </button>
-          <span>
-            <span nz-icon nzType="environment"></span>
-            Maputo e arredores
-          </span>
-        </div>
-      </div>
-
-      <form class="quote-panel">
-        <label>
-          Nome
-          <input [(ngModel)]="quoteName" name="landingQuoteName" placeholder="O seu nome" type="text">
-        </label>
-        <label>
-          Contacto
-          <input [(ngModel)]="quotePhone" name="landingQuotePhone" placeholder="+258" type="tel">
-        </label>
-        <label>
-          Local de entrega
-          <input [(ngModel)]="quoteLocation" name="landingQuoteLocation" placeholder="Ex: Matola" type="text">
-        </label>
-        <button (click)="showQuoteModal()" nz-button nzType="primary" type="button">Continuar cota&ccedil;&atilde;o</button>
-      </form>
-    </section>
-
-    <section id="localizacao" class="location-band">
-      <div class="location-copy">
-        <span class="section-label">Onde estamos</span>
-        <h2>{{ addressLine }}</h2>
-        <p>{{ legalName }} · NUIT {{ nuit }} · {{ taxOffice }}</p>
-      </div>
-
-      <div class="map-frame">
-        <iframe
-          title="Localizacao da Transportes Chiziane"
-          loading="lazy"
-          src="https://maps.google.com/maps?q=Maputo%20Mocambique&t=&z=12&ie=UTF8&iwloc=&output=embed">
-        </iframe>
-      </div>
-    </section>
-  </nz-content>
-
-  <nz-footer class="footer">
-    <span>? 2026 {{ companyName }}. Todos os direitos reservados.</span>
-    <button (click)="goToLogin()" nz-button nzType="default">Area do Sistema</button>
-  </nz-footer>
-
-  <nz-modal
-    (nzOnCancel)="closeQuoteModal()"
-    [(nzVisible)]="isQuoteModalVisible"
-    [nzFooter]="null"
-    [nzMaskClosable]="true"
-    nzCentered
-    nzClassName="quote-modal-shell"
-    nzTitle="Cotacao rapida">
-    <ng-container *nzModalContent>
-      <div class="quote-modal">
-        <div class="quote-modal-head">
-          <span class="section-label">WhatsApp</span>
-          <p>Preencha os detalhes e envie o pedido para confirmarmos disponibilidade e valor.</p>
-        </div>
-
-        <div class="quote-form">
-          <input [(ngModel)]="quoteName" name="quoteName" placeholder="Seu nome (opcional)" type="text">
-          <input [(ngModel)]="quotePhone" name="quotePhone" placeholder="Seu contacto (opcional)" type="text">
-          <input [(ngModel)]="quoteLocation" name="quoteLocation" placeholder="Local de entrega" type="text">
-
-          <label class="mini-label">Material</label>
-          <nz-select [(ngModel)]="quoteMaterial" name="quoteMaterial">
-            <nz-option *ngFor="let material of materials" [nzLabel]="material.title" [nzValue]="material.key"></nz-option>
-          </nz-select>
-
-          <label class="mini-label">Quantidade</label>
-          <nz-select [(ngModel)]="quoteCapacity" name="quoteCapacity">
-            <nz-option *ngFor="let capacity of capacities" [nzLabel]="capacity" [nzValue]="capacity"></nz-option>
-          </nz-select>
-
-          <button (click)="submitQuickQuote()" nz-button nzBlock nzType="primary">
-            Enviar para WhatsApp
-          </button>
-        </div>
-      </div>
-    </ng-container>
-  </nz-modal>
-</nz-layout>
+    <article>
+      <span nz-icon nzType="file-pdf"></span>
+      <h2>Reports</h2>
+      <p>Print partner lists, request pipeline and partner profiles in professional PDFs.</p>
+    </article>
+  </section>
+</main>

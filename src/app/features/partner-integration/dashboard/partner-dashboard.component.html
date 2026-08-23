@@ -1,19 +1,22 @@
 <div class="partner-page">
   <section class="dashboard-hero">
     <div class="hero-copy">
-      <span class="eyebrow">Partner Integration OS</span>
-      <h1>Operational view for partner integrations</h1>
-      <p>Track requests, ownership, next actions and attention points without going back to a spreadsheet.</p>
+      <span class="eyebrow">Partner Integration Command Center</span>
+      <h1>Business control for every partner integration.</h1>
+      <p>
+        Monitor onboarding, updates, technical blockers, approvals and handover
+        readiness from one executive workspace.
+      </p>
     </div>
 
     <div class="hero-actions">
       <button (click)="goPartners()" nz-button nzType="primary">
-        <span nz-icon nzType="plus"></span>
-        New Partner
+        <span nz-icon nzType="team"></span>
+        Partners
       </button>
-      <button (click)="goTasks()" nz-button nzType="default">
-        <span nz-icon nzType="check-square"></span>
-        My Tasks
+      <button (click)="goPipeline()" nz-button nzType="default">
+        <span nz-icon nzType="partition"></span>
+        Pipeline
       </button>
       <button (click)="reload()" nz-button nzType="default">
         <span nz-icon nzType="reload"></span>
@@ -23,35 +26,104 @@
   </section>
 
   <div class="metric-grid">
-    <button (click)="goPartners()" class="metric-card active" type="button">
-      <span>Total Partners</span>
+    <button (click)="goPartners()" class="metric-card portfolio" type="button">
+      <span>Partner portfolio</span>
       <strong>{{ partners.length }}</strong>
-      <small>Active operational records</small>
+      <small>Registered business profiles</small>
     </button>
 
-    <button (click)="goPipeline()" class="metric-card today" type="button">
-      <span>Open Requests</span>
+    <button (click)="goPipeline()" class="metric-card active" type="button">
+      <span>Open work</span>
       <strong>{{ openRequests.length }}</strong>
-      <small>Across new, update and support flows</small>
+      <small>Requests currently in motion</small>
     </button>
 
-    <button (click)="goTasks()" class="metric-card progress" type="button">
-      <span>My Tasks Today</span>
-      <strong>{{ myTasksToday.length }}</strong>
-      <small>Suggested actions for execution</small>
+    <button (click)="goPipeline()" class="metric-card ready" type="button">
+      <span>Ready for action</span>
+      <strong>{{ readyForActionCount }}</strong>
+      <small>Internal team can move today</small>
     </button>
 
-    <button (click)="goPipeline('TROUBLESHOOTING')" class="metric-card danger" type="button">
-      <span>Attention</span>
+    <button (click)="goPipeline('TROUBLESHOOTING')" class="metric-card risk" type="button">
+      <span>Risk and blockers</span>
       <strong>{{ attentionRequests.length }}</strong>
-      <small>Blocked, old or urgent requests</small>
+      <small>P1, old stage or troubleshooting</small>
     </button>
   </div>
 
-  <section class="section-panel">
+  <section class="command-strip">
+    <button (click)="goPipeline()" type="button">
+      <span>Waiting external</span>
+      <strong>{{ waitingExternalCount }}</strong>
+    </button>
+    <button (click)="goTasks()" type="button">
+      <span>My execution queue</span>
+      <strong>{{ myTasksToday.length }}</strong>
+    </button>
+    <button (click)="goPipeline('CLOSED')" type="button">
+      <span>Closed requests</span>
+      <strong>{{ closedCount }}</strong>
+    </button>
+    <button (click)="goPipeline('READY_HANDOVER')" type="button">
+      <span>Ready handover</span>
+      <strong>{{ countByStatus('READY_HANDOVER') }}</strong>
+    </button>
+  </section>
+
+  <div class="control-grid">
+    <section class="section-panel attention-panel">
+      <header>
+        <div>
+          <span class="panel-kicker">Management focus</span>
+          <h2>Attention queue</h2>
+        </div>
+        <button (click)="goPipeline('TROUBLESHOOTING')" nz-button nzType="default">Open risks</button>
+      </header>
+
+      <div class="request-list">
+        <article *ngFor="let request of commandQueue" class="request-row risk-row">
+          <div>
+            <nz-tag [nzColor]="request.priority === 'P1' ? 'red' : 'orange'">{{ request.priority }}</nz-tag>
+            <strong>{{ partnerName(request.partnerId) }}</strong>
+            <span>{{ partnerIntegration.statusLabel(request.currentStatus) }} - {{ ageDays(request.stageStartDate) }} day(s)</span>
+          </div>
+          <button (click)="openRequest(request.id)" nz-button nzType="link">Open</button>
+        </article>
+
+        <nz-empty *ngIf="!commandQueue.length" nzNotFoundContent="No critical items right now."></nz-empty>
+      </div>
+    </section>
+
+    <section class="section-panel">
+      <header>
+        <div>
+          <span class="panel-kicker">Execution</span>
+          <h2>Today work queue</h2>
+        </div>
+        <button (click)="goTasks()" nz-button nzType="default">View tasks</button>
+      </header>
+
+      <div class="task-list">
+        <article *ngFor="let task of myTasksToday" class="task-item">
+          <div>
+            <nz-tag [nzColor]="task.priority === 'P1' ? 'red' : task.priority === 'P2' ? 'orange' : 'blue'">
+              {{ task.priority }}
+            </nz-tag>
+            <strong>{{ task.title }}</strong>
+            <span>{{ task.partnerName }} - {{ partnerIntegration.typeLabel(task.requestType) }}</span>
+          </div>
+          <button (click)="openRequest(task.requestId)" nz-button nzType="link">Open</button>
+        </article>
+
+        <nz-empty *ngIf="!myTasksToday.length" nzNotFoundContent="No tasks assigned for today."></nz-empty>
+      </div>
+    </section>
+  </div>
+
+  <section class="section-panel pipeline-panel">
     <header>
       <div>
-        <span class="panel-kicker">Pipeline</span>
+        <span class="panel-kicker">Pipeline health</span>
         <h2>Requests by status</h2>
       </div>
       <button (click)="goPipeline()" nz-button nzType="default">Open Pipeline</button>
@@ -75,7 +147,7 @@
     <section class="section-panel">
       <header>
         <div>
-          <span class="panel-kicker">Request mix</span>
+          <span class="panel-kicker">Business mix</span>
           <h2>Open requests by type</h2>
         </div>
       </header>
@@ -91,22 +163,22 @@
     <section class="section-panel">
       <header>
         <div>
-          <span class="panel-kicker">Execution</span>
-          <h2>Suggested tasks</h2>
+          <span class="panel-kicker">Live portfolio</span>
+          <h2>Recently active requests</h2>
         </div>
-        <button (click)="goTasks()" nz-button nzType="default">View all</button>
+        <button (click)="goPipeline()" nz-button nzType="default">View all</button>
       </header>
 
-      <div class="task-list">
-        <article *ngFor="let task of myTasksToday" class="task-item">
+      <div class="request-list">
+        <article *ngFor="let request of liveRequests" class="request-row">
           <div>
-            <nz-tag [nzColor]="task.priority === 'P1' ? 'red' : task.priority === 'P2' ? 'orange' : 'blue'">
-              {{ task.priority }}
+            <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
+              {{ partnerIntegration.statusLabel(request.currentStatus) }}
             </nz-tag>
-            <strong>{{ task.title }}</strong>
-            <span>{{ task.partnerName }} · {{ partnerIntegration.typeLabel(task.requestType) }}</span>
+            <strong>{{ partnerName(request.partnerId) }}</strong>
+            <span>{{ partnerIntegration.typeLabel(request.type) }} - {{ request.currentOwner }}</span>
           </div>
-          <button (click)="openRequest(task.requestId)" nz-button nzType="link">Open</button>
+          <button (click)="openRequest(request.id)" nz-button nzType="link">Open</button>
         </article>
       </div>
     </section>

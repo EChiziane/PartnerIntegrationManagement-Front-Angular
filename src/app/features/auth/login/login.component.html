@@ -1,70 +1,71 @@
 <div class="login-page">
   <section class="brand-panel" aria-label="Partner Integration Management App">
-    <a class="brand" routerLink="/landing-page" aria-label="Back to Partner Integration Management App">
+    <a class="brand" routerLink="/landing-page" aria-label="Back to Partner Integration">
       <span class="brand-mark">PI</span>
       <span>Partner Integration</span>
     </a>
 
     <div class="brand-copy">
-      <p class="eyebrow">{{ 'auth.login.brandKicker' | translate }}</p>
-      <h1>{{ 'auth.login.brandTitle' | translate }}</h1>
+      <p class="eyebrow">Internal business workspace</p>
+      <h1>Control every partner request from intake to handover.</h1>
       <p>
-        {{ 'auth.login.brandText' | translate }}
+        A focused operating desk for partner onboarding, updates, VPN actions,
+        technical checks, approvals and downloadable management reports.
       </p>
     </div>
 
     <div class="brand-metrics">
       <div>
-        <strong>24/7</strong>
-        <span>{{ 'auth.login.organizedData' | translate }}</span>
+        <strong>V1 Local</strong>
+        <span>Demo workspace</span>
       </div>
       <div>
-        <strong>Seguro</strong>
-        <span>{{ 'auth.login.authenticatedAccess' | translate }}</span>
+        <strong>Reports</strong>
+        <span>Partner and pipeline PDFs</span>
       </div>
     </div>
   </section>
 
-  <section class="auth-panel" [attr.aria-label]="'auth.login.area' | translate">
+  <section class="auth-panel" aria-label="Login area">
     <nz-card class="login-card">
       <div class="card-heading">
-        <span class="section-label">{{ 'auth.login.area' | translate }}</span>
-        <h2>{{ 'auth.login.welcome' | translate }}</h2>
-        <p>{{ 'auth.login.hint' | translate }}</p>
+        <span class="section-label">Secure access</span>
+        <h2>Welcome back</h2>
+        <p>Use your workspace credentials to continue managing integrations.</p>
       </div>
 
       <form (ngSubmit)="login()" [formGroup]="userForm" novalidate>
         <label class="field">
-          <span>{{ 'auth.login.user' | translate }}</span>
+          <span>User or email</span>
           <nz-input-group nzAddOnBeforeIcon="user">
             <input
               autocomplete="username"
               formControlName="login"
               nz-input
-              [placeholder]="'auth.login.userPlaceholder' | translate"
+              placeholder="name@company.com"
               type="text"/>
           </nz-input-group>
 
           <small *ngIf="isInvalid('login')" class="field-error">
-            {{ 'auth.login.userRequired' | translate }}
+            Enter your user or email.
           </small>
         </label>
 
         <label class="field">
-          <span>{{ 'auth.login.password' | translate }}</span>
+          <span>Password</span>
           <nz-input-group [nzSuffix]="passwordSuffixTpl" nzAddOnBeforeIcon="lock">
             <input
               [type]="isPasswordVisible ? 'text' : 'password'"
               autocomplete="current-password"
               formControlName="password"
               nz-input
-              [placeholder]="'auth.login.passwordPlaceholder' | translate"/>
+              placeholder="Password"/>
           </nz-input-group>
 
           <ng-template #passwordSuffixTpl>
             <button
               (click)="togglePasswordVisibility()"
-              [attr.aria-label]="isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha'"
+              [attr.aria-label]="isPasswordVisible ? 'Hide password' : 'Show password'"
               class="password-toggle"
               type="button">
               <nz-icon [nzType]="isPasswordVisible ? 'eye-invisible' : 'eye'" nzTheme="outline"></nz-icon>
@@ -72,16 +73,13 @@
           </ng-template>
 
           <small *ngIf="isInvalid('password')" class="field-error">
-            {{ 'auth.login.passwordRequired' | translate }}
+            Enter your password.
           </small>
         </label>
 
         <div class="options">
-          <label formControlName="rememberMe" nz-checkbox>{{ 'auth.login.remember' | translate }}</label>
-
-          <button (click)="openForgotPasswordModal()" class="text-button" type="button">
-            {{ 'auth.login.forgot' | translate }}
-          </button>
+          <label formControlName="rememberMe" nz-checkbox>Keep me signed in</label>
+          <span class="local-note">Local access mode</span>
         </div>
 
         <button
@@ -91,10 +89,10 @@
           nzBlock
           nzType="primary"
           type="submit">
-          <span *ngIf="!isLoading">{{ 'auth.login.enter' | translate }}</span>
+          <span *ngIf="!isLoading">Enter workspace</span>
           <span *ngIf="isLoading" class="loading">
             <nz-spin nzSize="small"></nz-spin>
-            {{ 'auth.login.entering' | translate }}
+            Opening workspace
           </span>
         </button>
 
@@ -105,185 +103,7 @@
           nzShowIcon
           nzType="error">
         </nz-alert>
-
-        <div class="register-link">
-          <span>{{ 'auth.login.noAccount' | translate }}</span>
-          <button (click)="openRegisterModal()" class="text-button" type="button">{{ 'auth.login.createAccount' | translate }}</button>
-        </div>
       </form>
     </nz-card>
   </section>
-
-  <nz-modal
-    (nzOnCancel)="closeRegisterModal()"
-    [(nzVisible)]="isRegisterVisible"
-    [nzFooter]="null"
-    [nzMaskClosable]="false"
-    nzCentered
-    nzClassName="auth-modal"
-    nzTitle="{{ 'auth.login.createAccount' | translate }}"
-    nzWidth="720">
-    <ng-container *nzModalContent>
-      <div class="modal-intro">
-        <span class="section-label">{{ 'auth.login.newAccess' | translate }}</span>
-        <p>{{ 'auth.login.registerHint' | translate }}</p>
-      </div>
-      <app-signin></app-signin>
-    </ng-container>
-  </nz-modal>
-
-  <nz-modal
-    (nzOnCancel)="closeForgotPasswordModal()"
-    [(nzVisible)]="isForgotPasswordVisible"
-    [nzFooter]="null"
-    [nzMaskClosable]="false"
-    nzCentered
-    nzClassName="auth-modal recovery-modal"
-    [nzTitle]="'auth.recovery.title' | translate"
-    nzWidth="560">
-    <ng-container *nzModalContent>
-      <div class="recovery-steps">
-        <span [class.active]="recoveryStep === 0">{{ 'auth.recovery.whatsapp' | translate }}</span>
-        <span [class.active]="recoveryStep === 1">{{ 'auth.recovery.confirmAccount' | translate }}</span>
-        <span [class.active]="recoveryStep === 2">{{ 'auth.recovery.newPassword' | translate }}</span>
-      </div>
-
-      <div *ngIf="recoveryStep === 0" class="recovery-step">
-        <div class="modal-intro">
-          <span class="section-label">{{ 'auth.recovery.step1' | translate }}</span>
-          <h3>{{ 'auth.recovery.findAccount' | translate }}</h3>
-          <p>{{ 'auth.recovery.findHint' | translate }}</p>
-        </div>
-
-        <form [formGroup]="forgotPasswordForm" class="recovery-form">
-          <nz-form-item>
-            <nz-form-label nzRequired>WhatsApp</nz-form-label>
-            <nz-form-control [nzErrorTip]="'auth.recovery.phoneRequired' | translate">
-              <nz-input-group nzAddOnBefore="+258">
-                <input
-                  formControlName="phoneWhatsApp"
-                  inputmode="numeric"
-                  nz-input
-                  placeholder="84xxxxxxx"/>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-
-          <div class="recovery-actions">
-            <button (click)="closeForgotPasswordModal()" nz-button nzType="default" type="button">
-              Cancelar
-            </button>
-
-            <button (click)="requestRecovery()" [disabled]="recoveryLoading" nz-button nzType="primary" type="button">
-              <span *ngIf="!recoveryLoading">{{ 'common.actions.continue' | translate }}</span>
-              <span *ngIf="recoveryLoading" class="loading"><nz-spin nzSize="small"></nz-spin></span>
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div *ngIf="recoveryStep === 1" class="recovery-step">
-        <div class="modal-intro">
-          <span class="section-label">{{ 'auth.recovery.step2' | translate }}</span>
-          <h3>{{ 'auth.recovery.confirmData' | translate }}</h3>
-          <p>{{ 'auth.recovery.confirmHint' | translate }}</p>
-        </div>
-
-        <div *ngIf="recoveryPreview" class="recovery-preview">
-          <div>
-            <span>{{ 'common.name' | translate }}</span>
-            <strong>{{ recoveryPreview.maskedName }}</strong>
-          </div>
-          <div>
-            <span>{{ 'common.email' | translate }}</span>
-            <strong>{{ recoveryPreview.maskedEmail }}</strong>
-          </div>
-          <div>
-            <span>{{ 'auth.recovery.whatsapp' | translate }}</span>
-            <strong>{{ recoveryPreview.maskedPhone }}</strong>
-          </div>
-        </div>
-
-        <div class="recovery-actions">
-          <button (click)="backRecovery()" nz-button nzType="default" type="button">{{ 'common.actions.back' | translate }}</button>
-
-          <button (click)="confirmRecovery()" [disabled]="recoveryLoading" nz-button nzType="primary" type="button">
-            <span *ngIf="!recoveryLoading">{{ 'auth.recovery.sendCode' | translate }}</span>
-            <span *ngIf="recoveryLoading" class="loading"><nz-spin nzSize="small"></nz-spin></span>
-          </button>
-        </div>
-      </div>
-
-      <div *ngIf="recoveryStep === 2" class="recovery-step">
-        <div class="modal-intro">
-          <span class="section-label">{{ 'auth.recovery.step3' | translate }}</span>
-          <h3>{{ 'auth.recovery.definePassword' | translate }}</h3>
-          <p>{{ 'auth.recovery.defineHint' | translate }}</p>
-        </div>
-
-        <form [formGroup]="resetPasswordForm" class="recovery-form">
-          <nz-form-item>
-            <nz-form-label nzRequired>{{ 'auth.recovery.code' | translate }}</nz-form-label>
-            <nz-form-control [nzErrorTip]="'auth.recovery.codeRequired' | translate">
-              <input formControlName="otpCode" inputmode="numeric" nz-input placeholder="Ex: 123456"/>
-            </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item>
-            <nz-form-label nzRequired>{{ 'auth.recovery.newPassword' | translate }}</nz-form-label>
-            <nz-form-control [nzErrorTip]="'auth.recovery.minPassword' | translate">
-              <nz-input-group [nzSuffix]="resetPassSuffixTpl">
-                <input
-                  [type]="isResetPasswordVisible ? 'text' : 'password'"
-                  formControlName="newPassword"
-                  nz-input
-                  placeholder="{{ 'auth.recovery.newPassword' | translate }}"/>
-              </nz-input-group>
-
-              <ng-template #resetPassSuffixTpl>
-                <button (click)="toggleResetPasswordVisibility()" class="password-toggle" type="button">
-                  <nz-icon [nzType]="isResetPasswordVisible ? 'eye-invisible' : 'eye'" nzTheme="outline"></nz-icon>
-                </button>
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item>
-            <nz-form-label nzRequired>{{ 'auth.recovery.confirmPassword' | translate }}</nz-form-label>
-            <nz-form-control [nzErrorTip]="'auth.recovery.confirmPasswordTip' | translate">
-              <nz-input-group [nzSuffix]="resetConfirmSuffixTpl">
-                <input
-                  [type]="isResetConfirmVisible ? 'text' : 'password'"
-                  formControlName="confirmPassword"
-                  nz-input
-                  [placeholder]="'auth.recovery.confirmPassword' | translate"/>
-              </nz-input-group>
-
-              <ng-template #resetConfirmSuffixTpl>
-                <button (click)="toggleResetConfirmVisibility()" class="password-toggle" type="button">
-                  <nz-icon [nzType]="isResetConfirmVisible ? 'eye-invisible' : 'eye'" nzTheme="outline"></nz-icon>
-                </button>
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
-
-          <button (click)="confirmRecovery()" class="text-button resend" type="button">{{ 'auth.recovery.resendCode' | translate }}</button>
-
-          <div class="recovery-actions">
-            <button (click)="backRecovery()" nz-button nzType="default" type="button">{{ 'common.actions.back' | translate }}</button>
-
-            <button
-              (click)="submitResetPassword()"
-              [disabled]="recoveryLoading"
-              nz-button
-              nzType="primary"
-              type="button">
-              <span *ngIf="!recoveryLoading">{{ 'common.actions.confirm' | translate }}</span>
-              <span *ngIf="recoveryLoading" class="loading"><nz-spin nzSize="small"></nz-spin></span>
-            </button>
-          </div>
-        </form>
-      </div>
-    </ng-container>
-  </nz-modal>
 </div>

@@ -15,11 +15,11 @@ export interface AppLanguage {
 })
 export class TranslationService {
   readonly languages: AppLanguage[] = [
-    {code: 'pt', label: 'Português'},
+    {code: 'pt', label: 'Portugues'},
     {code: 'en', label: 'English'}
   ];
 
-  private readonly storageKey = 'tc-language';
+  private readonly storageKey = 'pi-language';
   private readonly fallbackLanguage = 'pt';
   private readonly dictionaries = new Map<string, TranslationDictionary>();
   private readonly currentLanguageSubject = new BehaviorSubject<string>(this.getInitialLanguage());

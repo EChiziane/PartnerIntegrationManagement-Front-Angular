@@ -8,6 +8,8 @@ import {isPlatformBrowser} from '@angular/common';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  title = 'PartnerIntegrationManagement';
+
   constructor(@Inject(PLATFORM_ID) private platformId: object) {
   }
 

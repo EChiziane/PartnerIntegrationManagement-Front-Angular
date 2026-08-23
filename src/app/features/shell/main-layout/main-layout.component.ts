@@ -53,8 +53,8 @@ export class MainLayoutComponent implements OnInit {
 
   profileRoute(): string[] {
     return this.currentUserId
-      ? ['/app/user-detail', this.currentUserId]
-      : ['/app/users'];
+      ? ['/app/home']
+      : ['/app/home'];
   }
 
   togglePrimaryNavigation(): void {
