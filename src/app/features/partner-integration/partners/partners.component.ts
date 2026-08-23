@@ -128,14 +128,16 @@ export class PartnersComponent implements OnInit {
     const score: Partial<Record<WorkflowStatus, number>> = {
       TROUBLESHOOTING: 1,
       READY_CONNECTIVITY: 2,
-      READY_UAT: 3,
-      READY_HANDOVER: 4,
-      FORM_VALIDATION: 5,
-      READY_STATEMENT: 6,
-      IMPLEMENTATION: 7,
-      WAITING_SIGNATURES: 8,
-      WAITING_FORM: 9,
-      NEW: 10
+      CONNECTIVITY_TEST: 3,
+      READY_UAT: 4,
+      UAT_IN_PROGRESS: 5,
+      READY_HANDOVER: 6,
+      FORM_VALIDATION: 7,
+      READY_STATEMENT: 8,
+      IMPLEMENTATION: 9,
+      WAITING_SIGNATURES: 10,
+      WAITING_FORM: 11,
+      NEW: 12
     };
 
     return [...openRequests].sort((a, b) =>

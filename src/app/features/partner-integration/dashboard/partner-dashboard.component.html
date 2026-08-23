@@ -39,9 +39,9 @@
     </button>
 
     <button (click)="goPipeline()" class="metric-card ready" type="button">
-      <span>Ready for action</span>
-      <strong>{{ readyForActionCount }}</strong>
-      <small>Internal team can move today</small>
+      <span>In testing</span>
+      <strong>{{ testingCount }}</strong>
+      <small>Connectivity or API/UAT testing</small>
     </button>
 
     <button (click)="goPipeline('TROUBLESHOOTING')" class="metric-card risk" type="button">

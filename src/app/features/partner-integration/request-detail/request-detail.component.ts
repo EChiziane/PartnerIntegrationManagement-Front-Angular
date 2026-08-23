@@ -30,6 +30,7 @@ export class RequestDetailComponent implements OnInit {
     'WAITING_SIGNATURES',
     'IMPLEMENTATION',
     'READY_CONNECTIVITY',
+    'CONNECTIVITY_TEST',
     'READY_UAT',
     'UAT_IN_PROGRESS',
     'READY_HANDOVER',
@@ -114,8 +115,14 @@ export class RequestDetailComponent implements OnInit {
         tone: 'primary'
       }],
       READY_CONNECTIVITY: [{
+        label: 'Start Connectivity Test',
+        description: 'Marks connectivity testing as in progress. Use this while VPN/routes/firewall are being tested.',
+        patch: {vpnStatus: 'IN_PROGRESS', connectivityUat: 'IN_PROGRESS', connectivityPrd: 'IN_PROGRESS'},
+        tone: 'primary'
+      }],
+      CONNECTIVITY_TEST: [{
         label: 'Connectivity PASS',
-        description: 'Moves the request to Ready UAT.',
+        description: 'Confirms connectivity tests passed and moves the request to Ready UAT.',
         patch: {vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS'},
         tone: 'primary'
       }],
@@ -192,10 +199,15 @@ export class RequestDetailComponent implements OnInit {
         description: 'Use if IP Core or IT is not actually complete.',
         patch: {ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'}
       },
-      READY_UAT: {
+      CONNECTIVITY_TEST: {
         label: 'Return to Ready Connectivity',
+        description: 'Use if connectivity testing was started by mistake.',
+        patch: {vpnStatus: 'NOT_STARTED', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'}
+      },
+      READY_UAT: {
+        label: 'Return to Connectivity Test',
         description: 'Use if connectivity pass was registered by mistake.',
-        patch: {connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED', credentialsProvided: false, uatStatus: 'NOT_STARTED'}
+        patch: {vpnStatus: 'IN_PROGRESS', connectivityUat: 'IN_PROGRESS', connectivityPrd: 'IN_PROGRESS', credentialsProvided: false, uatStatus: 'NOT_STARTED'}
       },
       UAT_IN_PROGRESS: {
         label: 'Return to Ready UAT',

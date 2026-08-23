@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-23.3",
+  "version": "2026-08-23.4",
   "partners": [
     {
       "id": "partner-a",
@@ -258,9 +258,9 @@
       "partnerId": "partner-e",
       "type": "NEW_INTEGRATION",
       "openDate": "2026-08-15",
-      "currentStatus": "READY_CONNECTIVITY",
+      "currentStatus": "CONNECTIVITY_TEST",
       "currentOwner": "Me",
-      "nextAction": "Coordinate Connectivity Test",
+      "nextAction": "Run connectivity tests",
       "priority": "P2",
       "followUpDate": "2026-08-22",
       "stageStartDate": "2026-08-19",
@@ -273,9 +273,9 @@
       "signaturesComplete": true,
       "ipCoreStatus": "DONE",
       "itStatus": "DONE",
-      "vpnStatus": "UP",
-      "connectivityUat": "NOT_TESTED",
-      "connectivityPrd": "NOT_TESTED",
+      "vpnStatus": "IN_PROGRESS",
+      "connectivityUat": "IN_PROGRESS",
+      "connectivityPrd": "IN_PROGRESS",
       "credentialsProvided": false,
       "uatStatus": "NOT_STARTED",
       "handoverComplete": false,
@@ -404,7 +404,7 @@
       "requestId": "request-e",
       "date": "2026-08-23T08:20:00.000Z",
       "title": "Source File Loaded",
-      "description": "Ready Connectivity"
+      "description": "Connectivity Test"
     },
     {
       "id": "event-f",

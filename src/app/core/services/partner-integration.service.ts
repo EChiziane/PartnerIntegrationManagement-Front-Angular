@@ -205,6 +205,9 @@ export class PartnerIntegrationService {
         if (request.itStatus !== 'DONE' && ['READY_IMPLEMENTATION', 'IMPLEMENTATION'].includes(request.currentStatus)) {
           items.push(this.scan('IT', 'Rotas e politicas de firewall ja foram concluidas?', partnerName, request));
         }
+        if (request.currentStatus === 'CONNECTIVITY_TEST') {
+          items.push(this.scan('IT', 'Testes de conectividade UAT/PRD ja passaram?', partnerName, request));
+        }
         if (['WAITING_FORM', 'FORM_VALIDATION', 'TROUBLESHOOTING', 'UAT_IN_PROGRESS'].includes(request.currentStatus)) {
           items.push(this.scan('PARTNER', 'Existe resposta, form, correcao ou resultado do parceiro?', partnerName, request));
         }
@@ -230,6 +233,7 @@ export class PartnerIntegrationService {
 
   statusColor(status: WorkflowStatus): string {
     if (status === 'CLOSED' || status === 'READY_UAT' || status === 'READY_CONNECTIVITY' || status === 'READY_HANDOVER') return 'green';
+    if (status === 'CONNECTIVITY_TEST' || status === 'UAT_IN_PROGRESS') return 'cyan';
     if (status.startsWith('WAITING')) return 'orange';
     if (status === 'TROUBLESHOOTING') return 'red';
     if (status === 'NEW') return 'default';
@@ -258,6 +262,7 @@ export class PartnerIntegrationService {
     if (request.uatStatus === 'IN_PROGRESS' || request.credentialsProvided) return 'UAT_IN_PROGRESS';
     if (request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL' || request.uatStatus === 'ISSUE') return 'TROUBLESHOOTING';
     if (request.connectivityUat === 'PASS' && request.connectivityPrd === 'PASS') return 'READY_UAT';
+    if (request.connectivityUat === 'IN_PROGRESS' || request.connectivityPrd === 'IN_PROGRESS' || request.vpnStatus === 'IN_PROGRESS') return 'CONNECTIVITY_TEST';
     if (request.ipCoreStatus === 'DONE' && request.itStatus === 'DONE') return 'READY_CONNECTIVITY';
     if (request.signaturesComplete && (request.ipCoreStatus !== 'DONE' || request.itStatus !== 'DONE')) return 'IMPLEMENTATION';
     if (request.statementSent && !request.signaturesComplete) return 'WAITING_SIGNATURES';
@@ -467,7 +472,7 @@ export class PartnerIntegrationService {
       base('request-b', 'partner-b', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true}),
       base('request-c', 'partner-c', 'UPDATE_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true}),
       base('request-d', 'partner-d', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'IN_PROGRESS'}),
-      base('request-e', 'partner-e', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'UP'}),
+      base('request-e', 'partner-e', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'IN_PROGRESS', connectivityUat: 'IN_PROGRESS', connectivityPrd: 'IN_PROGRESS'}),
       base('request-f', 'partner-f', 'CONNECTIVITY_SUPPORT', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'DOWN', connectivityUat: 'FAIL', blocker: 'Partner reports VPN down'}),
       base('request-g', 'partner-g', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS', credentialsProvided: true, uatStatus: 'IN_PROGRESS'}),
       base('request-h', 'partner-h', 'NEW_INTEGRATION', {formSent: true, formReceived: true, formValidated: true, statementCreated: true, statementSent: true, signaturesComplete: true, ipCoreStatus: 'DONE', itStatus: 'DONE', vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS', credentialsProvided: true, uatStatus: 'PASS', handoverComplete: true, closeDate: this.today()})

@@ -89,15 +89,15 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'READY_IMPLEMENTATION'"
-        (click)="confirmAction('Submitted to IP Core and IT', {ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'})"
+        (click)="confirmAction('Sent to vOffice', {statementSent: true})"
         nz-button
         nzType="primary">
-        Submit IP Core + IT
+        Send to vOffice
       </button>
 
       <button
         *ngIf="activeRequest.currentStatus === 'WAITING_SIGNATURES'"
-        (click)="confirmAction('Approval / Signatures Complete', {signaturesComplete: true})"
+        (click)="confirmAction('Approval / Signatures Complete', {signaturesComplete: true, ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'})"
         nz-button
         nzType="primary">
         Approval Complete
@@ -113,6 +113,14 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'READY_CONNECTIVITY'"
+        (click)="confirmAction('Connectivity Test Started', {vpnStatus: 'IN_PROGRESS', connectivityUat: 'IN_PROGRESS', connectivityPrd: 'IN_PROGRESS'})"
+        nz-button
+        nzType="primary">
+        Start Connectivity Test
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST'"
         (click)="confirmAction('Connectivity Passed', {vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS'})"
         nz-button
         nzType="primary">

@@ -19,9 +19,11 @@ export class PartnerDashboardComponent implements OnInit {
     'WAITING_FORM',
     'FORM_VALIDATION',
     'READY_STATEMENT',
+    'READY_IMPLEMENTATION',
     'WAITING_SIGNATURES',
     'IMPLEMENTATION',
     'READY_CONNECTIVITY',
+    'CONNECTIVITY_TEST',
     'TROUBLESHOOTING',
     'READY_UAT',
     'UAT_IN_PROGRESS',
@@ -78,6 +80,12 @@ export class PartnerDashboardComponent implements OnInit {
   get readyForActionCount(): number {
     return this.openRequests.filter(request =>
       ['FORM_VALIDATION', 'READY_STATEMENT', 'READY_CONNECTIVITY', 'READY_UAT', 'READY_HANDOVER'].includes(request.currentStatus)
+    ).length;
+  }
+
+  get testingCount(): number {
+    return this.openRequests.filter(request =>
+      ['CONNECTIVITY_TEST', 'UAT_IN_PROGRESS'].includes(request.currentStatus)
     ).length;
   }
 
