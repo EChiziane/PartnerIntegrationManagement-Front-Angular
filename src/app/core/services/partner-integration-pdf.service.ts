@@ -10,6 +10,10 @@ import {
 } from '@shared/models/partner-integration';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 
+export interface PartnerProfilePdfOptions {
+  includeCredentials?: boolean;
+}
+
 @Injectable({providedIn: 'root'})
 export class PartnerIntegrationPdfService {
   constructor(
@@ -109,6 +113,7 @@ export class PartnerIntegrationPdfService {
         'Open Date',
         'Follow-up',
         'Stage Start',
+        'Credentials',
         'Blocker'
       ]],
       body: requests.map(request => [
@@ -121,6 +126,7 @@ export class PartnerIntegrationPdfService {
         request.openDate || '-',
         request.followUpDate || '-',
         request.stageStartDate || '-',
+        this.credentialsStatus(request),
         request.blocker || '-'
       ]),
       theme: 'grid',
@@ -132,7 +138,12 @@ export class PartnerIntegrationPdfService {
     doc.save(this.documentFilename.build('PIPELINE', 'REQUESTS', scopeLabel));
   }
 
-  async downloadPartnerProfile(partner: Partner, requests: PartnerRequest[], events: TimelineEvent[]): Promise<void> {
+  async downloadPartnerProfile(
+    partner: Partner,
+    requests: PartnerRequest[],
+    events: TimelineEvent[],
+    options: PartnerProfilePdfOptions = {}
+  ): Promise<void> {
     const [{default: JsPDF}, {default: autoTable}] = await Promise.all([
       import('jspdf'),
       import('jspdf-autotable')
@@ -163,6 +174,7 @@ export class PartnerIntegrationPdfService {
       ['Public IP (Peer)', this.publicPeers(partner)],
       ['Private Endpoints', this.privateEndpoints(partner)],
       ['Auth Method', partner.authMethod || '-'],
+      ['Test Credentials', this.partnerCredentialsSummary(requests, options.includeCredentials)],
       ['OwnCloud Folder', partner.ownCloudFolderUrl || '-'],
       ['Form Notes', partner.formNotes || '-'],
       ['Last Activity', partner.lastActivity || '-'],
@@ -179,7 +191,7 @@ export class PartnerIntegrationPdfService {
     autoTable(doc, {
       startY: profileFinalY + 8,
       margin: {left: margin, right: margin, bottom: 20},
-      head: [['Request Type', 'Status', 'Owner', 'Next Action', 'Priority', 'Open Date', 'Follow-up', 'Blocker']],
+      head: [['Request Type', 'Status', 'Owner', 'Next Action', 'Priority', 'Open Date', 'Follow-up', 'Credentials', 'Blocker']],
       body: requests.map(request => [
         request.title || this.partnerIntegration.typeLabel(request.type),
         this.partnerIntegration.statusLabel(request.currentStatus),
@@ -188,6 +200,7 @@ export class PartnerIntegrationPdfService {
         request.priority || '-',
         request.openDate || '-',
         request.followUpDate || '-',
+        this.credentialsStatus(request),
         request.blocker || '-'
       ]),
       theme: 'grid',
@@ -326,6 +339,31 @@ export class PartnerIntegrationPdfService {
       partner.uatPort ? `UAT: ${partner.partnerServerIp || '-'}:${partner.uatPort}` : '',
       partner.prdPort ? `PRD: ${partner.partnerServerIp || '-'}:${partner.prdPort}` : ''
     ].filter(Boolean).join(' | ') || partner.partnerServerIp || '-';
+  }
+
+  private credentialsStatus(request: PartnerRequest): string {
+    if (request.testCredentials?.trim()) return 'Recorded';
+    if (request.credentialsProvided) return 'Provided, details missing';
+    return 'Not provided';
+  }
+
+  private partnerCredentialsSummary(requests: PartnerRequest[], includeCredentials = false): string {
+    const credentialRequests = requests.filter(request => request.credentialsProvided || request.testCredentials?.trim());
+    if (!credentialRequests.length) return 'Not provided';
+    if (!includeCredentials) {
+      return credentialRequests
+        .map(request => `${request.title || this.partnerIntegration.typeLabel(request.type)}: ${this.credentialsStatus(request)}${request.testCredentials?.trim() ? ' - ********' : ''}`)
+        .join(' | ');
+    }
+
+    return credentialRequests
+      .map(request => {
+        const label = request.title || this.partnerIntegration.typeLabel(request.type);
+        return request.testCredentials?.trim()
+          ? `${label}: ${request.testCredentials.trim()}`
+          : `${label}: Provided, details missing`;
+      })
+      .join('\n\n');
   }
 
   private mostUrgentStatus(requests: PartnerRequest[]): WorkflowStatus | null {

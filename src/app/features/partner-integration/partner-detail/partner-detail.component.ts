@@ -162,6 +162,19 @@ export class PartnerDetailComponent implements OnInit {
 
   downloadProfile(): void {
     if (!this.partner) return;
-    this.pdf.downloadPartnerProfile(this.partner, this.requests, this.events);
+    const hasCredentials = this.requests.some(request => request.testCredentials?.trim());
+    if (!hasCredentials) {
+      this.pdf.downloadPartnerProfile(this.partner, this.requests, this.events);
+      return;
+    }
+
+    this.modal.confirm({
+      nzTitle: 'Include test credentials?',
+      nzContent: 'This partner has recorded test credentials. Hide them unless this PDF really needs to include sensitive details.',
+      nzOkText: 'Include credentials',
+      nzCancelText: 'Hide credentials',
+      nzOnOk: () => this.pdf.downloadPartnerProfile(this.partner!, this.requests, this.events, {includeCredentials: true}),
+      nzOnCancel: () => this.pdf.downloadPartnerProfile(this.partner!, this.requests, this.events, {includeCredentials: false})
+    });
   }
 }
