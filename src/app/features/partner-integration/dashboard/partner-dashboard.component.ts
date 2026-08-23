@@ -185,6 +185,14 @@ export class PartnerDashboardComponent implements OnInit {
     return this.partners.find(partner => partner.id === partnerId)?.name || 'Partner';
   }
 
+  stageLabel(stage: WorkflowStage): string {
+    return this.partnerIntegration.stageLabel(stage.label);
+  }
+
+  stageDescription(stage: WorkflowStage): string {
+    return this.partnerIntegration.stageDescription(stage.label, stage.description);
+  }
+
   goPipeline(status?: WorkflowStatus): void {
     this.router.navigate(['/app/integrations'], {queryParams: status ? {status} : {}});
   }

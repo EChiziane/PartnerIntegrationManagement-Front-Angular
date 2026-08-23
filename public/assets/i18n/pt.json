@@ -1,53 +1,244 @@
 {
-  "app": {
-    "name": "eMola Integration Operations",
-    "subtitle": "Mesa operacional de integracoes"
-  },
+  "app": {"name": "eMola Integration Operations", "subtitle": "Mesa operacional de integracoes"},
   "layout": {
-    "sections": {
-      "operations": "Operacoes"
-    },
-    "nav": {
-      "home": "Inicio",
-      "pipeline": "Pipeline de Pedidos",
-      "tasks": "Execucao",
-      "scan": "Controlo",
-      "partners": "Partners"
-    },
-    "topbar": {
-      "subtitle": "Partners, integracoes e pedidos"
-    },
-    "status": {
-      "demoData": "Dados demo ativos"
-    },
-    "language": {
-      "label": "Idioma"
-    },
-    "account": {
-      "authenticated": "Autenticado",
-      "defaultUser": "Utilizador",
-      "logout": "Sair"
-    },
-    "roles": {
-      "admin": "Administrador",
-      "manager": "Gestor",
-      "operator": "Operador"
-    },
-    "pageEnd": {
-      "title": "Fim da pagina",
-      "hint": "Nao ha mais conteudo abaixo deste ponto."
-    }
+    "sections": {"operations": "Operacoes"},
+    "nav": {"home": "Inicio", "pipeline": "Pipeline de Pedidos", "tasks": "Execucao", "scan": "Controlo", "partners": "Partners", "mobile": "Navegacao mobile"},
+    "topbar": {"subtitle": "Partners, integracoes e pedidos"},
+    "status": {"demoData": "Dados demo ativos", "localV1": "Local V1"},
+    "language": {"label": "Idioma", "ptInterface": "Interface em Portugues", "enInterface": "Interface em Ingles"},
+    "account": {"authenticated": "Autenticado", "defaultUser": "Utilizador", "logout": "Sair"},
+    "roles": {"admin": "Administrador", "manager": "Gestor", "operator": "Operador"},
+    "pageEnd": {"title": "Fim da pagina", "hint": "Nao ha mais conteudo abaixo deste ponto."}
   },
   "common": {
     "actions": {
-      "back": "Voltar",
-      "cancel": "Cancelar",
-      "confirm": "Confirmar",
-      "continue": "Continuar",
-      "download": "Baixar",
-      "save": "Gravar"
+      "add": "Adicionar", "back": "Voltar", "block": "Bloquear", "cancel": "Cancelar", "confirm": "Confirmar", "continue": "Continuar",
+      "download": "Baixar", "edit": "Editar", "importVpnForm": "Importar Form VPN", "open": "Abrir", "refresh": "Atualizar",
+      "register": "Registar", "save": "Gravar", "update": "Atualizar", "work": "Trabalhar"
     },
-    "email": "Email",
-    "name": "Nome"
+    "all": "Todos", "clear": "Limpo", "days": "dias", "email": "Email", "name": "Nome", "none": "-", "notDefined": "Nao definido"
+  },
+  "fields": {
+    "authMethod": "Metodo de autenticacao", "businessOwner": "Business Owner", "cnocSrCode": "Codigo SR CNOC", "company": "Empresa",
+    "companyName": "Nome da empresa", "connectivity": "Conectividade", "currentOwner": "Responsavel atual", "date": "Data",
+    "email": "Email", "environment": "Ambiente", "followUp": "Follow-up", "groupLink": "Link do grupo", "importedAt": "Importado em",
+    "importedFile": "Ficheiro importado", "integration": "Integracao", "integrationStatus": "Estado da integracao",
+    "lastActivity": "Ultima atividade", "lastUpdated": "Ultima atualizacao", "nextAction": "Proxima acao", "openRequests": "Pedidos abertos",
+    "owner": "Responsavel", "ownCloudFolder": "Pasta OwnCloud", "phone": "Telefone", "priority": "Prioridade",
+    "privateEndpoints": "Endpoints de IP privado", "privateIp": "IP privado", "publicPeer": "IP publico (Peer)", "representative": "Representante",
+    "representativeName": "Nome do representante", "requestStatus": "Estado do pedido", "service": "Servico", "serviceApi": "Servico/API",
+    "stageStart": "Inicio da etapa", "status": "Estado", "technicalContact": "Contacto tecnico", "uatApi": "UAT/API", "vpn": "VPN"
+  },
+  "workflow": {
+    "status": {
+      "BLOCKED": "Bloqueado", "NEW": "Novo", "WAITING_FORM": "Aguardar Form", "FORM_VALIDATION": "Validacao do Form",
+      "READY_STATEMENT": "Pronto para Statement", "READY_IMPLEMENTATION": "Pronto para Implementacao", "WAITING_SIGNATURES": "Aguardar Assinaturas",
+      "IMPLEMENTATION": "Implementacao", "READY_CONNECTIVITY": "Pronto para Conectividade", "CONNECTIVITY_TEST": "Teste de Conectividade",
+      "TROUBLESHOOTING": "Troubleshooting", "READY_UAT": "Pronto para UAT", "UAT_IN_PROGRESS": "UAT em Curso",
+      "READY_HANDOVER": "Pronto para Handover", "CLOSED": "Fechado"
+    },
+    "type": {
+      "NEW_INTEGRATION": "Nova Integracao", "UPDATE_INTEGRATION": "Atualizacao de Integracao", "BLOCK_VPN": "Bloqueio da VPN de Integracao",
+      "UNBLOCK_VPN": "Desbloqueio da VPN de Integracao", "CONNECTIVITY_SUPPORT": "Troubleshooting da Integracao"
+    },
+    "health": {
+      "NOT_ESTABLISHED": "Nao Estabelecida", "PENDING_SETUP": "Configuracao Pendente", "IMPLEMENTING": "Em Implementacao",
+      "TESTING": "Em Testes", "HEALTHY": "Saudavel", "DEGRADED": "Degradada", "DOWN": "Down", "BLOCKED": "Bloqueada", "DISABLED": "Desativada"
+    },
+    "owner": {
+      "Blocked": "Bloqueado", "Closed": "Fechado", "IP Core / IT": "IP Core / IT", "Me": "Eu", "Partner": "Partner",
+      "Technical Team / Partner": "Equipa Tecnica / Partner", "vOffice / Signers": "vOffice / Assinantes"
+    },
+    "action": {
+      "Archive evidence and keep integration active": "Arquivar evidencias e manter a integracao ativa",
+      "Coordinate Connectivity Test": "Coordenar teste de conectividade", "Create Statement": "Criar statement",
+      "Follow up implementation": "Acompanhar implementacao", "Follow up implementation: IP Core": "Acompanhar implementacao: IP Core",
+      "Follow up implementation: IP Core + IT": "Acompanhar implementacao: IP Core + IT", "Follow up implementation: IT": "Acompanhar implementacao: IT",
+      "Follow up partner UAT/API testing": "Acompanhar testes UAT/API do partner", "Follow up signatures": "Acompanhar assinaturas",
+      "Follow up VPN integration form": "Acompanhar formulario VPN de integracao", "Handover to Business/Product": "Fazer handover para Business/Product",
+      "Implementation complete": "Implementacao concluida", "Provide API Test Credentials": "Fornecer credenciais de teste da API",
+      "Resolve blocker or unblock request": "Resolver bloqueio ou desbloquear pedido", "Run connectivity tests": "Executar testes de conectividade",
+      "Send Introduction + VPN Form + API Spec": "Enviar introducao + Form VPN + especificacao API",
+      "Submit to IP Core + Submit to IT": "Submeter ao IP Core + submeter ao IT",
+      "Troubleshoot integration / identify owner / next action": "Investigar integracao / identificar responsavel / proxima acao",
+      "Validate Form": "Validar Form"
+    },
+    "stage": {
+      "approval": "Aprovacao", "closed": "Fechado", "exception": "Excecao", "implementation": "Implementacao", "intake": "Entrada", "testing": "Testes",
+      "approvalDescription": "Statement e assinaturas", "closedDescription": "Pedido arquivado", "exceptionDescription": "Bloqueio ou troubleshooting",
+      "implementationDescription": "IP Core, IT e prontidao", "intakeDescription": "Pedido aberto e validacao do form", "testingDescription": "VPN, conectividade e UAT"
+    }
+  },
+  "dashboard": {
+    "eyebrow": "Centro de Comando de Integracoes", "title": "Controle todos os partners, integracoes e pedidos.",
+    "subtitle": "Acompanhe o perfil do partner, a conexao ativa e cada pedido que altera ou corrige essa integracao.",
+    "partnerPortfolio": "Portfolio de partners", "registeredProfiles": "Perfis de empresas registados", "activeIntegrations": "Integracoes ativas",
+    "healthSummary": "{{healthy}} saudaveis, {{attention}} precisam de atencao", "requestsTesting": "Pedidos em teste",
+    "testingHint": "Testes de VPN, conectividade ou UAT/API", "riskBlockers": "Riscos e bloqueios", "riskHint": "P1, etapa antiga ou troubleshooting",
+    "waitingExternal": "Aguardar externo", "executionQueue": "Fila de execucao", "closedRequests": "Pedidos fechados", "readyHandover": "Pronto para handover",
+    "managementFocus": "Foco de gestao", "attentionQueue": "Fila de atencao", "openRisks": "Abrir riscos", "ageDays": "{{days}} dia(s)",
+    "noCritical": "Sem itens criticos agora.", "execution": "Execucao", "todayQueue": "Fila de trabalho de hoje", "viewTasks": "Ver tarefas",
+    "noTasksToday": "Sem tarefas atribuidas para hoje.", "requestPipeline": "Pipeline de pedidos", "requestsByStatus": "Pedidos por estado do workflow",
+    "openRequestPipeline": "Abrir Pipeline de Pedidos", "requestMix": "Mix de pedidos", "openRequestsByType": "Pedidos abertos por tipo",
+    "currentActivity": "Atividade atual", "recentRequests": "Pedidos de integracao recentes", "viewAll": "Ver todos"
+  },
+  "landing": {
+    "openWorkspace": "Abrir Workspace", "enterApp": "Entrar na App",
+    "subtitle": "Um workspace operacional focado em perfis de partners, integracoes VPN, follow-ups de implementacao, testes de conectividade, UAT e historico de pedidos.",
+    "openRequests": "Pedidos Abertos", "workflowStatus": "Estado do Workflow", "dependencies": "Dependencias", "outputs": "Saidas",
+    "capabilityPipelineTitle": "Pipeline de Pedidos", "capabilityPipelineText": "Agrupe pedidos por estado e responsavel para ver bloqueios rapidamente.",
+    "capabilityExecutionTitle": "Execucao", "capabilityExecutionText": "Gere proximas acoes pelas regras do workflow mantendo a escolha do operador.",
+    "capabilityScanTitle": "Scan de Controlo", "capabilityScanText": "Execute checks AM/PM para assinaturas, IP Core, IT e respostas do partner.",
+    "capabilityReportsTitle": "Relatorios", "capabilityReportsText": "Imprima listas de partners, trabalho de integracao e perfis em PDFs profissionais."
+  },
+  "auth": {
+    "brandAria": "eMola Integration Operations", "backAria": "Voltar para eMola Integration Operations", "loginArea": "Area de login",
+    "workspaceEyebrow": "Workspace interno de negocio", "workspaceTitle": "Controle todos os partners, integracoes e pedidos.",
+    "workspaceSubtitle": "Uma mesa operacional focada em perfis de partners, acoes de integracao VPN, checks tecnicos, aprovacoes e relatorios de gestao baixaveis.",
+    "demoWorkspace": "Workspace demo", "reports": "Relatorios", "reportsHint": "PDFs de partners e integracoes",
+    "secureAccess": "Acesso seguro", "welcomeBack": "Bem-vindo de volta", "loginHint": "Use as credenciais do workspace para continuar a gerir integracoes.",
+    "userOrEmail": "Utilizador ou email", "userPlaceholder": "nome@empresa.com", "userRequired": "Informe o utilizador ou email.",
+    "password": "Senha", "passwordPlaceholder": "Senha", "hidePassword": "Ocultar senha", "showPassword": "Mostrar senha", "passwordRequired": "Informe a senha.",
+    "rememberMe": "Manter sessao iniciada", "localMode": "Modo de acesso local", "enterWorkspace": "Entrar no workspace", "openingWorkspace": "A abrir workspace"
+  },
+  "partners": {
+    "eyebrow": "Partners", "title": "Registo de partners", "subtitle": "Pesquise perfis de empresas, veja a integracao atual e abra pedidos controlados.",
+    "newPartner": "Novo Partner", "downloadRegistry": "Baixar Registo", "searchPlaceholder": "Pesquisar por partner, representante, servico, peer IP ou endpoint privado",
+    "active": "Ativos", "open": "Abertos", "attention": "Atencao", "category": "Categoria do partner", "allCategories": "Todas categorias",
+    "defaultRequestAction": "Acao padrao de pedido",
+    "headers": {"institution": "Inst.", "service": "Servico", "integrationStatus": "Estado da integracao", "integration": "Integracao", "urgentRequest": "Pedido urgente", "date": "Data", "actions": "Acoes"},
+    "noRepresentative": "Sem representante", "peer": "Peer", "private": "Privado", "needsAttention": "Precisa de atencao", "newAction": "Nova Acao",
+    "noPartnersTitle": "Nenhum partner encontrado", "noPartnersHint": "Tente outra pesquisa ou limpe o filtro ativo.", "drawerTitle": "Novo Partner",
+    "registration": "Registo de partner", "createProfile": "Criar perfil do partner",
+    "drawerSubtitle": "Registe o perfil da empresa, dados do form, detalhes da integracao atual e pasta documental.",
+    "partnerIdentity": "Identidade do partner", "partnerIdentityHint": "Empresa, ownership e informacao do representante.",
+    "contacts": "Contactos", "contactsHint": "Pessoas para acompanhar negocio e execucao tecnica.",
+    "connectivityHint": "Dados de rede do formulario VPN usados para estabelecer a integracao.", "documents": "Documentos",
+    "documentsHint": "Pasta central para forms, statements, evidencias e aprovacoes.", "privateEndpointHint": "Cada IP privado deve incluir porta e ambiente.",
+    "createPartner": "Criar Partner", "otpPlaceholder": "Conta OTP se aplicavel", "representativePlaceholder": "Representante da empresa",
+    "groupPlaceholder": "Link do grupo WhatsApp/Teams ou chat de onboarding", "businessOwnerPlaceholder": "Comece a escrever o owner ou departamento",
+    "authPlaceholder": "API Key, Basic, OAuth, mTLS...", "emailPlaceholder": "partner@example.com",
+    "ownCloudPlaceholder": "https://owncloud.../pasta-do-partner", "notesPlaceholder": "Notas importantes do form ou contexto de onboarding"
+  },
+  "partnerDetail": {
+    "cockpit": "Cockpit do partner", "serviceNotDefined": "Servico/API nao definido", "noDrivingRequest": "Ainda nao existe pedido a comandar esta integracao",
+    "downloadProfile": "Baixar PDF do Perfil", "editPartner": "Editar Partner", "openActiveRequest": "Abrir Pedido Ativo", "startUpdate": "Iniciar Pedido de Update",
+    "identity": "Identidade", "profile": "Perfil do partner", "openGroup": "Abrir grupo", "savePartnerData": "Gravar Dados do Partner",
+    "currentIntegration": "Integracao atual", "technicalProfile": "Perfil tecnico", "openRequestPipeline": "Abrir Pipeline do Pedido",
+    "openFolder": "Abrir pasta da integracao", "connectionState": "Estado da conexao que temos com este partner", "stateDrivenBy": "Estado ditado por",
+    "activeRequest": "Pedido ativo nesta integracao", "openFullRequest": "Abrir Pedido Completo", "blockedRequest": "Pedido bloqueado",
+    "noBlocker": "Sem razao de bloqueio registada", "blockedAt": "Bloqueado em {{date}}. Desbloqueie este pedido quando o mesmo trabalho puder continuar.",
+    "unblockRequest": "Desbloquear Pedido", "sendFormApiSpec": "Enviar Form/API Spec", "markVpnFormReceived": "Marcar Form VPN Recebido",
+    "validateForm": "Validar Form", "statementCreated": "Statement Criado", "sendToVoffice": "Enviar para vOffice", "approvalComplete": "Aprovacao Completa",
+    "ipCoreDone": "IP Core Feito", "itDone": "IT Feito", "startConnectivityTest": "Iniciar Teste de Conectividade", "vpnUp": "VPN UP",
+    "uatConnectivityPass": "Conectividade UAT PASS", "prdConnectivityPass": "Conectividade PRD PASS", "provideCredentials": "Fornecer Credenciais de Teste",
+    "uatPass": "UAT PASS", "closeRequest": "Fechar Pedido", "markIssue": "Marcar Problema", "blockRequest": "Bloquear Pedido",
+    "testCredentials": "Credenciais de teste", "pasteCredentialsFor": "Cole as credenciais fornecidas a {{partner}}.",
+    "credentialsPlaceholder": "Cole URL UAT, username, password, API key, MSISDNs de teste ou instrucoes partilhadas com o partner",
+    "saveMarkProvided": "Gravar e Marcar Fornecido", "credentialsProvided": "Credenciais Fornecidas", "credentialsNotRecorded": "Credenciais Nao Registadas",
+    "markedNoCredentialDetails": "Marcado como fornecido, mas sem detalhes das credenciais registados.", "noCredentialsRequest": "Ainda nao ha credenciais registadas para este pedido.",
+    "addCredentials": "Adicionar Credenciais", "integrationRequests": "Pedidos da integracao", "historyTitle": "Acoes e historico nesta conexao",
+    "activeRequestExists": "Ja existe pedido ativo", "continueActiveRequest": "Continue o pedido ativo, excepto se o trabalho atual estiver bloqueado.",
+    "openRequestAction": "Abrir Acao de Pedido", "openedOwnerFollow": "Aberto {{openDate}} · Responsavel {{owner}} · Follow-up {{followUp}}",
+    "history": "Historico", "partnerHistory": "Historico do partner e da integracao", "noHistory": "Ainda nao ha historico registado."
+  },
+  "request": {
+    "pipelineBack": "Pipeline de Pedidos", "workflow": "Workflow do pedido", "controlState": "Estado de controlo", "blockedRequest": "Pedido bloqueado",
+    "noBlocker": "Sem razao de bloqueio registada", "blockedAt": "Bloqueado em {{date}}. Desbloqueie quando o mesmo pedido puder continuar.",
+    "unblockRequest": "Desbloquear Pedido", "allowedNextStep": "Proximo passo permitido", "allowedHint": "Apenas as acoes validas para o estado atual estao ativas.",
+    "noForwardAction": "Nao existe acao seguinte para este estado.", "moveBack": "Voltar Estado", "testCredentials": "Credenciais de teste",
+    "pasteCredentialsFor": "Cole as credenciais fornecidas a {{partner}}.", "credentialsPlaceholder": "Cole URL UAT, username, password, API key, MSISDNs de teste ou instrucoes partilhadas com o partner",
+    "saveMarkProvided": "Gravar e Marcar Fornecido", "partnerIntegration": "Partner e integracao", "formSnapshot": "Snapshot dos dados do form",
+    "editManualData": "Editar Dados Manuais", "publicPeersPlaceholder": "Um ou mais IPs publicos peer, separados por virgula ou quebra de linha",
+    "technicalRequiredTitle": "Dados tecnicos obrigatorios antes da validacao",
+    "technicalRequiredHint": "Preencha o peer publico e os endpoints privados manualmente, ou importe o form VPN, depois valide.",
+    "privateEndpointHint": "Cada IP privado deve incluir porta e ambiente.", "servicePlaceholder": "Business Code, Push USSD...",
+    "technicalContactPlaceholder": "Nome ou equipa", "authPlaceholder": "Pre-share Key (PSK), API Key...", "ownCloudPlaceholder": "https://owncloud...",
+    "notes": "Notas", "notesPlaceholder": "Notas do formulario do pedido", "saveTechnicalData": "Gravar Dados Tecnicos",
+    "credentialsProvidedTitle": "Credenciais fornecidas", "uatCredentials": "Credenciais de teste UAT/API", "noCredentialsRecorded": "Sem credenciais registadas",
+    "markedNoCredentialDetails": "Este pedido foi marcado como fornecido antes de os detalhes das credenciais serem capturados.",
+    "noCredentialsYet": "Este pedido chegou a prontidao UAT, mas ainda nao tem credenciais registadas.", "history": "Historico", "timeline": "Linha do tempo",
+    "continue": "Continuar",
+    "actions": {
+      "sendFormApiSpec": "Enviar Form & API Spec", "sendFormApiSpecDescription": "Move o pedido para Aguardar Form.",
+      "formReceived": "Form Recebido", "formReceivedDescription": "Move o pedido para Validacao do Form.",
+      "formValidated": "Form Validado", "formValidatedDescription": "Move o pedido para Pronto para Statement.",
+      "formNeedsDataDescription": "Importe o Form VPN ou preencha peer/endpoints manualmente antes da validacao.",
+      "statementCreated": "Statement Criado", "statementCreatedDescription": "Deixa o pedido pronto para submissao de implementacao.",
+      "sendToVoffice": "Enviar para vOffice", "sendToVofficeDescription": "Move o pedido para Aguardar Assinaturas.",
+      "approvalComplete": "Aprovacao Completa", "approvalCompleteDescription": "Confirma aprovacoes/assinaturas e submete ao IP Core + IT.",
+      "ipCoreDone": "IP Core Feito", "ipCoreDoneItAlready": "IT ja esta feito. Isto completa a implementacao e move para Pronto para Conectividade.",
+      "ipCoreDoneDescription": "Regista conclusao do IP Core. O pedido fica em Implementacao ate IT tambem terminar.",
+      "itDone": "IT Feito", "itDoneIpAlready": "IP Core ja esta feito. Isto completa a implementacao e move para Pronto para Conectividade.",
+      "itDoneDescription": "Regista conclusao de IT/firewall/rotas. O pedido fica em Implementacao ate IP Core tambem terminar.",
+      "startConnectivity": "Iniciar Teste de Conectividade", "startConnectivityDescription": "Inicia a validacao de conectividade. A VPN deve ser confirmada antes de passar testes de ambiente.",
+      "vpnUp": "VPN UP", "vpnUpDescription": "Confirma que o tunel VPN esta up. A conectividade dos ambientes pode passar depois disso.",
+      "uatConnectivityPass": "Conectividade UAT PASS", "uatConnectivityPassDescription": "Confirma conectividade UAT deste partner.",
+      "prdConnectivityPass": "Conectividade PRD PASS", "prdConnectivityPassDescription": "Confirma conectividade PRD deste partner.",
+      "provideCredentials": "Fornecer Credenciais de Teste", "provideCredentialsDescription": "Cole as credenciais ou instrucoes de teste dadas a este partner.",
+      "uatPass": "UAT PASS", "uatPassDescription": "Move o pedido para Pronto para Handover.",
+      "handoverComplete": "Handover Completo", "handoverCompleteDescription": "Fecha o pedido.",
+      "registerIssue": "Registar Problema", "registerIssueDescription": "Move o pedido para Troubleshooting.",
+      "blockRequest": "Bloquear Pedido", "blockRequestDescription": "Pausa este pedido com razao obrigatoria de bloqueio. Use quando o pedido ativo nao puder continuar."
+    },
+    "backActions": {
+      "returnNew": "Voltar para Novo", "returnNewDescription": "Use apenas se o Form/API Spec nao foi realmente enviado.",
+      "returnWaitingForm": "Voltar para Aguardar Form", "returnWaitingFormDescription": "Use se o form recebido estiver invalido ou incompleto.",
+      "returnFormValidation": "Voltar para Validacao do Form", "returnFormValidationDescription": "Use se a validacao precisar de revisao.",
+      "returnReadyStatement": "Voltar para Pronto para Statement", "returnReadyStatementDescription": "Use se o statement nao estiver pronto para implementacao.",
+      "returnReadyImplementation": "Voltar para Pronto para Implementacao", "returnReadyImplementationDescription": "Use se o statement ainda nao deve estar com aprovadores.",
+      "returnWaitingSignatures": "Voltar para Aguardar Assinaturas", "returnWaitingSignaturesDescription": "Use se a aprovacao/assinatura foi registada por engano.",
+      "returnImplementation": "Voltar para Implementacao", "returnImplementationDescription": "Use se IP Core ou IT ainda nao esta realmente concluido.",
+      "returnReadyConnectivity": "Voltar para Pronto para Conectividade", "returnReadyConnectivityDescription": "Use se o teste de conectividade foi iniciado por engano.",
+      "returnConnectivityTest": "Voltar para Teste de Conectividade", "returnConnectivityTestDescription": "Use se a conectividade foi marcada como pass por engano.",
+      "returnReadyUat": "Voltar para Pronto para UAT", "returnReadyUatDescription": "Use se as credenciais nao foram realmente fornecidas.",
+      "returnUatProgress": "Voltar para UAT em Curso", "returnUatProgressDescription": "Use se a aprovacao UAT precisar de revisao.",
+      "reopenReadyHandover": "Reabrir para Pronto para Handover", "reopenReadyHandoverDescription": "Use se o pedido foi fechado por engano."
+    }
+  },
+  "pipeline": {
+    "eyebrow": "Pipeline de pedidos", "title": "Cada pedido tem o seu proprio workflow.",
+    "subtitle": "Acompanhe pedidos de criacao, update, bloqueio, desbloqueio e troubleshooting pelo estado atual do pipeline.",
+    "allStatuses": "Todos estados", "download": "Baixar Pipeline de Pedidos", "workflowStages": "Etapas do workflow",
+    "owner": "Responsavel: {{owner}}", "next": "Proximo: {{action}}", "followUp": "Follow-up: {{date}}"
+  },
+  "tasks": {
+    "eyebrow": "Fila de execucao", "title": "Lista de trabalho sugerida",
+    "subtitle": "Os itens sao gerados pelas regras dos pedidos. A ordem continua sob teu controlo.",
+    "allOwners": "Todos responsaveis", "owner": "Responsavel: {{owner}}", "age": "Idade: {{days}} dias", "due": "Prazo: {{date}}"
+  },
+  "scan": {
+    "eyebrow": "Scan de controlo", "title": "Check operacional {{mode}}", "subtitle": "Verifique rapidamente dependencias externas, gaps de implementacao e realidade dos pedidos.",
+    "suggestedAction": "Acao sugerida: {{action}}",
+    "questions": {
+      "SIGNATURES": "O statement ja esta totalmente assinado?", "IP_CORE": "IP Core ou VPN ja foi concluido?",
+      "IT": "Rotas e politicas de firewall ja foram concluidas?", "CONNECTIVITY": "Testes de conectividade UAT/PRD ja passaram?",
+      "PARTNER": "Existe resposta, form, correcao ou resultado da instituicao?"
+    }
+  },
+  "modal": {
+    "technicalRequiredTitle": "Dados tecnicos obrigatorios",
+    "technicalRequiredContent": "Preencha o peer publico e os endpoints privados manualmente, ou importe o form VPN, antes de validar este pedido.",
+    "confirmWorkflowTitle": "Confirmar atualizacao do workflow",
+    "confirmWorkflowContent": "Isto vai registar \"{{label}}\" para {{partner}} e pode mover o pedido de {{status}} para o proximo estado.",
+    "confirmUpdate": "Confirmar atualizacao", "backReason": "Porque precisa voltar este pedido?", "confirmBackTitle": "Confirmar retorno de estado",
+    "confirmBackContent": "Isto vai mover o pedido para tras a partir de {{status}}. A razao foi pedida para controlo, mas nao sera gravada no ficheiro do partner.",
+    "moveBack": "Voltar estado", "blockReason": "Porque este pedido esta bloqueado?", "blockTitle": "Bloquear pedido ativo",
+    "blockContent": "Isto vai pausar {{request}} ate ser desbloqueado. A razao do bloqueio sera gravada no historico do pedido.",
+    "blockOk": "Bloquear pedido", "unblockNote": "Nota opcional de desbloqueio", "unblockTitle": "Desbloquear pedido",
+    "unblockContent": "Isto vai reativar o pedido e devolver ao estado de workflow calculado pelo progresso atual.", "unblockOk": "Desbloquear pedido",
+    "srCodePrompt": "Codigo SR CNOC (opcional)", "srCodeSubmissionPrompt": "Codigo SR CNOC para submissao ao IP Core (opcional). Exemplo: SR_MVT_20260813_648534",
+    "createAnotherTitle": "Criar outro pedido?", "createAnotherContent": "Este partner ja tem um pedido bloqueado. Crie um novo pedido apenas se o trabalho bloqueado nao puder continuar.",
+    "createNewRequest": "Criar novo pedido", "openBlockedRequest": "Abrir pedido bloqueado", "blockedExistsTitle": "Existe pedido bloqueado",
+    "blockedExistsContent": "Esta integracao ja tem um pedido ativo bloqueado. Pode desbloquear ou criar um pedido de update separado se for trabalho realmente novo.",
+    "createUpdateRequest": "Criar pedido de update", "partnerTechnicalRequiredContent": "Abra o pipeline do pedido e importe o form VPN ou preencha os dados de IP manualmente antes de validar.",
+    "includeCredentialsTitle": "Incluir credenciais de teste?", "includeCredentialsContent": "Este partner tem credenciais de teste registadas. Oculte-as excepto se este PDF precisar mesmo desses dados sensiveis.",
+    "includeCredentials": "Incluir credenciais", "hideCredentials": "Ocultar credenciais"
+  },
+  "messages": {
+    "manualTechnicalSaved": "Dados tecnicos manuais gravados neste pedido.",
+    "importedRequest": "Importado {{file}}: dados do form do pedido atualizados.",
+    "importedPartner": "Importado {{file}}: {{endpoints}} endpoint(s), {{peers}} peer IP(s). O pedido vai iniciar em Pronto para Statement.",
+    "importFailed": "Nao foi possivel importar este Excel. Confirme se o ficheiro e o form VPN de integracao."
   }
 }

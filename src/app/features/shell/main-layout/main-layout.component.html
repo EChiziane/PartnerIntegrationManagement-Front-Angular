@@ -13,8 +13,8 @@
       </div>
 
       <div class="brand-copy">
-        <strong>eMola Integrations</strong>
-        <span>Operations Desk</span>
+        <strong>{{ 'app.name' | translate }}</strong>
+        <span>{{ 'app.subtitle' | translate }}</span>
       </div>
     </div>
 
@@ -66,7 +66,7 @@
     <div class="sidebar-footer">
       <span class="status-dot"></span>
       <div>
-        <strong>Local V1</strong>
+          <strong>{{ 'layout.status.localV1' | translate }}</strong>
         <span>{{ 'layout.status.demoData' | translate }}</span>
       </div>
     </div>
@@ -141,7 +141,7 @@
             <span class="language-option-code">{{ languageShortLabel(language.code) }}</span>
             <span class="language-option-copy">
               <strong>{{ language.label }}</strong>
-              <small>{{ language.code === 'pt' ? 'Interface em Portugues' : 'English interface' }}</small>
+              <small>{{ (language.code === 'pt' ? 'layout.language.ptInterface' : 'layout.language.enInterface') | translate }}</small>
             </span>
             <span *ngIf="language.code === currentLanguage" class="language-check" nz-icon nzType="check-circle"></span>
           </li>
@@ -168,9 +168,9 @@
   [nzVisible]="isMobileMenuVisible"
   class="mobile-navigation-drawer"
   nzPlacement="left"
-  nzTitle="eMola Integrations"
+  [nzTitle]="'app.name' | translate"
   nzWidth="320px">
-  <nav *nzDrawerContent class="mobile-navigation" aria-label="Mobile navigation">
+  <nav *nzDrawerContent class="mobile-navigation" [attr.aria-label]="'layout.nav.mobile' | translate">
     <a routerLink="/app/home" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="dashboard"></span>
       <span>{{ 'layout.nav.home' | translate }}</span>

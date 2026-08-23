@@ -1,47 +1,47 @@
 <div class="list-page">
   <section class="page-header">
     <div>
-      <span class="eyebrow">Partners</span>
-      <h1>Partner registry</h1>
-      <p>Search company profiles, inspect the current integration, and open controlled requests.</p>
+      <span class="eyebrow">{{ 'partners.eyebrow' | translate }}</span>
+      <h1>{{ 'partners.title' | translate }}</h1>
+      <p>{{ 'partners.subtitle' | translate }}</p>
     </div>
     <button (click)="openCreate()" nz-button nzType="primary">
       <span nz-icon nzType="plus"></span>
-      New Partner
+      {{ 'partners.newPartner' | translate }}
     </button>
     <button (click)="downloadList()" nz-button nzType="default">
       <span nz-icon nzType="download"></span>
-      Download Registry
+      {{ 'partners.downloadRegistry' | translate }}
     </button>
   </section>
 
   <section class="toolbar">
     <label class="search-control">
       <span nz-icon nzType="search"></span>
-      <input [(ngModel)]="searchValue" nz-input placeholder="Search by partner, representative, service, peer IP or private endpoint"/>
+      <input [(ngModel)]="searchValue" nz-input [placeholder]="'partners.searchPlaceholder' | translate"/>
     </label>
 
     <div class="filter-strip">
       <button (click)="setFilter('ALL')" [class.active]="activeFilter === 'ALL'" nz-button>
-        All <strong>{{ partners.length }}</strong>
+        {{ 'common.all' | translate }} <strong>{{ partners.length }}</strong>
       </button>
       <button (click)="setFilter('ACTIVE')" [class.active]="activeFilter === 'ACTIVE'" nz-button>
-        Active <strong>{{ partners.length }}</strong>
+        {{ 'partners.active' | translate }} <strong>{{ partners.length }}</strong>
       </button>
       <button (click)="setFilter('OPEN_REQUESTS')" [class.active]="activeFilter === 'OPEN_REQUESTS'" nz-button>
-        Open <strong>{{ openPartnersCount }}</strong>
+        {{ 'partners.open' | translate }} <strong>{{ openPartnersCount }}</strong>
       </button>
       <button (click)="setFilter('ATTENTION')" [class.active]="activeFilter === 'ATTENTION'" nz-button nzDanger>
-        Attention <strong>{{ attentionPartnersCount }}</strong>
+        {{ 'partners.attention' | translate }} <strong>{{ attentionPartnersCount }}</strong>
       </button>
     </div>
   </section>
 
   <section class="request-toolbar">
     <div class="toolbar-field">
-      <span>Partner category</span>
+      <span>{{ 'partners.category' | translate }}</span>
       <nz-select [(ngModel)]="categoryFilter">
-        <nz-option nzValue="ALL" nzLabel="All categories"></nz-option>
+        <nz-option nzValue="ALL" [nzLabel]="'partners.allCategories' | translate"></nz-option>
         <nz-option nzValue="Payment API" nzLabel="Payment API"></nz-option>
         <nz-option nzValue="USSD / Push USSD" nzLabel="USSD / Push USSD"></nz-option>
         <nz-option nzValue="Remittance" nzLabel="Remittance"></nz-option>
@@ -52,32 +52,32 @@
     </div>
 
     <div class="toolbar-field">
-      <span>Default request action</span>
+      <span>{{ 'partners.defaultRequestAction' | translate }}</span>
       <nz-select [(ngModel)]="requestType">
-        <nz-option nzValue="NEW_INTEGRATION" nzLabel="New Integration"></nz-option>
-        <nz-option nzValue="UPDATE_INTEGRATION" nzLabel="Update Integration"></nz-option>
-        <nz-option nzValue="BLOCK_VPN" nzLabel="Block VPN"></nz-option>
-        <nz-option nzValue="UNBLOCK_VPN" nzLabel="Unblock VPN"></nz-option>
-        <nz-option nzValue="CONNECTIVITY_SUPPORT" nzLabel="Connectivity Support"></nz-option>
+        <nz-option nzValue="NEW_INTEGRATION" [nzLabel]="partnerIntegration.typeLabel('NEW_INTEGRATION')"></nz-option>
+        <nz-option nzValue="UPDATE_INTEGRATION" [nzLabel]="partnerIntegration.typeLabel('UPDATE_INTEGRATION')"></nz-option>
+        <nz-option nzValue="BLOCK_VPN" [nzLabel]="partnerIntegration.typeLabel('BLOCK_VPN')"></nz-option>
+        <nz-option nzValue="UNBLOCK_VPN" [nzLabel]="partnerIntegration.typeLabel('UNBLOCK_VPN')"></nz-option>
+        <nz-option nzValue="CONNECTIVITY_SUPPORT" [nzLabel]="partnerIntegration.typeLabel('CONNECTIVITY_SUPPORT')"></nz-option>
       </nz-select>
     </div>
   </section>
 
   <section class="partners-table" aria-label="Partner list">
     <div class="table-head">
-      <span>Inst.</span>
-      <span>Service</span>
-      <span>Integration status</span>
-      <span>Integration</span>
-      <span>Urgent request</span>
-      <span>Date</span>
-      <span>Actions</span>
+      <span>{{ 'partners.headers.institution' | translate }}</span>
+      <span>{{ 'partners.headers.service' | translate }}</span>
+      <span>{{ 'partners.headers.integrationStatus' | translate }}</span>
+      <span>{{ 'partners.headers.integration' | translate }}</span>
+      <span>{{ 'partners.headers.urgentRequest' | translate }}</span>
+      <span>{{ 'partners.headers.date' | translate }}</span>
+      <span>{{ 'partners.headers.actions' | translate }}</span>
     </div>
 
     <article *ngFor="let partner of filteredPartners; trackBy: trackByPartnerId" class="partner-row" [class.needs-attention]="hasAttention(partner.id)">
       <div class="partner-identity">
         <strong>{{ partner.name }}</strong>
-        <span>{{ partner.representativeName || partner.businessOwner || 'No representative' }}</span>
+        <span>{{ partner.representativeName || partner.businessOwner || ('partners.noRepresentative' | translate) }}</span>
       </div>
 
       <div class="cell-stack">
@@ -94,8 +94,8 @@
 
       <div class="cell-stack compact">
         <strong>{{ integrationName(partner) }}</strong>
-        <span>Peer: {{ connectionPeersLabel(partner) }}</span>
-        <span>Private: {{ connectionEndpointsLabel(partner) }}</span>
+        <span>{{ 'partners.peer' | translate }}: {{ connectionPeersLabel(partner) }}</span>
+        <span>{{ 'partners.private' | translate }}: {{ connectionEndpointsLabel(partner) }}</span>
       </div>
 
       <div>
@@ -106,26 +106,26 @@
           </nz-tag>
         </ng-container>
         <ng-template #noStatus>
-          <nz-tag nzColor="default">Clear</nz-tag>
+          <nz-tag nzColor="default">{{ 'common.clear' | translate }}</nz-tag>
         </ng-template>
         <small class="next-action">{{ nextAction(partner.id) }}</small>
       </div>
 
       <div class="cell-stack compact">
         <strong>{{ partner.lastActivity || '-' }}</strong>
-        <span *ngIf="hasAttention(partner.id)" class="attention-label">Needs attention</span>
+        <span *ngIf="hasAttention(partner.id)" class="attention-label">{{ 'partners.needsAttention' | translate }}</span>
       </div>
 
       <div class="row-actions">
-        <button (click)="openPartner(partner)" nz-button nzType="default">Open</button>
-        <button (click)="createRequest(partner)" nz-button nzType="primary">New Action</button>
+        <button (click)="openPartner(partner)" nz-button nzType="default">{{ 'common.actions.open' | translate }}</button>
+        <button (click)="createRequest(partner)" nz-button nzType="primary">{{ 'partners.newAction' | translate }}</button>
       </div>
     </article>
 
     <div *ngIf="!filteredPartners.length" class="empty-state">
       <span nz-icon nzType="search"></span>
-      <strong>No partners found</strong>
-      <p>Try a different search or clear the active filter.</p>
+      <strong>{{ 'partners.noPartnersTitle' | translate }}</strong>
+      <p>{{ 'partners.noPartnersHint' | translate }}</p>
     </div>
   </section>
 </div>
@@ -136,17 +136,17 @@
   [nzWidth]="720"
   [nzBodyStyle]="{ padding: '0' }"
   nzPlacement="right"
-  nzTitle="New Partner">
+  [nzTitle]="'partners.drawerTitle' | translate">
   <div *nzDrawerContent class="partner-drawer">
     <section class="drawer-intro">
-      <span class="eyebrow">Partner registration</span>
-      <h2>Create partner profile</h2>
-      <p>Register the company profile, request form data, current integration details and document folder.</p>
+      <span class="eyebrow">{{ 'partners.registration' | translate }}</span>
+      <h2>{{ 'partners.createProfile' | translate }}</h2>
+      <p>{{ 'partners.drawerSubtitle' | translate }}</p>
       <div class="import-strip">
         <input #partnerFormInput (change)="importPartnerForm($event)" accept=".xls,.xlsx" hidden type="file"/>
         <button (click)="partnerFormInput.click()" nz-button nzType="default">
           <span nz-icon nzType="upload"></span>
-          Import VPN Form
+          {{ 'common.actions.importVpnForm' | translate }}
         </button>
         <span *ngIf="importNotice">{{ importNotice }}</span>
       </div>
@@ -156,38 +156,38 @@
       <div class="section-heading">
         <span>1</span>
         <div>
-          <h3>Partner identity</h3>
-          <p>Company, ownership and representative information.</p>
+          <h3>{{ 'partners.partnerIdentity' | translate }}</h3>
+          <p>{{ 'partners.partnerIdentityHint' | translate }}</p>
         </div>
       </div>
 
       <div class="form-grid">
-        <label class="wide">Company Name <input [(ngModel)]="draft.name" nz-input placeholder="Ex: Alpha Connect, Lda"/></label>
-        <label>e-Mola Account (OTP) <input [(ngModel)]="draft.eMolaAccountOtp" nz-input placeholder="OTP account if applicable"/></label>
-        <label>Representative Name <input [(ngModel)]="draft.representativeName" nz-input placeholder="Company representative"/></label>
-        <label class="wide">Group Link <input [(ngModel)]="draft.groupLink" nz-input placeholder="WhatsApp/Teams group link or onboarding chat"/></label>
+        <label class="wide">{{ 'fields.companyName' | translate }} <input [(ngModel)]="draft.name" nz-input placeholder="Ex: Alpha Connect, Lda"/></label>
+        <label>e-Mola Account (OTP) <input [(ngModel)]="draft.eMolaAccountOtp" nz-input [placeholder]="'partners.otpPlaceholder' | translate"/></label>
+        <label>{{ 'fields.representativeName' | translate }} <input [(ngModel)]="draft.representativeName" nz-input [placeholder]="'partners.representativePlaceholder' | translate"/></label>
+        <label class="wide">{{ 'fields.groupLink' | translate }} <input [(ngModel)]="draft.groupLink" nz-input [placeholder]="'partners.groupPlaceholder' | translate"/></label>
         <label>
-          Business Owner
-          <input [(ngModel)]="draft.businessOwner" [attr.list]="'business-owner-suggestions'" nz-input placeholder="Start typing the owner or department"/>
+          {{ 'fields.businessOwner' | translate }}
+          <input [(ngModel)]="draft.businessOwner" [attr.list]="'business-owner-suggestions'" nz-input [placeholder]="'partners.businessOwnerPlaceholder' | translate"/>
           <datalist id="business-owner-suggestions">
             <option *ngFor="let owner of businessOwnerSuggestions" [value]="owner"></option>
           </datalist>
         </label>
         <label>
-          Service/API
+          {{ 'fields.serviceApi' | translate }}
           <nz-select [(ngModel)]="draft.serviceApi">
             <nz-option *ngFor="let service of serviceOptions" [nzValue]="service" [nzLabel]="service"></nz-option>
           </nz-select>
         </label>
         <label>
-          Environment
+          {{ 'fields.environment' | translate }}
           <nz-select [(ngModel)]="draft.environment">
             <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
             <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
             <nz-option nzValue="UAT+PRD" nzLabel="UAT+PRD"></nz-option>
           </nz-select>
         </label>
-        <label>Auth Method <input [(ngModel)]="draft.authMethod" nz-input placeholder="API Key, Basic, OAuth, mTLS..."/></label>
+        <label>{{ 'fields.authMethod' | translate }} <input [(ngModel)]="draft.authMethod" nz-input [placeholder]="'partners.authPlaceholder' | translate"/></label>
       </div>
     </section>
 
@@ -195,15 +195,15 @@
       <div class="section-heading">
         <span>2</span>
         <div>
-          <h3>Contacts</h3>
-          <p>People to follow for business and technical execution.</p>
+          <h3>{{ 'partners.contacts' | translate }}</h3>
+          <p>{{ 'partners.contactsHint' | translate }}</p>
         </div>
       </div>
 
       <div class="form-grid">
-        <label>Technical Contact <input [(ngModel)]="draft.technicalContact" nz-input placeholder="Name or team"/></label>
-        <label>Phone <input [(ngModel)]="draft.phone" nz-input placeholder="+258 ..."/></label>
-        <label class="wide">Email <input [(ngModel)]="draft.email" nz-input placeholder="partner@example.com"/></label>
+        <label>{{ 'fields.technicalContact' | translate }} <input [(ngModel)]="draft.technicalContact" nz-input [placeholder]="'request.technicalContactPlaceholder' | translate"/></label>
+        <label>{{ 'fields.phone' | translate }} <input [(ngModel)]="draft.phone" nz-input placeholder="+258 ..."/></label>
+        <label class="wide">{{ 'fields.email' | translate }} <input [(ngModel)]="draft.email" nz-input [placeholder]="'partners.emailPlaceholder' | translate"/></label>
       </div>
     </section>
 
@@ -211,32 +211,32 @@
       <div class="section-heading">
         <span>3</span>
         <div>
-          <h3>Connectivity</h3>
-          <p>Network data from the VPN form used to establish the integration.</p>
+          <h3>{{ 'fields.connectivity' | translate }}</h3>
+          <p>{{ 'partners.connectivityHint' | translate }}</p>
         </div>
       </div>
 
       <div class="form-grid">
         <label class="wide">
-          Public IP (Peer)
-          <textarea [(ngModel)]="draft.publicPeerIpsText" nz-input rows="3" placeholder="One or more peer public IPs, separated by comma or line break"></textarea>
+          {{ 'fields.publicPeer' | translate }}
+          <textarea [(ngModel)]="draft.publicPeerIpsText" nz-input rows="3" [placeholder]="'request.publicPeersPlaceholder' | translate"></textarea>
         </label>
 
         <div class="private-endpoints wide">
           <div class="endpoint-header">
             <div>
-              <strong>Private IP endpoints</strong>
-              <span>Each private IP must include port and environment.</span>
+              <strong>{{ 'fields.privateEndpoints' | translate }}</strong>
+              <span>{{ 'partners.privateEndpointHint' | translate }}</span>
             </div>
             <button (click)="addPrivateEndpoint()" nz-button nzType="default" nzSize="small">
               <span nz-icon nzType="plus"></span>
-              Add
+              {{ 'common.actions.add' | translate }}
             </button>
           </div>
 
           <div *ngFor="let endpoint of draft.privateEndpoints; let index = index" class="endpoint-row">
             <label>
-              Environment
+              {{ 'fields.environment' | translate }}
               <nz-select [(ngModel)]="endpoint.environment">
                 <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
                 <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
@@ -244,7 +244,7 @@
               </nz-select>
             </label>
             <label>
-              Private IP
+              {{ 'fields.privateIp' | translate }}
               <input [(ngModel)]="endpoint.ip" nz-input placeholder="10.x.x.x"/>
             </label>
             <label>
@@ -263,20 +263,20 @@
       <div class="section-heading">
         <span>4</span>
         <div>
-          <h3>Documents</h3>
-          <p>Central folder for forms, statements, evidences and approvals.</p>
+          <h3>{{ 'partners.documents' | translate }}</h3>
+          <p>{{ 'partners.documentsHint' | translate }}</p>
         </div>
       </div>
 
       <div class="form-grid">
-        <label class="wide">OwnCloud Folder <input [(ngModel)]="draft.ownCloudFolderUrl" nz-input placeholder="https://owncloud.../partner-folder"/></label>
-        <label class="wide">Notes <textarea [(ngModel)]="draft.formNotes" nz-input rows="4" placeholder="Important notes from the form or onboarding context"></textarea></label>
+        <label class="wide">{{ 'fields.ownCloudFolder' | translate }} <input [(ngModel)]="draft.ownCloudFolderUrl" nz-input [placeholder]="'partners.ownCloudPlaceholder' | translate"/></label>
+        <label class="wide">{{ 'request.notes' | translate }} <textarea [(ngModel)]="draft.formNotes" nz-input rows="4" [placeholder]="'partners.notesPlaceholder' | translate"></textarea></label>
       </div>
     </section>
 
     <footer class="drawer-actions">
-      <button (click)="closeCreate()" nz-button nzType="default">Cancel</button>
-      <button (click)="createPartner()" [disabled]="!draft.name.trim()" nz-button nzType="primary">Create Partner</button>
+      <button (click)="closeCreate()" nz-button nzType="default">{{ 'common.actions.cancel' | translate }}</button>
+      <button (click)="createPartner()" [disabled]="!draft.name.trim()" nz-button nzType="primary">{{ 'partners.createPartner' | translate }}</button>
     </footer>
   </div>
 </nz-drawer>

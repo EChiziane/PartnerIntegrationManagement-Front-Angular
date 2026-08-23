@@ -1,9 +1,9 @@
 <div class="scan-page">
   <section class="page-header">
     <div>
-      <span class="eyebrow">Control scan</span>
-      <h1>{{ scanMode }} operational check</h1>
-      <p>Quickly verify external dependencies, implementation gaps and request reality.</p>
+      <span class="eyebrow">{{ 'scan.eyebrow' | translate }}</span>
+      <h1>{{ 'scan.title' | translate:{mode: scanMode} }}</h1>
+      <p>{{ 'scan.subtitle' | translate }}</p>
     </div>
     <div class="scan-toggle">
       <button (click)="scanMode = 'AM'" [class.active]="scanMode === 'AM'" nz-button>AM</button>
@@ -19,9 +19,9 @@
       <div>
         <strong>{{ item.question }}</strong>
         <span>{{ item.partnerName }} · {{ partnerIntegration.statusLabel(item.status) }}</span>
-        <small>Suggested action: {{ item.suggestedAction }}</small>
+        <small>{{ 'scan.suggestedAction' | translate:{action: partnerIntegration.actionLabel(item.suggestedAction)} }}</small>
       </div>
-      <button (click)="openRequest(item)" nz-button nzType="primary">Update</button>
+      <button (click)="openRequest(item)" nz-button nzType="primary">{{ 'common.actions.update' | translate }}</button>
     </article>
   </section>
 </div>

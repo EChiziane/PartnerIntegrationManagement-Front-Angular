@@ -2,12 +2,12 @@
   <section class="detail-header">
     <button (click)="back()" nz-button nzType="default">
       <span nz-icon nzType="arrow-left"></span>
-      Request Pipeline
+      {{ 'request.pipelineBack' | translate }}
     </button>
     <div>
       <span class="eyebrow">{{ partnerIntegration.typeLabel(request.type) }}</span>
       <h1>{{ partnerIntegration.requestDisplayTitle(request, partner) }}</h1>
-      <p>{{ partner.name }} - {{ request.nextAction }}</p>
+      <p>{{ partner.name }} - {{ partnerIntegration.actionLabel(request.nextAction) }}</p>
     </div>
     <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
       {{ partnerIntegration.statusLabel(request.currentStatus) }}
@@ -17,35 +17,35 @@
   <div class="detail-grid">
     <section class="panel">
       <header>
-        <span class="panel-kicker">Request workflow</span>
-        <h2>Control state</h2>
+        <span class="panel-kicker">{{ 'request.workflow' | translate }}</span>
+        <h2>{{ 'request.controlState' | translate }}</h2>
       </header>
 
       <div class="facts">
-        <div><span>Owner</span><strong>{{ request.currentOwner }}</strong></div>
-        <div><span>Priority</span><strong>{{ request.priority }}</strong></div>
-        <div><span>Follow-up</span><strong>{{ request.followUpDate || '-' }}</strong></div>
-        <div><span>Stage start</span><strong>{{ request.stageStartDate || '-' }}</strong></div>
+        <div><span>{{ 'fields.owner' | translate }}</span><strong>{{ partnerIntegration.ownerLabel(request.currentOwner) }}</strong></div>
+        <div><span>{{ 'fields.priority' | translate }}</span><strong>{{ request.priority }}</strong></div>
+        <div><span>{{ 'fields.followUp' | translate }}</span><strong>{{ request.followUpDate || '-' }}</strong></div>
+        <div><span>{{ 'fields.stageStart' | translate }}</span><strong>{{ request.stageStartDate || '-' }}</strong></div>
         <div class="fact-with-action">
-          <span>CNOC SR Code</span>
+          <span>{{ 'fields.cnocSrCode' | translate }}</span>
           <strong>{{ request.srCode || '-' }}</strong>
           <button (click)="editSrCode()" nz-button nzSize="small" nzType="default">
-            {{ request.srCode ? 'Edit' : 'Add' }}
+            {{ request.srCode ? ('common.actions.edit' | translate) : ('common.actions.add' | translate) }}
           </button>
         </div>
         <div><span>IP Core</span><strong>{{ request.ipCoreStatus }}</strong></div>
         <div><span>IT</span><strong>{{ request.itStatus }}</strong></div>
         <div><span>VPN</span><strong>{{ request.vpnStatus }}</strong></div>
-        <div><span>Connectivity</span><strong>{{ request.connectivityUat }} / {{ request.connectivityPrd }}</strong></div>
+        <div><span>{{ 'fields.connectivity' | translate }}</span><strong>{{ request.connectivityUat }} / {{ request.connectivityPrd }}</strong></div>
       </div>
 
       <div *ngIf="request.currentStatus === 'BLOCKED'" class="blocked-notice">
         <div>
-          <span class="panel-kicker">Blocked request</span>
-          <strong>{{ request.blockReason || request.blocker || 'No blocker reason recorded' }}</strong>
-          <p>Blocked at {{ request.blockedAt || '-' }}. Unblock when the same request can continue.</p>
+          <span class="panel-kicker">{{ 'request.blockedRequest' | translate }}</span>
+          <strong>{{ request.blockReason || request.blocker || ('request.noBlocker' | translate) }}</strong>
+          <p>{{ 'request.blockedAt' | translate:{date: request.blockedAt || '-'} }}</p>
         </div>
-        <button (click)="unblockRequest()" nz-button nzType="primary">Unblock Request</button>
+        <button (click)="unblockRequest()" nz-button nzType="primary">{{ 'request.unblockRequest' | translate }}</button>
       </div>
 
       <div class="flow-strip">
@@ -60,8 +60,8 @@
 
       <div class="action-section">
         <div>
-          <span class="panel-kicker">Allowed next step</span>
-          <h3>Only actions valid from the current status are enabled.</h3>
+          <span class="panel-kicker">{{ 'request.allowedNextStep' | translate }}</span>
+          <h3>{{ 'request.allowedHint' | translate }}</h3>
         </div>
 
         <div class="actions-grid" *ngIf="nextActions.length; else noForwardAction">
@@ -75,13 +75,13 @@
               [disabled]="item.requiresTechnicalData && !canValidateForm()"
               nz-button
               [nzType]="item.tone === 'primary' ? 'primary' : 'default'">
-              Continue
+              {{ 'request.continue' | translate }}
             </button>
           </article>
         </div>
 
         <ng-template #noForwardAction>
-          <div class="empty-action">No forward action is available for this status.</div>
+          <div class="empty-action">{{ 'request.noForwardAction' | translate }}</div>
         </ng-template>
       </div>
 
@@ -92,10 +92,10 @@
             <span>{{ item.description }}</span>
           </div>
           <button
-            (click)="item.label === 'Block Request' ? blockRequest() : confirmAction(item.label, item.patch)"
+            (click)="isBlockAction(item) ? blockRequest() : confirmAction(item.label, item.patch)"
             nz-button
             nzDanger>
-            {{ item.label === 'Block Request' ? 'Block' : 'Register' }}
+            {{ isBlockAction(item) ? ('common.actions.block' | translate) : ('common.actions.register' | translate) }}
           </button>
         </article>
 
@@ -104,24 +104,24 @@
             <strong>{{ previousAction.label }}</strong>
             <span>{{ previousAction.description }}</span>
           </div>
-          <button (click)="confirmPreviousAction()" nz-button nzType="default">Move Back</button>
+          <button (click)="confirmPreviousAction()" nz-button nzType="default">{{ 'request.moveBack' | translate }}</button>
         </article>
       </div>
 
       <div *ngIf="isCredentialsEditorOpen" class="credentials-editor">
         <div>
-          <span class="panel-kicker">Test credentials</span>
-          <h3>Paste the credentials provided to {{ partner.name }}.</h3>
+          <span class="panel-kicker">{{ 'request.testCredentials' | translate }}</span>
+          <h3>{{ 'request.pasteCredentialsFor' | translate:{partner: partner.name} }}</h3>
         </div>
         <textarea
           [(ngModel)]="credentialsDraft"
           nz-input
           rows="8"
-          placeholder="Paste UAT URL, username, password, API key, test MSISDNs or any instructions shared with the partner"></textarea>
+          [placeholder]="'request.credentialsPlaceholder' | translate"></textarea>
         <div class="credentials-actions">
-          <button (click)="cancelCredentialsEditor()" nz-button nzType="default">Cancel</button>
+          <button (click)="cancelCredentialsEditor()" nz-button nzType="default">{{ 'common.actions.cancel' | translate }}</button>
           <button (click)="saveCredentials()" [disabled]="!credentialsDraft.trim()" nz-button nzType="primary">
-            Save & Mark Provided
+            {{ 'request.saveMarkProvided' | translate }}
           </button>
         </div>
       </div>
@@ -130,56 +130,56 @@
     <section class="panel">
       <header>
         <div>
-          <span class="panel-kicker">Partner and integration</span>
-          <h2>Form data snapshot</h2>
+          <span class="panel-kicker">{{ 'request.partnerIntegration' | translate }}</span>
+          <h2>{{ 'request.formSnapshot' | translate }}</h2>
         </div>
         <div class="import-inline">
           <input #requestFormInput (change)="importRequestForm($event)" accept=".xls,.xlsx" hidden type="file"/>
           <button (click)="openTechnicalEditor()" nz-button nzType="default">
             <span nz-icon nzType="edit"></span>
-            Edit Manual Data
+            {{ 'request.editManualData' | translate }}
           </button>
           <button (click)="requestFormInput.click()" nz-button nzType="default">
             <span nz-icon nzType="upload"></span>
-            Import VPN Form
+            {{ 'common.actions.importVpnForm' | translate }}
           </button>
         </div>
       </header>
 
       <div class="facts stacked">
-        <div><span>Company</span><strong>{{ formData?.companyName || partner.name }}</strong></div>
-        <div><span>Service/API</span><strong>{{ formData?.serviceApi || '-' }}</strong></div>
-        <div><span>Environment</span><strong>{{ formData?.environment || '-' }}</strong></div>
-        <div><span>Technical Contact</span><strong>{{ formData?.technicalContact || '-' }}</strong></div>
-        <div><span>Public IP Peer</span><strong>{{ publicPeersLabel() }}</strong></div>
-        <div><span>Private Endpoints</span><strong>{{ privateEndpointsLabel() }}</strong></div>
-        <div><span>Auth Method</span><strong>{{ formData?.authMethod || '-' }}</strong></div>
-        <div><span>Imported File</span><strong>{{ formData?.importedFileName || '-' }}</strong></div>
+        <div><span>{{ 'fields.company' | translate }}</span><strong>{{ formData?.companyName || partner.name }}</strong></div>
+        <div><span>{{ 'fields.serviceApi' | translate }}</span><strong>{{ formData?.serviceApi || '-' }}</strong></div>
+        <div><span>{{ 'fields.environment' | translate }}</span><strong>{{ formData?.environment || '-' }}</strong></div>
+        <div><span>{{ 'fields.technicalContact' | translate }}</span><strong>{{ formData?.technicalContact || '-' }}</strong></div>
+        <div><span>{{ 'fields.publicPeer' | translate }}</span><strong>{{ publicPeersLabel() }}</strong></div>
+        <div><span>{{ 'fields.privateEndpoints' | translate }}</span><strong>{{ privateEndpointsLabel() }}</strong></div>
+        <div><span>{{ 'fields.authMethod' | translate }}</span><strong>{{ formData?.authMethod || '-' }}</strong></div>
+        <div><span>{{ 'fields.importedFile' | translate }}</span><strong>{{ formData?.importedFileName || '-' }}</strong></div>
       </div>
 
       <div *ngIf="request.currentStatus === 'FORM_VALIDATION' && !canValidateForm()" class="validation-gate">
-        <strong>Technical data required before validation</strong>
-        <span>Fill the public peer and private IP endpoints manually, or import the VPN form, then validate.</span>
+        <strong>{{ 'request.technicalRequiredTitle' | translate }}</strong>
+        <span>{{ 'request.technicalRequiredHint' | translate }}</span>
       </div>
 
       <div *ngIf="isTechnicalEditorOpen" class="technical-editor">
         <label class="wide">
-          Public IP (Peer)
-          <textarea [(ngModel)]="technicalDraft.publicPeerIpsText" nz-input rows="3" placeholder="One or more peer public IPs, separated by comma or line break"></textarea>
+          {{ 'fields.publicPeer' | translate }}
+          <textarea [(ngModel)]="technicalDraft.publicPeerIpsText" nz-input rows="3" [placeholder]="'request.publicPeersPlaceholder' | translate"></textarea>
         </label>
 
         <div class="endpoint-editor wide">
           <div class="endpoint-header">
-            <strong>Private IP endpoints</strong>
+            <strong>{{ 'fields.privateEndpoints' | translate }}</strong>
             <button (click)="addPrivateEndpoint()" nz-button nzSize="small" nzType="default">
               <span nz-icon nzType="plus"></span>
-              Add
+              {{ 'common.actions.add' | translate }}
             </button>
           </div>
 
           <div *ngFor="let endpoint of technicalDraft.privateEndpoints; let index = index" class="endpoint-row">
             <label>
-              Environment
+              {{ 'fields.environment' | translate }}
               <nz-select [(ngModel)]="endpoint.environment">
                 <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
                 <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
@@ -187,7 +187,7 @@
               </nz-select>
             </label>
             <label>
-              Private IP
+              {{ 'fields.privateIp' | translate }}
               <input [(ngModel)]="endpoint.ip" nz-input placeholder="10.x.x.x"/>
             </label>
             <label>
@@ -201,11 +201,11 @@
         </div>
 
         <label>
-          Service/API
-          <input [(ngModel)]="technicalDraft.serviceApi" nz-input placeholder="Business Code, Push USSD..."/>
+          {{ 'fields.serviceApi' | translate }}
+          <input [(ngModel)]="technicalDraft.serviceApi" nz-input [placeholder]="'request.servicePlaceholder' | translate"/>
         </label>
         <label>
-          Environment
+          {{ 'fields.environment' | translate }}
           <nz-select [(ngModel)]="technicalDraft.environment">
             <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
             <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
@@ -213,25 +213,25 @@
           </nz-select>
         </label>
         <label>
-          Technical Contact
-          <input [(ngModel)]="technicalDraft.technicalContact" nz-input placeholder="Name or team"/>
+          {{ 'fields.technicalContact' | translate }}
+          <input [(ngModel)]="technicalDraft.technicalContact" nz-input [placeholder]="'request.technicalContactPlaceholder' | translate"/>
         </label>
         <label>
-          Auth Method
-          <input [(ngModel)]="technicalDraft.authMethod" nz-input placeholder="Pre-share Key (PSK), API Key..."/>
+          {{ 'fields.authMethod' | translate }}
+          <input [(ngModel)]="technicalDraft.authMethod" nz-input [placeholder]="'request.authPlaceholder' | translate"/>
         </label>
         <label class="wide">
-          OwnCloud Folder
-          <input [(ngModel)]="technicalDraft.ownCloudFolderUrl" nz-input placeholder="https://owncloud..."/>
+          {{ 'fields.ownCloudFolder' | translate }}
+          <input [(ngModel)]="technicalDraft.ownCloudFolderUrl" nz-input [placeholder]="'request.ownCloudPlaceholder' | translate"/>
         </label>
         <label class="wide">
-          Form Notes
-          <textarea [(ngModel)]="technicalDraft.formNotes" nz-input rows="3" placeholder="Notes from the request form"></textarea>
+          {{ 'request.notes' | translate }}
+          <textarea [(ngModel)]="technicalDraft.formNotes" nz-input rows="3" [placeholder]="'request.notesPlaceholder' | translate"></textarea>
         </label>
 
         <div class="technical-actions wide">
-          <button (click)="cancelTechnicalEditor()" nz-button nzType="default">Cancel</button>
-          <button (click)="saveTechnicalData()" nz-button nzType="primary">Save Technical Data</button>
+          <button (click)="cancelTechnicalEditor()" nz-button nzType="default">{{ 'common.actions.cancel' | translate }}</button>
+          <button (click)="saveTechnicalData()" nz-button nzType="primary">{{ 'request.saveTechnicalData' | translate }}</button>
         </div>
       </div>
 
@@ -241,28 +241,28 @@
 
   <section *ngIf="shouldShowCredentialsPanel()" class="panel">
     <header>
-      <span class="panel-kicker">Credentials provided</span>
-      <h2>UAT/API test credentials</h2>
+      <span class="panel-kicker">{{ 'request.credentialsProvidedTitle' | translate }}</span>
+      <h2>{{ 'request.uatCredentials' | translate }}</h2>
     </header>
     <pre *ngIf="request.testCredentials; else noCredentialsRecorded" class="credentials-output">{{ request.testCredentials }}</pre>
     <ng-template #noCredentialsRecorded>
       <div class="credentials-empty">
         <div>
-          <strong>No credentials recorded</strong>
-          <span *ngIf="request.credentialsProvided; else notProvidedYet">This request was marked as provided before credential details were captured.</span>
+          <strong>{{ 'request.noCredentialsRecorded' | translate }}</strong>
+          <span *ngIf="request.credentialsProvided; else notProvidedYet">{{ 'request.markedNoCredentialDetails' | translate }}</span>
           <ng-template #notProvidedYet>
-            <span>This request has reached UAT readiness, but no credentials have been recorded yet.</span>
+            <span>{{ 'request.noCredentialsYet' | translate }}</span>
           </ng-template>
         </div>
-        <button (click)="openCredentialsEditor()" nz-button nzType="default">Add Credentials</button>
+        <button (click)="openCredentialsEditor()" nz-button nzType="default">{{ 'partnerDetail.addCredentials' | translate }}</button>
       </div>
     </ng-template>
   </section>
 
   <section class="panel">
     <header>
-      <span class="panel-kicker">History</span>
-      <h2>Timeline</h2>
+      <span class="panel-kicker">{{ 'request.history' | translate }}</span>
+      <h2>{{ 'request.timeline' | translate }}</h2>
     </header>
 
     <article *ngFor="let event of events" class="timeline-item">

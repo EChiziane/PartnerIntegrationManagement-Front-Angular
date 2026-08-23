@@ -4,6 +4,7 @@ import {PartnerIntegrationService} from '@core/services/partner-integration.serv
 import {Partner, PartnerConnection, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestFormData, RequestType, TimelineEvent} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {TranslationService} from '@core/services/translation.service';
 
 @Component({
   selector: 'app-partner-detail',
@@ -26,6 +27,7 @@ export class PartnerDetailComponent implements OnInit {
     public partnerIntegration: PartnerIntegrationService,
     private pdf: PartnerIntegrationPdfService,
     private modal: NzModalService,
+    private translation: TranslationService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -127,10 +129,10 @@ export class PartnerDetailComponent implements OnInit {
 
     if (this.activeRequest?.currentStatus === 'BLOCKED') {
       this.modal.confirm({
-        nzTitle: 'Create another request?',
-        nzContent: 'This partner already has a blocked request. Create a new request only if the blocked work cannot continue.',
-        nzOkText: 'Create new request',
-        nzCancelText: 'Open blocked request',
+        nzTitle: this.t('modal.createAnotherTitle'),
+        nzContent: this.t('modal.createAnotherContent'),
+        nzOkText: this.t('modal.createNewRequest'),
+        nzCancelText: this.t('modal.openBlockedRequest'),
         nzOnOk: () => this.createRequestNow(),
         nzOnCancel: () => this.openActiveRequest()
       });
@@ -155,10 +157,10 @@ export class PartnerDetailComponent implements OnInit {
 
     if (this.activeRequest?.currentStatus === 'BLOCKED') {
       this.modal.confirm({
-        nzTitle: 'Blocked request exists',
-        nzContent: 'This integration already has a blocked active request. You can unblock it or create a separate update request if this is genuinely new work.',
-        nzOkText: 'Create update request',
-        nzCancelText: 'Open blocked request',
+        nzTitle: this.t('modal.blockedExistsTitle'),
+        nzContent: this.t('modal.blockedExistsContent'),
+        nzOkText: this.t('modal.createUpdateRequest'),
+        nzCancelText: this.t('modal.openBlockedRequest'),
         nzOnOk: () => this.createUpdateRequestNow(),
         nzOnCancel: () => this.openActiveRequest()
       });
@@ -219,11 +221,11 @@ export class PartnerDetailComponent implements OnInit {
         formReceived: true,
         formValidated: this.hasTechnicalData(formData)
       }, this.hasTechnicalData(formData) ? 'Request Form Imported And Validated' : 'Request Form Data Updated');
-      this.importNotice = `Imported ${file.name}: request form data updated.`;
+      this.importNotice = this.t('messages.importedRequest', {file: file.name});
       this.load();
     } catch (error) {
       console.error('Partner form import failed', error);
-      this.importNotice = 'Could not import this Excel form. Please check if the file is the VPN integration form.';
+      this.importNotice = this.t('messages.importFailed');
     } finally {
       input.value = '';
     }
@@ -269,8 +271,8 @@ export class PartnerDetailComponent implements OnInit {
     if (!request) return;
     if (patch.formValidated && !this.canValidateActiveForm()) {
       this.modal.warning({
-        nzTitle: 'Technical data required',
-        nzContent: 'Open the request pipeline and import the VPN form or fill the IP data manually before validating.'
+        nzTitle: this.t('modal.technicalRequiredTitle'),
+        nzContent: this.t('modal.partnerTechnicalRequiredContent')
       });
       return;
     }
@@ -278,10 +280,14 @@ export class PartnerDetailComponent implements OnInit {
     if (!nextPatch) return;
 
     this.modal.confirm({
-      nzTitle: 'Confirm workflow update',
-      nzContent: `This will register "${label}" for ${this.partner?.name || 'this partner'} and may move the request from ${this.partnerIntegration.statusLabel(request.currentStatus)} to the next status.`,
-      nzOkText: 'Confirm update',
-      nzCancelText: 'Cancel',
+      nzTitle: this.t('modal.confirmWorkflowTitle'),
+      nzContent: this.t('modal.confirmWorkflowContent', {
+        label,
+        partner: this.partner?.name || this.t('fields.company'),
+        status: this.partnerIntegration.statusLabel(request.currentStatus)
+      }),
+      nzOkText: this.t('modal.confirmUpdate'),
+      nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => this.applyAction(label, nextPatch)
     });
   }
@@ -289,7 +295,7 @@ export class PartnerDetailComponent implements OnInit {
   editActiveSrCode(): void {
     const request = this.activeRequest;
     if (!request) return;
-    const value = window.prompt('CNOC SR Code (optional)', request.srCode || '');
+    const value = window.prompt(this.t('modal.srCodePrompt'), request.srCode || '');
     if (value === null) return;
 
     this.partnerIntegration.updateRequest(request.id, {
@@ -302,15 +308,15 @@ export class PartnerDetailComponent implements OnInit {
     const request = this.activeRequest;
     if (!request) return;
 
-    const reason = window.prompt('Why is this request blocked?');
+    const reason = window.prompt(this.t('modal.blockReason'));
     if (!reason?.trim()) return;
 
     this.modal.confirm({
-      nzTitle: 'Block active request',
-      nzContent: `This will pause ${request.title || this.partner?.name || 'this request'} until it is unblocked. The blocker reason will be stored in the request history.`,
-      nzOkText: 'Block request',
+      nzTitle: this.t('modal.blockTitle'),
+      nzContent: this.t('modal.blockContent', {request: request.title || this.partner?.name || this.t('request.workflow')}),
+      nzOkText: this.t('modal.blockOk'),
       nzOkDanger: true,
-      nzCancelText: 'Cancel',
+      nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => {
         this.partnerIntegration.blockRequest(request.id, reason);
         this.load();
@@ -322,12 +328,12 @@ export class PartnerDetailComponent implements OnInit {
     const request = this.activeRequest;
     if (!request) return;
 
-    const note = window.prompt('Optional unblock note');
+    const note = window.prompt(this.t('modal.unblockNote'));
     this.modal.confirm({
-      nzTitle: 'Unblock request',
-      nzContent: 'This will reactivate the request and return it to the workflow state calculated from its existing progress.',
-      nzOkText: 'Unblock request',
-      nzCancelText: 'Cancel',
+      nzTitle: this.t('modal.unblockTitle'),
+      nzContent: this.t('modal.unblockContent'),
+      nzOkText: this.t('modal.unblockOk'),
+      nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => {
         this.partnerIntegration.unblockRequest(request.id, note || '');
         this.load();
@@ -347,7 +353,7 @@ export class PartnerDetailComponent implements OnInit {
     const submitsToIpCore = patch.signaturesComplete === true && patch.ipCoreStatus === 'SUBMITTED';
     if (!submitsToIpCore || request.srCode?.trim()) return patch;
 
-    const value = window.prompt('CNOC SR Code for IP Core submission (optional). Example: SR_MVT_20260813_648534', '');
+    const value = window.prompt(this.t('modal.srCodeSubmissionPrompt'), '');
     if (value === null) return null;
     return {
       ...patch,
@@ -364,10 +370,10 @@ export class PartnerDetailComponent implements OnInit {
     }
 
     this.modal.confirm({
-      nzTitle: 'Include test credentials?',
-      nzContent: 'This partner has recorded test credentials. Hide them unless this PDF really needs to include sensitive details.',
-      nzOkText: 'Include credentials',
-      nzCancelText: 'Hide credentials',
+      nzTitle: this.t('modal.includeCredentialsTitle'),
+      nzContent: this.t('modal.includeCredentialsContent'),
+      nzOkText: this.t('modal.includeCredentials'),
+      nzCancelText: this.t('modal.hideCredentials'),
       nzOnOk: () => this.pdf.downloadPartnerProfile(this.partner!, this.requests, this.events, {includeCredentials: true}),
       nzOnCancel: () => this.pdf.downloadPartnerProfile(this.partner!, this.requests, this.events, {includeCredentials: false})
     });
@@ -488,5 +494,9 @@ export class PartnerDetailComponent implements OnInit {
 
   private requestTimestamp(request: PartnerRequest): number {
     return new Date(request.closeDate || request.stageStartDate || request.openDate || 0).getTime() || 0;
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translation.instant(key, params);
   }
 }

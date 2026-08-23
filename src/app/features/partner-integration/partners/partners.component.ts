@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 import {Partner, PartnerConnection, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestFormData, RequestType, WorkflowStatus} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
+import {TranslationService} from '@core/services/translation.service';
 
 type PartnerFilter = 'ALL' | 'ACTIVE' | 'OPEN_REQUESTS' | 'ATTENTION';
 type PartnerCategory = 'ALL' | 'Payment API' | 'USSD / Push USSD' | 'Remittance' | 'Connectivity' | 'Gaming' | 'Other';
@@ -81,6 +82,7 @@ export class PartnersComponent implements OnInit {
   constructor(
     public partnerIntegration: PartnerIntegrationService,
     public pdf: PartnerIntegrationPdfService,
+    private translation: TranslationService,
     private router: Router
   ) {
   }
@@ -220,10 +222,14 @@ export class PartnersComponent implements OnInit {
       };
 
       this.createRequestFromImportedForm = true;
-      this.importNotice = `Imported ${file.name}: ${privateEndpoints.length} endpoint(s), ${publicPeers.length} peer IP(s). Request will start in Ready Statement.`;
+      this.importNotice = this.translation.instant('messages.importedPartner', {
+        file: file.name,
+        endpoints: privateEndpoints.length,
+        peers: publicPeers.length
+      });
     } catch (error) {
       console.error('Partner form import failed', error);
-      this.importNotice = 'Could not import this Excel form. Please check if the file is the VPN integration form.';
+      this.importNotice = this.translation.instant('messages.importFailed');
     } finally {
       input.value = '';
     }

@@ -1,30 +1,30 @@
 <div class="pipeline-page">
   <section class="page-header">
     <div>
-      <span class="eyebrow">Request pipeline</span>
-      <h1>Every request has its own workflow.</h1>
-      <p>Track creation, update, block, unblock and troubleshooting requests by their current pipeline state.</p>
+      <span class="eyebrow">{{ 'pipeline.eyebrow' | translate }}</span>
+      <h1>{{ 'pipeline.title' | translate }}</h1>
+      <p>{{ 'pipeline.subtitle' | translate }}</p>
     </div>
   </section>
 
   <section class="toolbar">
     <nz-select [(ngModel)]="selectedStatus">
-      <nz-option nzValue="ALL" nzLabel="All statuses"></nz-option>
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allStatuses' | translate"></nz-option>
       <nz-option *ngFor="let status of statuses" [nzValue]="status" [nzLabel]="partnerIntegration.statusLabel(status)"></nz-option>
     </nz-select>
     <button (click)="downloadPipeline()" nz-button nzType="default">
       <span nz-icon nzType="download"></span>
-      Download Request Pipeline
+      {{ 'pipeline.download' | translate }}
     </button>
   </section>
 
-  <section class="stage-strip" aria-label="Workflow stages">
+  <section class="stage-strip" [attr.aria-label]="'pipeline.workflowStages' | translate">
     <button
       *ngFor="let stage of workflowStages"
       (click)="selectStage(stage)"
       [class]="'stage-chip tone-' + stage.tone"
       type="button">
-      <span>{{ stage.label }}</span>
+      <span>{{ stageLabel(stage) }}</span>
       <strong>{{ countByStage(stage) }}</strong>
     </button>
   </section>
@@ -36,15 +36,15 @@
         <span>{{ partnerName(request.partnerId) }} - {{ partnerIntegration.typeLabel(request.type) }}</span>
       </div>
       <div [class]="'request-status tone-' + stageForStatus(request.currentStatus).tone">
-        <span>{{ stageForStatus(request.currentStatus).label }}</span>
+        <span>{{ stageLabel(stageForStatus(request.currentStatus)) }}</span>
         <strong>{{ partnerIntegration.statusLabel(request.currentStatus) }}</strong>
       </div>
       <div class="request-meta">
-        <span>Owner: {{ request.currentOwner }}</span>
-        <span>Next: {{ request.nextAction }}</span>
-        <span>Follow-up: {{ request.followUpDate || '-' }}</span>
+        <span>{{ 'pipeline.owner' | translate:{owner: partnerIntegration.ownerLabel(request.currentOwner)} }}</span>
+        <span>{{ 'pipeline.next' | translate:{action: partnerIntegration.actionLabel(request.nextAction)} }}</span>
+        <span>{{ 'pipeline.followUp' | translate:{date: request.followUpDate || '-'} }}</span>
       </div>
-      <button (click)="openRequest(request)" nz-button nzType="default">Open</button>
+      <button (click)="openRequest(request)" nz-button nzType="default">{{ 'common.actions.open' | translate }}</button>
     </article>
   </section>
 </div>

@@ -2,24 +2,21 @@
   <header class="landing-header">
     <div class="brand">
       <span>PI</span>
-      <strong>eMola Integrations</strong>
+      <strong>{{ 'app.name' | translate }}</strong>
     </div>
 
-    <button (click)="goToLogin()" nz-button nzType="primary">Open Workspace</button>
+    <button (click)="goToLogin()" nz-button nzType="primary">{{ 'landing.openWorkspace' | translate }}</button>
   </header>
 
   <section class="hero">
     <div class="hero-copy">
-      <span class="eyebrow">eMola Integration Operations</span>
-      <h1>Control every partner, integration and request.</h1>
-      <p>
-        A focused operating workspace for partner profiles, VPN integrations,
-        implementation follow-ups, connectivity testing, UAT and request history.
-      </p>
+      <span class="eyebrow">{{ 'app.name' | translate }}</span>
+      <h1>{{ 'dashboard.title' | translate }}</h1>
+      <p>{{ 'landing.subtitle' | translate }}</p>
 
       <div class="hero-actions">
         <button (click)="goToLogin()" nz-button nzType="primary">
-          Enter App
+          {{ 'landing.enterApp' | translate }}
           <span nz-icon nzType="arrow-right"></span>
         </button>
       </div>
@@ -27,15 +24,15 @@
 
     <div class="hero-panel">
       <div>
-        <span>Open Requests</span>
-        <strong>Workflow Status</strong>
+        <span>{{ 'landing.openRequests' | translate }}</span>
+        <strong>{{ 'landing.workflowStatus' | translate }}</strong>
       </div>
       <div>
-        <span>Dependencies</span>
+        <span>{{ 'landing.dependencies' | translate }}</span>
         <strong>IP Core · IT · Partner</strong>
       </div>
       <div>
-        <span>Outputs</span>
+        <span>{{ 'landing.outputs' | translate }}</span>
         <strong>Tasks · Scan · Reports</strong>
       </div>
     </div>
@@ -44,26 +41,26 @@
   <section class="capability-grid">
     <article>
       <span nz-icon nzType="partition"></span>
-      <h2>Request Pipeline</h2>
-      <p>Group requests by status and owner so blockers are visible quickly.</p>
+      <h2>{{ 'landing.capabilityPipelineTitle' | translate }}</h2>
+      <p>{{ 'landing.capabilityPipelineText' | translate }}</p>
     </article>
 
     <article>
       <span nz-icon nzType="check-square"></span>
-      <h2>Execution</h2>
-      <p>Generate next actions from workflow rules while preserving operator choice.</p>
+      <h2>{{ 'landing.capabilityExecutionTitle' | translate }}</h2>
+      <p>{{ 'landing.capabilityExecutionText' | translate }}</p>
     </article>
 
     <article>
       <span nz-icon nzType="radar-chart"></span>
-      <h2>Control Scan</h2>
-      <p>Run AM/PM checks for signatures, IP Core, IT and partner responses.</p>
+      <h2>{{ 'landing.capabilityScanTitle' | translate }}</h2>
+      <p>{{ 'landing.capabilityScanText' | translate }}</p>
     </article>
 
     <article>
       <span nz-icon nzType="file-pdf"></span>
-      <h2>Reports</h2>
-      <p>Print partner lists, integration work and partner profiles in professional PDFs.</p>
+      <h2>{{ 'landing.capabilityReportsTitle' | translate }}</h2>
+      <p>{{ 'landing.capabilityReportsText' | translate }}</p>
     </article>
   </section>
 </main>

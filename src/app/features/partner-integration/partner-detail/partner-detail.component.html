@@ -1,31 +1,31 @@
 <div *ngIf="partner" class="partner-detail">
   <section class="detail-header">
     <div>
-      <span class="eyebrow">Partner cockpit</span>
+      <span class="eyebrow">{{ 'partnerDetail.cockpit' | translate }}</span>
       <h1>{{ partner.name }}</h1>
-      <p>{{ partner.serviceApi || 'Service/API not defined' }} - {{ partner.environment }}</p>
+      <p>{{ partner.serviceApi || ('partnerDetail.serviceNotDefined' | translate) }} - {{ partner.environment }}</p>
     </div>
 
     <div class="integration-signal">
-      <span>Integration status</span>
+      <span>{{ 'fields.integrationStatus' | translate }}</span>
       <strong>{{ partnerIntegration.connectionHealthLabel(connection?.health) }}</strong>
-      <small>{{ integrationDrivingRequest ? partnerIntegration.requestDisplayTitle(integrationDrivingRequest, partner) : 'No request driving this integration yet' }}</small>
+      <small>{{ integrationDrivingRequest ? partnerIntegration.requestDisplayTitle(integrationDrivingRequest, partner) : ('partnerDetail.noDrivingRequest' | translate) }}</small>
     </div>
 
     <div class="header-actions">
       <button (click)="downloadProfile()" nz-button nzType="default">
         <span nz-icon nzType="download"></span>
-        Download Profile PDF
+        {{ 'partnerDetail.downloadProfile' | translate }}
       </button>
 
       <button (click)="editProfile()" nz-button nzType="default">
         <span nz-icon nzType="edit"></span>
-        Edit Partner
+        {{ 'partnerDetail.editPartner' | translate }}
       </button>
 
       <button (click)="startUpdateFlow()" nz-button nzType="primary">
         <span nz-icon nzType="sync"></span>
-        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? 'Open Active Request' : 'Start Update Request' }}
+        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? ('partnerDetail.openActiveRequest' | translate) : ('partnerDetail.startUpdate' | translate) }}
       </button>
     </div>
   </section>
@@ -34,33 +34,33 @@
     <section class="panel">
       <header>
         <div>
-          <span class="panel-kicker">Identity</span>
-          <h2>Partner profile</h2>
+          <span class="panel-kicker">{{ 'partnerDetail.identity' | translate }}</span>
+          <h2>{{ 'partnerDetail.profile' | translate }}</h2>
         </div>
       </header>
 
       <div *ngIf="!isEditingProfile" class="facts">
-        <div><span>Company Name</span><strong>{{ partner.name || '-' }}</strong></div>
+        <div><span>{{ 'fields.companyName' | translate }}</span><strong>{{ partner.name || '-' }}</strong></div>
         <div><span>e-Mola Account (OTP)</span><strong>{{ partner.eMolaAccountOtp || '-' }}</strong></div>
-        <div><span>Representative</span><strong>{{ partner.representativeName || partner.technicalContact || '-' }}</strong></div>
-        <div><span>Business Owner</span><strong>{{ partner.businessOwner || '-' }}</strong></div>
-        <div><span>Phone</span><strong>{{ partner.phone || '-' }}</strong></div>
-        <div><span>Email</span><strong>{{ partner.email || '-' }}</strong></div>
-        <div class="wide"><span>Group Link</span><strong><a *ngIf="partner.groupLink; else noGroupLink" [href]="partner.groupLink" target="_blank" rel="noopener">Open group</a><ng-template #noGroupLink>-</ng-template></strong></div>
-        <div><span>Status</span><strong>{{ partner.status }}</strong></div>
-        <div><span>Last Activity</span><strong>{{ partner.lastActivity || '-' }}</strong></div>
+        <div><span>{{ 'fields.representative' | translate }}</span><strong>{{ partner.representativeName || partner.technicalContact || '-' }}</strong></div>
+        <div><span>{{ 'fields.businessOwner' | translate }}</span><strong>{{ partner.businessOwner || '-' }}</strong></div>
+        <div><span>{{ 'fields.phone' | translate }}</span><strong>{{ partner.phone || '-' }}</strong></div>
+        <div><span>{{ 'fields.email' | translate }}</span><strong>{{ partner.email || '-' }}</strong></div>
+        <div class="wide"><span>{{ 'fields.groupLink' | translate }}</span><strong><a *ngIf="partner.groupLink; else noGroupLink" [href]="partner.groupLink" target="_blank" rel="noopener">{{ 'partnerDetail.openGroup' | translate }}</a><ng-template #noGroupLink>-</ng-template></strong></div>
+        <div><span>{{ 'fields.status' | translate }}</span><strong>{{ partner.status }}</strong></div>
+        <div><span>{{ 'fields.lastActivity' | translate }}</span><strong>{{ partner.lastActivity || '-' }}</strong></div>
       </div>
 
       <div *ngIf="isEditingProfile" class="edit-form">
-        <label>Company Name <input [(ngModel)]="partnerDraft.name" nz-input/></label>
+        <label>{{ 'fields.companyName' | translate }} <input [(ngModel)]="partnerDraft.name" nz-input/></label>
         <label>e-Mola Account (OTP) <input [(ngModel)]="partnerDraft.eMolaAccountOtp" nz-input/></label>
-        <label>Representative <input [(ngModel)]="partnerDraft.representativeName" nz-input/></label>
-        <label class="wide">Group Link <input [(ngModel)]="partnerDraft.groupLink" nz-input/></label>
-        <label>Business Owner <input [(ngModel)]="partnerDraft.businessOwner" nz-input/></label>
-        <label>Phone <input [(ngModel)]="partnerDraft.phone" nz-input/></label>
-        <label>Email <input [(ngModel)]="partnerDraft.email" nz-input/></label>
+        <label>{{ 'fields.representative' | translate }} <input [(ngModel)]="partnerDraft.representativeName" nz-input/></label>
+        <label class="wide">{{ 'fields.groupLink' | translate }} <input [(ngModel)]="partnerDraft.groupLink" nz-input/></label>
+        <label>{{ 'fields.businessOwner' | translate }} <input [(ngModel)]="partnerDraft.businessOwner" nz-input/></label>
+        <label>{{ 'fields.phone' | translate }} <input [(ngModel)]="partnerDraft.phone" nz-input/></label>
+        <label>{{ 'fields.email' | translate }} <input [(ngModel)]="partnerDraft.email" nz-input/></label>
         <label>
-          Status
+          {{ 'fields.status' | translate }}
           <nz-select [(ngModel)]="partnerDraft.status">
             <nz-option nzValue="ACTIVE" nzLabel="ACTIVE"></nz-option>
             <nz-option nzValue="INACTIVE" nzLabel="INACTIVE"></nz-option>
@@ -69,29 +69,29 @@
       </div>
 
       <div *ngIf="isEditingProfile" class="form-actions">
-        <button (click)="cancelProfileEdit()" nz-button nzType="default">Cancel</button>
-        <button (click)="saveProfile()" nz-button nzType="primary">Save Partner Data</button>
+        <button (click)="cancelProfileEdit()" nz-button nzType="default">{{ 'common.actions.cancel' | translate }}</button>
+        <button (click)="saveProfile()" nz-button nzType="primary">{{ 'partnerDetail.savePartnerData' | translate }}</button>
       </div>
     </section>
 
     <section class="panel">
       <header>
         <div>
-          <span class="panel-kicker">Current integration</span>
-          <h2>Technical profile</h2>
+          <span class="panel-kicker">{{ 'partnerDetail.currentIntegration' | translate }}</span>
+          <h2>{{ 'partnerDetail.technicalProfile' | translate }}</h2>
         </div>
         <div class="import-inline">
           <button (click)="openActiveRequest()" [disabled]="!activeRequest" nz-button nzType="default">
             <span nz-icon nzType="partition"></span>
-            Open Request Pipeline
+            {{ 'partnerDetail.openRequestPipeline' | translate }}
           </button>
         </div>
       </header>
 
       <div class="facts">
-        <div class="wide"><span>Public IP (Peer)</span><strong>{{ connection?.publicPeerIps?.join(', ') || connection?.publicIp || '-' }}</strong></div>
+        <div class="wide"><span>{{ 'fields.publicPeer' | translate }}</span><strong>{{ connection?.publicPeerIps?.join(', ') || connection?.publicIp || '-' }}</strong></div>
         <div class="wide endpoint-facts">
-          <span>Private IP endpoints</span>
+          <span>{{ 'fields.privateEndpoints' | translate }}</span>
           <strong *ngIf="connection?.privateEndpoints?.length; else noPrivateEndpoints">
             <span *ngFor="let endpoint of connection?.privateEndpoints">
               {{ endpoint.environment }} - {{ endpoint.ip || '-' }}:{{ endpoint.port || '-' }}
@@ -99,22 +99,22 @@
           </strong>
           <ng-template #noPrivateEndpoints><strong>-</strong></ng-template>
         </div>
-        <div><span>Service/API</span><strong>{{ connection?.serviceApi || partner.serviceApi || '-' }}</strong></div>
-        <div><span>Environment</span><strong>{{ connection?.environment || partner.environment || '-' }}</strong></div>
-        <div><span>Technical Contact</span><strong>{{ connection?.technicalContact || partner.technicalContact || '-' }}</strong></div>
-        <div><span>Auth Method</span><strong>{{ connection?.authMethod || partner.authMethod || '-' }}</strong></div>
+        <div><span>{{ 'fields.serviceApi' | translate }}</span><strong>{{ connection?.serviceApi || partner.serviceApi || '-' }}</strong></div>
+        <div><span>{{ 'fields.environment' | translate }}</span><strong>{{ connection?.environment || partner.environment || '-' }}</strong></div>
+        <div><span>{{ 'fields.technicalContact' | translate }}</span><strong>{{ connection?.technicalContact || partner.technicalContact || '-' }}</strong></div>
+        <div><span>{{ 'fields.authMethod' | translate }}</span><strong>{{ connection?.authMethod || partner.authMethod || '-' }}</strong></div>
         <div class="wide">
-          <span>OwnCloud Folder</span>
+          <span>{{ 'fields.ownCloudFolder' | translate }}</span>
           <strong>
             <a *ngIf="connection?.ownCloudFolderUrl || partner.ownCloudFolderUrl; else noFolder" [href]="connection?.ownCloudFolderUrl || partner.ownCloudFolderUrl" target="_blank" rel="noopener">
-              Open integration folder
+              {{ 'partnerDetail.openFolder' | translate }}
             </a>
             <ng-template #noFolder>-</ng-template>
           </strong>
         </div>
-        <div><span>Imported File</span><strong>{{ connection?.importedFileName || '-' }}</strong></div>
-        <div><span>Imported At</span><strong>{{ connection?.importedAt ? (connection?.importedAt | date: 'yyyy-MM-dd HH:mm') : '-' }}</strong></div>
-        <div class="wide"><span>Form Notes</span><strong>{{ connection?.formNotes || partner.formNotes || '-' }}</strong></div>
+        <div><span>{{ 'fields.importedFile' | translate }}</span><strong>{{ connection?.importedFileName || '-' }}</strong></div>
+        <div><span>{{ 'fields.importedAt' | translate }}</span><strong>{{ connection?.importedAt ? (connection?.importedAt | date: 'yyyy-MM-dd HH:mm') : '-' }}</strong></div>
+        <div class="wide"><span>{{ 'request.notes' | translate }}</span><strong>{{ connection?.formNotes || partner.formNotes || '-' }}</strong></div>
       </div>
 
       <p *ngIf="importNotice" class="import-notice">{{ importNotice }}</p>
@@ -124,8 +124,8 @@
   <section class="panel connection-panel">
     <header>
       <div>
-        <span class="panel-kicker">Integration status</span>
-        <h2>State of the connection we have with this partner</h2>
+        <span class="panel-kicker">{{ 'fields.integrationStatus' | translate }}</span>
+        <h2>{{ 'partnerDetail.connectionState' | translate }}</h2>
       </div>
       <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection?.health)">
         {{ partnerIntegration.connectionHealthLabel(connection?.health) }}
@@ -133,24 +133,24 @@
     </header>
 
     <div class="facts integration-facts">
-      <div><span>VPN</span><strong>{{ connection?.vpnStatus || 'NOT_STARTED' }}</strong></div>
-      <div><span>UAT Connectivity</span><strong>{{ connection?.connectivityUat || 'NOT_TESTED' }}</strong></div>
-      <div><span>PRD Connectivity</span><strong>{{ connection?.connectivityPrd || 'NOT_TESTED' }}</strong></div>
-      <div><span>UAT/API</span><strong>{{ connection?.uatStatus || 'NOT_STARTED' }}</strong></div>
-      <div><span>State driven by</span><strong>{{ integrationDrivingRequest ? partnerIntegration.requestDisplayTitle(integrationDrivingRequest, partner) : '-' }}</strong></div>
-      <div><span>Request status</span><strong>{{ integrationDrivingRequest ? partnerIntegration.statusLabel(integrationDrivingRequest.currentStatus) : '-' }}</strong></div>
-      <div><span>Last Updated</span><strong>{{ connection?.lastUpdated || '-' }}</strong></div>
-      <div><span>Open Requests</span><strong>{{ openRequestsCount }}</strong></div>
+      <div><span>{{ 'fields.vpn' | translate }}</span><strong>{{ connection?.vpnStatus || 'NOT_STARTED' }}</strong></div>
+      <div><span>UAT {{ 'fields.connectivity' | translate }}</span><strong>{{ connection?.connectivityUat || 'NOT_TESTED' }}</strong></div>
+      <div><span>PRD {{ 'fields.connectivity' | translate }}</span><strong>{{ connection?.connectivityPrd || 'NOT_TESTED' }}</strong></div>
+      <div><span>{{ 'fields.uatApi' | translate }}</span><strong>{{ connection?.uatStatus || 'NOT_STARTED' }}</strong></div>
+      <div><span>{{ 'partnerDetail.stateDrivenBy' | translate }}</span><strong>{{ integrationDrivingRequest ? partnerIntegration.requestDisplayTitle(integrationDrivingRequest, partner) : '-' }}</strong></div>
+      <div><span>{{ 'fields.requestStatus' | translate }}</span><strong>{{ integrationDrivingRequest ? partnerIntegration.statusLabel(integrationDrivingRequest.currentStatus) : '-' }}</strong></div>
+      <div><span>{{ 'fields.lastUpdated' | translate }}</span><strong>{{ connection?.lastUpdated || '-' }}</strong></div>
+      <div><span>{{ 'fields.openRequests' | translate }}</span><strong>{{ openRequestsCount }}</strong></div>
     </div>
   </section>
 
   <section *ngIf="activeRequest" class="panel active-request-panel">
     <header class="active-request-header">
       <div>
-        <span class="panel-kicker">Active request on this integration</span>
+        <span class="panel-kicker">{{ 'partnerDetail.activeRequest' | translate }}</span>
         <h2>{{ partnerIntegration.requestDisplayTitle(activeRequest, partner) }}</h2>
       </div>
-      <button (click)="openRequest(activeRequest)" nz-button nzType="default">Open Full Request</button>
+      <button (click)="openRequest(activeRequest)" nz-button nzType="default">{{ 'partnerDetail.openFullRequest' | translate }}</button>
     </header>
 
     <div class="status-focus">
@@ -160,131 +160,131 @@
         [class.status-blocked]="activeRequest.currentStatus === 'BLOCKED'"
         [class.status-risk]="activeRequest.currentStatus === 'TROUBLESHOOTING'"
         [class.status-testing]="activeRequest.currentStatus === 'CONNECTIVITY_TEST' || activeRequest.currentStatus === 'UAT_IN_PROGRESS'">
-        <span>Request status</span>
+        <span>{{ 'fields.requestStatus' | translate }}</span>
         <strong>{{ partnerIntegration.statusLabel(activeRequest.currentStatus) }}</strong>
       </div>
       <div>
-        <span>Next action</span>
-        <strong>{{ activeRequest.nextAction }}</strong>
+        <span>{{ 'fields.nextAction' | translate }}</span>
+        <strong>{{ partnerIntegration.actionLabel(activeRequest.nextAction) }}</strong>
       </div>
       <div>
-        <span>Current owner</span>
-        <strong>{{ activeRequest.currentOwner }}</strong>
+        <span>{{ 'fields.currentOwner' | translate }}</span>
+        <strong>{{ partnerIntegration.ownerLabel(activeRequest.currentOwner) }}</strong>
       </div>
       <div class="sr-code-card">
-        <span>CNOC SR Code</span>
+        <span>{{ 'fields.cnocSrCode' | translate }}</span>
         <strong>{{ activeRequest.srCode || '-' }}</strong>
         <button (click)="editActiveSrCode()" nz-button nzSize="small" nzType="default">
-          {{ activeRequest.srCode ? 'Edit' : 'Add' }}
+          {{ activeRequest.srCode ? ('common.actions.edit' | translate) : ('common.actions.add' | translate) }}
         </button>
       </div>
     </div>
 
     <div class="next-step">
       <div>
-        <span>Priority</span>
+        <span>{{ 'fields.priority' | translate }}</span>
         <strong>{{ activeRequest.priority }}</strong>
       </div>
       <div>
-        <span>Open requests</span>
+        <span>{{ 'fields.openRequests' | translate }}</span>
         <strong>{{ openRequestsCount }}</strong>
       </div>
     </div>
 
     <div *ngIf="activeRequest.currentStatus === 'BLOCKED'" class="blocked-notice">
       <div>
-        <span class="panel-kicker">Blocked request</span>
-        <strong>{{ activeRequest.blockReason || activeRequest.blocker || 'No blocker reason recorded' }}</strong>
-        <p>Blocked at {{ activeRequest.blockedAt || '-' }}. Unblock this request when the same work can continue.</p>
+        <span class="panel-kicker">{{ 'partnerDetail.blockedRequest' | translate }}</span>
+        <strong>{{ activeRequest.blockReason || activeRequest.blocker || ('partnerDetail.noBlocker' | translate) }}</strong>
+        <p>{{ 'partnerDetail.blockedAt' | translate:{date: activeRequest.blockedAt || '-'} }}</p>
       </div>
-      <button (click)="unblockActiveRequest()" nz-button nzType="primary">Unblock Request</button>
+      <button (click)="unblockActiveRequest()" nz-button nzType="primary">{{ 'partnerDetail.unblockRequest' | translate }}</button>
     </div>
 
     <div *ngIf="activeRequest.currentStatus !== 'BLOCKED'" class="step-actions">
-      <button *ngIf="activeRequest.currentStatus === 'NEW'" (click)="confirmAction('Form and API Spec Sent', {formSent: true})" nz-button nzType="primary">Send Form/API Spec</button>
-      <button *ngIf="activeRequest.currentStatus === 'WAITING_FORM'" (click)="confirmAction('VPN Integration Form Received', {formReceived: true})" nz-button nzType="primary">Mark VPN Form Received</button>
-      <button *ngIf="activeRequest.currentStatus === 'FORM_VALIDATION'" (click)="confirmAction('Form Validated', {formValidated: true})" [disabled]="!canValidateActiveForm()" nz-button nzType="primary">Validate Form</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_STATEMENT'" (click)="confirmAction('Statement Created', {statementCreated: true})" nz-button nzType="primary">Statement Created</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_IMPLEMENTATION'" (click)="confirmAction('Sent to vOffice', {statementSent: true})" nz-button nzType="primary">Send to vOffice</button>
-      <button *ngIf="activeRequest.currentStatus === 'WAITING_SIGNATURES'" (click)="confirmAction('Approval / Signatures Complete', {signaturesComplete: true, ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'})" nz-button nzType="primary">Approval Complete</button>
-      <button *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION' && activeRequest.ipCoreStatus !== 'DONE'" (click)="confirmAction('IP Core Done', {ipCoreStatus: 'DONE'})" nz-button nzType="primary">IP Core Done</button>
-      <button *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION' && activeRequest.itStatus !== 'DONE'" (click)="confirmAction('IT Done', {itStatus: 'DONE'})" nz-button nzType="primary">IT Done</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_CONNECTIVITY'" (click)="confirmAction('Connectivity Test Started', {vpnStatus: 'IN_PROGRESS', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'})" nz-button nzType="primary">Start Connectivity Test</button>
-      <button *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus !== 'UP'" (click)="confirmAction('VPN UP', {vpnStatus: 'UP'})" nz-button nzType="primary">VPN UP</button>
-      <button *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus === 'UP' && requiresUat() && activeRequest.connectivityUat !== 'PASS'" (click)="confirmAction('UAT Connectivity Passed', {connectivityUat: 'PASS'})" nz-button nzType="primary">UAT Connectivity PASS</button>
-      <button *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus === 'UP' && requiresPrd() && activeRequest.connectivityPrd !== 'PASS'" (click)="confirmAction('PRD Connectivity Passed', {connectivityPrd: 'PASS'})" nz-button nzType="primary">PRD Connectivity PASS</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_UAT'" (click)="openCredentialsEditor()" nz-button nzType="primary">Provide Test Credentials</button>
-      <button *ngIf="activeRequest.currentStatus === 'UAT_IN_PROGRESS'" (click)="confirmAction('UAT Passed', {uatStatus: 'PASS'})" nz-button nzType="primary">UAT PASS</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_HANDOVER'" (click)="confirmAction('Handover Complete', {handoverComplete: true})" nz-button nzType="primary">Close Request</button>
-      <button (click)="confirmAction('Issue / Blocker Registered', {connectivityUat: 'FAIL', blocker: 'Needs investigation'})" nz-button nzDanger>Mark Issue</button>
-      <button (click)="blockActiveRequest()" nz-button nzDanger>Block Request</button>
+      <button *ngIf="activeRequest.currentStatus === 'NEW'" (click)="confirmAction('Form and API Spec Sent', {formSent: true})" nz-button nzType="primary">{{ 'partnerDetail.sendFormApiSpec' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'WAITING_FORM'" (click)="confirmAction('VPN Integration Form Received', {formReceived: true})" nz-button nzType="primary">{{ 'partnerDetail.markVpnFormReceived' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'FORM_VALIDATION'" (click)="confirmAction('Form Validated', {formValidated: true})" [disabled]="!canValidateActiveForm()" nz-button nzType="primary">{{ 'partnerDetail.validateForm' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'READY_STATEMENT'" (click)="confirmAction('Statement Created', {statementCreated: true})" nz-button nzType="primary">{{ 'partnerDetail.statementCreated' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'READY_IMPLEMENTATION'" (click)="confirmAction('Sent to vOffice', {statementSent: true})" nz-button nzType="primary">{{ 'partnerDetail.sendToVoffice' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'WAITING_SIGNATURES'" (click)="confirmAction('Approval / Signatures Complete', {signaturesComplete: true, ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'})" nz-button nzType="primary">{{ 'partnerDetail.approvalComplete' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION' && activeRequest.ipCoreStatus !== 'DONE'" (click)="confirmAction('IP Core Done', {ipCoreStatus: 'DONE'})" nz-button nzType="primary">{{ 'partnerDetail.ipCoreDone' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION' && activeRequest.itStatus !== 'DONE'" (click)="confirmAction('IT Done', {itStatus: 'DONE'})" nz-button nzType="primary">{{ 'partnerDetail.itDone' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'READY_CONNECTIVITY'" (click)="confirmAction('Connectivity Test Started', {vpnStatus: 'IN_PROGRESS', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'})" nz-button nzType="primary">{{ 'partnerDetail.startConnectivityTest' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus !== 'UP'" (click)="confirmAction('VPN UP', {vpnStatus: 'UP'})" nz-button nzType="primary">{{ 'partnerDetail.vpnUp' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus === 'UP' && requiresUat() && activeRequest.connectivityUat !== 'PASS'" (click)="confirmAction('UAT Connectivity Passed', {connectivityUat: 'PASS'})" nz-button nzType="primary">{{ 'partnerDetail.uatConnectivityPass' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus === 'UP' && requiresPrd() && activeRequest.connectivityPrd !== 'PASS'" (click)="confirmAction('PRD Connectivity Passed', {connectivityPrd: 'PASS'})" nz-button nzType="primary">{{ 'partnerDetail.prdConnectivityPass' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'READY_UAT'" (click)="openCredentialsEditor()" nz-button nzType="primary">{{ 'partnerDetail.provideCredentials' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'UAT_IN_PROGRESS'" (click)="confirmAction('UAT Passed', {uatStatus: 'PASS'})" nz-button nzType="primary">{{ 'partnerDetail.uatPass' | translate }}</button>
+      <button *ngIf="activeRequest.currentStatus === 'READY_HANDOVER'" (click)="confirmAction('Handover Complete', {handoverComplete: true})" nz-button nzType="primary">{{ 'partnerDetail.closeRequest' | translate }}</button>
+      <button (click)="confirmAction('Issue / Blocker Registered', {connectivityUat: 'FAIL', blocker: 'Needs investigation'})" nz-button nzDanger>{{ 'partnerDetail.markIssue' | translate }}</button>
+      <button (click)="blockActiveRequest()" nz-button nzDanger>{{ 'partnerDetail.blockRequest' | translate }}</button>
     </div>
 
     <div *ngIf="isCredentialsEditorOpen" class="credentials-editor">
       <div>
-        <span class="panel-kicker">Test credentials</span>
-        <h3>Paste the credentials provided to {{ partner.name }}.</h3>
+        <span class="panel-kicker">{{ 'partnerDetail.testCredentials' | translate }}</span>
+        <h3>{{ 'partnerDetail.pasteCredentialsFor' | translate:{partner: partner.name} }}</h3>
       </div>
-      <textarea [(ngModel)]="credentialsDraft" nz-input rows="7" placeholder="Paste UAT URL, username, password, API key, test MSISDNs or any instructions shared with the partner"></textarea>
+      <textarea [(ngModel)]="credentialsDraft" nz-input rows="7" [placeholder]="'partnerDetail.credentialsPlaceholder' | translate"></textarea>
       <div class="credentials-actions">
-        <button (click)="cancelCredentialsEditor()" nz-button nzType="default">Cancel</button>
-        <button (click)="saveCredentials()" [disabled]="!credentialsDraft.trim()" nz-button nzType="primary">Save & Mark Provided</button>
+        <button (click)="cancelCredentialsEditor()" nz-button nzType="default">{{ 'common.actions.cancel' | translate }}</button>
+        <button (click)="saveCredentials()" [disabled]="!credentialsDraft.trim()" nz-button nzType="primary">{{ 'partnerDetail.saveMarkProvided' | translate }}</button>
       </div>
     </div>
 
     <div *ngIf="shouldShowCredentialsPanel(activeRequest) && !isCredentialsEditorOpen" class="credentials-summary" [class.missing]="!activeRequest.testCredentials">
-      <span>{{ activeRequest.testCredentials ? 'Credentials Provided' : 'Credentials Not Recorded' }}</span>
+      <span>{{ activeRequest.testCredentials ? ('partnerDetail.credentialsProvided' | translate) : ('partnerDetail.credentialsNotRecorded' | translate) }}</span>
       <pre *ngIf="activeRequest.testCredentials; else activeNoCredentials">{{ activeRequest.testCredentials }}</pre>
       <ng-template #activeNoCredentials>
-        <p *ngIf="activeRequest.credentialsProvided; else activeNotProvidedYet">Marked as provided, but no credential details were recorded.</p>
+        <p *ngIf="activeRequest.credentialsProvided; else activeNotProvidedYet">{{ 'partnerDetail.markedNoCredentialDetails' | translate }}</p>
         <ng-template #activeNotProvidedYet>
-          <p>No credentials have been recorded for this request yet.</p>
+          <p>{{ 'partnerDetail.noCredentialsRequest' | translate }}</p>
         </ng-template>
-        <button (click)="openCredentialsEditor()" nz-button nzType="default">Add Credentials</button>
+        <button (click)="openCredentialsEditor()" nz-button nzType="default">{{ 'partnerDetail.addCredentials' | translate }}</button>
       </ng-template>
     </div>
   </section>
 
   <section class="panel">
     <header>
-      <span class="panel-kicker">Integration requests</span>
-      <h2>Actions and history on this connection</h2>
+      <span class="panel-kicker">{{ 'partnerDetail.integrationRequests' | translate }}</span>
+      <h2>{{ 'partnerDetail.historyTitle' | translate }}</h2>
     </header>
 
     <div class="new-request">
       <div *ngIf="hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED'" class="request-guard">
-        <strong>Active request already exists</strong>
-        <span>Continue the active request unless the current work is blocked.</span>
+        <strong>{{ 'partnerDetail.activeRequestExists' | translate }}</strong>
+        <span>{{ 'partnerDetail.continueActiveRequest' | translate }}</span>
       </div>
 
       <nz-select [(ngModel)]="requestType" [nzDisabled]="hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED'">
-        <nz-option nzValue="NEW_INTEGRATION" nzLabel="New Integration"></nz-option>
-        <nz-option nzValue="UPDATE_INTEGRATION" nzLabel="Update Integration"></nz-option>
-        <nz-option nzValue="CONNECTIVITY_SUPPORT" nzLabel="Connectivity Support"></nz-option>
+        <nz-option nzValue="NEW_INTEGRATION" [nzLabel]="partnerIntegration.typeLabel('NEW_INTEGRATION')"></nz-option>
+        <nz-option nzValue="UPDATE_INTEGRATION" [nzLabel]="partnerIntegration.typeLabel('UPDATE_INTEGRATION')"></nz-option>
+        <nz-option nzValue="CONNECTIVITY_SUPPORT" [nzLabel]="partnerIntegration.typeLabel('CONNECTIVITY_SUPPORT')"></nz-option>
       </nz-select>
 
       <button (click)="createRequest()" nz-button nzType="primary">
-        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? 'Open Active Request' : 'Open Request Action' }}
+        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? ('partnerDetail.openActiveRequest' | translate) : ('partnerDetail.openRequestAction' | translate) }}
       </button>
     </div>
 
     <article *ngFor="let request of requests" class="request-row">
       <div>
         <strong>{{ partnerIntegration.requestDisplayTitle(request, partner) }}</strong>
-        <span>{{ partnerIntegration.typeLabel(request.type) }} - {{ request.nextAction }}</span>
-        <small>Opened {{ request.openDate }} · Owner {{ request.currentOwner }} · Follow-up {{ request.followUpDate || '-' }}</small>
+        <span>{{ partnerIntegration.typeLabel(request.type) }} - {{ partnerIntegration.actionLabel(request.nextAction) }}</span>
+        <small>{{ 'partnerDetail.openedOwnerFollow' | translate:{openDate: request.openDate, owner: partnerIntegration.ownerLabel(request.currentOwner), followUp: request.followUpDate || '-'} }}</small>
       </div>
       <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
         {{ partnerIntegration.statusLabel(request.currentStatus) }}
       </nz-tag>
-      <button (click)="openRequest(request)" nz-button nzType="default">Open</button>
+      <button (click)="openRequest(request)" nz-button nzType="default">{{ 'common.actions.open' | translate }}</button>
     </article>
   </section>
 
   <section class="panel">
     <header>
-      <span class="panel-kicker">History</span>
-      <h2>Partner and integration history</h2>
+      <span class="panel-kicker">{{ 'partnerDetail.history' | translate }}</span>
+      <h2>{{ 'partnerDetail.partnerHistory' | translate }}</h2>
     </header>
 
     <article *ngFor="let event of events" class="history-row">
@@ -293,6 +293,6 @@
       <p>{{ event.description }}</p>
     </article>
 
-    <div *ngIf="!events.length" class="empty-history">No history recorded yet.</div>
+    <div *ngIf="!events.length" class="empty-history">{{ 'partnerDetail.noHistory' | translate }}</div>
   </section>
 </div>

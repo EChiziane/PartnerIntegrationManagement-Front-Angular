@@ -1,71 +1,68 @@
 <div class="partner-page">
   <section class="dashboard-hero">
     <div class="hero-copy">
-      <span class="eyebrow">Integration Command Center</span>
-      <h1>Control every partner, integration and request.</h1>
-      <p>
-        Follow the partner profile, the live connection, and every request
-        that changes or repairs that integration.
-      </p>
+      <span class="eyebrow">{{ 'dashboard.eyebrow' | translate }}</span>
+      <h1>{{ 'dashboard.title' | translate }}</h1>
+      <p>{{ 'dashboard.subtitle' | translate }}</p>
     </div>
 
     <div class="hero-actions">
       <button (click)="goPartners()" nz-button nzType="primary">
         <span nz-icon nzType="team"></span>
-        Partners
+        {{ 'layout.nav.partners' | translate }}
       </button>
       <button (click)="goPipeline()" nz-button nzType="default">
         <span nz-icon nzType="partition"></span>
-        Request Pipeline
+        {{ 'dashboard.openRequestPipeline' | translate }}
       </button>
       <button (click)="reload()" nz-button nzType="default">
         <span nz-icon nzType="reload"></span>
-        Refresh
+        {{ 'common.actions.refresh' | translate }}
       </button>
     </div>
   </section>
 
   <div class="metric-grid">
     <button (click)="goPartners()" class="metric-card portfolio" type="button">
-      <span>Partner portfolio</span>
+      <span>{{ 'dashboard.partnerPortfolio' | translate }}</span>
       <strong>{{ partners.length }}</strong>
-      <small>Registered company profiles</small>
+      <small>{{ 'dashboard.registeredProfiles' | translate }}</small>
     </button>
 
     <button (click)="goPipeline()" class="metric-card active" type="button">
-      <span>Active integrations</span>
+      <span>{{ 'dashboard.activeIntegrations' | translate }}</span>
       <strong>{{ activeIntegrationsCount }}</strong>
-      <small>{{ healthyIntegrationsCount }} healthy, {{ degradedIntegrationsCount + downIntegrationsCount }} needing attention</small>
+      <small>{{ 'dashboard.healthSummary' | translate:{healthy: healthyIntegrationsCount, attention: degradedIntegrationsCount + downIntegrationsCount} }}</small>
     </button>
 
     <button (click)="goPipeline()" class="metric-card ready" type="button">
-      <span>Requests in testing</span>
+      <span>{{ 'dashboard.requestsTesting' | translate }}</span>
       <strong>{{ testingCount }}</strong>
-      <small>VPN, connectivity or UAT/API testing</small>
+      <small>{{ 'dashboard.testingHint' | translate }}</small>
     </button>
 
     <button (click)="goPipeline('TROUBLESHOOTING')" class="metric-card risk" type="button">
-      <span>Risk and blockers</span>
+      <span>{{ 'dashboard.riskBlockers' | translate }}</span>
       <strong>{{ attentionRequests.length }}</strong>
-      <small>P1, old stage or troubleshooting</small>
+      <small>{{ 'dashboard.riskHint' | translate }}</small>
     </button>
   </div>
 
   <section class="command-strip">
     <button (click)="goPipeline()" type="button">
-      <span>Waiting external</span>
+      <span>{{ 'dashboard.waitingExternal' | translate }}</span>
       <strong>{{ waitingExternalCount }}</strong>
     </button>
     <button (click)="goTasks()" type="button">
-      <span>Execution queue</span>
+      <span>{{ 'dashboard.executionQueue' | translate }}</span>
       <strong>{{ myTasksToday.length }}</strong>
     </button>
     <button (click)="goPipeline('CLOSED')" type="button">
-      <span>Closed requests</span>
+      <span>{{ 'dashboard.closedRequests' | translate }}</span>
       <strong>{{ closedCount }}</strong>
     </button>
     <button (click)="goPipeline('READY_HANDOVER')" type="button">
-      <span>Ready handover</span>
+      <span>{{ 'dashboard.readyHandover' | translate }}</span>
       <strong>{{ countByStatus('READY_HANDOVER') }}</strong>
     </button>
   </section>
@@ -74,10 +71,10 @@
     <section class="section-panel attention-panel">
       <header>
         <div>
-          <span class="panel-kicker">Management focus</span>
-          <h2>Attention queue</h2>
+          <span class="panel-kicker">{{ 'dashboard.managementFocus' | translate }}</span>
+          <h2>{{ 'dashboard.attentionQueue' | translate }}</h2>
         </div>
-        <button (click)="goPipeline('TROUBLESHOOTING')" nz-button nzType="default">Open risks</button>
+        <button (click)="goPipeline('TROUBLESHOOTING')" nz-button nzType="default">{{ 'dashboard.openRisks' | translate }}</button>
       </header>
 
       <div class="request-list">
@@ -85,22 +82,22 @@
           <div>
             <nz-tag [nzColor]="request.priority === 'P1' ? 'red' : 'orange'">{{ request.priority }}</nz-tag>
             <strong>{{ partnerName(request.partnerId) }}</strong>
-            <span>{{ partnerIntegration.statusLabel(request.currentStatus) }} - {{ ageDays(request.stageStartDate) }} day(s)</span>
+            <span>{{ partnerIntegration.statusLabel(request.currentStatus) }} - {{ 'dashboard.ageDays' | translate:{days: ageDays(request.stageStartDate)} }}</span>
           </div>
-          <button (click)="openRequest(request.id)" nz-button nzType="link">Open</button>
+          <button (click)="openRequest(request.id)" nz-button nzType="link">{{ 'common.actions.open' | translate }}</button>
         </article>
 
-        <nz-empty *ngIf="!commandQueue.length" nzNotFoundContent="No critical items right now."></nz-empty>
+        <nz-empty *ngIf="!commandQueue.length" [nzNotFoundContent]="'dashboard.noCritical' | translate"></nz-empty>
       </div>
     </section>
 
     <section class="section-panel">
       <header>
         <div>
-          <span class="panel-kicker">Execution</span>
-          <h2>Today work queue</h2>
+          <span class="panel-kicker">{{ 'dashboard.execution' | translate }}</span>
+          <h2>{{ 'dashboard.todayQueue' | translate }}</h2>
         </div>
-        <button (click)="goTasks()" nz-button nzType="default">View tasks</button>
+        <button (click)="goTasks()" nz-button nzType="default">{{ 'dashboard.viewTasks' | translate }}</button>
       </header>
 
       <div class="task-list">
@@ -112,10 +109,10 @@
             <strong>{{ task.title }}</strong>
             <span>{{ task.partnerName }} - {{ partnerIntegration.typeLabel(task.requestType) }}</span>
           </div>
-          <button (click)="openRequest(task.requestId)" nz-button nzType="link">Open</button>
+          <button (click)="openRequest(task.requestId)" nz-button nzType="link">{{ 'common.actions.open' | translate }}</button>
         </article>
 
-        <nz-empty *ngIf="!myTasksToday.length" nzNotFoundContent="No tasks assigned for today."></nz-empty>
+        <nz-empty *ngIf="!myTasksToday.length" [nzNotFoundContent]="'dashboard.noTasksToday' | translate"></nz-empty>
       </div>
     </section>
   </div>
@@ -123,18 +120,18 @@
   <section class="section-panel pipeline-panel">
     <header>
       <div>
-          <span class="panel-kicker">Request pipeline</span>
-          <h2>Requests by workflow status</h2>
+          <span class="panel-kicker">{{ 'dashboard.requestPipeline' | translate }}</span>
+          <h2>{{ 'dashboard.requestsByStatus' | translate }}</h2>
       </div>
-      <button (click)="goPipeline()" nz-button nzType="default">Open Request Pipeline</button>
+      <button (click)="goPipeline()" nz-button nzType="default">{{ 'dashboard.openRequestPipeline' | translate }}</button>
     </header>
 
     <div class="workflow-stage-grid">
       <article *ngFor="let stage of workflowStages" class="workflow-stage-card" [class]="'tone-' + stage.tone">
         <button (click)="goPipeline()" class="stage-summary" type="button">
-          <span>{{ stage.label }}</span>
+          <span>{{ stageLabel(stage) }}</span>
           <strong>{{ countByStage(stage) }}</strong>
-          <small>{{ stage.description }}</small>
+          <small>{{ stageDescription(stage) }}</small>
         </button>
 
         <div class="stage-status-list">
@@ -151,8 +148,8 @@
     <section class="section-panel">
       <header>
         <div>
-          <span class="panel-kicker">Request mix</span>
-          <h2>Open requests by type</h2>
+          <span class="panel-kicker">{{ 'dashboard.requestMix' | translate }}</span>
+          <h2>{{ 'dashboard.openRequestsByType' | translate }}</h2>
         </div>
       </header>
 
@@ -167,10 +164,10 @@
     <section class="section-panel">
       <header>
         <div>
-          <span class="panel-kicker">Current activity</span>
-          <h2>Recently active integration requests</h2>
+          <span class="panel-kicker">{{ 'dashboard.currentActivity' | translate }}</span>
+          <h2>{{ 'dashboard.recentRequests' | translate }}</h2>
         </div>
-        <button (click)="goPipeline()" nz-button nzType="default">View all</button>
+        <button (click)="goPipeline()" nz-button nzType="default">{{ 'dashboard.viewAll' | translate }}</button>
       </header>
 
       <div class="request-list">
@@ -180,9 +177,9 @@
               {{ partnerIntegration.statusLabel(request.currentStatus) }}
             </nz-tag>
             <strong>{{ partnerName(request.partnerId) }}</strong>
-            <span>{{ partnerIntegration.typeLabel(request.type) }} - {{ request.currentOwner }}</span>
+            <span>{{ partnerIntegration.typeLabel(request.type) }} - {{ partnerIntegration.ownerLabel(request.currentOwner) }}</span>
           </div>
-          <button (click)="openRequest(request.id)" nz-button nzType="link">Open</button>
+          <button (click)="openRequest(request.id)" nz-button nzType="link">{{ 'common.actions.open' | translate }}</button>
         </article>
       </div>
     </section>

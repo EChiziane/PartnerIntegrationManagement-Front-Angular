@@ -84,6 +84,10 @@ export class PipelineComponent implements OnInit {
     return this.workflowStages.find(stage => stage.statuses.includes(status)) || this.workflowStages[0];
   }
 
+  stageLabel(stage: WorkflowStage): string {
+    return this.partnerIntegration.stageLabel(stage.label);
+  }
+
   selectStage(stage: WorkflowStage): void {
     const firstStatusWithRequests = stage.statuses.find(status => this.countByStatus(status) > 0);
     this.selectedStatus = firstStatusWithRequests || stage.statuses[0];

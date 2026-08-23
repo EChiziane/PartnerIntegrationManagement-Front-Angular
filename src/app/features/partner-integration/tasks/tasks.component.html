@@ -1,19 +1,19 @@
 <div class="tasks-page">
   <section class="page-header">
     <div>
-      <span class="eyebrow">Execution queue</span>
-      <h1>Suggested work list</h1>
-      <p>Work items are generated from request rules. You still choose the order.</p>
+      <span class="eyebrow">{{ 'tasks.eyebrow' | translate }}</span>
+      <h1>{{ 'tasks.title' | translate }}</h1>
+      <p>{{ 'tasks.subtitle' | translate }}</p>
     </div>
   </section>
 
   <section class="toolbar">
     <nz-select [(ngModel)]="ownerFilter">
-      <nz-option nzValue="ALL" nzLabel="All owners"></nz-option>
-      <nz-option nzValue="Me" nzLabel="Me"></nz-option>
-      <nz-option nzValue="Partner" nzLabel="Partner"></nz-option>
-      <nz-option nzValue="IP Core / IT" nzLabel="IP Core / IT"></nz-option>
-      <nz-option nzValue="Technical Team / Partner" nzLabel="Technical Team / Partner"></nz-option>
+      <nz-option nzValue="ALL" [nzLabel]="'tasks.allOwners' | translate"></nz-option>
+      <nz-option nzValue="Me" [nzLabel]="partnerIntegration.ownerLabel('Me')"></nz-option>
+      <nz-option nzValue="Partner" [nzLabel]="partnerIntegration.ownerLabel('Partner')"></nz-option>
+      <nz-option nzValue="IP Core / IT" [nzLabel]="partnerIntegration.ownerLabel('IP Core / IT')"></nz-option>
+      <nz-option nzValue="Technical Team / Partner" [nzLabel]="partnerIntegration.ownerLabel('Technical Team / Partner')"></nz-option>
     </nz-select>
   </section>
 
@@ -27,11 +27,11 @@
         <span>{{ task.partnerName }} · {{ partnerIntegration.typeLabel(task.requestType) }}</span>
       </div>
       <div class="task-meta">
-        <span>Owner: {{ task.owner }}</span>
-        <span>Age: {{ task.ageDays }} days</span>
-        <span>Due: {{ task.dueDate }}</span>
+        <span>{{ 'tasks.owner' | translate:{owner: partnerIntegration.ownerLabel(task.owner)} }}</span>
+        <span>{{ 'tasks.age' | translate:{days: task.ageDays} }}</span>
+        <span>{{ 'tasks.due' | translate:{date: task.dueDate} }}</span>
       </div>
-      <button (click)="openTask(task)" nz-button nzType="primary">Work</button>
+      <button (click)="openTask(task)" nz-button nzType="primary">{{ 'common.actions.work' | translate }}</button>
     </article>
   </section>
 </div>

@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 .detail-header,
@@ -14,9 +15,16 @@
 
 .detail-header {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px;
+}
+
+.detail-header > div,
+.detail-header h1,
+.detail-header p {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .eyebrow,
@@ -44,6 +52,11 @@ p,
   display: grid;
   grid-template-columns: 1.35fr 0.65fr;
   gap: 16px;
+  min-width: 0;
+}
+
+.panel {
+  min-width: 0;
 }
 
 .panel header {
@@ -52,11 +65,19 @@ p,
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 14px;
+  min-width: 0;
 }
 
 .import-inline {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.import-inline button {
+  white-space: normal;
 }
 
 .import-notice {
@@ -97,6 +118,7 @@ p,
   border: 1px solid #dfe8ef;
   border-radius: 8px;
   background: #ffffff;
+  min-width: 0;
 }
 
 .technical-editor label {
@@ -105,6 +127,14 @@ p,
   color: #334b5a;
   font-size: 12px;
   font-weight: 800;
+  min-width: 0;
+}
+
+.technical-editor input,
+.technical-editor textarea,
+.technical-editor nz-select {
+  width: 100%;
+  min-width: 0;
 }
 
 .technical-editor .wide {
@@ -138,10 +168,17 @@ p,
   border: 1px solid #e4edf3;
   border-radius: 8px;
   background: #f8fbfd;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .endpoint-row label {
   flex: 1 1 0;
+  min-width: 150px;
+}
+
+.endpoint-row button {
+  flex: 0 0 auto;
 }
 
 .technical-actions {
@@ -166,6 +203,15 @@ p,
   border: 1px solid #e4edf3;
   border-radius: 8px;
   background: #f8fbfd;
+  min-width: 0;
+}
+
+.facts span,
+.facts strong,
+.action-card span,
+.action-card strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .blocked-notice {
@@ -343,6 +389,7 @@ p,
   border: 1px solid #dfe8ef;
   border-radius: 8px;
   background: #f8fbfd;
+  min-width: 0;
 }
 
 .action-card div {
@@ -429,5 +476,40 @@ p,
   .technical-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .endpoint-row {
+    display: grid;
+  }
+
+  .endpoint-row label {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .detail-header {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-header > button {
+    width: 100%;
+  }
+
+  .detail-header nz-tag {
+    justify-self: start;
+  }
+
+  .facts {
+    grid-template-columns: 1fr;
+  }
+
+  .fact-with-action button {
+    position: static;
+    width: fit-content;
+  }
+
+  .fact-with-action strong {
+    padding-right: 0;
   }
 }

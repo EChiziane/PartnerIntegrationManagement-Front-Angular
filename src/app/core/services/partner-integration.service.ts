@@ -15,6 +15,7 @@ import {
   WorkflowTask
 } from '@shared/models/partner-integration';
 import {environment} from '@env/environment';
+import {TranslationService} from '@core/services/translation.service';
 
 interface PartnerState {
   partners: Partner[];
@@ -38,7 +39,10 @@ export class PartnerIntegrationService {
   private readonly dataSourcePath = environment.partnerDataSourcePath;
   private sourceState: PartnerSourceState | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private translation: TranslationService
+  ) {
   }
 
   async loadFromTextFiles(): Promise<void> {
@@ -255,19 +259,19 @@ export class PartnerIntegrationService {
         const items: ScanItem[] = [];
 
         if (request.currentStatus === 'WAITING_SIGNATURES') {
-          items.push(this.scan('SIGNATURES', 'Statement ja esta totalmente assinado?', partnerName, request));
+          items.push(this.scan('SIGNATURES', this.translation.instant('scan.questions.SIGNATURES'), partnerName, request));
         }
         if (request.ipCoreStatus !== 'DONE' && ['READY_IMPLEMENTATION', 'IMPLEMENTATION'].includes(request.currentStatus)) {
-          items.push(this.scan('IP_CORE', 'IP Core ou VPN ja foi concluido?', partnerName, request));
+          items.push(this.scan('IP_CORE', this.translation.instant('scan.questions.IP_CORE'), partnerName, request));
         }
         if (request.itStatus !== 'DONE' && ['READY_IMPLEMENTATION', 'IMPLEMENTATION'].includes(request.currentStatus)) {
-          items.push(this.scan('IT', 'Rotas e politicas de firewall ja foram concluidas?', partnerName, request));
+          items.push(this.scan('IT', this.translation.instant('scan.questions.IT'), partnerName, request));
         }
         if (request.currentStatus === 'CONNECTIVITY_TEST') {
-          items.push(this.scan('IT', 'Testes de conectividade UAT/PRD ja passaram?', partnerName, request));
+          items.push(this.scan('IT', this.translation.instant('scan.questions.CONNECTIVITY'), partnerName, request));
         }
         if (['WAITING_FORM', 'FORM_VALIDATION', 'TROUBLESHOOTING', 'UAT_IN_PROGRESS'].includes(request.currentStatus)) {
-          items.push(this.scan('PARTNER', 'Existe resposta, form, correcao ou resultado da instituicao?', partnerName, request));
+          items.push(this.scan('PARTNER', this.translation.instant('scan.questions.PARTNER'), partnerName, request));
         }
 
         return items;
@@ -275,19 +279,11 @@ export class PartnerIntegrationService {
   }
 
   statusLabel(status: WorkflowStatus): string {
-    if (status === 'BLOCKED') return 'Blocked';
-    return status.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, value => value.toUpperCase());
+    return this.labelFromKey(`workflow.status.${status}`, status.replace(/_/g, ' '));
   }
 
   typeLabel(type: RequestType): string {
-    const labels: Record<RequestType, string> = {
-      NEW_INTEGRATION: 'New Integration',
-      UPDATE_INTEGRATION: 'Update Integration',
-      BLOCK_VPN: 'Block Integration VPN',
-      UNBLOCK_VPN: 'Unblock Integration VPN',
-      CONNECTIVITY_SUPPORT: 'Integration Troubleshooting'
-    };
-    return labels[type];
+    return this.labelFromKey(`workflow.type.${type}`, type.replace(/_/g, ' '));
   }
 
   requestDisplayTitle(request: PartnerRequest, partner?: Partner): string {
@@ -295,18 +291,27 @@ export class PartnerIntegrationService {
   }
 
   connectionHealthLabel(health: PartnerConnection['health'] | undefined): string {
-    const labels: Record<PartnerConnection['health'], string> = {
-      NOT_ESTABLISHED: 'Not Established',
-      PENDING_SETUP: 'Pending Setup',
-      IMPLEMENTING: 'Implementing',
-      TESTING: 'Testing',
-      HEALTHY: 'Healthy',
-      DEGRADED: 'Degraded',
-      DOWN: 'Down',
-      BLOCKED: 'Blocked',
-      DISABLED: 'Disabled'
-    };
-    return health ? labels[health] : 'Not Established';
+    return health
+      ? this.labelFromKey(`workflow.health.${health}`, health.replace(/_/g, ' '))
+      : this.translation.instant('workflow.health.NOT_ESTABLISHED');
+  }
+
+  ownerLabel(owner: string | undefined): string {
+    if (!owner) return '-';
+    return this.labelFromKey(`workflow.owner.${owner}`, owner);
+  }
+
+  actionLabel(action: string | undefined): string {
+    if (!action) return '-';
+    return this.labelFromKey(`workflow.action.${action}`, action);
+  }
+
+  stageLabel(label: string): string {
+    return this.labelFromKey(`workflow.stage.${this.stageKey(label)}`, label);
+  }
+
+  stageDescription(label: string, description: string): string {
+    return this.labelFromKey(`workflow.stage.${this.stageKey(label)}Description`, description);
   }
 
   connectionHealthColor(health: PartnerConnection['health'] | undefined): string {
@@ -406,6 +411,17 @@ export class PartnerIntegrationService {
     return missing.length
       ? `Follow up implementation: ${missing.join(' + ')}`
       : 'Implementation complete';
+  }
+
+  private labelFromKey(key: string, fallback: string): string {
+    const value = this.translation.instant(key);
+    return value === key
+      ? fallback.toLowerCase().replace(/\b\w/g, item => item.toUpperCase())
+      : value;
+  }
+
+  private stageKey(label: string): string {
+    return label.replace(/\s+/g, '').replace(/^./, item => item.toLowerCase());
   }
 
   private calculatePriority(request: PartnerRequest): TaskPriority {

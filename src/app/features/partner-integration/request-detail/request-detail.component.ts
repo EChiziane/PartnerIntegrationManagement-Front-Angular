@@ -11,6 +11,7 @@ import {
   WorkflowStatus
 } from '@shared/models/partner-integration';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {TranslationService} from '@core/services/translation.service';
 
 interface WorkflowAction {
   label: string;
@@ -67,6 +68,7 @@ export class RequestDetailComponent implements OnInit {
   constructor(
     public partnerIntegration: PartnerIntegrationService,
     private modal: NzModalService,
+    private translation: TranslationService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -171,7 +173,7 @@ export class RequestDetailComponent implements OnInit {
       formReceived: true,
       formValidated: this.hasTechnicalData(formData) ? this.request.formValidated : false
     }, 'VPN Integration Form Data Updated Manually');
-    this.importNotice = 'Manual technical data saved on this request.';
+    this.importNotice = this.t('messages.manualTechnicalSaved');
     this.isTechnicalEditorOpen = false;
     this.load();
   }
@@ -197,11 +199,11 @@ export class RequestDetailComponent implements OnInit {
         formReceived: true,
         formValidated: this.hasTechnicalData(formData)
       }, this.hasTechnicalData(formData) ? 'VPN Integration Form Imported And Validated' : 'VPN Integration Form Data Updated');
-      this.importNotice = `Imported ${file.name}: request form data updated.`;
+      this.importNotice = this.t('messages.importedRequest', {file: file.name});
       this.load();
     } catch (error) {
       console.error('VPN integration form import failed', error);
-      this.importNotice = 'Could not import this Excel form. Please check if the file is the VPN integration form.';
+      this.importNotice = this.t('messages.importFailed');
     } finally {
       input.value = '';
     }
@@ -211,8 +213,8 @@ export class RequestDetailComponent implements OnInit {
     if (!this.request) return;
     if (patch.formValidated && !this.canValidateForm()) {
       this.modal.warning({
-        nzTitle: 'Technical data required',
-        nzContent: 'Fill the public peer and private IP endpoints manually, or import the VPN form, before validating this request.'
+        nzTitle: this.t('modal.technicalRequiredTitle'),
+        nzContent: this.t('modal.technicalRequiredContent')
       });
       return;
     }
@@ -220,10 +222,14 @@ export class RequestDetailComponent implements OnInit {
     if (!nextPatch) return;
 
     this.modal.confirm({
-      nzTitle: 'Confirm workflow update',
-      nzContent: `This will register "${label}" for ${this.partner?.name || 'this partner'} and may move the request from ${this.partnerIntegration.statusLabel(this.request.currentStatus)} to the next status.`,
-      nzOkText: 'Confirm update',
-      nzCancelText: 'Cancel',
+      nzTitle: this.t('modal.confirmWorkflowTitle'),
+      nzContent: this.t('modal.confirmWorkflowContent', {
+        label,
+        partner: this.partner?.name || this.t('fields.company'),
+        status: this.partnerIntegration.statusLabel(this.request.currentStatus)
+      }),
+      nzOkText: this.t('modal.confirmUpdate'),
+      nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => this.applyAction(label, nextPatch)
     });
   }
@@ -233,68 +239,68 @@ export class RequestDetailComponent implements OnInit {
 
     const map: Partial<Record<WorkflowStatus, WorkflowAction[]>> = {
       NEW: [{
-        label: 'Send Form & API Spec',
-        description: 'Moves the request to Waiting Form.',
+        label: this.t('request.actions.sendFormApiSpec'),
+        description: this.t('request.actions.sendFormApiSpecDescription'),
         patch: {formSent: true},
         tone: 'primary'
       }],
       WAITING_FORM: [{
-        label: 'Form Received',
-        description: 'Moves the request to Form Validation.',
+        label: this.t('request.actions.formReceived'),
+        description: this.t('request.actions.formReceivedDescription'),
         patch: {formReceived: true},
         tone: 'primary'
       }],
       FORM_VALIDATION: [{
-        label: 'Form Validated',
+        label: this.t('request.actions.formValidated'),
         description: this.canValidateForm()
-          ? 'Moves the request to Ready Statement.'
-          : 'Import the VPN form or fill peer/endpoints manually before validation.',
+          ? this.t('request.actions.formValidatedDescription')
+          : this.t('request.actions.formNeedsDataDescription'),
         patch: {formValidated: true},
         tone: 'primary',
         requiresTechnicalData: true
       }],
       READY_STATEMENT: [{
-        label: 'Statement Created',
-        description: 'Makes the request ready for implementation submission.',
+        label: this.t('request.actions.statementCreated'),
+        description: this.t('request.actions.statementCreatedDescription'),
         patch: {statementCreated: true},
         tone: 'primary'
       }],
       READY_IMPLEMENTATION: [{
-        label: 'Send to vOffice',
-        description: 'Moves the request to Waiting Signatures.',
+        label: this.t('request.actions.sendToVoffice'),
+        description: this.t('request.actions.sendToVofficeDescription'),
         patch: {statementSent: true},
         tone: 'primary'
       }],
       WAITING_SIGNATURES: [{
-        label: 'Approval Complete',
-        description: 'Confirms approvals/signatures and submits to IP Core + IT.',
+        label: this.t('request.actions.approvalComplete'),
+        description: this.t('request.actions.approvalCompleteDescription'),
         patch: {signaturesComplete: true, ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'},
         tone: 'primary'
       }],
       IMPLEMENTATION: this.implementationActions(),
       READY_CONNECTIVITY: [{
-        label: 'Start Connectivity Test',
-        description: 'Starts the connectivity validation. VPN must be confirmed before environment tests are passed.',
+        label: this.t('request.actions.startConnectivity'),
+        description: this.t('request.actions.startConnectivityDescription'),
         patch: {vpnStatus: 'IN_PROGRESS', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'},
         tone: 'primary'
       }],
       CONNECTIVITY_TEST: this.connectivityActions(),
       READY_UAT: [{
-        label: 'Provide Test Credentials',
-        description: 'Paste the credentials or test instructions given to this partner.',
+        label: this.t('request.actions.provideCredentials'),
+        description: this.t('request.actions.provideCredentialsDescription'),
         patch: {},
         tone: 'primary',
         requiresCredentialsText: true
       }],
       UAT_IN_PROGRESS: [{
-        label: 'UAT PASS',
-        description: 'Moves the request to Ready Handover.',
+        label: this.t('request.actions.uatPass'),
+        description: this.t('request.actions.uatPassDescription'),
         patch: {uatStatus: 'PASS'},
         tone: 'primary'
       }],
       READY_HANDOVER: [{
-        label: 'Handover Complete',
-        description: 'Closes the request.',
+        label: this.t('request.actions.handoverComplete'),
+        description: this.t('request.actions.handoverCompleteDescription'),
         patch: {handoverComplete: true},
         tone: 'primary'
       }]
@@ -308,18 +314,22 @@ export class RequestDetailComponent implements OnInit {
 
     return [
       {
-        label: 'Register Issue',
-        description: 'Moves the request to Troubleshooting.',
+        label: this.t('request.actions.registerIssue'),
+        description: this.t('request.actions.registerIssueDescription'),
         patch: {connectivityUat: 'FAIL', blocker: 'Needs investigation'},
         tone: 'danger'
       },
       {
-        label: 'Block Request',
-        description: 'Pauses this request with a mandatory blocker reason. Use this when the active request cannot continue.',
+        label: this.t('request.actions.blockRequest'),
+        description: this.t('request.actions.blockRequestDescription'),
         patch: {},
         tone: 'danger'
       }
     ];
+  }
+
+  isBlockAction(action: WorkflowAction): boolean {
+    return action.label === this.t('request.actions.blockRequest');
   }
 
   private implementationActions(): WorkflowAction[] {
@@ -329,10 +339,10 @@ export class RequestDetailComponent implements OnInit {
 
     if (this.request.ipCoreStatus !== 'DONE') {
       actions.push({
-        label: 'IP Core Done',
+        label: this.t('request.actions.ipCoreDone'),
         description: this.request.itStatus === 'DONE'
-          ? 'IT is already done. This will complete implementation and move to Ready Connectivity.'
-          : 'Registers IP Core completion. The request stays in Implementation until IT is also done.',
+          ? this.t('request.actions.ipCoreDoneItAlready')
+          : this.t('request.actions.ipCoreDoneDescription'),
         patch: {ipCoreStatus: 'DONE'},
         tone: 'primary'
       });
@@ -340,10 +350,10 @@ export class RequestDetailComponent implements OnInit {
 
     if (this.request.itStatus !== 'DONE') {
       actions.push({
-        label: 'IT Done',
+        label: this.t('request.actions.itDone'),
         description: this.request.ipCoreStatus === 'DONE'
-          ? 'IP Core is already done. This will complete implementation and move to Ready Connectivity.'
-          : 'Registers IT/firewall/routes completion. The request stays in Implementation until IP Core is also done.',
+          ? this.t('request.actions.itDoneIpAlready')
+          : this.t('request.actions.itDoneDescription'),
         patch: {itStatus: 'DONE'},
         tone: 'primary'
       });
@@ -359,8 +369,8 @@ export class RequestDetailComponent implements OnInit {
 
     if (this.request.vpnStatus !== 'UP') {
       actions.push({
-        label: 'VPN UP',
-        description: 'Confirms the VPN tunnel is up. Environment connectivity can be passed after this.',
+        label: this.t('request.actions.vpnUp'),
+        description: this.t('request.actions.vpnUpDescription'),
         patch: {vpnStatus: 'UP'},
         tone: 'primary'
       });
@@ -369,8 +379,8 @@ export class RequestDetailComponent implements OnInit {
 
     if (this.requiresUat() && this.request.connectivityUat !== 'PASS') {
       actions.push({
-        label: 'UAT Connectivity PASS',
-        description: 'Confirms UAT connectivity for this partner.',
+        label: this.t('request.actions.uatConnectivityPass'),
+        description: this.t('request.actions.uatConnectivityPassDescription'),
         patch: {connectivityUat: 'PASS'},
         tone: 'primary'
       });
@@ -378,8 +388,8 @@ export class RequestDetailComponent implements OnInit {
 
     if (this.requiresPrd() && this.request.connectivityPrd !== 'PASS') {
       actions.push({
-        label: 'PRD Connectivity PASS',
-        description: 'Confirms PRD connectivity for this partner.',
+        label: this.t('request.actions.prdConnectivityPass'),
+        description: this.t('request.actions.prdConnectivityPassDescription'),
         patch: {connectivityPrd: 'PASS'},
         tone: 'primary'
       });
@@ -421,7 +431,7 @@ export class RequestDetailComponent implements OnInit {
 
   editSrCode(): void {
     if (!this.request) return;
-    const value = window.prompt('CNOC SR Code (optional)', this.request.srCode || '');
+    const value = window.prompt(this.t('modal.srCodePrompt'), this.request.srCode || '');
     if (value === null) return;
 
     this.partnerIntegration.updateRequest(this.request.id, {
@@ -445,63 +455,63 @@ export class RequestDetailComponent implements OnInit {
 
     const map: Partial<Record<WorkflowStatus, WorkflowAction>> = {
       WAITING_FORM: {
-        label: 'Return to New',
-        description: 'Use only if the form/API spec was not actually sent.',
+        label: this.t('request.backActions.returnNew'),
+        description: this.t('request.backActions.returnNewDescription'),
         patch: {formSent: false}
       },
       FORM_VALIDATION: {
-        label: 'Return to Waiting Form',
-        description: 'Use if the received form is invalid or incomplete.',
+        label: this.t('request.backActions.returnWaitingForm'),
+        description: this.t('request.backActions.returnWaitingFormDescription'),
         patch: {formReceived: false, formValidated: false}
       },
       READY_STATEMENT: {
-        label: 'Return to Form Validation',
-        description: 'Use if validation needs to be reviewed.',
+        label: this.t('request.backActions.returnFormValidation'),
+        description: this.t('request.backActions.returnFormValidationDescription'),
         patch: {formValidated: false, statementCreated: false}
       },
       READY_IMPLEMENTATION: {
-        label: 'Return to Ready Statement',
-        description: 'Use if the statement is not ready for implementation.',
+        label: this.t('request.backActions.returnReadyStatement'),
+        description: this.t('request.backActions.returnReadyStatementDescription'),
         patch: {statementCreated: false, statementSent: false}
       },
       WAITING_SIGNATURES: {
-        label: 'Return to Ready Implementation',
-        description: 'Use if the statement should not be with approvers yet.',
+        label: this.t('request.backActions.returnReadyImplementation'),
+        description: this.t('request.backActions.returnReadyImplementationDescription'),
         patch: {statementSent: false, signaturesComplete: false}
       },
       IMPLEMENTATION: {
-        label: 'Return to Waiting Signatures',
-        description: 'Use if approval/signature completion was registered by mistake.',
+        label: this.t('request.backActions.returnWaitingSignatures'),
+        description: this.t('request.backActions.returnWaitingSignaturesDescription'),
         patch: {signaturesComplete: false, ipCoreStatus: 'NOT_SUBMITTED', itStatus: 'NOT_SUBMITTED'}
       },
       READY_CONNECTIVITY: {
-        label: 'Return to Implementation',
-        description: 'Use if IP Core or IT is not actually complete.',
+        label: this.t('request.backActions.returnImplementation'),
+        description: this.t('request.backActions.returnImplementationDescription'),
         patch: {ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'}
       },
       CONNECTIVITY_TEST: {
-        label: 'Return to Ready Connectivity',
-        description: 'Use if connectivity testing was started by mistake.',
+        label: this.t('request.backActions.returnReadyConnectivity'),
+        description: this.t('request.backActions.returnReadyConnectivityDescription'),
         patch: {vpnStatus: 'NOT_STARTED', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'}
       },
       READY_UAT: {
-        label: 'Return to Connectivity Test',
-        description: 'Use if connectivity pass was registered by mistake.',
+        label: this.t('request.backActions.returnConnectivityTest'),
+        description: this.t('request.backActions.returnConnectivityTestDescription'),
         patch: {vpnStatus: 'IN_PROGRESS', connectivityUat: 'IN_PROGRESS', connectivityPrd: 'IN_PROGRESS', credentialsProvided: false, uatStatus: 'NOT_STARTED'}
       },
       UAT_IN_PROGRESS: {
-        label: 'Return to Ready UAT',
-        description: 'Use if credentials were not actually provided.',
+        label: this.t('request.backActions.returnReadyUat'),
+        description: this.t('request.backActions.returnReadyUatDescription'),
         patch: {credentialsProvided: false, uatStatus: 'NOT_STARTED'}
       },
       READY_HANDOVER: {
-        label: 'Return to UAT In Progress',
-        description: 'Use if UAT approval needs review.',
+        label: this.t('request.backActions.returnUatProgress'),
+        description: this.t('request.backActions.returnUatProgressDescription'),
         patch: {uatStatus: 'IN_PROGRESS', handoverComplete: false}
       },
       CLOSED: {
-        label: 'Reopen to Ready Handover',
-        description: 'Use if the request was closed by mistake.',
+        label: this.t('request.backActions.reopenReadyHandover'),
+        description: this.t('request.backActions.reopenReadyHandoverDescription'),
         patch: {handoverComplete: false}
       }
     };
@@ -529,16 +539,16 @@ export class RequestDetailComponent implements OnInit {
     const action = this.previousAction;
     if (!action || !this.request) return;
 
-    const reason = window.prompt('Why do you need to move this request backwards?');
+    const reason = window.prompt(this.t('modal.backReason'));
     if (!reason?.trim()) {
       return;
     }
 
     this.modal.confirm({
-      nzTitle: 'Confirm backwards movement',
-      nzContent: `This will move the request backwards from ${this.partnerIntegration.statusLabel(this.request.currentStatus)}. Reason was requested for control, but it will not be stored in the partner file.`,
-      nzOkText: 'Move backwards',
-      nzCancelText: 'Cancel',
+      nzTitle: this.t('modal.confirmBackTitle'),
+      nzContent: this.t('modal.confirmBackContent', {status: this.partnerIntegration.statusLabel(this.request.currentStatus)}),
+      nzOkText: this.t('modal.moveBack'),
+      nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => this.applyAction(action.label, action.patch)
     });
   }
@@ -546,15 +556,15 @@ export class RequestDetailComponent implements OnInit {
   blockRequest(): void {
     if (!this.request) return;
 
-    const reason = window.prompt('Why is this request blocked?');
+    const reason = window.prompt(this.t('modal.blockReason'));
     if (!reason?.trim()) return;
 
     this.modal.confirm({
-      nzTitle: 'Block active request',
-      nzContent: `This will pause ${this.request.title || this.partner?.name || 'this request'} until it is unblocked. The blocker reason will be stored in the request history.`,
-      nzOkText: 'Block request',
+      nzTitle: this.t('modal.blockTitle'),
+      nzContent: this.t('modal.blockContent', {request: this.request.title || this.partner?.name || this.t('request.workflow')}),
+      nzOkText: this.t('modal.blockOk'),
       nzOkDanger: true,
-      nzCancelText: 'Cancel',
+      nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => {
         this.partnerIntegration.blockRequest(this.request!.id, reason);
         this.load();
@@ -565,12 +575,12 @@ export class RequestDetailComponent implements OnInit {
   unblockRequest(): void {
     if (!this.request) return;
 
-    const note = window.prompt('Optional unblock note');
+    const note = window.prompt(this.t('modal.unblockNote'));
     this.modal.confirm({
-      nzTitle: 'Unblock request',
-      nzContent: `This will reactivate the request and return it to the workflow state calculated from its existing progress.`,
-      nzOkText: 'Unblock request',
-      nzCancelText: 'Cancel',
+      nzTitle: this.t('modal.unblockTitle'),
+      nzContent: this.t('modal.unblockContent'),
+      nzOkText: this.t('modal.unblockOk'),
+      nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => {
         this.partnerIntegration.unblockRequest(this.request!.id, note || '');
         this.load();
@@ -588,7 +598,7 @@ export class RequestDetailComponent implements OnInit {
     const submitsToIpCore = patch.signaturesComplete === true && patch.ipCoreStatus === 'SUBMITTED';
     if (!submitsToIpCore || request.srCode?.trim()) return patch;
 
-    const value = window.prompt('CNOC SR Code for IP Core submission (optional). Example: SR_MVT_20260813_648534', '');
+    const value = window.prompt(this.t('modal.srCodeSubmissionPrompt'), '');
     if (value === null) return null;
     return {
       ...patch,
@@ -724,5 +734,9 @@ export class RequestDetailComponent implements OnInit {
       ownCloudFolderUrl: '',
       formNotes: ''
     };
+  }
+
+  private t(key: string, params?: Record<string, string | number | null | undefined>): string {
+    return this.translation.instant(key, params);
   }
 }

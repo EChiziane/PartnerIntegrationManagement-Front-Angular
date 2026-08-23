@@ -1,71 +1,68 @@
 <div class="login-page">
-  <section class="brand-panel" aria-label="eMola Integration Operations">
-    <a class="brand" routerLink="/landing-page" aria-label="Back to eMola Integration Operations">
+  <section class="brand-panel" [attr.aria-label]="'auth.brandAria' | translate">
+    <a class="brand" routerLink="/landing-page" [attr.aria-label]="'auth.backAria' | translate">
       <span class="brand-mark">PI</span>
-      <span>eMola Integrations</span>
+      <span>{{ 'app.name' | translate }}</span>
     </a>
 
     <div class="brand-copy">
-      <p class="eyebrow">Internal business workspace</p>
-      <h1>Control every partner, integration and request.</h1>
-      <p>
-        A focused operating desk for partner profiles, VPN integration actions,
-        technical checks, approvals and downloadable management reports.
-      </p>
+      <p class="eyebrow">{{ 'auth.workspaceEyebrow' | translate }}</p>
+      <h1>{{ 'auth.workspaceTitle' | translate }}</h1>
+      <p>{{ 'auth.workspaceSubtitle' | translate }}</p>
     </div>
 
     <div class="brand-metrics">
       <div>
-        <strong>V1 Local</strong>
-        <span>Demo workspace</span>
+        <strong>{{ 'layout.status.localV1' | translate }}</strong>
+        <span>{{ 'auth.demoWorkspace' | translate }}</span>
       </div>
       <div>
-        <strong>Reports</strong>
-        <span>Partner and integration PDFs</span>
+        <strong>{{ 'auth.reports' | translate }}</strong>
+        <span>{{ 'auth.reportsHint' | translate }}</span>
       </div>
     </div>
   </section>
 
-  <section class="auth-panel" aria-label="Login area">
+  <section class="auth-panel" [attr.aria-label]="'auth.loginArea' | translate">
     <nz-card class="login-card">
       <div class="card-heading">
-        <span class="section-label">Secure access</span>
-        <h2>Welcome back</h2>
-        <p>Use your workspace credentials to continue managing integrations.</p>
+        <span class="section-label">{{ 'auth.secureAccess' | translate }}</span>
+        <h2>{{ 'auth.welcomeBack' | translate }}</h2>
+        <p>{{ 'auth.loginHint' | translate }}</p>
       </div>
 
       <form (ngSubmit)="login()" [formGroup]="userForm" novalidate>
         <label class="field">
-          <span>User or email</span>
+          <span>{{ 'auth.userOrEmail' | translate }}</span>
           <nz-input-group nzAddOnBeforeIcon="user">
             <input
               autocomplete="username"
               formControlName="login"
               nz-input
-              placeholder="name@company.com"
+              [placeholder]="'auth.userPlaceholder' | translate"
               type="text"/>
           </nz-input-group>
 
           <small *ngIf="isInvalid('login')" class="field-error">
-            Enter your user or email.
+            {{ 'auth.userRequired' | translate }}
           </small>
         </label>
 
         <label class="field">
-          <span>Password</span>
+          <span>{{ 'auth.password' | translate }}</span>
           <nz-input-group [nzSuffix]="passwordSuffixTpl" nzAddOnBeforeIcon="lock">
             <input
               [type]="isPasswordVisible ? 'text' : 'password'"
               autocomplete="current-password"
               formControlName="password"
               nz-input
-              placeholder="Password"/>
+              [placeholder]="'auth.passwordPlaceholder' | translate"/>
           </nz-input-group>
 
           <ng-template #passwordSuffixTpl>
             <button
               (click)="togglePasswordVisibility()"
-              [attr.aria-label]="isPasswordVisible ? 'Hide password' : 'Show password'"
+              [attr.aria-label]="isPasswordVisible ? ('auth.hidePassword' | translate) : ('auth.showPassword' | translate)"
               class="password-toggle"
               type="button">
               <nz-icon [nzType]="isPasswordVisible ? 'eye-invisible' : 'eye'" nzTheme="outline"></nz-icon>
@@ -73,13 +70,13 @@
           </ng-template>
 
           <small *ngIf="isInvalid('password')" class="field-error">
-            Enter your password.
+            {{ 'auth.passwordRequired' | translate }}
           </small>
         </label>
 
         <div class="options">
-          <label formControlName="rememberMe" nz-checkbox>Keep me signed in</label>
-          <span class="local-note">Local access mode</span>
+          <label formControlName="rememberMe" nz-checkbox>{{ 'auth.rememberMe' | translate }}</label>
+          <span class="local-note">{{ 'auth.localMode' | translate }}</span>
         </div>
 
         <button
@@ -89,10 +86,10 @@
           nzBlock
           nzType="primary"
           type="submit">
-          <span *ngIf="!isLoading">Enter workspace</span>
+          <span *ngIf="!isLoading">{{ 'auth.enterWorkspace' | translate }}</span>
           <span *ngIf="isLoading" class="loading">
             <nz-spin nzSize="small"></nz-spin>
-            Opening workspace
+            {{ 'auth.openingWorkspace' | translate }}
           </span>
         </button>
 
