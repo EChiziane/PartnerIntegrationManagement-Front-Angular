@@ -6,6 +6,12 @@
       <p>{{ partner.serviceApi || 'Service/API not defined' }} - {{ partner.environment }}</p>
     </div>
 
+    <div class="integration-signal">
+      <span>Integration status</span>
+      <strong>{{ partnerIntegration.connectionHealthLabel(connection?.health) }}</strong>
+      <small>{{ integrationDrivingRequest ? partnerIntegration.requestDisplayTitle(integrationDrivingRequest, partner) : 'No request driving this integration yet' }}</small>
+    </div>
+
     <div class="header-actions">
       <button (click)="downloadProfile()" nz-button nzType="default">
         <span nz-icon nzType="download"></span>
@@ -83,32 +89,32 @@
       </header>
 
       <div class="facts">
-        <div class="wide"><span>Public IP (Peer)</span><strong>{{ publicPeersLabel(partner) }}</strong></div>
+        <div class="wide"><span>Public IP (Peer)</span><strong>{{ connection?.publicPeerIps?.join(', ') || connection?.publicIp || '-' }}</strong></div>
         <div class="wide endpoint-facts">
           <span>Private IP endpoints</span>
-          <strong *ngIf="privateEndpoints(partner).length; else noPrivateEndpoints">
-            <span *ngFor="let endpoint of privateEndpoints(partner)">
+          <strong *ngIf="connection?.privateEndpoints?.length; else noPrivateEndpoints">
+            <span *ngFor="let endpoint of connection?.privateEndpoints">
               {{ endpoint.environment }} - {{ endpoint.ip || '-' }}:{{ endpoint.port || '-' }}
             </span>
           </strong>
           <ng-template #noPrivateEndpoints><strong>-</strong></ng-template>
         </div>
-        <div><span>Service/API</span><strong>{{ activeFormData?.serviceApi || partner.serviceApi || '-' }}</strong></div>
-        <div><span>Environment</span><strong>{{ activeFormData?.environment || partner.environment || '-' }}</strong></div>
-        <div><span>Technical Contact</span><strong>{{ activeFormData?.technicalContact || partner.technicalContact || '-' }}</strong></div>
-        <div><span>Auth Method</span><strong>{{ activeFormData?.authMethod || partner.authMethod || '-' }}</strong></div>
+        <div><span>Service/API</span><strong>{{ connection?.serviceApi || partner.serviceApi || '-' }}</strong></div>
+        <div><span>Environment</span><strong>{{ connection?.environment || partner.environment || '-' }}</strong></div>
+        <div><span>Technical Contact</span><strong>{{ connection?.technicalContact || partner.technicalContact || '-' }}</strong></div>
+        <div><span>Auth Method</span><strong>{{ connection?.authMethod || partner.authMethod || '-' }}</strong></div>
         <div class="wide">
           <span>OwnCloud Folder</span>
           <strong>
-            <a *ngIf="activeFormData?.ownCloudFolderUrl || partner.ownCloudFolderUrl; else noFolder" [href]="activeFormData?.ownCloudFolderUrl || partner.ownCloudFolderUrl" target="_blank" rel="noopener">
+            <a *ngIf="connection?.ownCloudFolderUrl || partner.ownCloudFolderUrl; else noFolder" [href]="connection?.ownCloudFolderUrl || partner.ownCloudFolderUrl" target="_blank" rel="noopener">
               Open integration folder
             </a>
             <ng-template #noFolder>-</ng-template>
           </strong>
         </div>
-        <div><span>Imported File</span><strong>{{ activeFormData?.importedFileName || '-' }}</strong></div>
-        <div><span>Imported At</span><strong>{{ activeFormData?.importedAt ? (activeFormData?.importedAt | date: 'yyyy-MM-dd HH:mm') : '-' }}</strong></div>
-        <div class="wide"><span>Form Notes</span><strong>{{ activeFormData?.formNotes || partner.formNotes || '-' }}</strong></div>
+        <div><span>Imported File</span><strong>{{ connection?.importedFileName || '-' }}</strong></div>
+        <div><span>Imported At</span><strong>{{ connection?.importedAt ? (connection?.importedAt | date: 'yyyy-MM-dd HH:mm') : '-' }}</strong></div>
+        <div class="wide"><span>Form Notes</span><strong>{{ connection?.formNotes || partner.formNotes || '-' }}</strong></div>
       </div>
 
       <p *ngIf="importNotice" class="import-notice">{{ importNotice }}</p>

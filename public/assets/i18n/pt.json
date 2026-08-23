@@ -9,7 +9,7 @@
     },
     "nav": {
       "home": "Inicio",
-      "pipeline": "Integracoes",
+      "pipeline": "Pipeline de Pedidos",
       "tasks": "Execucao",
       "scan": "Controlo",
       "partners": "Instituicoes"

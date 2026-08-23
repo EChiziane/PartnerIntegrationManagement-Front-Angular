@@ -9,7 +9,7 @@
     },
     "nav": {
       "home": "Home",
-      "pipeline": "Integrations",
+      "pipeline": "Request Pipeline",
       "tasks": "Execution",
       "scan": "Control",
       "partners": "Institutions"

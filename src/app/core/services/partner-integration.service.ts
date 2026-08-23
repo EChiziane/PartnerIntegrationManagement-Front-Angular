@@ -549,31 +549,36 @@ export class PartnerIntegrationService {
     return partners.map(partner => {
       const current = existing.find(connection => connection.partnerId === partner.id);
       const request = this.integrationDrivingRequest(partner.id, state.requests || []);
-      return {...current, ...this.connectionFromPartnerAndRequest(partner, request)};
+      return this.connectionFromPartnerAndRequest(partner, request, current);
     });
   }
 
   private syncConnectionFromRequest(state: PartnerState, request: PartnerRequest): void {
-    const formData = request.formData;
-    const canSyncTechnicalSnapshot = request.type !== 'CONNECTIVITY_SUPPORT'
-      && !!formData
-      && this.hasTechnicalData(formData);
-    if (request.currentStatus !== 'CLOSED' && !canSyncTechnicalSnapshot) return;
     const partner = state.partners.find(item => item.id === request.partnerId);
     if (!partner) return;
     const connections = state.connections || this.normalizeConnections(state, state.partners);
-    const nextConnection = this.connectionFromPartnerAndRequest(partner, request);
     const index = connections.findIndex(connection => connection.partnerId === request.partnerId);
+    const current = index >= 0 ? connections[index] : undefined;
+    const nextConnection = this.connectionFromPartnerAndRequest(partner, request, current);
     if (index >= 0) {
-      connections[index] = {...connections[index], ...nextConnection};
+      connections[index] = nextConnection;
     } else {
       connections.unshift(nextConnection);
     }
     state.connections = connections;
   }
 
-  private connectionFromPartnerAndRequest(partner: Partner, request?: PartnerRequest): PartnerConnection {
-    const formData = request ? this.getRequestFormData(request, partner) : this.formDataFromPartner(partner);
+  private connectionFromPartnerAndRequest(
+    partner: Partner,
+    request?: PartnerRequest,
+    current?: PartnerConnection
+  ): PartnerConnection {
+    const requestFormData = request ? this.getRequestFormData(request, partner) : this.formDataFromPartner(partner);
+    const currentFormData: RequestFormData = current || this.formDataFromPartner(partner);
+    const formData = this.shouldApplyRequestFormToConnection(request, current)
+      ? requestFormData
+      : currentFormData;
+
     return {
       id: `connection-${partner.id}`,
       partnerId: partner.id,
@@ -588,6 +593,17 @@ export class PartnerIntegrationService {
       lastRequestType: request?.type,
       lastUpdated: request?.closeDate || request?.stageStartDate || partner.lastActivity || this.today()
     };
+  }
+
+  private shouldApplyRequestFormToConnection(request: PartnerRequest | undefined, current?: PartnerConnection): boolean {
+    if (!request || !this.hasTechnicalData(request.formData)) return false;
+    if (!current || !this.hasTechnicalData(current)) return true;
+    if (request.type === 'NEW_INTEGRATION') return true;
+    if (request.type === 'UPDATE_INTEGRATION') {
+      return request.currentStatus === 'CLOSED'
+        || (request.ipCoreStatus === 'DONE' && request.itStatus === 'DONE');
+    }
+    return false;
   }
 
   private connectionHealth(request?: PartnerRequest): PartnerConnection['health'] {
