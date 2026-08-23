@@ -9,16 +9,16 @@
 
     <div class="brand">
       <div class="brand-mark">
-        <span>TC</span>
+        <span>PI</span>
       </div>
 
       <div class="brand-copy">
-        <strong>Transportes Chiziane</strong>
-        <span>{{ 'layout.brandSubtitle' | translate }}</span>
+        <strong>Partner Integration</strong>
+        <span>Management App</span>
       </div>
     </div>
 
-    <div class="sidebar-section">{{ 'layout.sectionOperation' | translate }}</div>
+    <div class="sidebar-section">Operations</div>
 
     <ul
       [nzInlineCollapsed]="isCollapsed"
@@ -28,105 +28,44 @@
       nzTheme="dark">
 
       <li nz-menu-item nzMatchRouter>
-        <a routerLink="/app/dashboard">
+        <a routerLink="/app/home">
           <span nz-icon nzType="dashboard"></span>
-          <span>{{ 'layout.menu.dashboard' | translate }}</span>
+          <span>Home</span>
         </a>
       </li>
 
-      <li nz-submenu nzIcon="car" nzOpen [nzTitle]="'layout.menu.carloadsGroup' | translate">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/carload">
-              <span nz-icon nzType="unordered-list"></span>
-              <span>{{ 'layout.menu.carloads' | translate }}</span>
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/sprint">
-              <span nz-icon nzType="partition"></span>
-              <span>{{ 'layout.menu.sprints' | translate }}</span>
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/truck">
-              <span nz-icon nzType="truck"></span>
-              <span>Camiões</span>
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/commercial-catalogs">
-              <span nz-icon nzType="read"></span>
-              <span>{{ 'layout.menu.commercialCatalogs' | translate }}</span>
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/carload-customer">
-              <span nz-icon nzType="team"></span>
-              <span>{{ 'layout.menu.customers' | translate }}</span>
-            </a>
-          </li>
-        </ul>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/app/pipeline">
+          <span nz-icon nzType="partition"></span>
+          <span>Pipeline</span>
+        </a>
       </li>
 
-      <li nz-submenu nzIcon="solution" [nzTitle]="'layout.menu.team' | translate">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/driver">
-              <span nz-icon nzType="idcard"></span>
-              <span>{{ 'layout.menu.drivers' | translate }}</span>
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/manager">
-              <span nz-icon nzType="user-switch"></span>
-              <span>{{ 'layout.menu.managers' | translate }}</span>
-            </a>
-          </li>
-        </ul>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/app/tasks">
+          <span nz-icon nzType="check-square"></span>
+          <span>Tasks</span>
+        </a>
       </li>
 
-      <li nz-submenu nzIcon="wallet" [nzTitle]="'layout.menu.finance' | translate">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/quote">
-              <span nz-icon nzType="file-text"></span>
-              <span>{{ 'layout.menu.quotes' | translate }}</span>
-            </a>
-          </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/app/scan">
+          <span nz-icon nzType="radar-chart"></span>
+          <span>Scan</span>
+        </a>
+      </li>
 
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/invoice">
-              <span nz-icon nzType="file-done"></span>
-              <span>{{ 'layout.menu.invoices' | translate }}</span>
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/payment">
-              <span nz-icon nzType="wallet"></span>
-              <span>Pagamentos</span>
-            </a>
-          </li>
-
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/app/product-prices">
-              <span nz-icon nzType="database"></span>
-              <span>Preços</span>
-            </a>
-          </li>
-        </ul>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/app/partners">
+          <span nz-icon nzType="team"></span>
+          <span>Partners</span>
+        </a>
       </li>
 
       <li nz-menu-item nzMatchRouter>
         <a routerLink="/app/users">
           <span nz-icon nzType="usergroup-add"></span>
-          <span>{{ 'layout.menu.users' | translate }}</span>
+          <span>Users</span>
         </a>
       </li>
     </ul>
@@ -134,8 +73,8 @@
     <div class="sidebar-footer">
       <span class="status-dot"></span>
       <div>
-        <strong>{{ 'layout.footer.title' | translate }}</strong>
-        <span>{{ 'layout.footer.subtitle' | translate }}</span>
+        <strong>Local V1</strong>
+        <span>Demo data enabled</span>
       </div>
     </div>
   </nz-sider>
@@ -144,53 +83,21 @@
     <nz-header class="topbar">
       <button
         (click)="togglePrimaryNavigation()"
-        [attr.aria-label]="'layout.topbar.toggleMenu' | translate"
+        aria-label="Toggle navigation"
         class="nav-toggle"
         type="button">
         <span [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" nz-icon></span>
       </button>
 
       <div class="topbar-title">
-        <span>{{ 'layout.topbar.title' | translate }}</span>
-        <strong>{{ 'layout.topbar.subtitle' | translate }}</strong>
+        <span>Partner Integration Management App</span>
+        <strong>Operational workflow control</strong>
       </div>
 
       <div class="topbar-actions">
-        <button
-          [nzDropdownMenu]="languageMenu"
-          class="language-switch"
-          nz-dropdown
-          nzTrigger="click"
-          type="button">
-          <span class="language-icon" nz-icon nzType="global"></span>
-          <span class="language-copy">
-            <small>{{ 'layout.language' | translate }}</small>
-            <strong>{{ currentLanguageLabel }}</strong>
-          </span>
-          <span class="language-code">{{ currentLanguageShortLabel }}</span>
-          <span class="language-arrow" nz-icon nzType="down"></span>
-        </button>
-
-        <nz-dropdown-menu #languageMenu="nzDropdownMenu">
-          <ul class="language-menu" nz-menu>
-            <li
-              *ngFor="let language of translationService.languages"
-              (click)="changeLanguage(language.code)"
-              [class.active]="language.code === currentLanguage"
-              nz-menu-item>
-              <span class="language-option-code">{{ languageShortLabel(language.code) }}</span>
-              <span class="language-option-copy">
-                <strong>{{ language.label }}</strong>
-                <small>{{ language.code === currentLanguage ? 'Ativo' : 'Disponível' }}</small>
-              </span>
-              <span *ngIf="language.code === currentLanguage" class="language-check" nz-icon nzType="check"></span>
-            </li>
-          </ul>
-        </nz-dropdown-menu>
-
         <div class="operator-chip">
           <span nz-icon nzType="safety-certificate"></span>
-          <span>{{ 'layout.topbar.secure' | translate }}</span>
+          <span>Authenticated</span>
         </div>
 
         <div [nzDropdownMenu]="userMenu" class="user-menu" nz-dropdown>
@@ -210,22 +117,15 @@
       <nz-dropdown-menu #userMenu="nzDropdownMenu">
         <ul nz-menu class="account-menu">
           <li nz-menu-item>
-            <a [routerLink]="profileRoute()">
-              <span nz-icon nzType="user"></span>
-              {{ 'layout.account.profile' | translate }}
-            </a>
-          </li>
-
-          <li nz-menu-item>
             <a routerLink="/app/users">
               <span nz-icon nzType="setting"></span>
-              {{ 'layout.account.users' | translate }}
+              Users
             </a>
           </li>
 
           <li (click)="logout()" nz-menu-item>
             <span nz-icon nzType="logout"></span>
-            {{ 'common.actions.logout' | translate }}
+            Logout
           </li>
         </ul>
       </nz-dropdown-menu>
@@ -245,85 +145,37 @@
   [nzVisible]="isMobileMenuVisible"
   class="mobile-navigation-drawer"
   nzPlacement="left"
-  nzTitle="Transportes Chiziane"
+  nzTitle="Partner Integration"
   nzWidth="320px">
-  <nav *nzDrawerContent class="mobile-navigation" aria-label="Navegação mobile">
-    <a routerLink="/app/dashboard" routerLinkActive="active" (click)="closeMobileMenu()">
+  <nav *nzDrawerContent class="mobile-navigation" aria-label="Mobile navigation">
+    <a routerLink="/app/home" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="dashboard"></span>
-      <span>{{ 'layout.menu.dashboard' | translate }}</span>
+      <span>Home</span>
     </a>
 
-    <div class="mobile-nav-section">{{ 'layout.menu.carloadsGroup' | translate }}</div>
-
-    <a routerLink="/app/carload" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="unordered-list"></span>
-      <span>{{ 'layout.menu.carloads' | translate }}</span>
-    </a>
-
-    <a routerLink="/app/sprint" routerLinkActive="active" (click)="closeMobileMenu()">
+    <a routerLink="/app/pipeline" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="partition"></span>
-      <span>{{ 'layout.menu.sprints' | translate }}</span>
+      <span>Pipeline</span>
     </a>
 
-    <a routerLink="/app/truck" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="truck"></span>
-      <span>Camiões</span>
+    <a routerLink="/app/tasks" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="check-square"></span>
+      <span>Tasks</span>
     </a>
 
-    <a routerLink="/app/carload-customer" routerLinkActive="active" (click)="closeMobileMenu()">
+    <a routerLink="/app/scan" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="radar-chart"></span>
+      <span>Scan</span>
+    </a>
+
+    <a routerLink="/app/partners" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="team"></span>
-      <span>{{ 'layout.menu.customers' | translate }}</span>
-    </a>
-
-    <a routerLink="/app/commercial-catalogs" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="read"></span>
-      <span>{{ 'layout.menu.commercialCatalogs' | translate }}</span>
-    </a>
-
-    <div class="mobile-nav-section">{{ 'layout.menu.team' | translate }}</div>
-
-    <a routerLink="/app/driver" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="idcard"></span>
-      <span>{{ 'layout.menu.drivers' | translate }}</span>
-    </a>
-
-    <a routerLink="/app/manager" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="user-switch"></span>
-      <span>{{ 'layout.menu.managers' | translate }}</span>
-    </a>
-
-    <div class="mobile-nav-section">{{ 'layout.menu.finance' | translate }}</div>
-
-    <a routerLink="/app/quote" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="file-text"></span>
-      <span>{{ 'layout.menu.quotes' | translate }}</span>
-    </a>
-
-    <a routerLink="/app/invoice" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="file-done"></span>
-      <span>{{ 'layout.menu.invoices' | translate }}</span>
-    </a>
-
-    <a routerLink="/app/payment" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="wallet"></span>
-      <span>Pagamentos</span>
-    </a>
-
-    <a routerLink="/app/product-prices" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="database"></span>
-      <span>Preços</span>
-    </a>
-
-    <div class="mobile-nav-section">Conta</div>
-
-    <a routerLink="/app/users" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="usergroup-add"></span>
-      <span>{{ 'layout.menu.users' | translate }}</span>
+      <span>Partners</span>
     </a>
 
     <button (click)="logout()" class="mobile-logout" type="button">
       <span nz-icon nzType="logout"></span>
-      <span>{{ 'common.actions.logout' | translate }}</span>
+      <span>Logout</span>
     </button>
   </nav>
 </nz-drawer>

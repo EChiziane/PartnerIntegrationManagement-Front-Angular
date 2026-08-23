@@ -11,7 +11,7 @@ export class DocumentFilenameService {
     const documentScope = this.fileSafe(scope, 'GERAL');
     const documentDate = this.formatDate(date);
 
-    return `TC_${documentType}_${documentCode}_${documentScope}_${documentDate}.pdf`;
+    return `PI_${documentType}_${documentCode}_${documentScope}_${documentDate}.pdf`;
   }
 
   private fileSafe(value: string | null | undefined, fallback: string): string {

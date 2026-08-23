@@ -1,0 +1,37 @@
+<div class="tasks-page">
+  <section class="page-header">
+    <div>
+      <span class="eyebrow">Tasks</span>
+      <h1>Suggested execution list</h1>
+      <p>Tasks are generated from workflow rules. You still choose the order.</p>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <nz-select [(ngModel)]="ownerFilter">
+      <nz-option nzValue="ALL" nzLabel="All owners"></nz-option>
+      <nz-option nzValue="Me" nzLabel="Me"></nz-option>
+      <nz-option nzValue="Partner" nzLabel="Partner"></nz-option>
+      <nz-option nzValue="IP Core / IT" nzLabel="IP Core / IT"></nz-option>
+      <nz-option nzValue="Technical Team / Partner" nzLabel="Technical Team / Partner"></nz-option>
+    </nz-select>
+  </section>
+
+  <section class="task-list">
+    <article *ngFor="let task of filteredTasks" class="task-card">
+      <nz-tag [nzColor]="task.priority === 'P1' ? 'red' : task.priority === 'P2' ? 'orange' : 'blue'">
+        {{ task.priority }}
+      </nz-tag>
+      <div>
+        <strong>{{ task.title }}</strong>
+        <span>{{ task.partnerName }} · {{ partnerIntegration.typeLabel(task.requestType) }}</span>
+      </div>
+      <div class="task-meta">
+        <span>Owner: {{ task.owner }}</span>
+        <span>Age: {{ task.ageDays }} days</span>
+        <span>Due: {{ task.dueDate }}</span>
+      </div>
+      <button (click)="openTask(task)" nz-button nzType="primary">Work</button>
+    </article>
+  </section>
+</div>

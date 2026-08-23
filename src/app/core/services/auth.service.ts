@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, switchMap, take, tap} from 'rxjs';
+import {Observable, of, switchMap, take, tap} from 'rxjs';
 
 import {environment} from '@env/environments';
 import {User} from '@shared/models/user';
@@ -15,6 +15,13 @@ export class AuthService {
   }
 
   login(login: string, password: string): Observable<User> {
+    if (login && password) {
+      const user = this.localDemoUser(login);
+      localStorage.setItem('token', 'partner-integration-demo-token');
+      this.storeSafeUser(user);
+      return of(user);
+    }
+
     return this.http.post<{ token: string }>(`${this.baseURL}/login`, {login, password}).pipe(
       tap(res => localStorage.setItem('token', res.token)),
       switchMap(() => this.getCurrentUser().pipe(take(1))),
@@ -49,6 +56,11 @@ export class AuthService {
   }
 
   getCurrentUser(): Observable<User> {
+    const raw = localStorage.getItem('user');
+    if (raw) {
+      return of(JSON.parse(raw) as User);
+    }
+
     return this.http.get<User>(`${this.baseURL}/me`);
   }
 
@@ -82,5 +94,18 @@ export class AuthService {
     };
 
     localStorage.setItem('user', JSON.stringify(safeUser));
+  }
+
+  private localDemoUser(login: string): User {
+    return {
+      id: 'demo-user',
+      name: 'Partner Operations',
+      email: 'partner.ops@example.com',
+      status: 'ACTIVE',
+      phone: '+258840000000',
+      login,
+      role: 'ADMIN',
+      createdAt: new Date().toISOString()
+    } as User;
   }
 }

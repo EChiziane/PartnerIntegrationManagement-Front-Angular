@@ -1,0 +1,27 @@
+<div class="scan-page">
+  <section class="page-header">
+    <div>
+      <span class="eyebrow">SCAN Center</span>
+      <h1>{{ scanMode }} operational scan</h1>
+      <p>Quickly check external dependencies and update the request reality.</p>
+    </div>
+    <div class="scan-toggle">
+      <button (click)="scanMode = 'AM'" [class.active]="scanMode === 'AM'" nz-button>AM</button>
+      <button (click)="scanMode = 'PM'" [class.active]="scanMode === 'PM'" nz-button>PM</button>
+    </div>
+  </section>
+
+  <section class="scan-list">
+    <article *ngFor="let item of scanItems" class="scan-card">
+      <nz-tag [nzColor]="item.category === 'SIGNATURES' ? 'orange' : item.category === 'PARTNER' ? 'blue' : 'green'">
+        {{ item.category.replace('_', ' ') }}
+      </nz-tag>
+      <div>
+        <strong>{{ item.question }}</strong>
+        <span>{{ item.partnerName }} · {{ partnerIntegration.statusLabel(item.status) }}</span>
+        <small>Suggested action: {{ item.suggestedAction }}</small>
+      </div>
+      <button (click)="openRequest(item)" nz-button nzType="primary">Update</button>
+    </article>
+  </section>
+</div>

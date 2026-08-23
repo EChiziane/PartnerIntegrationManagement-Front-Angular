@@ -1,0 +1,150 @@
+<div class="list-page">
+  <section class="page-header">
+    <div>
+      <span class="eyebrow">Partners</span>
+      <h1>Partner registry</h1>
+      <p>Search partners, inspect open requests, and create new operational requests.</p>
+    </div>
+    <button (click)="openCreate()" nz-button nzType="primary">
+      <span nz-icon nzType="plus"></span>
+      New Partner
+    </button>
+    <button (click)="downloadList()" nz-button nzType="default">
+      <span nz-icon nzType="download"></span>
+      Download List
+    </button>
+  </section>
+
+  <section class="toolbar">
+    <label class="search-control">
+      <span nz-icon nzType="search"></span>
+      <input [(ngModel)]="searchValue" nz-input placeholder="Search by partner, contact, service, public IP or server IP"/>
+    </label>
+
+    <div class="filter-strip">
+      <button (click)="setFilter('ALL')" [class.active]="activeFilter === 'ALL'" nz-button>
+        All <strong>{{ partners.length }}</strong>
+      </button>
+      <button (click)="setFilter('ACTIVE')" [class.active]="activeFilter === 'ACTIVE'" nz-button>
+        Active <strong>{{ partners.length }}</strong>
+      </button>
+      <button (click)="setFilter('OPEN_REQUESTS')" [class.active]="activeFilter === 'OPEN_REQUESTS'" nz-button>
+        Open <strong>{{ openPartnersCount }}</strong>
+      </button>
+      <button (click)="setFilter('ATTENTION')" [class.active]="activeFilter === 'ATTENTION'" nz-button nzDanger>
+        Attention <strong>{{ attentionPartnersCount }}</strong>
+      </button>
+    </div>
+  </section>
+
+  <section class="request-toolbar">
+    <div class="toolbar-field">
+      <span>Partner category</span>
+      <nz-select [(ngModel)]="categoryFilter">
+        <nz-option nzValue="ALL" nzLabel="All categories"></nz-option>
+        <nz-option nzValue="Payment API" nzLabel="Payment API"></nz-option>
+        <nz-option nzValue="USSD / Push USSD" nzLabel="USSD / Push USSD"></nz-option>
+        <nz-option nzValue="Remittance" nzLabel="Remittance"></nz-option>
+        <nz-option nzValue="Connectivity" nzLabel="Connectivity"></nz-option>
+        <nz-option nzValue="Gaming" nzLabel="Gaming"></nz-option>
+        <nz-option nzValue="Other" nzLabel="Other"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="toolbar-field">
+      <span>Default request for quick creation</span>
+      <nz-select [(ngModel)]="requestType">
+        <nz-option nzValue="NEW_INTEGRATION" nzLabel="New Integration"></nz-option>
+        <nz-option nzValue="UPDATE_INTEGRATION" nzLabel="Update Integration"></nz-option>
+        <nz-option nzValue="BLOCK_VPN" nzLabel="Block VPN"></nz-option>
+        <nz-option nzValue="UNBLOCK_VPN" nzLabel="Unblock VPN"></nz-option>
+        <nz-option nzValue="CONNECTIVITY_SUPPORT" nzLabel="Connectivity Support"></nz-option>
+      </nz-select>
+    </div>
+  </section>
+
+  <section class="partners-table" aria-label="Partner list">
+    <div class="table-head">
+      <span>Partner</span>
+      <span>Service / Contact</span>
+      <span>Connectivity</span>
+      <span>Requests</span>
+      <span>Urgent Status</span>
+      <span>Last Activity</span>
+      <span>Actions</span>
+    </div>
+
+    <article *ngFor="let partner of filteredPartners" class="partner-row" [class.needs-attention]="hasAttention(partner.id)">
+      <div class="partner-identity">
+        <strong>{{ partner.name }}</strong>
+        <span>{{ partner.businessOwner || 'No business owner' }}</span>
+      </div>
+
+      <div class="cell-stack">
+        <strong>{{ partner.serviceApi || '-' }}</strong>
+        <span>{{ pdf.partnerCategory(partner) }} · {{ partner.technicalContact || '-' }}</span>
+      </div>
+
+      <div class="cell-stack compact">
+        <span>Public: {{ partner.publicIp || '-' }}</span>
+        <span>Server: {{ partner.partnerServerIp || '-' }}</span>
+        <span>Ports: {{ partner.uatPort || '-' }} / {{ partner.prdPort || '-' }}</span>
+      </div>
+
+      <div class="cell-stack">
+        <strong>{{ requestSummary(partner.id) }}</strong>
+        <span>{{ partner.environment }}</span>
+      </div>
+
+      <div>
+        <nz-tag *ngIf="mostUrgentStatus(partner.id) as urgentStatus; else noStatus"
+                [nzColor]="partnerIntegration.statusColor(urgentStatus)">
+          {{ partnerIntegration.statusLabel(urgentStatus) }}
+        </nz-tag>
+        <ng-template #noStatus>
+          <nz-tag nzColor="default">Clear</nz-tag>
+        </ng-template>
+        <small class="next-action">{{ nextAction(partner.id) }}</small>
+      </div>
+
+      <div class="cell-stack compact">
+        <strong>{{ partner.lastActivity || '-' }}</strong>
+        <span *ngIf="hasAttention(partner.id)" class="attention-label">Needs attention</span>
+      </div>
+
+      <div class="row-actions">
+        <button (click)="openPartner(partner)" nz-button nzType="default">Open</button>
+        <button (click)="createRequest(partner)" nz-button nzType="primary">New Request</button>
+      </div>
+    </article>
+
+    <div *ngIf="!filteredPartners.length" class="empty-state">
+      <span nz-icon nzType="search"></span>
+      <strong>No partners found</strong>
+      <p>Try a different search or clear the active filter.</p>
+    </div>
+  </section>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isCreateVisible"
+  (nzOnCancel)="isCreateVisible = false"
+  (nzOnOk)="createPartner()"
+  nzTitle="Create Partner"
+  nzOkText="Create"
+  nzWidth="720">
+  <ng-container *nzModalContent>
+    <div class="form-grid">
+      <label>Partner Name <input [(ngModel)]="draft.name" nz-input/></label>
+      <label>Business Owner <input [(ngModel)]="draft.businessOwner" nz-input/></label>
+      <label>Technical Contact <input [(ngModel)]="draft.technicalContact" nz-input/></label>
+      <label>Phone <input [(ngModel)]="draft.phone" nz-input/></label>
+      <label>Email <input [(ngModel)]="draft.email" nz-input/></label>
+      <label>Service/API <input [(ngModel)]="draft.serviceApi" nz-input/></label>
+      <label>Public IP <input [(ngModel)]="draft.publicIp" nz-input/></label>
+      <label>Partner Server IP <input [(ngModel)]="draft.partnerServerIp" nz-input/></label>
+      <label>UAT Port <input [(ngModel)]="draft.uatPort" nz-input/></label>
+      <label>PRD Port <input [(ngModel)]="draft.prdPort" nz-input/></label>
+    </div>
+  </ng-container>
+</nz-modal>

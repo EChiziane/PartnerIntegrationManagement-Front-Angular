@@ -1,0 +1,56 @@
+.tasks-page,
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.page-header,
+.toolbar,
+.task-card {
+  border: 1px solid #dfe8ef;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 16px;
+}
+
+.eyebrow {
+  color: #0e7c72;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+p,
+.task-card span {
+  color: #607786;
+}
+
+.toolbar {
+  max-width: 320px;
+}
+
+.task-card {
+  display: grid;
+  grid-template-columns: auto 1fr 260px auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.task-meta {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  .task-card {
+    grid-template-columns: 1fr;
+  }
+}

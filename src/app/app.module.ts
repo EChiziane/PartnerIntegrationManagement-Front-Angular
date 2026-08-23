@@ -82,6 +82,13 @@ import {
   CarloadCustomerDetailComponent
 } from '@features/customers/carload-customer-detail/carload-customer-detail.component';
 import {TranslatePipe} from '@shared/pipes/translate.pipe';
+import {PartnerDashboardComponent} from '@features/partner-integration/dashboard/partner-dashboard.component';
+import {PartnersComponent} from '@features/partner-integration/partners/partners.component';
+import {PipelineComponent} from '@features/partner-integration/pipeline/pipeline.component';
+import {TasksComponent} from '@features/partner-integration/tasks/tasks.component';
+import {ScanComponent} from '@features/partner-integration/scan/scan.component';
+import {RequestDetailComponent} from '@features/partner-integration/request-detail/request-detail.component';
+import {PartnerDetailComponent} from '@features/partner-integration/partner-detail/partner-detail.component';
 
 
 registerLocaleData(en);
@@ -114,6 +121,13 @@ registerLocaleData(en);
     ProductPriceComponent,
     CommercialCatalogComponent,
     CarloadCustomerDetailComponent,
+    PartnerDashboardComponent,
+    PartnersComponent,
+    PipelineComponent,
+    TasksComponent,
+    ScanComponent,
+    RequestDetailComponent,
+    PartnerDetailComponent,
     TranslatePipe
 
   ],

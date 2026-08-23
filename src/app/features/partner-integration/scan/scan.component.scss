@@ -1,0 +1,61 @@
+.scan-page,
+.scan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.page-header,
+.scan-card {
+  border: 1px solid #dfe8ef;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 16px;
+}
+
+.page-header,
+.scan-card,
+.scan-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.eyebrow {
+  color: #0e7c72;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+p,
+.scan-card span,
+.scan-card small {
+  color: #607786;
+}
+
+.scan-card div {
+  flex: 1;
+  display: grid;
+  gap: 4px;
+}
+
+.scan-toggle button.active {
+  border-color: #0e7c72;
+  color: #0e7c72;
+}
+
+@media (max-width: 900px) {
+  .page-header,
+  .scan-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

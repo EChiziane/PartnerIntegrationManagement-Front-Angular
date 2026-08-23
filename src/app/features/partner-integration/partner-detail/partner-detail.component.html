@@ -1,0 +1,81 @@
+<div *ngIf="partner" class="partner-detail">
+  <section class="detail-header">
+    <div>
+      <span class="eyebrow">Partner Detail</span>
+      <h1>{{ partner.name }}</h1>
+      <p>{{ partner.serviceApi }} · {{ partner.environment }}</p>
+    </div>
+
+    <div class="new-request">
+      <button (click)="downloadProfile()" nz-button nzType="default">
+        <span nz-icon nzType="download"></span>
+        Download Profile
+      </button>
+
+      <button (click)="startUpdateFlow()" nz-button nzType="default">
+        <span nz-icon nzType="edit"></span>
+        Start Update Flow
+      </button>
+
+      <nz-select [(ngModel)]="requestType">
+        <nz-option nzValue="NEW_INTEGRATION" nzLabel="New Integration"></nz-option>
+        <nz-option nzValue="UPDATE_INTEGRATION" nzLabel="Update Integration"></nz-option>
+        <nz-option nzValue="BLOCK_VPN" nzLabel="Block VPN"></nz-option>
+        <nz-option nzValue="UNBLOCK_VPN" nzLabel="Unblock VPN"></nz-option>
+        <nz-option nzValue="CONNECTIVITY_SUPPORT" nzLabel="Connectivity Support"></nz-option>
+      </nz-select>
+
+      <button (click)="createRequest()" nz-button nzType="primary">Open Request</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <header>
+      <span class="panel-kicker">Identity and connectivity</span>
+      <h2>Partner profile</h2>
+    </header>
+    <div class="facts">
+      <div><span>Business Owner</span><strong>{{ partner.businessOwner || '-' }}</strong></div>
+      <div><span>Technical Contact</span><strong>{{ partner.technicalContact || '-' }}</strong></div>
+      <div><span>Phone</span><strong>{{ partner.phone || '-' }}</strong></div>
+      <div><span>Email</span><strong>{{ partner.email || '-' }}</strong></div>
+      <div><span>Public IP</span><strong>{{ partner.publicIp || '-' }}</strong></div>
+      <div><span>Server IP</span><strong>{{ partner.partnerServerIp || '-' }}</strong></div>
+      <div><span>UAT Port</span><strong>{{ partner.uatPort || '-' }}</strong></div>
+      <div><span>PRD Port</span><strong>{{ partner.prdPort || '-' }}</strong></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <header>
+      <span class="panel-kicker">Requests</span>
+      <h2>Open and historical requests</h2>
+    </header>
+
+    <article *ngFor="let request of requests" class="request-row">
+      <div>
+        <strong>{{ partnerIntegration.typeLabel(request.type) }}</strong>
+        <span>{{ request.nextAction }}</span>
+      </div>
+      <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
+        {{ partnerIntegration.statusLabel(request.currentStatus) }}
+      </nz-tag>
+      <button (click)="openRequest(request)" nz-button nzType="default">Open</button>
+    </article>
+  </section>
+
+  <section class="panel">
+    <header>
+      <span class="panel-kicker">History</span>
+      <h2>Operational history</h2>
+    </header>
+
+    <article *ngFor="let event of events" class="history-row">
+      <span>{{ event.date | date: 'yyyy-MM-dd HH:mm' }}</span>
+      <strong>{{ event.title }}</strong>
+      <p>{{ event.description }}</p>
+    </article>
+
+    <div *ngIf="!events.length" class="empty-history">No history recorded yet.</div>
+  </section>
+</div>

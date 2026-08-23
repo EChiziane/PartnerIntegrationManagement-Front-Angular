@@ -28,6 +28,13 @@ import {CommercialCatalogComponent} from '@features/commercial-catalogs/commerci
 import {
   CarloadCustomerDetailComponent
 } from '@features/customers/carload-customer-detail/carload-customer-detail.component';
+import {PartnerDashboardComponent} from '@features/partner-integration/dashboard/partner-dashboard.component';
+import {PartnersComponent} from '@features/partner-integration/partners/partners.component';
+import {PipelineComponent} from '@features/partner-integration/pipeline/pipeline.component';
+import {TasksComponent} from '@features/partner-integration/tasks/tasks.component';
+import {ScanComponent} from '@features/partner-integration/scan/scan.component';
+import {RequestDetailComponent} from '@features/partner-integration/request-detail/request-detail.component';
+import {PartnerDetailComponent} from '@features/partner-integration/partner-detail/partner-detail.component';
 
 
 const routes: Routes = [
@@ -43,6 +50,13 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'dashboard', component: DashboardComponent},
+      {path: 'home', component: PartnerDashboardComponent},
+      {path: 'partners', component: PartnersComponent},
+      {path: 'pipeline', component: PipelineComponent},
+      {path: 'tasks', component: TasksComponent},
+      {path: 'scan', component: ScanComponent},
+      {path: 'request/:id', component: RequestDetailComponent},
+      {path: 'partner/:id', component: PartnerDetailComponent},
       {path: 'carload', component: CarLoadComponent},
       {path: 'quotation', component: QuatationComponent},
       {path: 'carload-customer', component: CarloadCustomerComponent},
@@ -63,7 +77,7 @@ const routes: Routes = [
 
       {path: 'users', component: ListuserComponent},
       // Mantem o dashboard como primeira tela apos login.
-      {path: '', redirectTo: 'dashboard', pathMatch: 'full'}
+      {path: '', redirectTo: 'home', pathMatch: 'full'}
     ]
   },
 

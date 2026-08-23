@@ -1,0 +1,38 @@
+<div class="pipeline-page">
+  <section class="page-header">
+    <div>
+      <span class="eyebrow">Pipeline</span>
+      <h1>Requests grouped by workflow state</h1>
+      <p>Use this view to see what is waiting, blocked, ready or closed.</p>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <nz-select [(ngModel)]="selectedStatus">
+      <nz-option nzValue="ALL" nzLabel="All Statuses"></nz-option>
+      <nz-option *ngFor="let status of statuses" [nzValue]="status" [nzLabel]="partnerIntegration.statusLabel(status)"></nz-option>
+    </nz-select>
+    <button (click)="downloadPipeline()" nz-button nzType="default">
+      <span nz-icon nzType="download"></span>
+      Download Pipeline
+    </button>
+  </section>
+
+  <section class="request-list">
+    <article *ngFor="let request of filteredRequests" class="request-card">
+      <div>
+        <strong>{{ partnerName(request.partnerId) }}</strong>
+        <span>{{ partnerIntegration.typeLabel(request.type) }}</span>
+      </div>
+      <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
+        {{ partnerIntegration.statusLabel(request.currentStatus) }}
+      </nz-tag>
+      <div class="request-meta">
+        <span>Owner: {{ request.currentOwner }}</span>
+        <span>Next: {{ request.nextAction }}</span>
+        <span>Follow-up: {{ request.followUpDate || '-' }}</span>
+      </div>
+      <button (click)="openRequest(request)" nz-button nzType="default">Open</button>
+    </article>
+  </section>
+</div>
