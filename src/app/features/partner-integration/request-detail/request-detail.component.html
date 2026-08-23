@@ -6,7 +6,7 @@
     </button>
     <div>
       <span class="eyebrow">{{ partnerIntegration.typeLabel(request.type) }}</span>
-      <h1>{{ request.title || partner.name }}</h1>
+      <h1>{{ partnerIntegration.requestDisplayTitle(request, partner) }}</h1>
       <p>{{ partner.name }} - {{ request.nextAction }}</p>
     </div>
     <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">

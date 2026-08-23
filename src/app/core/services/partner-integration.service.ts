@@ -131,6 +131,7 @@ export class PartnerIntegrationService {
     const request = this.recalculateRequest({
       id: requestId,
       partnerId,
+      title: this.defaultRequestTitle(type, partner?.name || 'Unknown Institution'),
       environment: partner?.environment || 'UAT+PRD',
       formData: {...baseFormData, ...(safePatch.formData || {})},
       type,
@@ -288,6 +289,10 @@ export class PartnerIntegrationService {
     return labels[type];
   }
 
+  requestDisplayTitle(request: PartnerRequest, partner?: Partner): string {
+    return request.title || this.defaultRequestTitle(request.type, partner?.name || 'Unknown Institution');
+  }
+
   connectionHealthLabel(health: PartnerConnection['health'] | undefined): string {
     const labels: Record<PartnerConnection['health'], string> = {
       NOT_ESTABLISHED: 'Not Established',
@@ -377,6 +382,18 @@ export class PartnerIntegrationService {
       CLOSED: {owner: 'Closed', action: 'Archive evidence and keep integration active'}
     };
     return map[status];
+  }
+
+  private defaultRequestTitle(type: RequestType, partnerName: string): string {
+    const name = partnerName.trim() || 'Unknown Institution';
+    const titles: Record<RequestType, string> = {
+      NEW_INTEGRATION: `Create connection between eMola and ${name}`,
+      UPDATE_INTEGRATION: `Update connection between eMola and ${name}`,
+      BLOCK_VPN: `Block connection between eMola and ${name}`,
+      UNBLOCK_VPN: `Unblock connection between eMola and ${name}`,
+      CONNECTIVITY_SUPPORT: `Troubleshoot connection between eMola and ${name}`
+    };
+    return titles[type];
   }
 
   private implementationAction(request: PartnerRequest): string {

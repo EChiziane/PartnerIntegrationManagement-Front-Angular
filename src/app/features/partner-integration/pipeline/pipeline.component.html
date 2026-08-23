@@ -1,9 +1,9 @@
 <div class="pipeline-page">
   <section class="page-header">
     <div>
-      <span class="eyebrow">Integration work</span>
-      <h1>Requests grouped by workflow state</h1>
-      <p>Use this view to control new integrations, updates, blocks, unblocks and troubleshooting.</p>
+      <span class="eyebrow">Request pipeline</span>
+      <h1>Every request has its own workflow.</h1>
+      <p>Track creation, update, block, unblock and troubleshooting requests by their current pipeline state.</p>
     </div>
   </section>
 
@@ -14,15 +14,15 @@
     </nz-select>
     <button (click)="downloadPipeline()" nz-button nzType="default">
       <span nz-icon nzType="download"></span>
-      Download Integration Work
+      Download Request Pipeline
     </button>
   </section>
 
   <section class="request-list">
     <article *ngFor="let request of filteredRequests" class="request-card">
       <div>
-        <strong>{{ partnerName(request.partnerId) }}</strong>
-        <span>{{ request.title || partnerIntegration.typeLabel(request.type) }}</span>
+        <strong>{{ requestTitle(request) }}</strong>
+        <span>{{ partnerName(request.partnerId) }} - {{ partnerIntegration.typeLabel(request.type) }}</span>
       </div>
       <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
         {{ partnerIntegration.statusLabel(request.currentStatus) }}

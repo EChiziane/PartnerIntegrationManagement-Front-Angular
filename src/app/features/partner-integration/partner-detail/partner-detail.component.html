@@ -132,7 +132,7 @@
       <div><span>UAT Connectivity</span><strong>{{ connection?.connectivityUat || 'NOT_TESTED' }}</strong></div>
       <div><span>PRD Connectivity</span><strong>{{ connection?.connectivityPrd || 'NOT_TESTED' }}</strong></div>
       <div><span>UAT/API</span><strong>{{ connection?.uatStatus || 'NOT_STARTED' }}</strong></div>
-      <div><span>State driven by</span><strong>{{ integrationDrivingRequest?.title || (integrationDrivingRequest ? partnerIntegration.typeLabel(integrationDrivingRequest.type) : '-') }}</strong></div>
+      <div><span>State driven by</span><strong>{{ integrationDrivingRequest ? partnerIntegration.requestDisplayTitle(integrationDrivingRequest, partner) : '-' }}</strong></div>
       <div><span>Request status</span><strong>{{ integrationDrivingRequest ? partnerIntegration.statusLabel(integrationDrivingRequest.currentStatus) : '-' }}</strong></div>
       <div><span>Last Updated</span><strong>{{ connection?.lastUpdated || '-' }}</strong></div>
       <div><span>Open Requests</span><strong>{{ openRequestsCount }}</strong></div>
@@ -143,7 +143,7 @@
     <header class="active-request-header">
       <div>
         <span class="panel-kicker">Active request on this integration</span>
-        <h2>{{ activeRequest.title || partnerIntegration.typeLabel(activeRequest.type) }}</h2>
+        <h2>{{ partnerIntegration.requestDisplayTitle(activeRequest, partner) }}</h2>
       </div>
       <button (click)="openRequest(activeRequest)" nz-button nzType="default">Open Full Request</button>
     </header>
@@ -258,7 +258,7 @@
 
     <article *ngFor="let request of requests" class="request-row">
       <div>
-        <strong>{{ request.title || partnerIntegration.typeLabel(request.type) }}</strong>
+        <strong>{{ partnerIntegration.requestDisplayTitle(request, partner) }}</strong>
         <span>{{ partnerIntegration.typeLabel(request.type) }} - {{ request.nextAction }}</span>
         <small>Opened {{ request.openDate }} · Owner {{ request.currentOwner }} · Follow-up {{ request.followUpDate || '-' }}</small>
       </div>

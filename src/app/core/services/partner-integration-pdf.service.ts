@@ -95,7 +95,7 @@ export class PartnerIntegrationPdfService {
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;
 
-    this.drawHeader(doc, 'INTEGRATION WORK REPORT', scopeLabel);
+    this.drawHeader(doc, 'REQUEST PIPELINE REPORT', scopeLabel);
     this.drawSummaryTable(doc, autoTable, margin, 26, [
       ['Requests', String(requests.length)],
       ['Open', String(this.openRequestCount(requests))],
@@ -121,7 +121,7 @@ export class PartnerIntegrationPdfService {
       ]],
       body: requests.map(request => [
         partners.find(partner => partner.id === request.partnerId)?.name || '-',
-        request.title || this.partnerIntegration.typeLabel(request.type),
+        this.partnerIntegration.requestDisplayTitle(request, partners.find(partner => partner.id === request.partnerId)),
         this.partnerIntegration.statusLabel(request.currentStatus),
         request.currentOwner || '-',
         request.nextAction || '-',
@@ -138,7 +138,7 @@ export class PartnerIntegrationPdfService {
       didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
     });
 
-    doc.save(this.documentFilename.build('INTEGRATION_WORK', 'REQUESTS', scopeLabel));
+    doc.save(this.documentFilename.build('REQUEST_PIPELINE', 'REQUESTS', scopeLabel));
   }
 
   async downloadPartnerProfile(
@@ -220,7 +220,7 @@ export class PartnerIntegrationPdfService {
       margin: {left: margin, right: margin, bottom: 20},
       head: [['Request Type', 'Status', 'Service/API', 'Environment', 'Technical Contact', 'Owner', 'Next Action', 'Open Date', 'Credentials', 'Blocker']],
       body: requests.map(request => [
-        request.title || this.partnerIntegration.typeLabel(request.type),
+        this.partnerIntegration.requestDisplayTitle(request, partner),
         this.partnerIntegration.statusLabel(request.currentStatus),
         this.partnerIntegration.getRequestFormData(request, partner).serviceApi || '-',
         this.partnerIntegration.getRequestFormData(request, partner).environment || '-',
@@ -418,13 +418,13 @@ export class PartnerIntegrationPdfService {
     if (!credentialRequests.length) return 'Not provided';
     if (!includeCredentials) {
       return credentialRequests
-        .map(request => `${request.title || this.partnerIntegration.typeLabel(request.type)}: ${this.credentialsStatus(request)}${request.testCredentials?.trim() ? ' - ********' : ''}`)
+        .map(request => `${this.partnerIntegration.requestDisplayTitle(request)}: ${this.credentialsStatus(request)}${request.testCredentials?.trim() ? ' - ********' : ''}`)
         .join(' | ');
     }
 
     return credentialRequests
       .map(request => {
-        const label = request.title || this.partnerIntegration.typeLabel(request.type);
+        const label = this.partnerIntegration.requestDisplayTitle(request);
         return request.testCredentials?.trim()
           ? `${label}: ${request.testCredentials.trim()}`
           : `${label}: Provided, details missing`;

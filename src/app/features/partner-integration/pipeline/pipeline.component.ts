@@ -57,13 +57,20 @@ export class PipelineComponent implements OnInit {
     return this.partners.find(partner => partner.id === partnerId)?.name || 'Unknown Institution';
   }
 
+  requestTitle(request: PartnerRequest): string {
+    return this.partnerIntegration.requestDisplayTitle(
+      request,
+      this.partners.find(partner => partner.id === request.partnerId)
+    );
+  }
+
   openRequest(request: PartnerRequest): void {
     this.router.navigate(['/app/request', request.id]);
   }
 
   downloadPipeline(): void {
     const scope = this.selectedStatus === 'ALL'
-      ? 'All Integration Work'
+      ? 'All Request Pipeline'
       : this.partnerIntegration.statusLabel(this.selectedStatus);
     this.pdf.downloadPipeline(this.filteredRequests, this.partners, scope);
   }

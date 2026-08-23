@@ -382,7 +382,7 @@ export class PartnersComponent implements OnInit {
   }
 
   private importedFormRequestTitle(partnerName: string): string {
-    return `New Integration between eMola and ${partnerName.trim()}`;
+    return `Create connection between eMola and ${partnerName.trim()}`;
   }
 
   private sheetRows(
