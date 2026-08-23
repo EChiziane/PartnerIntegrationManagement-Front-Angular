@@ -8,6 +8,7 @@ export type RequestType =
   | 'CONNECTIVITY_SUPPORT';
 
 export type WorkflowStatus =
+  | 'BLOCKED'
   | 'NEW'
   | 'WAITING_FORM'
   | 'FORM_VALIDATION'
@@ -71,6 +72,11 @@ export interface PartnerRequest {
   priority: TaskPriority;
   followUpDate: string;
   stageStartDate: string;
+  isBlocked?: boolean;
+  previousStatusBeforeBlock?: WorkflowStatus;
+  blockReason?: string;
+  blockedAt?: string;
+  unblockedAt?: string;
   blocker: string;
   formSent: boolean;
   formReceived: boolean;

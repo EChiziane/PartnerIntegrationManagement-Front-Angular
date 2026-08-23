@@ -16,6 +16,7 @@ export class PipelineComponent implements OnInit {
   selectedStatus: WorkflowStatus | 'ALL' = 'ALL';
 
   readonly statuses: WorkflowStatus[] = [
+    'BLOCKED',
     'NEW',
     'WAITING_FORM',
     'FORM_VALIDATION',

@@ -46,6 +46,15 @@ export class PartnerDetailComponent implements OnInit {
     return this.requests.find(request => request.currentStatus !== 'CLOSED') || this.requests[0];
   }
 
+  get hasOpenRequest(): boolean {
+    return this.requests.some(request => request.currentStatus !== 'CLOSED');
+  }
+
+  get canCreateNewRequest(): boolean {
+    const active = this.activeRequest;
+    return !active || active.currentStatus === 'CLOSED' || active.currentStatus === 'BLOCKED';
+  }
+
   get openRequestsCount(): number {
     return this.requests.filter(request => request.currentStatus !== 'CLOSED').length;
   }
@@ -84,14 +93,62 @@ export class PartnerDetailComponent implements OnInit {
 
   createRequest(): void {
     if (!this.partner) return;
+    if (!this.canCreateNewRequest) {
+      this.openActiveRequest();
+      return;
+    }
+
+    if (this.activeRequest?.currentStatus === 'BLOCKED') {
+      this.modal.confirm({
+        nzTitle: 'Create another request?',
+        nzContent: 'This partner already has a blocked request. Create a new request only if the blocked work cannot continue.',
+        nzOkText: 'Create new request',
+        nzCancelText: 'Open blocked request',
+        nzOnOk: () => this.createRequestNow(),
+        nzOnCancel: () => this.openActiveRequest()
+      });
+      return;
+    }
+
+    this.createRequestNow();
+  }
+
+  private createRequestNow(): void {
+    if (!this.partner) return;
     const request = this.partnerIntegration.createRequest(this.partner.id, this.requestType);
     this.router.navigate(['/app/request', request.id]);
   }
 
   startUpdateFlow(): void {
     if (!this.partner) return;
+    if (this.hasOpenRequest && this.activeRequest?.currentStatus !== 'BLOCKED') {
+      this.openActiveRequest();
+      return;
+    }
+
+    if (this.activeRequest?.currentStatus === 'BLOCKED') {
+      this.modal.confirm({
+        nzTitle: 'Blocked request exists',
+        nzContent: 'This partner already has a blocked active request. You can unblock it or create a separate update request if this is genuinely new work.',
+        nzOkText: 'Create update request',
+        nzCancelText: 'Open blocked request',
+        nzOnOk: () => this.createUpdateRequestNow(),
+        nzOnCancel: () => this.openActiveRequest()
+      });
+      return;
+    }
+
+    this.createUpdateRequestNow();
+  }
+
+  private createUpdateRequestNow(): void {
+    if (!this.partner) return;
     const request = this.partnerIntegration.createRequest(this.partner.id, 'UPDATE_INTEGRATION');
     this.router.navigate(['/app/request', request.id]);
+  }
+
+  openActiveRequest(): void {
+    if (this.activeRequest) this.openRequest(this.activeRequest);
   }
 
   editProfile(): void {
@@ -158,6 +215,43 @@ export class PartnerDetailComponent implements OnInit {
       nzOkText: 'Confirm update',
       nzCancelText: 'Cancel',
       nzOnOk: () => this.applyAction(label, patch)
+    });
+  }
+
+  blockActiveRequest(): void {
+    const request = this.activeRequest;
+    if (!request) return;
+
+    const reason = window.prompt('Why is this request blocked?');
+    if (!reason?.trim()) return;
+
+    this.modal.confirm({
+      nzTitle: 'Block active request',
+      nzContent: `This will pause ${request.title || this.partner?.name || 'this request'} until it is unblocked. The blocker reason will be stored in the request history.`,
+      nzOkText: 'Block request',
+      nzOkDanger: true,
+      nzCancelText: 'Cancel',
+      nzOnOk: () => {
+        this.partnerIntegration.blockRequest(request.id, reason);
+        this.load();
+      }
+    });
+  }
+
+  unblockActiveRequest(): void {
+    const request = this.activeRequest;
+    if (!request) return;
+
+    const note = window.prompt('Optional unblock note');
+    this.modal.confirm({
+      nzTitle: 'Unblock request',
+      nzContent: 'This will reactivate the request and return it to the workflow state calculated from its existing progress.',
+      nzOkText: 'Unblock request',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => {
+        this.partnerIntegration.unblockRequest(request.id, note || '');
+        this.load();
+      }
     });
   }
 

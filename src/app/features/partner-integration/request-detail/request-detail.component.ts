@@ -25,6 +25,7 @@ export class RequestDetailComponent implements OnInit {
   isCredentialsEditorOpen = false;
   credentialsDraft = '';
   readonly flow: WorkflowStatus[] = [
+    'BLOCKED',
     'NEW',
     'WAITING_FORM',
     'FORM_VALIDATION',
@@ -144,14 +145,22 @@ export class RequestDetailComponent implements OnInit {
   }
 
   get exceptionActions(): WorkflowAction[] {
-    if (!this.request || this.request.currentStatus === 'CLOSED') return [];
+    if (!this.request || this.request.currentStatus === 'CLOSED' || this.request.currentStatus === 'BLOCKED') return [];
 
-    return [{
-      label: 'Register Issue',
-      description: 'Moves the request to Troubleshooting.',
-      patch: {connectivityUat: 'FAIL', blocker: 'Needs investigation'},
-      tone: 'danger'
-    }];
+    return [
+      {
+        label: 'Register Issue',
+        description: 'Moves the request to Troubleshooting.',
+        patch: {connectivityUat: 'FAIL', blocker: 'Needs investigation'},
+        tone: 'danger'
+      },
+      {
+        label: 'Block Request',
+        description: 'Pauses this request with a mandatory blocker reason. Use this when the active request cannot continue.',
+        patch: {},
+        tone: 'danger'
+      }
+    ];
   }
 
   private implementationActions(): WorkflowAction[] {
@@ -262,7 +271,7 @@ export class RequestDetailComponent implements OnInit {
   }
 
   get previousAction(): WorkflowAction | null {
-    if (!this.request) return null;
+    if (!this.request || this.request.currentStatus === 'BLOCKED') return null;
 
     const map: Partial<Record<WorkflowStatus, WorkflowAction>> = {
       WAITING_FORM: {
@@ -361,6 +370,41 @@ export class RequestDetailComponent implements OnInit {
       nzOkText: 'Move backwards',
       nzCancelText: 'Cancel',
       nzOnOk: () => this.applyAction(action.label, action.patch)
+    });
+  }
+
+  blockRequest(): void {
+    if (!this.request) return;
+
+    const reason = window.prompt('Why is this request blocked?');
+    if (!reason?.trim()) return;
+
+    this.modal.confirm({
+      nzTitle: 'Block active request',
+      nzContent: `This will pause ${this.request.title || this.partner?.name || 'this request'} until it is unblocked. The blocker reason will be stored in the request history.`,
+      nzOkText: 'Block request',
+      nzOkDanger: true,
+      nzCancelText: 'Cancel',
+      nzOnOk: () => {
+        this.partnerIntegration.blockRequest(this.request!.id, reason);
+        this.load();
+      }
+    });
+  }
+
+  unblockRequest(): void {
+    if (!this.request) return;
+
+    const note = window.prompt('Optional unblock note');
+    this.modal.confirm({
+      nzTitle: 'Unblock request',
+      nzContent: `This will reactivate the request and return it to the workflow state calculated from its existing progress.`,
+      nzOkText: 'Unblock request',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => {
+        this.partnerIntegration.unblockRequest(this.request!.id, note || '');
+        this.load();
+      }
     });
   }
 

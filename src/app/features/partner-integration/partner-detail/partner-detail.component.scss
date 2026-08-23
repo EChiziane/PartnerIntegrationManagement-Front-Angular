@@ -134,6 +134,12 @@ p,
   box-shadow: inset 4px 0 0 #d97706;
 }
 
+.status-focus .current-status-card.status-blocked {
+  border-color: #dc2626;
+  background: #fff1f2;
+  box-shadow: inset 4px 0 0 #dc2626;
+}
+
 .status-focus .current-status-card.status-risk {
   border-color: #dc2626;
   background: #fff1f2;
@@ -164,6 +170,11 @@ p,
   color: #991b1b;
 }
 
+.current-status-card.status-blocked span,
+.current-status-card.status-blocked strong {
+  color: #991b1b;
+}
+
 .current-status-card.status-testing span,
 .current-status-card.status-testing strong {
   color: #155e75;
@@ -185,6 +196,45 @@ p,
 .step-actions {
   padding-top: 10px;
   border-top: 1px solid #eef3f6;
+}
+
+.blocked-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fff8f8;
+}
+
+.blocked-notice div,
+.request-guard {
+  display: grid;
+  gap: 4px;
+}
+
+.blocked-notice strong {
+  color: #991b1b;
+}
+
+.request-guard {
+  max-width: 360px;
+  padding: 10px;
+  border: 1px dashed #cbdbe5;
+  border-radius: 8px;
+  background: #f8fbfd;
+}
+
+.request-guard strong {
+  color: #0f1f2a;
+}
+
+.request-guard span {
+  color: #607786;
+  font-size: 12px;
 }
 
 .credentials-editor,
@@ -391,5 +441,10 @@ p,
 
   .credentials-summary button {
     width: 100%;
+  }
+
+  .blocked-notice {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

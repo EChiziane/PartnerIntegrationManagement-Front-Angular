@@ -15,6 +15,7 @@ export class PartnerDashboardComponent implements OnInit {
   tasks: WorkflowTask[] = [];
 
   readonly statuses: WorkflowStatus[] = [
+    'BLOCKED',
     'NEW',
     'WAITING_FORM',
     'FORM_VALIDATION',
@@ -34,8 +35,6 @@ export class PartnerDashboardComponent implements OnInit {
   readonly requestTypes: RequestType[] = [
     'NEW_INTEGRATION',
     'UPDATE_INTEGRATION',
-    'BLOCK_VPN',
-    'UNBLOCK_VPN',
     'CONNECTIVITY_SUPPORT'
   ];
 
@@ -61,7 +60,8 @@ export class PartnerDashboardComponent implements OnInit {
 
   get attentionRequests(): PartnerRequest[] {
     return this.openRequests.filter(request =>
-      request.currentStatus === 'TROUBLESHOOTING'
+      request.currentStatus === 'BLOCKED'
+      || request.currentStatus === 'TROUBLESHOOTING'
       || this.ageDays(request.stageStartDate) >= 3
       || request.priority === 'P1'
     );

@@ -122,6 +122,11 @@ export class PartnerIntegrationService {
       priority: 'P3',
       followUpDate: this.addDays(1),
       stageStartDate: this.today(),
+      isBlocked: false,
+      previousStatusBeforeBlock: undefined,
+      blockReason: '',
+      blockedAt: '',
+      unblockedAt: '',
       blocker: '',
       formSent: false,
       formReceived: false,
@@ -147,6 +152,28 @@ export class PartnerIntegrationService {
     this.touchPartner(state, partnerId);
     this.save(state);
     return request;
+  }
+
+  blockRequest(requestId: string, reason: string): PartnerRequest {
+    const request = this.getRequest(requestId);
+    if (!request) throw new Error('Request not found');
+
+    return this.updateRequest(requestId, {
+      isBlocked: true,
+      previousStatusBeforeBlock: request.currentStatus,
+      blockReason: reason.trim(),
+      blockedAt: this.today(),
+      unblockedAt: '',
+      blocker: reason.trim()
+    }, 'Request Blocked');
+  }
+
+  unblockRequest(requestId: string, note = ''): PartnerRequest {
+    return this.updateRequest(requestId, {
+      isBlocked: false,
+      unblockedAt: this.today(),
+      blocker: note.trim()
+    }, 'Request Unblocked');
   }
 
   updateRequest(requestId: string, patch: Partial<PartnerRequest>, eventTitle = 'Request Updated'): PartnerRequest {
@@ -225,6 +252,7 @@ export class PartnerIntegrationService {
   }
 
   statusLabel(status: WorkflowStatus): string {
+    if (status === 'BLOCKED') return 'Blocked';
     return status.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, value => value.toUpperCase());
   }
 
@@ -240,6 +268,7 @@ export class PartnerIntegrationService {
   }
 
   statusColor(status: WorkflowStatus): string {
+    if (status === 'BLOCKED') return 'volcano';
     if (status === 'CLOSED' || status === 'READY_UAT' || status === 'READY_CONNECTIVITY' || status === 'READY_HANDOVER') return 'green';
     if (status === 'CONNECTIVITY_TEST' || status === 'UAT_IN_PROGRESS') return 'cyan';
     if (status.startsWith('WAITING')) return 'orange';
@@ -267,6 +296,7 @@ export class PartnerIntegrationService {
   }
 
   private calculateStatus(request: PartnerRequest): WorkflowStatus {
+    if (request.isBlocked) return 'BLOCKED';
     if (request.type === 'CONNECTIVITY_SUPPORT' && request.connectivityUat === 'FAIL') return 'TROUBLESHOOTING';
     if (request.handoverComplete) return 'CLOSED';
     if (request.uatStatus === 'PASS') return 'READY_HANDOVER';
@@ -286,6 +316,7 @@ export class PartnerIntegrationService {
 
   private ownerAction(status: WorkflowStatus): { owner: string; action: string } {
     const map: Record<WorkflowStatus, { owner: string; action: string }> = {
+      BLOCKED: {owner: 'Blocked', action: 'Resolve blocker or unblock request'},
       NEW: {owner: 'Me', action: 'Send Introduction + VPN Form + API Spec'},
       WAITING_FORM: {owner: 'Partner', action: 'Follow up partner form'},
       FORM_VALIDATION: {owner: 'Me', action: 'Validate Form'},
@@ -501,6 +532,11 @@ export class PartnerIntegrationService {
       priority: 'P3',
       followUpDate: this.addDays(-1),
       stageStartDate: this.addDays(-4),
+      isBlocked: false,
+      previousStatusBeforeBlock: undefined,
+      blockReason: '',
+      blockedAt: '',
+      unblockedAt: '',
       blocker: '',
       formSent: false,
       formReceived: false,

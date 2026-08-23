@@ -32,6 +32,15 @@
         <div><span>Connectivity</span><strong>{{ request.connectivityUat }} / {{ request.connectivityPrd }}</strong></div>
       </div>
 
+      <div *ngIf="request.currentStatus === 'BLOCKED'" class="blocked-notice">
+        <div>
+          <span class="panel-kicker">Blocked request</span>
+          <strong>{{ request.blockReason || request.blocker || 'No blocker reason recorded' }}</strong>
+          <p>Blocked at {{ request.blockedAt || '-' }}. Unblock when the same request can continue.</p>
+        </div>
+        <button (click)="unblockRequest()" nz-button nzType="primary">Unblock Request</button>
+      </div>
+
       <div class="flow-strip">
         <span
           *ngFor="let status of flow"
@@ -74,7 +83,12 @@
             <strong>{{ item.label }}</strong>
             <span>{{ item.description }}</span>
           </div>
-          <button (click)="confirmAction(item.label, item.patch)" nz-button nzDanger>Register</button>
+          <button
+            (click)="item.label === 'Block Request' ? blockRequest() : confirmAction(item.label, item.patch)"
+            nz-button
+            nzDanger>
+            {{ item.label === 'Block Request' ? 'Block' : 'Register' }}
+          </button>
         </article>
 
         <article *ngIf="previousAction" class="action-card backtrack">

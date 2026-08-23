@@ -19,7 +19,7 @@
 
       <button (click)="startUpdateFlow()" nz-button nzType="primary">
         <span nz-icon nzType="sync"></span>
-        Start Update Flow
+        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? 'Update Active Request' : 'Start Update Flow' }}
       </button>
     </div>
   </section>
@@ -37,6 +37,7 @@
       <div
         class="current-status-card"
         [class.status-waiting]="activeRequest.currentStatus.startsWith('WAITING')"
+        [class.status-blocked]="activeRequest.currentStatus === 'BLOCKED'"
         [class.status-risk]="activeRequest.currentStatus === 'TROUBLESHOOTING'"
         [class.status-testing]="activeRequest.currentStatus === 'CONNECTIVITY_TEST' || activeRequest.currentStatus === 'UAT_IN_PROGRESS'">
         <span>Current status</span>
@@ -63,7 +64,16 @@
       </div>
     </div>
 
-    <div class="step-actions">
+    <div *ngIf="activeRequest.currentStatus === 'BLOCKED'" class="blocked-notice">
+      <div>
+        <span class="panel-kicker">Blocked request</span>
+        <strong>{{ activeRequest.blockReason || activeRequest.blocker || 'No blocker reason recorded' }}</strong>
+        <p>Blocked at {{ activeRequest.blockedAt || '-' }}. Unblock this request when the same work can continue.</p>
+      </div>
+      <button (click)="unblockActiveRequest()" nz-button nzType="primary">Unblock Request</button>
+    </div>
+
+    <div *ngIf="activeRequest.currentStatus !== 'BLOCKED'" class="step-actions">
       <button
         *ngIf="activeRequest.currentStatus === 'NEW'"
         (click)="confirmAction('Form and API Spec Sent', {formSent: true})"
@@ -189,6 +199,13 @@
         nz-button
         nzDanger>
         Mark Issue
+      </button>
+
+      <button
+        (click)="blockActiveRequest()"
+        nz-button
+        nzDanger>
+        Block Request
       </button>
     </div>
 
@@ -324,15 +341,20 @@
     </header>
 
     <div class="new-request">
-      <nz-select [(ngModel)]="requestType">
+      <div *ngIf="hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED'" class="request-guard">
+        <strong>Active request already exists</strong>
+        <span>Use updates on the active request instead of opening another one.</span>
+      </div>
+
+      <nz-select [(ngModel)]="requestType" [nzDisabled]="hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED'">
         <nz-option nzValue="NEW_INTEGRATION" nzLabel="New Integration"></nz-option>
         <nz-option nzValue="UPDATE_INTEGRATION" nzLabel="Update Integration"></nz-option>
-        <nz-option nzValue="BLOCK_VPN" nzLabel="Block VPN"></nz-option>
-        <nz-option nzValue="UNBLOCK_VPN" nzLabel="Unblock VPN"></nz-option>
         <nz-option nzValue="CONNECTIVITY_SUPPORT" nzLabel="Connectivity Support"></nz-option>
       </nz-select>
 
-      <button (click)="createRequest()" nz-button nzType="primary">Open Request</button>
+      <button (click)="createRequest()" nz-button nzType="primary">
+        {{ hasOpenRequest && activeRequest?.currentStatus !== 'BLOCKED' ? 'Open Active Request' : 'Open Request' }}
+      </button>
     </div>
 
     <article *ngFor="let request of requests" class="request-row">
