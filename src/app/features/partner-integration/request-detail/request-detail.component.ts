@@ -108,12 +108,7 @@ export class RequestDetailComponent implements OnInit {
         patch: {signaturesComplete: true, ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'},
         tone: 'primary'
       }],
-      IMPLEMENTATION: [{
-        label: 'IP Core + IT Done',
-        description: 'Moves the request to connectivity testing readiness.',
-        patch: {ipCoreStatus: 'DONE', itStatus: 'DONE'},
-        tone: 'primary'
-      }],
+      IMPLEMENTATION: this.implementationActions(),
       READY_CONNECTIVITY: [{
         label: 'Start Connectivity Test',
         description: 'Marks connectivity testing as in progress. Use this while VPN/routes/firewall are being tested.',
@@ -158,6 +153,36 @@ export class RequestDetailComponent implements OnInit {
       patch: {connectivityUat: 'FAIL', blocker: 'Needs investigation'},
       tone: 'danger'
     }];
+  }
+
+  private implementationActions(): WorkflowAction[] {
+    if (!this.request) return [];
+
+    const actions: WorkflowAction[] = [];
+
+    if (this.request.ipCoreStatus !== 'DONE') {
+      actions.push({
+        label: 'IP Core Done',
+        description: this.request.itStatus === 'DONE'
+          ? 'IT is already done. This will complete implementation and move to Ready Connectivity.'
+          : 'Registers IP Core completion. The request stays in Implementation until IT is also done.',
+        patch: {ipCoreStatus: 'DONE'},
+        tone: 'primary'
+      });
+    }
+
+    if (this.request.itStatus !== 'DONE') {
+      actions.push({
+        label: 'IT Done',
+        description: this.request.ipCoreStatus === 'DONE'
+          ? 'IP Core is already done. This will complete implementation and move to Ready Connectivity.'
+          : 'Registers IT/firewall/routes completion. The request stays in Implementation until IP Core is also done.',
+        patch: {itStatus: 'DONE'},
+        tone: 'primary'
+      });
+    }
+
+    return actions;
   }
 
   get previousAction(): WorkflowAction | null {

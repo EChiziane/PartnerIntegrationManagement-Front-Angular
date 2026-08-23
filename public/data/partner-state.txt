@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-23.4",
+  "version": "2026-08-23.5",
   "partners": [
     {
       "id": "partner-a",
@@ -231,7 +231,7 @@
       "openDate": "2026-08-15",
       "currentStatus": "IMPLEMENTATION",
       "currentOwner": "IP Core / IT",
-      "nextAction": "Follow up implementation",
+      "nextAction": "Follow up implementation: IT",
       "priority": "P2",
       "followUpDate": "2026-08-22",
       "stageStartDate": "2026-08-19",

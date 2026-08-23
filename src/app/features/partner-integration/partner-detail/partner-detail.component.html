@@ -104,11 +104,19 @@
       </button>
 
       <button
-        *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION'"
-        (click)="confirmAction('IP Core and IT Done', {ipCoreStatus: 'DONE', itStatus: 'DONE'})"
+        *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION' && activeRequest.ipCoreStatus !== 'DONE'"
+        (click)="confirmAction('IP Core Done', {ipCoreStatus: 'DONE'})"
         nz-button
         nzType="primary">
-        IP Core + IT Done
+        IP Core Done
+      </button>
+
+      <button
+        *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION' && activeRequest.itStatus !== 'DONE'"
+        (click)="confirmAction('IT Done', {itStatus: 'DONE'})"
+        nz-button
+        nzType="primary">
+        IT Done
       </button>
 
       <button

@@ -243,13 +243,16 @@ export class PartnerIntegrationService {
   private recalculateRequest(request: PartnerRequest): PartnerRequest {
     const currentStatus = this.calculateStatus(request);
     const ownerAction = this.ownerAction(currentStatus);
+    const nextAction = currentStatus === 'IMPLEMENTATION'
+      ? this.implementationAction({...request, currentStatus})
+      : ownerAction.action;
     const priority = this.calculatePriority({...request, currentStatus});
 
     return {
       ...request,
       currentStatus,
       currentOwner: ownerAction.owner,
-      nextAction: ownerAction.action,
+      nextAction,
       priority,
       closeDate: currentStatus === 'CLOSED' ? (request.closeDate || this.today()) : null
     };
@@ -291,6 +294,17 @@ export class PartnerIntegrationService {
       CLOSED: {owner: 'Closed', action: 'Archive evidence and keep partner active'}
     };
     return map[status];
+  }
+
+  private implementationAction(request: PartnerRequest): string {
+    const missing = [
+      request.ipCoreStatus !== 'DONE' ? 'IP Core' : '',
+      request.itStatus !== 'DONE' ? 'IT' : ''
+    ].filter(Boolean);
+
+    return missing.length
+      ? `Follow up implementation: ${missing.join(' + ')}`
+      : 'Implementation complete';
   }
 
   private calculatePriority(request: PartnerRequest): TaskPriority {
