@@ -162,7 +162,7 @@
 
       <button
         *ngIf="activeRequest.currentStatus === 'READY_UAT'"
-        (click)="confirmAction('API Test Credentials Provided', {credentialsProvided: true, uatStatus: 'IN_PROGRESS'})"
+        (click)="openCredentialsEditor()"
         nz-button
         nzType="primary">
         Provide Test Credentials
@@ -190,6 +190,29 @@
         nzDanger>
         Mark Issue
       </button>
+    </div>
+
+    <div *ngIf="isCredentialsEditorOpen" class="credentials-editor">
+      <div>
+        <span class="panel-kicker">Test credentials</span>
+        <h3>Paste the credentials provided to {{ partner.name }}.</h3>
+      </div>
+      <textarea
+        [(ngModel)]="credentialsDraft"
+        nz-input
+        rows="7"
+        placeholder="Paste UAT URL, username, password, API key, test MSISDNs or any instructions shared with the partner"></textarea>
+      <div class="credentials-actions">
+        <button (click)="cancelCredentialsEditor()" nz-button nzType="default">Cancel</button>
+        <button (click)="saveCredentials()" [disabled]="!credentialsDraft.trim()" nz-button nzType="primary">
+          Save & Mark Provided
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="activeRequest.testCredentials && !isCredentialsEditorOpen" class="credentials-summary">
+      <span>Credentials Provided</span>
+      <pre>{{ activeRequest.testCredentials }}</pre>
     </div>
   </section>
 

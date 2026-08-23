@@ -54,7 +54,10 @@
               <strong>{{ item.label }}</strong>
               <span>{{ item.description }}</span>
             </div>
-            <button (click)="confirmAction(item.label, item.patch)" nz-button [nzType]="item.tone === 'primary' ? 'primary' : 'default'">
+            <button
+              (click)="item.requiresCredentialsText ? openCredentialsEditor() : confirmAction(item.label, item.patch)"
+              nz-button
+              [nzType]="item.tone === 'primary' ? 'primary' : 'default'">
               Continue
             </button>
           </article>
@@ -82,6 +85,24 @@
           <button (click)="confirmPreviousAction()" nz-button nzType="default">Move Back</button>
         </article>
       </div>
+
+      <div *ngIf="isCredentialsEditorOpen" class="credentials-editor">
+        <div>
+          <span class="panel-kicker">Test credentials</span>
+          <h3>Paste the credentials provided to {{ partner.name }}.</h3>
+        </div>
+        <textarea
+          [(ngModel)]="credentialsDraft"
+          nz-input
+          rows="8"
+          placeholder="Paste UAT URL, username, password, API key, test MSISDNs or any instructions shared with the partner"></textarea>
+        <div class="credentials-actions">
+          <button (click)="cancelCredentialsEditor()" nz-button nzType="default">Cancel</button>
+          <button (click)="saveCredentials()" [disabled]="!credentialsDraft.trim()" nz-button nzType="primary">
+            Save & Mark Provided
+          </button>
+        </div>
+      </div>
     </section>
 
     <section class="panel">
@@ -100,6 +121,14 @@
       </div>
     </section>
   </div>
+
+  <section *ngIf="request.testCredentials" class="panel">
+    <header>
+      <span class="panel-kicker">Credentials Provided</span>
+      <h2>Partner test credentials</h2>
+    </header>
+    <pre class="credentials-output">{{ request.testCredentials }}</pre>
+  </section>
 
   <section class="panel">
     <header>

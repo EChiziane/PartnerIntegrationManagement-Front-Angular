@@ -84,6 +84,7 @@ export interface PartnerRequest {
   connectivityUat: TestStatus;
   connectivityPrd: TestStatus;
   credentialsProvided: boolean;
+  testCredentials?: string;
   uatStatus: UatStatus;
   handoverComplete: boolean;
   closeDate: string | null;

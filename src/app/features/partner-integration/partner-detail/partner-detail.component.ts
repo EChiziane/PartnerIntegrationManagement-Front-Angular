@@ -18,6 +18,8 @@ export class PartnerDetailComponent implements OnInit {
   events: TimelineEvent[] = [];
   requestType: RequestType = 'NEW_INTEGRATION';
   isEditingProfile = false;
+  isCredentialsEditorOpen = false;
+  credentialsDraft = '';
 
   constructor(
     public partnerIntegration: PartnerIntegrationService,
@@ -108,6 +110,32 @@ export class PartnerDetailComponent implements OnInit {
     this.partner = this.partnerIntegration.updatePartner(this.partner.id, this.partnerDraft);
     this.partnerDraft = {...this.partner};
     this.isEditingProfile = false;
+    this.load();
+  }
+
+  openCredentialsEditor(): void {
+    const request = this.activeRequest;
+    if (!request) return;
+    this.credentialsDraft = request.testCredentials || '';
+    this.isCredentialsEditorOpen = true;
+  }
+
+  cancelCredentialsEditor(): void {
+    this.isCredentialsEditorOpen = false;
+    this.credentialsDraft = '';
+  }
+
+  saveCredentials(): void {
+    const request = this.activeRequest;
+    if (!request || !this.credentialsDraft.trim()) return;
+
+    this.partnerIntegration.updateRequest(request.id, {
+      credentialsProvided: true,
+      testCredentials: this.credentialsDraft.trim(),
+      uatStatus: 'IN_PROGRESS'
+    }, 'Test Credentials Provided');
+    this.isCredentialsEditorOpen = false;
+    this.credentialsDraft = '';
     this.load();
   }
 

@@ -9,6 +9,7 @@ interface WorkflowAction {
   description: string;
   patch: Partial<PartnerRequest>;
   tone?: 'primary' | 'default' | 'danger';
+  requiresCredentialsText?: boolean;
 }
 
 @Component({
@@ -21,6 +22,8 @@ export class RequestDetailComponent implements OnInit {
   request: PartnerRequest | undefined;
   partner: Partner | undefined;
   events: TimelineEvent[] = [];
+  isCredentialsEditorOpen = false;
+  credentialsDraft = '';
   readonly flow: WorkflowStatus[] = [
     'NEW',
     'WAITING_FORM',
@@ -118,9 +121,10 @@ export class RequestDetailComponent implements OnInit {
       CONNECTIVITY_TEST: this.connectivityActions(),
       READY_UAT: [{
         label: 'Provide Test Credentials',
-        description: 'Moves the request to UAT in progress.',
-        patch: {credentialsProvided: true, uatStatus: 'IN_PROGRESS'},
-        tone: 'primary'
+        description: 'Paste the credentials or test instructions given to this partner.',
+        patch: {},
+        tone: 'primary',
+        requiresCredentialsText: true
       }],
       UAT_IN_PROGRESS: [{
         label: 'UAT PASS',
@@ -222,6 +226,29 @@ export class RequestDetailComponent implements OnInit {
 
   private requiresPrd(): boolean {
     return this.partner?.environment !== 'UAT';
+  }
+
+  openCredentialsEditor(): void {
+    if (!this.request) return;
+    this.credentialsDraft = this.request.testCredentials || '';
+    this.isCredentialsEditorOpen = true;
+  }
+
+  cancelCredentialsEditor(): void {
+    this.isCredentialsEditorOpen = false;
+    this.credentialsDraft = '';
+  }
+
+  saveCredentials(): void {
+    if (!this.request || !this.credentialsDraft.trim()) return;
+    this.partnerIntegration.updateRequest(this.request.id, {
+      credentialsProvided: true,
+      testCredentials: this.credentialsDraft.trim(),
+      uatStatus: 'IN_PROGRESS'
+    }, 'Test Credentials Provided');
+    this.isCredentialsEditorOpen = false;
+    this.credentialsDraft = '';
+    this.load();
   }
 
   get previousAction(): WorkflowAction | null {

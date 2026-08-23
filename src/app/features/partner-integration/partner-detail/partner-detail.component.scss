@@ -187,6 +187,54 @@ p,
   border-top: 1px solid #eef3f6;
 }
 
+.credentials-editor,
+.credentials-summary {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #bfe8dd;
+  border-radius: 8px;
+  background: #f1fbf8;
+}
+
+.credentials-editor h3 {
+  margin: 3px 0 0;
+  color: #0f1f2a;
+  font-size: 15px;
+  font-weight: 850;
+}
+
+.credentials-editor textarea {
+  width: 100%;
+  font-family: Consolas, 'Courier New', monospace;
+  resize: vertical;
+}
+
+.credentials-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.credentials-summary > span {
+  color: #0e7c72;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.credentials-summary pre {
+  margin: 0;
+  color: #0f1f2a;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
@@ -313,7 +361,12 @@ p,
   .form-actions button,
   .step-actions button,
   .new-request button,
+  .credentials-actions button,
   .new-request nz-select {
     width: 100%;
+  }
+
+  .credentials-actions {
+    display: grid;
   }
 }
