@@ -28,6 +28,13 @@ export type VpnStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'UP' | 'DOWN';
 export type TestStatus = 'NOT_TESTED' | 'IN_PROGRESS' | 'PASS' | 'FAIL';
 export type UatStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'PASS' | 'ISSUE' | 'WAITING_PARTNER';
 export type TaskPriority = 'P1' | 'P2' | 'P3' | 'P4';
+export type PartnerEnvironment = 'UAT' | 'PRD' | 'UAT + PRD';
+
+export interface PartnerPrivateEndpoint {
+  environment: PartnerEnvironment;
+  ip: string;
+  port: string;
+}
 
 export interface Partner {
   id: string;
@@ -37,11 +44,13 @@ export interface Partner {
   phone: string;
   email: string;
   serviceApi: string;
-  environment: 'UAT' | 'PRD' | 'UAT + PRD';
+  environment: PartnerEnvironment;
   publicIp: string;
+  publicPeerIps?: string[];
   partnerServerIp: string;
   uatPort: string;
   prdPort: string;
+  privateEndpoints?: PartnerPrivateEndpoint[];
   authMethod?: string;
   ownCloudFolderUrl?: string;
   formNotes?: string;

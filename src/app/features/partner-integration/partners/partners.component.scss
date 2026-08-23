@@ -291,6 +291,51 @@ p {
   width: 100%;
 }
 
+.private-endpoints {
+  display: grid;
+  gap: 10px;
+}
+
+.endpoint-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #e4edf3;
+  border-radius: 8px;
+  background: #f8fbfd;
+}
+
+.endpoint-header div {
+  display: grid;
+  gap: 2px;
+}
+
+.endpoint-header strong {
+  color: #10212b;
+  font-size: 13px;
+}
+
+.endpoint-header span {
+  color: #607786;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.endpoint-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 110px 40px;
+  gap: 8px;
+  align-items: end;
+}
+
+.endpoint-row button {
+  width: 40px;
+  height: 32px;
+  padding: 0;
+}
+
 .drawer-actions {
   position: sticky;
   bottom: 0;
@@ -347,6 +392,19 @@ p {
   .drawer-actions {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .endpoint-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .endpoint-row {
+    grid-template-columns: 1fr;
+  }
+
+  .endpoint-row button {
+    width: 100%;
   }
 
   .drawer-actions button {

@@ -45,9 +45,8 @@ export class PartnerIntegrationPdfService {
         'Business Owner',
         'Technical Contact',
         'Environment',
-        'Public IP',
-        'Server IP',
-        'Ports',
+        'Public IP (Peer)',
+        'Private Endpoints',
         'Open',
         'Urgent Status',
         'Next Action'
@@ -63,9 +62,8 @@ export class PartnerIntegrationPdfService {
           partner.businessOwner || '-',
           partner.technicalContact || '-',
           partner.environment || '-',
-          partner.publicIp || '-',
-          partner.partnerServerIp || '-',
-          `${partner.uatPort || '-'} / ${partner.prdPort || '-'}`,
+          this.publicPeers(partner),
+          this.privateEndpoints(partner),
           String(partnerRequests.filter(request => request.currentStatus !== 'CLOSED').length),
           urgent ? this.partnerIntegration.statusLabel(urgent) : 'Clear',
           next
@@ -162,10 +160,8 @@ export class PartnerIntegrationPdfService {
       ['Email', partner.email || '-'],
       ['Service/API', partner.serviceApi || '-'],
       ['Environment', partner.environment || '-'],
-      ['Public IP', partner.publicIp || '-'],
-      ['Server IP', partner.partnerServerIp || '-'],
-      ['UAT Port', partner.uatPort || '-'],
-      ['PRD Port', partner.prdPort || '-'],
+      ['Public IP (Peer)', this.publicPeers(partner)],
+      ['Private Endpoints', this.privateEndpoints(partner)],
       ['Auth Method', partner.authMethod || '-'],
       ['OwnCloud Folder', partner.ownCloudFolderUrl || '-'],
       ['Form Notes', partner.formNotes || '-'],
@@ -221,6 +217,7 @@ export class PartnerIntegrationPdfService {
 
   partnerCategory(partner: Partner): string {
     const value = `${partner.serviceApi || ''} ${partner.name || ''}`.toLowerCase();
+    if (value.includes('business code')) return 'Payment API';
     if (value.includes('payment')) return 'Payment API';
     if (value.includes('ussd')) return 'USSD / Push USSD';
     if (value.includes('remittance')) return 'Remittance';
@@ -312,6 +309,23 @@ export class PartnerIntegrationPdfService {
       output.push([first[0], first[1], second[0], second[1]]);
     }
     return output;
+  }
+
+  private publicPeers(partner: Partner): string {
+    return partner.publicPeerIps?.length ? partner.publicPeerIps.join(', ') : partner.publicIp || '-';
+  }
+
+  private privateEndpoints(partner: Partner): string {
+    if (partner.privateEndpoints?.length) {
+      return partner.privateEndpoints
+        .map(endpoint => `${endpoint.environment}: ${endpoint.ip || '-'}:${endpoint.port || '-'}`)
+        .join(' | ');
+    }
+
+    return [
+      partner.uatPort ? `UAT: ${partner.partnerServerIp || '-'}:${partner.uatPort}` : '',
+      partner.prdPort ? `PRD: ${partner.partnerServerIp || '-'}:${partner.prdPort}` : ''
+    ].filter(Boolean).join(' | ') || partner.partnerServerIp || '-';
   }
 
   private mostUrgentStatus(requests: PartnerRequest[]): WorkflowStatus | null {

@@ -1,11 +1,27 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
-import {Partner, PartnerRequest, RequestType, WorkflowStatus} from '@shared/models/partner-integration';
+import {Partner, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestType, WorkflowStatus} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 
 type PartnerFilter = 'ALL' | 'ACTIVE' | 'OPEN_REQUESTS' | 'ATTENTION';
 type PartnerCategory = 'ALL' | 'Payment API' | 'USSD / Push USSD' | 'Remittance' | 'Connectivity' | 'Gaming' | 'Other';
+type ServiceOption = 'Business Code' | 'Push USSD';
+
+interface PartnerDraft {
+  name: string;
+  businessOwner: string;
+  technicalContact: string;
+  phone: string;
+  email: string;
+  serviceApi: ServiceOption;
+  environment: PartnerEnvironment;
+  publicPeerIpsText: string;
+  privateEndpoints: PartnerPrivateEndpoint[];
+  authMethod: string;
+  ownCloudFolderUrl: string;
+  formNotes: string;
+}
 
 @Component({
   selector: 'app-partners',
@@ -22,19 +38,25 @@ export class PartnersComponent implements OnInit {
 
   requestType: RequestType = 'NEW_INTEGRATION';
   isCreateVisible = false;
+  readonly businessOwnerSuggestions = [
+    'Business Development',
+    'Financial Services',
+    'M-MOLA Business',
+    'Enterprise Sales',
+    'VAS and Digital Channels'
+  ];
+  readonly serviceOptions: ServiceOption[] = ['Business Code', 'Push USSD'];
 
-  draft = {
+  draft: PartnerDraft = {
     name: '',
     businessOwner: '',
     technicalContact: '',
     phone: '',
     email: '',
-    serviceApi: '',
+    serviceApi: 'Business Code',
     environment: 'UAT + PRD' as Partner['environment'],
-    publicIp: '',
-    partnerServerIp: '',
-    uatPort: '',
-    prdPort: '',
+    publicPeerIpsText: '',
+    privateEndpoints: [{environment: 'UAT + PRD', ip: '', port: ''}],
     authMethod: '',
     ownCloudFolderUrl: '',
     formNotes: ''
@@ -61,7 +83,9 @@ export class PartnersComponent implements OnInit {
         || partner.technicalContact.toLowerCase().includes(query)
         || partner.businessOwner.toLowerCase().includes(query)
         || partner.publicIp.toLowerCase().includes(query)
-        || partner.partnerServerIp.toLowerCase().includes(query);
+        || partner.partnerServerIp.toLowerCase().includes(query)
+        || this.publicPeersLabel(partner).toLowerCase().includes(query)
+        || this.privateEndpointsLabel(partner).toLowerCase().includes(query);
 
       if (!matchesQuery) return false;
       if (this.categoryFilter !== 'ALL' && this.pdf.partnerCategory(partner) !== this.categoryFilter) return false;
@@ -110,7 +134,7 @@ export class PartnersComponent implements OnInit {
 
   createPartner(): void {
     if (!this.draft.name.trim()) return;
-    const partner = this.partnerIntegration.createPartner({...this.draft});
+    const partner = this.partnerIntegration.createPartner(this.buildPartnerPayload());
     this.isCreateVisible = false;
     this.resetDraft();
     this.reload();
@@ -124,6 +148,43 @@ export class PartnersComponent implements OnInit {
   createRequest(partner: Partner): void {
     const request = this.partnerIntegration.createRequest(partner.id, this.requestType);
     this.router.navigate(['/app/request', request.id]);
+  }
+
+  publicPeersLabel(partner: Partner): string {
+    return partner.publicPeerIps?.length ? partner.publicPeerIps.join(', ') : partner.publicIp || '-';
+  }
+
+  privateEndpointsLabel(partner: Partner): string {
+    if (partner.privateEndpoints?.length) {
+      return partner.privateEndpoints
+        .map(endpoint => `${endpoint.environment}: ${endpoint.ip || '-'}:${endpoint.port || '-'}`)
+        .join(' | ');
+    }
+
+    return partner.partnerServerIp || '-';
+  }
+
+  portsLabel(partner: Partner): string {
+    if (partner.privateEndpoints?.length) {
+      return partner.privateEndpoints
+        .map(endpoint => `${endpoint.environment} ${endpoint.port || '-'}`)
+        .join(' / ');
+    }
+
+    return `${partner.uatPort || '-'} / ${partner.prdPort || '-'}`;
+  }
+
+  addPrivateEndpoint(): void {
+    this.draft.privateEndpoints.push({environment: 'UAT + PRD', ip: '', port: ''});
+  }
+
+  removePrivateEndpoint(index: number): void {
+    if (this.draft.privateEndpoints.length === 1) {
+      this.draft.privateEndpoints[0] = {environment: 'UAT + PRD', ip: '', port: ''};
+      return;
+    }
+
+    this.draft.privateEndpoints.splice(index, 1);
   }
 
   openRequestCount(partnerId: string): number {
@@ -191,15 +252,49 @@ export class PartnersComponent implements OnInit {
       technicalContact: '',
       phone: '',
       email: '',
-      serviceApi: '',
+      serviceApi: 'Business Code',
       environment: 'UAT + PRD',
-      publicIp: '',
-      partnerServerIp: '',
-      uatPort: '',
-      prdPort: '',
+      publicPeerIpsText: '',
+      privateEndpoints: [{environment: 'UAT + PRD', ip: '', port: ''}],
       authMethod: '',
       ownCloudFolderUrl: '',
       formNotes: ''
+    };
+  }
+
+  private buildPartnerPayload(): Omit<Partner, 'id' | 'lastActivity' | 'status'> {
+    const publicPeerIps = this.draft.publicPeerIpsText
+      .split(/[\n,;]+/)
+      .map(value => value.trim())
+      .filter(Boolean);
+    const privateEndpoints = this.draft.privateEndpoints
+      .map(endpoint => ({
+        environment: endpoint.environment,
+        ip: endpoint.ip.trim(),
+        port: endpoint.port.trim()
+      }))
+      .filter(endpoint => endpoint.ip || endpoint.port);
+    const firstPrivateIp = privateEndpoints.find(endpoint => endpoint.ip)?.ip || '';
+    const uatPort = privateEndpoints.find(endpoint => endpoint.environment !== 'PRD' && endpoint.port)?.port || '';
+    const prdPort = privateEndpoints.find(endpoint => endpoint.environment !== 'UAT' && endpoint.port)?.port || '';
+
+    return {
+      name: this.draft.name.trim(),
+      businessOwner: this.draft.businessOwner.trim(),
+      technicalContact: this.draft.technicalContact.trim(),
+      phone: this.draft.phone.trim(),
+      email: this.draft.email.trim(),
+      serviceApi: this.draft.serviceApi,
+      environment: this.draft.environment,
+      publicIp: publicPeerIps[0] || '',
+      publicPeerIps,
+      partnerServerIp: firstPrivateIp,
+      uatPort,
+      prdPort,
+      privateEndpoints,
+      authMethod: this.draft.authMethod.trim(),
+      ownCloudFolderUrl: this.draft.ownCloudFolderUrl.trim(),
+      formNotes: this.draft.formNotes.trim()
     };
   }
 }

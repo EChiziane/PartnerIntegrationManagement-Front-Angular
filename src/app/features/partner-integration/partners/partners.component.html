@@ -86,9 +86,9 @@
       </div>
 
       <div class="cell-stack compact">
-        <span>Public: {{ partner.publicIp || '-' }}</span>
-        <span>Server: {{ partner.partnerServerIp || '-' }}</span>
-        <span>Ports: {{ partner.uatPort || '-' }} / {{ partner.prdPort || '-' }}</span>
+        <span>Peer: {{ publicPeersLabel(partner) }}</span>
+        <span>Private: {{ privateEndpointsLabel(partner) }}</span>
+        <span>Ports: {{ portsLabel(partner) }}</span>
       </div>
 
       <div class="cell-stack">
@@ -151,8 +151,19 @@
 
       <div class="form-grid">
         <label class="wide">Partner Name <input [(ngModel)]="draft.name" nz-input placeholder="Ex: Wiremit"/></label>
-        <label>Business Owner <input [(ngModel)]="draft.businessOwner" nz-input placeholder="Business owner or department"/></label>
-        <label>Service/API <input [(ngModel)]="draft.serviceApi" nz-input placeholder="Push USSD, Payment API, Remittance..."/></label>
+        <label>
+          Business Owner
+          <input [(ngModel)]="draft.businessOwner" [attr.list]="'business-owner-suggestions'" nz-input placeholder="Start typing the owner or department"/>
+          <datalist id="business-owner-suggestions">
+            <option *ngFor="let owner of businessOwnerSuggestions" [value]="owner"></option>
+          </datalist>
+        </label>
+        <label>
+          Service/API
+          <nz-select [(ngModel)]="draft.serviceApi">
+            <nz-option *ngFor="let service of serviceOptions" [nzValue]="service" [nzLabel]="service"></nz-option>
+          </nz-select>
+        </label>
         <label>
           Environment
           <nz-select [(ngModel)]="draft.environment">
@@ -191,10 +202,45 @@
       </div>
 
       <div class="form-grid">
-        <label>Public IP <input [(ngModel)]="draft.publicIp" nz-input placeholder="Public IP"/></label>
-        <label>Partner Server IP <input [(ngModel)]="draft.partnerServerIp" nz-input placeholder="Server/private IP"/></label>
-        <label>UAT Port <input [(ngModel)]="draft.uatPort" nz-input placeholder="UAT port"/></label>
-        <label>PRD Port <input [(ngModel)]="draft.prdPort" nz-input placeholder="PRD port"/></label>
+        <label class="wide">
+          Public IP (Peer)
+          <textarea [(ngModel)]="draft.publicPeerIpsText" nz-input rows="3" placeholder="One or more peer public IPs, separated by comma or line break"></textarea>
+        </label>
+
+        <div class="private-endpoints wide">
+          <div class="endpoint-header">
+            <div>
+              <strong>Private IP endpoints</strong>
+              <span>Each private IP must include port and environment.</span>
+            </div>
+            <button (click)="addPrivateEndpoint()" nz-button nzType="default" nzSize="small">
+              <span nz-icon nzType="plus"></span>
+              Add
+            </button>
+          </div>
+
+          <div *ngFor="let endpoint of draft.privateEndpoints; let index = index" class="endpoint-row">
+            <label>
+              Environment
+              <nz-select [(ngModel)]="endpoint.environment">
+                <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
+                <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
+                <nz-option nzValue="UAT + PRD" nzLabel="UAT + PRD"></nz-option>
+              </nz-select>
+            </label>
+            <label>
+              Private IP
+              <input [(ngModel)]="endpoint.ip" nz-input placeholder="10.x.x.x"/>
+            </label>
+            <label>
+              Port
+              <input [(ngModel)]="endpoint.port" nz-input placeholder="443"/>
+            </label>
+            <button (click)="removePrivateEndpoint(index)" nz-button nzType="default" nzDanger>
+              <span nz-icon nzType="delete"></span>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 

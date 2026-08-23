@@ -48,6 +48,26 @@ export class PartnerDetailComponent implements OnInit {
     return this.requests.filter(request => request.currentStatus !== 'CLOSED').length;
   }
 
+  publicPeersLabel(partner: Partner): string {
+    return partner.publicPeerIps?.length ? partner.publicPeerIps.join(', ') : partner.publicIp || '-';
+  }
+
+  privateEndpoints(partner: Partner): Array<{environment: string; ip: string; port: string}> {
+    if (partner.privateEndpoints?.length) {
+      return partner.privateEndpoints;
+    }
+
+    const endpoints: Array<{environment: string; ip: string; port: string}> = [];
+    if (partner.partnerServerIp || partner.uatPort) {
+      endpoints.push({environment: 'UAT', ip: partner.partnerServerIp || '-', port: partner.uatPort || '-'});
+    }
+    if (partner.partnerServerIp || partner.prdPort) {
+      endpoints.push({environment: 'PRD', ip: partner.partnerServerIp || '-', port: partner.prdPort || '-'});
+    }
+
+    return endpoints;
+  }
+
   openRequest(request: PartnerRequest): void {
     this.router.navigate(['/app/request', request.id]);
   }

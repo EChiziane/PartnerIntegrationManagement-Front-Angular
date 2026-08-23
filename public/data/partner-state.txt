@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-23.5",
+  "version": "2026-08-23.6",
   "partners": [
     {
       "id": "partner-a",
@@ -11,9 +11,24 @@
       "serviceApi": "Payment API",
       "environment": "UAT + PRD",
       "publicIp": "139.84.234.187",
+      "publicPeerIps": [
+        "139.84.234.187"
+      ],
       "partnerServerIp": "10.177.0.10",
       "uatPort": "8520",
       "prdPort": "9921",
+      "privateEndpoints": [
+        {
+          "environment": "UAT",
+          "ip": "10.177.0.10",
+          "port": "8520"
+        },
+        {
+          "environment": "PRD",
+          "ip": "10.177.0.10",
+          "port": "9921"
+        }
+      ],
       "authMethod": "API Key",
       "ownCloudFolderUrl": "https://owncloud.example.com/index.php/s/alpha-pay-partner-folder",
       "formNotes": "UAT and PRD requested in the same partner form.",
@@ -30,9 +45,24 @@
       "serviceApi": "USSD / API",
       "environment": "UAT + PRD",
       "publicIp": "72.61.147.82",
+      "publicPeerIps": [
+        "72.61.147.82"
+      ],
       "partnerServerIp": "10.177.0.20",
       "uatPort": "8600",
       "prdPort": "9600",
+      "privateEndpoints": [
+        {
+          "environment": "UAT",
+          "ip": "10.177.0.20",
+          "port": "8600"
+        },
+        {
+          "environment": "PRD",
+          "ip": "10.177.0.20",
+          "port": "9600"
+        }
+      ],
       "authMethod": "Basic Auth",
       "ownCloudFolderUrl": "https://owncloud.example.com/index.php/s/beta-lotto-partner-folder",
       "formNotes": "Waiting statement creation after validated form.",

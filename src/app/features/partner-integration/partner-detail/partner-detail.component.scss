@@ -131,6 +131,11 @@ p,
   text-decoration: underline;
 }
 
+.endpoint-facts strong {
+  display: grid;
+  gap: 3px;
+}
+
 .edit-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

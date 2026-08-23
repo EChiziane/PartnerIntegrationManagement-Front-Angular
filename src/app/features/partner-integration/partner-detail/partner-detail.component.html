@@ -224,10 +224,16 @@
       </header>
 
       <div *ngIf="!isEditingProfile" class="facts">
-        <div><span>Public IP</span><strong>{{ partner.publicIp || '-' }}</strong></div>
-        <div><span>Server IP</span><strong>{{ partner.partnerServerIp || '-' }}</strong></div>
-        <div><span>UAT Port</span><strong>{{ partner.uatPort || '-' }}</strong></div>
-        <div><span>PRD Port</span><strong>{{ partner.prdPort || '-' }}</strong></div>
+        <div class="wide"><span>Public IP (Peer)</span><strong>{{ publicPeersLabel(partner) }}</strong></div>
+        <div class="wide endpoint-facts">
+          <span>Private IP endpoints</span>
+          <strong *ngIf="privateEndpoints(partner).length; else noPrivateEndpoints">
+            <span *ngFor="let endpoint of privateEndpoints(partner)">
+              {{ endpoint.environment }} - {{ endpoint.ip || '-' }}:{{ endpoint.port || '-' }}
+            </span>
+          </strong>
+          <ng-template #noPrivateEndpoints><strong>-</strong></ng-template>
+        </div>
         <div><span>Auth Method</span><strong>{{ partner.authMethod || '-' }}</strong></div>
         <div class="wide">
           <span>OwnCloud Folder</span>
