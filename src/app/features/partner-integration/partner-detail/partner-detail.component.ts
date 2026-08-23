@@ -102,6 +102,10 @@ export class PartnerDetailComponent implements OnInit {
     return endpoints;
   }
 
+  canValidateActiveForm(): boolean {
+    return this.hasTechnicalData(this.activeFormData);
+  }
+
   requiresUat(): boolean {
     return this.activeFormData?.environment !== 'PRD';
   }
@@ -263,6 +267,13 @@ export class PartnerDetailComponent implements OnInit {
   confirmAction(label: string, patch: Partial<PartnerRequest>): void {
     const request = this.activeRequest;
     if (!request) return;
+    if (patch.formValidated && !this.canValidateActiveForm()) {
+      this.modal.warning({
+        nzTitle: 'Technical data required',
+        nzContent: 'Open the request pipeline and import the VPN form or fill the IP data manually before validating.'
+      });
+      return;
+    }
 
     this.modal.confirm({
       nzTitle: 'Confirm workflow update',
@@ -441,11 +452,12 @@ export class PartnerDetailComponent implements OnInit {
     return clean.toLowerCase().replace(/\s+/g, '') === placeholder.toLowerCase().replace(/\s+/g, '') ? '' : clean;
   }
 
-  private hasTechnicalData(formData: RequestFormData): boolean {
-    return !!formData.publicIp
-      || !!formData.partnerServerIp
-      || !!formData.publicPeerIps?.length
-      || !!formData.privateEndpoints?.length;
+  private hasTechnicalData(formData?: RequestFormData): boolean {
+    return !!formData
+      && (!!formData.publicIp
+        || !!formData.partnerServerIp
+        || !!formData.publicPeerIps?.length
+        || !!formData.privateEndpoints?.length);
   }
 
   private requestTimestamp(request: PartnerRequest): number {

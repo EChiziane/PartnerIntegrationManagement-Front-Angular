@@ -65,6 +65,7 @@
             </div>
             <button
               (click)="item.requiresCredentialsText ? openCredentialsEditor() : confirmAction(item.label, item.patch)"
+              [disabled]="item.requiresTechnicalData && !canValidateForm()"
               nz-button
               [nzType]="item.tone === 'primary' ? 'primary' : 'default'">
               Continue
@@ -127,6 +128,10 @@
         </div>
         <div class="import-inline">
           <input #requestFormInput (change)="importRequestForm($event)" accept=".xls,.xlsx" hidden type="file"/>
+          <button (click)="openTechnicalEditor()" nz-button nzType="default">
+            <span nz-icon nzType="edit"></span>
+            Edit Manual Data
+          </button>
           <button (click)="requestFormInput.click()" nz-button nzType="default">
             <span nz-icon nzType="upload"></span>
             Import VPN Form
@@ -143,6 +148,84 @@
         <div><span>Private Endpoints</span><strong>{{ privateEndpointsLabel() }}</strong></div>
         <div><span>Auth Method</span><strong>{{ formData?.authMethod || '-' }}</strong></div>
         <div><span>Imported File</span><strong>{{ formData?.importedFileName || '-' }}</strong></div>
+      </div>
+
+      <div *ngIf="request.currentStatus === 'FORM_VALIDATION' && !canValidateForm()" class="validation-gate">
+        <strong>Technical data required before validation</strong>
+        <span>Fill the public peer and private IP endpoints manually, or import the VPN form, then validate.</span>
+      </div>
+
+      <div *ngIf="isTechnicalEditorOpen" class="technical-editor">
+        <label class="wide">
+          Public IP (Peer)
+          <textarea [(ngModel)]="technicalDraft.publicPeerIpsText" nz-input rows="3" placeholder="One or more peer public IPs, separated by comma or line break"></textarea>
+        </label>
+
+        <div class="endpoint-editor wide">
+          <div class="endpoint-header">
+            <strong>Private IP endpoints</strong>
+            <button (click)="addPrivateEndpoint()" nz-button nzSize="small" nzType="default">
+              <span nz-icon nzType="plus"></span>
+              Add
+            </button>
+          </div>
+
+          <div *ngFor="let endpoint of technicalDraft.privateEndpoints; let index = index" class="endpoint-row">
+            <label>
+              Environment
+              <nz-select [(ngModel)]="endpoint.environment">
+                <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
+                <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
+                <nz-option nzValue="UAT+PRD" nzLabel="UAT+PRD"></nz-option>
+              </nz-select>
+            </label>
+            <label>
+              Private IP
+              <input [(ngModel)]="endpoint.ip" nz-input placeholder="10.x.x.x"/>
+            </label>
+            <label>
+              Port
+              <input [(ngModel)]="endpoint.port" nz-input placeholder="443"/>
+            </label>
+            <button (click)="removePrivateEndpoint(index)" nz-button nzDanger nzType="default">
+              <span nz-icon nzType="delete"></span>
+            </button>
+          </div>
+        </div>
+
+        <label>
+          Service/API
+          <input [(ngModel)]="technicalDraft.serviceApi" nz-input placeholder="Business Code, Push USSD..."/>
+        </label>
+        <label>
+          Environment
+          <nz-select [(ngModel)]="technicalDraft.environment">
+            <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
+            <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
+            <nz-option nzValue="UAT+PRD" nzLabel="UAT+PRD"></nz-option>
+          </nz-select>
+        </label>
+        <label>
+          Technical Contact
+          <input [(ngModel)]="technicalDraft.technicalContact" nz-input placeholder="Name or team"/>
+        </label>
+        <label>
+          Auth Method
+          <input [(ngModel)]="technicalDraft.authMethod" nz-input placeholder="Pre-share Key (PSK), API Key..."/>
+        </label>
+        <label class="wide">
+          OwnCloud Folder
+          <input [(ngModel)]="technicalDraft.ownCloudFolderUrl" nz-input placeholder="https://owncloud..."/>
+        </label>
+        <label class="wide">
+          Form Notes
+          <textarea [(ngModel)]="technicalDraft.formNotes" nz-input rows="3" placeholder="Notes from the request form"></textarea>
+        </label>
+
+        <div class="technical-actions wide">
+          <button (click)="cancelTechnicalEditor()" nz-button nzType="default">Cancel</button>
+          <button (click)="saveTechnicalData()" nz-button nzType="primary">Save Technical Data</button>
+        </div>
       </div>
 
       <p *ngIf="importNotice" class="import-notice">{{ importNotice }}</p>

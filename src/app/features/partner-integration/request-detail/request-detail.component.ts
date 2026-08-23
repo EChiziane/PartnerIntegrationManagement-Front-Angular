@@ -18,6 +18,18 @@ interface WorkflowAction {
   patch: Partial<PartnerRequest>;
   tone?: 'primary' | 'default' | 'danger';
   requiresCredentialsText?: boolean;
+  requiresTechnicalData?: boolean;
+}
+
+interface TechnicalDraft {
+  publicPeerIpsText: string;
+  privateEndpoints: PartnerPrivateEndpoint[];
+  serviceApi: string;
+  environment: PartnerEnvironment;
+  technicalContact: string;
+  authMethod: string;
+  ownCloudFolderUrl: string;
+  formNotes: string;
 }
 
 @Component({
@@ -31,7 +43,9 @@ export class RequestDetailComponent implements OnInit {
   partner: Partner | undefined;
   events: TimelineEvent[] = [];
   isCredentialsEditorOpen = false;
+  isTechnicalEditorOpen = false;
   credentialsDraft = '';
+  technicalDraft: TechnicalDraft = this.emptyTechnicalDraft();
   importNotice = '';
   readonly flow: WorkflowStatus[] = [
     'BLOCKED',
@@ -88,6 +102,80 @@ export class RequestDetailComponent implements OnInit {
     return this.formData?.partnerServerIp || '-';
   }
 
+  canValidateForm(): boolean {
+    return this.hasTechnicalData(this.formData);
+  }
+
+  openTechnicalEditor(): void {
+    const formData = this.formData;
+    this.technicalDraft = {
+      publicPeerIpsText: formData?.publicPeerIps?.length ? formData.publicPeerIps.join('\n') : formData?.publicIp || '',
+      privateEndpoints: formData?.privateEndpoints?.length
+        ? formData.privateEndpoints.map(endpoint => ({...endpoint}))
+        : [{environment: formData?.environment || 'UAT+PRD', ip: formData?.partnerServerIp || '', port: formData?.uatPort || formData?.prdPort || ''}],
+      serviceApi: formData?.serviceApi || '',
+      environment: formData?.environment || 'UAT+PRD',
+      technicalContact: formData?.technicalContact || '',
+      authMethod: formData?.authMethod || '',
+      ownCloudFolderUrl: formData?.ownCloudFolderUrl || '',
+      formNotes: formData?.formNotes || ''
+    };
+    this.isTechnicalEditorOpen = true;
+  }
+
+  cancelTechnicalEditor(): void {
+    this.isTechnicalEditorOpen = false;
+    this.technicalDraft = this.emptyTechnicalDraft();
+  }
+
+  addPrivateEndpoint(): void {
+    this.technicalDraft.privateEndpoints.push({environment: 'UAT+PRD', ip: '', port: ''});
+  }
+
+  removePrivateEndpoint(index: number): void {
+    if (this.technicalDraft.privateEndpoints.length === 1) {
+      this.technicalDraft.privateEndpoints[0] = {environment: 'UAT+PRD', ip: '', port: ''};
+      return;
+    }
+    this.technicalDraft.privateEndpoints.splice(index, 1);
+  }
+
+  saveTechnicalData(): void {
+    if (!this.request || !this.partner) return;
+    const publicPeerIps = this.splitValues(this.technicalDraft.publicPeerIpsText);
+    const privateEndpoints = this.technicalDraft.privateEndpoints
+      .map(endpoint => ({
+        environment: endpoint.environment,
+        ip: endpoint.ip.trim(),
+        port: endpoint.port.trim()
+      }))
+      .filter(endpoint => endpoint.ip || endpoint.port);
+    const formData: RequestFormData = {
+      ...this.partnerIntegration.getRequestFormData(this.request, this.partner),
+      serviceApi: this.technicalDraft.serviceApi.trim(),
+      environment: this.technicalDraft.environment,
+      technicalContact: this.technicalDraft.technicalContact.trim(),
+      publicIp: publicPeerIps[0] || '',
+      publicPeerIps,
+      partnerServerIp: privateEndpoints.find(endpoint => endpoint.ip)?.ip || '',
+      uatPort: privateEndpoints.find(endpoint => endpoint.environment !== 'PRD' && endpoint.port)?.port || '',
+      prdPort: privateEndpoints.find(endpoint => endpoint.environment !== 'UAT' && endpoint.port)?.port || '',
+      privateEndpoints,
+      authMethod: this.technicalDraft.authMethod.trim(),
+      ownCloudFolderUrl: this.technicalDraft.ownCloudFolderUrl.trim(),
+      formNotes: this.technicalDraft.formNotes.trim()
+    };
+
+    this.partnerIntegration.updateRequest(this.request.id, {
+      formData,
+      formReceived: true,
+      formValidated: this.hasTechnicalData(formData) ? this.request.formValidated : false
+    }, 'VPN Integration Form Data Updated Manually');
+    this.importNotice = 'Manual technical data saved on this request.';
+    this.isTechnicalEditorOpen = false;
+    this.load();
+  }
+
   async importRequestForm(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -121,6 +209,13 @@ export class RequestDetailComponent implements OnInit {
 
   confirmAction(label: string, patch: Partial<PartnerRequest>): void {
     if (!this.request) return;
+    if (patch.formValidated && !this.canValidateForm()) {
+      this.modal.warning({
+        nzTitle: 'Technical data required',
+        nzContent: 'Fill the public peer and private IP endpoints manually, or import the VPN form, before validating this request.'
+      });
+      return;
+    }
 
     this.modal.confirm({
       nzTitle: 'Confirm workflow update',
@@ -149,9 +244,12 @@ export class RequestDetailComponent implements OnInit {
       }],
       FORM_VALIDATION: [{
         label: 'Form Validated',
-        description: 'Moves the request to Ready Statement.',
+        description: this.canValidateForm()
+          ? 'Moves the request to Ready Statement.'
+          : 'Import the VPN form or fill peer/endpoints manually before validation.',
         patch: {formValidated: true},
-        tone: 'primary'
+        tone: 'primary',
+        requiresTechnicalData: true
       }],
       READY_STATEMENT: [{
         label: 'Statement Created',
@@ -582,10 +680,24 @@ export class RequestDetailComponent implements OnInit {
     return clean.toLowerCase().replace(/\s+/g, '') === placeholder.toLowerCase().replace(/\s+/g, '') ? '' : clean;
   }
 
-  private hasTechnicalData(formData: RequestFormData): boolean {
-    return !!formData.publicIp
-      || !!formData.partnerServerIp
-      || !!formData.publicPeerIps?.length
-      || !!formData.privateEndpoints?.length;
+  private hasTechnicalData(formData?: RequestFormData): boolean {
+    return !!formData
+      && (!!formData.publicIp
+        || !!formData.partnerServerIp
+        || !!formData.publicPeerIps?.length
+        || !!formData.privateEndpoints?.length);
+  }
+
+  private emptyTechnicalDraft(): TechnicalDraft {
+    return {
+      publicPeerIpsText: '',
+      privateEndpoints: [{environment: 'UAT+PRD', ip: '', port: ''}],
+      serviceApi: '',
+      environment: 'UAT+PRD',
+      technicalContact: '',
+      authMethod: '',
+      ownCloudFolderUrl: '',
+      formNotes: ''
+    };
   }
 }

@@ -75,10 +75,9 @@
           <h2>Technical profile</h2>
         </div>
         <div class="import-inline">
-          <input #requestFormInput (change)="importRequestForm($event)" accept=".xls,.xlsx" hidden type="file"/>
-          <button (click)="requestFormInput.click()" [disabled]="!activeRequest" nz-button nzType="default">
-            <span nz-icon nzType="upload"></span>
-            Import VPN Form
+          <button (click)="openActiveRequest()" [disabled]="!activeRequest" nz-button nzType="default">
+            <span nz-icon nzType="partition"></span>
+            Open Request Pipeline
           </button>
         </div>
       </header>
@@ -191,7 +190,7 @@
     <div *ngIf="activeRequest.currentStatus !== 'BLOCKED'" class="step-actions">
       <button *ngIf="activeRequest.currentStatus === 'NEW'" (click)="confirmAction('Form and API Spec Sent', {formSent: true})" nz-button nzType="primary">Send Form/API Spec</button>
       <button *ngIf="activeRequest.currentStatus === 'WAITING_FORM'" (click)="confirmAction('VPN Integration Form Received', {formReceived: true})" nz-button nzType="primary">Mark VPN Form Received</button>
-      <button *ngIf="activeRequest.currentStatus === 'FORM_VALIDATION'" (click)="confirmAction('Form Validated', {formValidated: true})" nz-button nzType="primary">Validate Form</button>
+      <button *ngIf="activeRequest.currentStatus === 'FORM_VALIDATION'" (click)="confirmAction('Form Validated', {formValidated: true})" [disabled]="!canValidateActiveForm()" nz-button nzType="primary">Validate Form</button>
       <button *ngIf="activeRequest.currentStatus === 'READY_STATEMENT'" (click)="confirmAction('Statement Created', {statementCreated: true})" nz-button nzType="primary">Statement Created</button>
       <button *ngIf="activeRequest.currentStatus === 'READY_IMPLEMENTATION'" (click)="confirmAction('Sent to vOffice', {statementSent: true})" nz-button nzType="primary">Send to vOffice</button>
       <button *ngIf="activeRequest.currentStatus === 'WAITING_SIGNATURES'" (click)="confirmAction('Approval / Signatures Complete', {signaturesComplete: true, ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'})" nz-button nzType="primary">Approval Complete</button>
