@@ -284,7 +284,7 @@
 
     <article *ngFor="let request of requests" class="request-row">
       <div>
-        <strong>{{ partnerIntegration.typeLabel(request.type) }}</strong>
+        <strong>{{ request.title || partnerIntegration.typeLabel(request.type) }}</strong>
         <span>{{ request.nextAction }}</span>
       </div>
       <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">

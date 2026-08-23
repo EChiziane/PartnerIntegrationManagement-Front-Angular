@@ -101,7 +101,7 @@ export class PartnerIntegrationPdfService {
       margin: {left: margin, right: margin, bottom: 20},
       head: [[
         'Partner',
-        'Request Type',
+        'Request',
         'Status',
         'Owner',
         'Next Action',
@@ -113,7 +113,7 @@ export class PartnerIntegrationPdfService {
       ]],
       body: requests.map(request => [
         partners.find(partner => partner.id === request.partnerId)?.name || '-',
-        this.partnerIntegration.typeLabel(request.type),
+        request.title || this.partnerIntegration.typeLabel(request.type),
         this.partnerIntegration.statusLabel(request.currentStatus),
         request.currentOwner || '-',
         request.nextAction || '-',
@@ -181,7 +181,7 @@ export class PartnerIntegrationPdfService {
       margin: {left: margin, right: margin, bottom: 20},
       head: [['Request Type', 'Status', 'Owner', 'Next Action', 'Priority', 'Open Date', 'Follow-up', 'Blocker']],
       body: requests.map(request => [
-        this.partnerIntegration.typeLabel(request.type),
+        request.title || this.partnerIntegration.typeLabel(request.type),
         this.partnerIntegration.statusLabel(request.currentStatus),
         request.currentOwner || '-',
         request.nextAction || '-',

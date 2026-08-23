@@ -61,6 +61,7 @@ export interface Partner {
 export interface PartnerRequest {
   id: string;
   partnerId: string;
+  title?: string;
   type: RequestType;
   openDate: string;
   currentStatus: WorkflowStatus;

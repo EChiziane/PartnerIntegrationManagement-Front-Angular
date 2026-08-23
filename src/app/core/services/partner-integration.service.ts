@@ -103,10 +103,12 @@ export class PartnerIntegrationService {
     return updated;
   }
 
-  createRequest(partnerId: string, type: RequestType): PartnerRequest {
+  createRequest(partnerId: string, type: RequestType, patch: Partial<PartnerRequest> = {}): PartnerRequest {
     const state = this.state();
+    const requestId = this.id('request');
+    const {id: _id, partnerId: _partnerId, type: _type, ...safePatch} = patch;
     const request = this.recalculateRequest({
-      id: this.id('request'),
+      id: requestId,
       partnerId,
       type,
       openDate: this.today(),
@@ -132,11 +134,12 @@ export class PartnerIntegrationService {
       uatStatus: 'NOT_STARTED',
       handoverComplete: false,
       closeDate: null,
-      notes: ''
+      notes: '',
+      ...safePatch
     });
 
     state.requests.unshift(request);
-    state.events.unshift(this.event(request.id, 'Request Opened', this.typeLabel(type)));
+    state.events.unshift(this.event(request.id, 'Request Opened', request.title || this.typeLabel(type)));
     this.touchPartner(state, partnerId);
     this.save(state);
     return request;
@@ -176,7 +179,7 @@ export class PartnerIntegrationService {
           requestId: request.id,
           partnerName: partner?.name || 'Unknown Partner',
           requestType: request.type,
-          title: request.nextAction,
+          title: request.title || request.nextAction,
           owner: request.currentOwner,
           priority: request.priority,
           dueDate: request.followUpDate,

@@ -39,6 +39,7 @@ export class PartnersComponent implements OnInit {
   requestType: RequestType = 'NEW_INTEGRATION';
   isCreateVisible = false;
   importNotice = '';
+  private createRequestFromImportedForm = false;
   readonly businessOwnerSuggestions = [
     'Business Development',
     'Financial Services',
@@ -131,16 +132,29 @@ export class PartnersComponent implements OnInit {
   openCreate(): void {
     this.resetDraft();
     this.importNotice = '';
+    this.createRequestFromImportedForm = false;
     this.isCreateVisible = true;
   }
 
   createPartner(): void {
     if (!this.draft.name.trim()) return;
     const partner = this.partnerIntegration.createPartner(this.buildPartnerPayload());
+    const request = this.createRequestFromImportedForm
+      ? this.partnerIntegration.createRequest(partner.id, 'NEW_INTEGRATION', {
+        title: this.importedFormRequestTitle(partner.name),
+        formSent: true,
+        formReceived: true,
+        formValidated: false,
+        notes: 'Created automatically from imported VPN partner form.'
+      })
+      : null;
+
     this.isCreateVisible = false;
     this.resetDraft();
+    this.importNotice = '';
+    this.createRequestFromImportedForm = false;
     this.reload();
-    this.router.navigate(['/app/partner', partner.id]);
+    this.router.navigate(request ? ['/app/request', request.id] : ['/app/partner', partner.id]);
   }
 
   closeCreate(): void {
@@ -180,7 +194,8 @@ export class PartnersComponent implements OnInit {
         authMethod: this.partnerCell(vpnRows, 'Authentication Method') || this.draft.authMethod
       };
 
-      this.importNotice = `Imported ${file.name}: ${privateEndpoints.length} endpoint(s), ${publicPeers.length} peer IP(s).`;
+      this.createRequestFromImportedForm = true;
+      this.importNotice = `Imported ${file.name}: ${privateEndpoints.length} endpoint(s), ${publicPeers.length} peer IP(s). Request will start in Form Validation.`;
     } catch (error) {
       console.error('Partner form import failed', error);
       this.importNotice = 'Could not import this Excel form. Please check if the file is the partner VPN form.';
@@ -304,6 +319,10 @@ export class PartnersComponent implements OnInit {
       ownCloudFolderUrl: '',
       formNotes: ''
     };
+  }
+
+  private importedFormRequestTitle(partnerName: string): string {
+    return `New Integration VPN between eMola and ${partnerName.trim()}`;
   }
 
   private sheetRows(

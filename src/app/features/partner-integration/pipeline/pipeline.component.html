@@ -22,7 +22,7 @@
     <article *ngFor="let request of filteredRequests" class="request-card">
       <div>
         <strong>{{ partnerName(request.partnerId) }}</strong>
-        <span>{{ partnerIntegration.typeLabel(request.type) }}</span>
+        <span>{{ request.title || partnerIntegration.typeLabel(request.type) }}</span>
       </div>
       <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
         {{ partnerIntegration.statusLabel(request.currentStatus) }}
