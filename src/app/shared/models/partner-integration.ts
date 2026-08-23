@@ -28,7 +28,7 @@ export type VpnStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'UP' | 'DOWN';
 export type TestStatus = 'NOT_TESTED' | 'IN_PROGRESS' | 'PASS' | 'FAIL';
 export type UatStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'PASS' | 'ISSUE' | 'WAITING_PARTNER';
 export type TaskPriority = 'P1' | 'P2' | 'P3' | 'P4';
-export type PartnerEnvironment = 'UAT' | 'PRD' | 'UAT + PRD';
+export type PartnerEnvironment = 'UAT' | 'PRD' | 'UAT+PRD';
 
 export interface PartnerPrivateEndpoint {
   environment: PartnerEnvironment;

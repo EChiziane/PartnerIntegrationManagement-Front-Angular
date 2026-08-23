@@ -425,13 +425,13 @@ export class PartnerIntegrationService {
 
   private seedState(): PartnerState {
     const partners: Partner[] = [
-      ['partner-a', 'Alpha Pay', 'Business Dept', 'Carlos Alpha', '+258 84 100 2001', 'alpha@example.com', 'Payment API', 'UAT + PRD', '139.84.234.187', '10.177.0.10', '8520', '9921'],
-      ['partner-b', 'Beta Lotto', 'Business Dept', 'Ana Beta', '+258 84 100 2002', 'beta@example.com', 'USSD / API', 'UAT + PRD', '72.61.147.82', '10.177.0.20', '8600', '9600'],
-      ['partner-c', 'Thunes', 'Business Dept', 'Ousmane', '+258 84 100 2003', 'thunes@example.com', 'Remittance API', 'UAT + PRD', '52.209.193.244', '52.209.248.254', '8443', '9443'],
-      ['partner-d', 'OlaLotto', 'Business Dept', 'Shan', '+258 84 100 2004', 'ola@example.com', 'USSD / API', 'UAT + PRD', '13.245.98.196', '172.31.4.206', '10021', '10020'],
-      ['partner-e', 'Onde Tem', 'Business Dept', 'Xefino Jose', '+258 84 100 2005', 'onde@example.com', 'USSD / API', 'UAT + PRD', '34.1.210.78', '10.218.0.2', '8055', '9055'],
+      ['partner-a', 'Alpha Pay', 'Business Dept', 'Carlos Alpha', '+258 84 100 2001', 'alpha@example.com', 'Payment API', 'UAT+PRD', '139.84.234.187', '10.177.0.10', '8520', '9921'],
+      ['partner-b', 'Beta Lotto', 'Business Dept', 'Ana Beta', '+258 84 100 2002', 'beta@example.com', 'USSD / API', 'UAT+PRD', '72.61.147.82', '10.177.0.20', '8600', '9600'],
+      ['partner-c', 'Thunes', 'Business Dept', 'Ousmane', '+258 84 100 2003', 'thunes@example.com', 'Remittance API', 'UAT+PRD', '52.209.193.244', '52.209.248.254', '8443', '9443'],
+      ['partner-d', 'OlaLotto', 'Business Dept', 'Shan', '+258 84 100 2004', 'ola@example.com', 'USSD / API', 'UAT+PRD', '13.245.98.196', '172.31.4.206', '10021', '10020'],
+      ['partner-e', 'Onde Tem', 'Business Dept', 'Xefino Jose', '+258 84 100 2005', 'onde@example.com', 'USSD / API', 'UAT+PRD', '34.1.210.78', '10.218.0.2', '8055', '9055'],
       ['partner-f', 'Recarga Aki', 'Business Dept', 'Support Desk', '+258 84 100 2006', 'support@recarga.example', 'Connectivity', 'UAT', '102.207.223.37', '10.0.1.12', '8686', '8685'],
-      ['partner-g', '888Bet', 'Business Dept', 'Partner Tech', '+258 84 100 2007', 'tech@888.example', 'Gaming API', 'UAT + PRD', '139.84.238.180', '139.84.238.180', '443', '22'],
+      ['partner-g', '888Bet', 'Business Dept', 'Partner Tech', '+258 84 100 2007', 'tech@888.example', 'Gaming API', 'UAT+PRD', '139.84.238.180', '139.84.238.180', '443', '22'],
       ['partner-h', 'VAARGO', 'Business Dept', 'Operations', '+258 84 100 2008', 'ops@vaargo.example', 'Push USSD', 'PRD', '197.248.224.119', '197.248.224.119', '8443', '9443']
     ].map(([id, name, businessOwner, technicalContact, phone, email, serviceApi, environment, publicIp, partnerServerIp, uatPort, prdPort]) => ({
       id,

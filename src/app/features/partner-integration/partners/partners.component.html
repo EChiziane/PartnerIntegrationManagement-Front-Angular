@@ -169,7 +169,7 @@
           <nz-select [(ngModel)]="draft.environment">
             <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
             <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
-            <nz-option nzValue="UAT + PRD" nzLabel="UAT + PRD"></nz-option>
+            <nz-option nzValue="UAT+PRD" nzLabel="UAT+PRD"></nz-option>
           </nz-select>
         </label>
         <label>Auth Method <input [(ngModel)]="draft.authMethod" nz-input placeholder="API Key, Basic, OAuth, mTLS..."/></label>
@@ -225,7 +225,7 @@
               <nz-select [(ngModel)]="endpoint.environment">
                 <nz-option nzValue="UAT" nzLabel="UAT"></nz-option>
                 <nz-option nzValue="PRD" nzLabel="PRD"></nz-option>
-                <nz-option nzValue="UAT + PRD" nzLabel="UAT + PRD"></nz-option>
+                <nz-option nzValue="UAT+PRD" nzLabel="UAT+PRD"></nz-option>
               </nz-select>
             </label>
             <label>

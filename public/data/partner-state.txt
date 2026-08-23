@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-23.6",
+  "version": "2026-08-23.7",
   "partners": [
     {
       "id": "partner-a",
@@ -9,7 +9,7 @@
       "phone": "+258 84 100 2001",
       "email": "alpha@example.com",
       "serviceApi": "Payment API",
-      "environment": "UAT + PRD",
+      "environment": "UAT+PRD",
       "publicIp": "139.84.234.187",
       "publicPeerIps": [
         "139.84.234.187"
@@ -43,7 +43,7 @@
       "phone": "+258 84 100 2002",
       "email": "beta@example.com",
       "serviceApi": "USSD / API",
-      "environment": "UAT + PRD",
+      "environment": "UAT+PRD",
       "publicIp": "72.61.147.82",
       "publicPeerIps": [
         "72.61.147.82"
@@ -77,7 +77,7 @@
       "phone": "+258 84 100 2003",
       "email": "thunes@example.com",
       "serviceApi": "Remittance API",
-      "environment": "UAT + PRD",
+      "environment": "UAT+PRD",
       "publicIp": "52.209.193.244",
       "partnerServerIp": "52.209.248.254",
       "uatPort": "8443",
@@ -93,7 +93,7 @@
       "phone": "+258 84 100 2004",
       "email": "ola@example.com",
       "serviceApi": "USSD / API",
-      "environment": "UAT + PRD",
+      "environment": "UAT+PRD",
       "publicIp": "13.245.98.196",
       "partnerServerIp": "172.31.4.206",
       "uatPort": "10021",
@@ -109,7 +109,7 @@
       "phone": "+258 84 100 2005",
       "email": "onde@example.com",
       "serviceApi": "USSD / API",
-      "environment": "UAT + PRD",
+      "environment": "UAT+PRD",
       "publicIp": "34.1.210.78",
       "partnerServerIp": "10.218.0.2",
       "uatPort": "8055",
@@ -141,7 +141,7 @@
       "phone": "+258 84 100 2007",
       "email": "tech@888.example",
       "serviceApi": "Gaming API",
-      "environment": "UAT + PRD",
+      "environment": "UAT+PRD",
       "publicIp": "139.84.238.180",
       "partnerServerIp": "139.84.238.180",
       "uatPort": "443",

@@ -54,9 +54,9 @@ export class PartnersComponent implements OnInit {
     phone: '',
     email: '',
     serviceApi: 'Business Code',
-    environment: 'UAT + PRD' as Partner['environment'],
+    environment: 'UAT+PRD' as Partner['environment'],
     publicPeerIpsText: '',
-    privateEndpoints: [{environment: 'UAT + PRD', ip: '', port: ''}],
+    privateEndpoints: [{environment: 'UAT+PRD', ip: '', port: ''}],
     authMethod: '',
     ownCloudFolderUrl: '',
     formNotes: ''
@@ -175,12 +175,12 @@ export class PartnersComponent implements OnInit {
   }
 
   addPrivateEndpoint(): void {
-    this.draft.privateEndpoints.push({environment: 'UAT + PRD', ip: '', port: ''});
+    this.draft.privateEndpoints.push({environment: 'UAT+PRD', ip: '', port: ''});
   }
 
   removePrivateEndpoint(index: number): void {
     if (this.draft.privateEndpoints.length === 1) {
-      this.draft.privateEndpoints[0] = {environment: 'UAT + PRD', ip: '', port: ''};
+      this.draft.privateEndpoints[0] = {environment: 'UAT+PRD', ip: '', port: ''};
       return;
     }
 
@@ -253,9 +253,9 @@ export class PartnersComponent implements OnInit {
       phone: '',
       email: '',
       serviceApi: 'Business Code',
-      environment: 'UAT + PRD',
+      environment: 'UAT+PRD',
       publicPeerIpsText: '',
-      privateEndpoints: [{environment: 'UAT + PRD', ip: '', port: ''}],
+      privateEndpoints: [{environment: 'UAT+PRD', ip: '', port: ''}],
       authMethod: '',
       ownCloudFolderUrl: '',
       formNotes: ''
