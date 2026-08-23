@@ -26,7 +26,8 @@ const companyRows = [
   pad(['e-Mola Account (OTP)', '', '']),
   pad(['Representative Name', '', '']),
   pad(['Email Address', '', '']),
-  pad(['Contact Phone Number', '', ''])
+  pad(['Contact Phone Number', '', '']),
+  pad(['Group Link', '', ''])
 ];
 
 const nextRows = [title, description, ...companyRows, ...technicalRows];

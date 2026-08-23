@@ -12,6 +12,7 @@ interface PartnerDraft {
   name: string;
   eMolaAccountOtp: string;
   representativeName: string;
+  groupLink: string;
   businessOwner: string;
   technicalContact: string;
   phone: string;
@@ -55,6 +56,7 @@ export class PartnersComponent implements OnInit {
     name: '',
     eMolaAccountOtp: '',
     representativeName: '',
+    groupLink: '',
     businessOwner: '',
     technicalContact: '',
     phone: '',
@@ -143,23 +145,25 @@ export class PartnersComponent implements OnInit {
   createPartner(): void {
     if (!this.draft.name.trim()) return;
     const partner = this.partnerIntegration.createPartner(this.buildPartnerPayload());
-    const request = this.createRequestFromImportedForm
-      ? this.partnerIntegration.createRequest(partner.id, 'NEW_INTEGRATION', {
-        title: this.importedFormRequestTitle(partner.name),
-        formData: this.buildRequestFormDataFromDraft(partner.name),
-        formSent: true,
-        formReceived: true,
-        formValidated: false,
-        notes: 'Created automatically from imported VPN partner form.'
-      })
-      : null;
+    const formData = this.buildRequestFormDataFromDraft(partner.name);
+    const hasTechnicalData = this.hasTechnicalData(formData);
+    const request = this.partnerIntegration.createRequest(partner.id, 'NEW_INTEGRATION', {
+      title: this.importedFormRequestTitle(partner.name),
+      formData,
+      formSent: hasTechnicalData,
+      formReceived: hasTechnicalData,
+      formValidated: hasTechnicalData,
+      notes: hasTechnicalData
+        ? 'Created automatically from imported and validated VPN partner form.'
+        : 'Created from quick partner registration. Waiting for partner form.'
+    });
 
     this.isCreateVisible = false;
     this.resetDraft();
     this.importNotice = '';
     this.createRequestFromImportedForm = false;
     this.reload();
-    this.router.navigate(request ? ['/app/request', request.id] : ['/app/partner', partner.id]);
+    this.router.navigate(['/app/request', request.id]);
   }
 
   closeCreate(): void {
@@ -205,7 +209,7 @@ export class PartnersComponent implements OnInit {
       };
 
       this.createRequestFromImportedForm = true;
-      this.importNotice = `Imported ${file.name}: ${privateEndpoints.length} endpoint(s), ${publicPeers.length} peer IP(s). Request will start in Form Validation.`;
+      this.importNotice = `Imported ${file.name}: ${privateEndpoints.length} endpoint(s), ${publicPeers.length} peer IP(s). Request will start in Ready Statement.`;
     } catch (error) {
       console.error('Partner form import failed', error);
       this.importNotice = 'Could not import this Excel form. Please check if the file is the partner VPN form.';
@@ -362,6 +366,7 @@ export class PartnersComponent implements OnInit {
       name: '',
       eMolaAccountOtp: '',
       representativeName: '',
+      groupLink: '',
       businessOwner: '',
       technicalContact: '',
       phone: '',
@@ -484,6 +489,7 @@ export class PartnersComponent implements OnInit {
       name: this.draft.name.trim(),
       eMolaAccountOtp: this.draft.eMolaAccountOtp.trim(),
       representativeName: this.draft.representativeName.trim(),
+      groupLink: this.draft.groupLink.trim(),
       businessOwner: this.draft.businessOwner.trim(),
       technicalContact: formData.technicalContact,
       phone: formData.phone,
@@ -522,6 +528,7 @@ export class PartnersComponent implements OnInit {
       companyName,
       eMolaAccountOtp: this.draft.eMolaAccountOtp.trim(),
       representativeName: this.draft.representativeName.trim(),
+      groupLink: this.draft.groupLink.trim(),
       businessOwner: this.draft.businessOwner.trim(),
       technicalContact: this.draft.technicalContact.trim(),
       phone: this.draft.phone.trim(),
@@ -539,5 +546,12 @@ export class PartnersComponent implements OnInit {
       formNotes: this.draft.formNotes.trim(),
       importedAt: this.createRequestFromImportedForm ? new Date().toISOString() : ''
     };
+  }
+
+  private hasTechnicalData(formData: RequestFormData): boolean {
+    return !!formData.publicIp
+      || !!formData.partnerServerIp
+      || !!formData.publicPeerIps?.length
+      || !!formData.privateEndpoints?.length;
   }
 }

@@ -198,10 +198,16 @@ export class PartnerDetailComponent implements OnInit {
         name: formData.companyName || this.partner.name,
         eMolaAccountOtp: formData.eMolaAccountOtp || this.partner.eMolaAccountOtp || '',
         representativeName: formData.representativeName || this.partner.representativeName || '',
+        groupLink: formData.groupLink || this.partner.groupLink || '',
         phone: formData.phone || this.partner.phone,
         email: formData.email || this.partner.email
       });
-      this.partnerIntegration.updateRequest(request.id, {formData}, 'Request Form Data Updated');
+      this.partnerIntegration.updateRequest(request.id, {
+        formData,
+        formSent: true,
+        formReceived: true,
+        formValidated: this.hasTechnicalData(formData)
+      }, this.hasTechnicalData(formData) ? 'Request Form Imported And Validated' : 'Request Form Data Updated');
       this.importNotice = `Imported ${file.name}: request form data updated.`;
       this.load();
     } catch (error) {
@@ -339,6 +345,7 @@ export class PartnerDetailComponent implements OnInit {
       companyName: this.partnerCell(vpnRows, 'Company Name') || companyName,
       eMolaAccountOtp: this.partnerCell(vpnRows, 'e-Mola Account (OTP)') || current?.eMolaAccountOtp || this.partner?.eMolaAccountOtp || '',
       representativeName: this.partnerCell(vpnRows, 'Representative Name') || current?.representativeName || this.partner?.representativeName || '',
+      groupLink: current?.groupLink || this.partner?.groupLink || '',
       businessOwner: current?.businessOwner || this.partner?.businessOwner || '',
       technicalContact: this.partnerCell(vpnRows, 'Name') || current?.technicalContact || this.partner?.technicalContact || '',
       phone: institutionPhone || this.partnerCell(vpnRows, 'Cell Phone') || current?.phone || this.partner?.phone || '',
@@ -425,5 +432,12 @@ export class PartnerDetailComponent implements OnInit {
   private cleanPlaceholder(value: string, placeholder: string): string {
     const clean = String(value || '').trim();
     return clean.toLowerCase().replace(/\s+/g, '') === placeholder.toLowerCase().replace(/\s+/g, '') ? '' : clean;
+  }
+
+  private hasTechnicalData(formData: RequestFormData): boolean {
+    return !!formData.publicIp
+      || !!formData.partnerServerIp
+      || !!formData.publicPeerIps?.length
+      || !!formData.privateEndpoints?.length;
   }
 }

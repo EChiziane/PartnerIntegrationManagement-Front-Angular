@@ -166,6 +166,7 @@ export class PartnerIntegrationService {
 
     state.requests.unshift(request);
     state.events.unshift(this.event(request.id, 'Request Opened', request.title || this.typeLabel(type)));
+    this.syncConnectionFromRequest(state, request);
     this.touchPartner(state, partnerId);
     this.save(state);
     return request;
@@ -532,7 +533,11 @@ export class PartnerIntegrationService {
   }
 
   private syncConnectionFromRequest(state: PartnerState, request: PartnerRequest): void {
-    if (request.currentStatus !== 'CLOSED' || request.type === 'CONNECTIVITY_SUPPORT') return;
+    const formData = request.formData;
+    const canSyncTechnicalSnapshot = request.type !== 'CONNECTIVITY_SUPPORT'
+      && !!formData
+      && this.hasTechnicalData(formData);
+    if (request.currentStatus !== 'CLOSED' && !canSyncTechnicalSnapshot) return;
     const partner = state.partners.find(item => item.id === request.partnerId);
     if (!partner) return;
     const connections = state.connections || this.normalizeConnections(state, state.partners);
@@ -565,9 +570,19 @@ export class PartnerIntegrationService {
   private connectionHealth(request?: PartnerRequest): PartnerConnection['health'] {
     if (!request) return 'NOT_ESTABLISHED';
     if (request.vpnStatus === 'DOWN' || request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL') return 'DOWN';
+    if (this.hasTechnicalData(request.formData) && request.vpnStatus !== 'UP') return 'DOWN';
     if (request.currentStatus === 'TROUBLESHOOTING' || request.uatStatus === 'ISSUE') return 'DEGRADED';
     if (request.vpnStatus === 'UP' && this.requiredConnectivityPassed(request) && request.uatStatus === 'PASS') return 'HEALTHY';
+    if (!this.hasTechnicalData(request.formData) && request.vpnStatus !== 'UP') return 'NOT_ESTABLISHED';
     return 'DEGRADED';
+  }
+
+  private hasTechnicalData(formData?: RequestFormData): boolean {
+    return !!formData
+      && (!!formData.publicIp
+        || !!formData.partnerServerIp
+        || !!formData.publicPeerIps?.length
+        || !!formData.privateEndpoints?.length);
   }
 
   private withRequestData(request: PartnerRequest, partners: Partner[]): PartnerRequest {
@@ -609,6 +624,7 @@ export class PartnerIntegrationService {
       companyName: partner?.name || '',
       eMolaAccountOtp: partner?.eMolaAccountOtp || '',
       representativeName: partner?.representativeName || partner?.technicalContact || '',
+      groupLink: partner?.groupLink || '',
       businessOwner: partner?.businessOwner || '',
       technicalContact: partner?.technicalContact || '',
       phone: partner?.phone || '',

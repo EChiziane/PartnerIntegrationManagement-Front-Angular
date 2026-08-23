@@ -1,7 +1,8 @@
 {
-  "version": "2026-08-23.prod.3",
+  "version": "2026-08-23.prod.4",
   "partners": [
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Carlos Alpha",
       "id": "partner-2",
@@ -37,6 +38,7 @@
       "lastActivity": "2026-08-15"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Ana Beta",
       "id": "partner-3",
@@ -72,6 +74,7 @@
       "lastActivity": "2026-08-14"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Ousmane",
       "id": "partner-4",
@@ -96,6 +99,7 @@
       "lastActivity": "2026-07-15"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-5",
@@ -118,6 +122,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Shan - 869131313",
       "id": "partner-6",
@@ -163,6 +168,7 @@
       "lastActivity": "2026-07-15"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Micheal Akinwonmi- 2347038102474",
       "id": "partner-7",
@@ -198,6 +204,7 @@
       "lastActivity": "2026-07-15"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Xefino José - 876337381",
       "id": "partner-8",
@@ -233,6 +240,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Jumaa Kiswagara '+25255754378867",
       "id": "partner-9",
@@ -308,6 +316,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "tech@e-davinci.com\n+258 83 673 5250",
       "id": "partner-10",
@@ -343,6 +352,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Alirio Figueiredo\n849826065",
       "id": "partner-11",
@@ -378,6 +388,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Ayod Arune\n'877604760",
       "id": "partner-12",
@@ -413,6 +424,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Angelino Nhampossa\n'+258846532574",
       "id": "partner-13",
@@ -448,6 +460,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Gerardio Chiluvane\n878893290",
       "id": "partner-14",
@@ -513,6 +526,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "+258 82 389 6874\nElton B. Chidjoto",
       "id": "partner-15",
@@ -548,6 +562,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "84 476 4990\nJorge Loureiro",
       "id": "partner-16",
@@ -594,6 +609,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Camiro Fonseca\n'+25870969574",
       "id": "partner-17",
@@ -629,6 +645,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Prosperino Acacio António\n+258 870345291",
       "id": "partner-18",
@@ -664,6 +681,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Octávio Magaia\n+258 840 358 010",
       "id": "partner-19",
@@ -699,6 +717,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Marin Babara\n'+37369233061",
       "id": "partner-20",
@@ -744,6 +763,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "+258 84 637 9977\nPiedoso Dos Santos",
       "id": "partner-21",
@@ -766,6 +786,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Mussagy Cassamo\n258 846441124",
       "id": "partner-22",
@@ -801,6 +822,7 @@
       "lastActivity": "2026-07-17"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Jeremias Dinis Fondo\n844386747\njeremiasfondo@gmail.com",
       "id": "partner-23",
@@ -846,6 +868,7 @@
       "lastActivity": "2026-07-18"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Grace Kyeyune\ngrace.kyeyune@888africa.com\n'+256776847346",
       "id": "partner-24",
@@ -881,6 +904,7 @@
       "lastActivity": "2026-07-19"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "William Cossa\nwilliam@unitec.co.mz\n'+258871979615",
       "id": "partner-25",
@@ -926,6 +950,7 @@
       "lastActivity": "2026-07-20"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Iaroslav Gubaev\niaroslav.gubaev@b2tech.com",
       "id": "partner-26",
@@ -971,6 +996,7 @@
       "lastActivity": "2026-07-21"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Happy\n86 146 9150",
       "id": "partner-27",
@@ -1006,6 +1032,7 @@
       "lastActivity": "2026-07-22"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Munir Bragança\n258845911289\nmunir.braganca@bragalink.co.mz",
       "id": "partner-28",
@@ -1041,6 +1068,7 @@
       "lastActivity": "2026-07-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-29",
@@ -1063,6 +1091,7 @@
       "lastActivity": "2026-07-24"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Adérito Mufume\naderito.muffins@taaqui.co.mz\n'258 858782674",
       "id": "partner-30",
@@ -1098,6 +1127,7 @@
       "lastActivity": "2026-07-25"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Octavio Cossa\nmtvamosmz@gmail.com\n+258844747755",
       "id": "partner-31",
@@ -1133,6 +1163,7 @@
       "lastActivity": "2026-07-26"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-32",
@@ -1155,6 +1186,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-33",
@@ -1177,6 +1209,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-34",
@@ -1199,6 +1232,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-35",
@@ -1221,6 +1255,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-36",
@@ -1243,6 +1278,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-37",
@@ -1265,6 +1301,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-38",
@@ -1287,6 +1324,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-39",
@@ -1309,6 +1347,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Yasser Nazir\n+258 862212157",
       "id": "partner-40",
@@ -1344,6 +1383,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "SAVE MOZ \n258823085756",
       "id": "partner-41",
@@ -1389,6 +1429,7 @@
       "lastActivity": "2026-07-16"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-42",
@@ -1411,6 +1452,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-43",
@@ -1433,6 +1475,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-44",
@@ -1455,6 +1498,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-45",
@@ -1477,6 +1521,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-46",
@@ -1499,6 +1544,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-47",
@@ -1521,6 +1567,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-48",
@@ -1543,6 +1590,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Heitor Ferreira\n'+258842171200",
       "id": "partner-49",
@@ -1578,6 +1626,7 @@
       "lastActivity": "2026-08-10"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-50",
@@ -1600,6 +1649,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-51",
@@ -1622,6 +1672,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-52",
@@ -1644,6 +1695,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Zelito Atumane Saide\n'842520280\nzelitosaide83@gmail.com",
       "id": "partner-53",
@@ -1679,6 +1731,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "OPTIMIZE ADS, E.I.\n258867912790\nnuferdebetino2016@gmail.com",
       "id": "partner-54",
@@ -1714,6 +1767,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-55",
@@ -1736,6 +1790,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "",
       "id": "partner-56",
@@ -1758,6 +1813,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Gil Macarringue\n+258 82 904 9295",
       "id": "partner-57",
@@ -1793,6 +1849,7 @@
       "lastActivity": "2026-08-10"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Florinda Tembe\n258846248072",
       "id": "partner-",
@@ -1859,6 +1916,7 @@
       "notes": "Simulation: Statement approved; waiting for IP Core.",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "ALPHA PAY",
         "eMolaAccountOtp": "",
         "representativeName": "Carlos Alpha",
@@ -1922,6 +1980,7 @@
       "notes": "Simulation: IP Core and IT/FW complete; should enter Ready for Test.",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "BETA LOTTO",
         "eMolaAccountOtp": "",
         "representativeName": "Ana Beta",
@@ -1985,6 +2044,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Thunes",
         "eMolaAccountOtp": "",
         "representativeName": "Ousmane",
@@ -2037,6 +2097,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Wiremit",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -2087,6 +2148,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "OlaLotto",
         "eMolaAccountOtp": "",
         "representativeName": "Shan - 869131313",
@@ -2160,6 +2222,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "AlphaConnect",
         "eMolaAccountOtp": "",
         "representativeName": "Micheal Akinwonmi- 2347038102474",
@@ -2223,6 +2286,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Onde Tem",
         "eMolaAccountOtp": "",
         "representativeName": "Xefino José - 876337381",
@@ -2286,6 +2350,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Bionic",
         "eMolaAccountOtp": "",
         "representativeName": "Jumaa Kiswagara '+25255754378867",
@@ -2389,6 +2454,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "E-Davinci",
         "eMolaAccountOtp": "",
         "representativeName": "tech@e-davinci.com\n+258 83 673 5250",
@@ -2452,6 +2518,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Indicos seguros",
         "eMolaAccountOtp": "",
         "representativeName": "Alirio Figueiredo\n849826065",
@@ -2515,6 +2582,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Sociedade moçambicana de serviços e transformação digital",
         "eMolaAccountOtp": "",
         "representativeName": "Ayod Arune\n'877604760",
@@ -2578,6 +2646,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Ac Tech",
         "eMolaAccountOtp": "",
         "representativeName": "Angelino Nhampossa\n'+258846532574",
@@ -2641,6 +2710,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Confianca Seguros",
         "eMolaAccountOtp": "",
         "representativeName": "Gerardio Chiluvane\n878893290",
@@ -2734,6 +2804,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "AraSul",
         "eMolaAccountOtp": "",
         "representativeName": "+258 82 389 6874\nElton B. Chidjoto",
@@ -2797,6 +2868,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Recarga Aki",
         "eMolaAccountOtp": "",
         "representativeName": "84 476 4990\nJorge Loureiro",
@@ -2871,6 +2943,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Alpha Media",
         "eMolaAccountOtp": "",
         "representativeName": "Camiro Fonseca\n'+25870969574",
@@ -2934,6 +3007,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Grupo Vim",
         "eMolaAccountOtp": "",
         "representativeName": "Prosperino Acacio António\n+258 870345291",
@@ -2997,6 +3071,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Artec",
         "eMolaAccountOtp": "",
         "representativeName": "Octávio Magaia\n+258 840 358 010",
@@ -3060,6 +3135,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Sporty",
         "eMolaAccountOtp": "",
         "representativeName": "Marin Babara\n'+37369233061",
@@ -3133,6 +3209,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Am Creative",
         "eMolaAccountOtp": "",
         "representativeName": "+258 84 637 9977\nPiedoso Dos Santos",
@@ -3183,6 +3260,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Gesfrota",
         "eMolaAccountOtp": "",
         "representativeName": "Mussagy Cassamo\n258 846441124",
@@ -3246,6 +3324,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Amor e Desejo",
         "eMolaAccountOtp": "",
         "representativeName": "Jeremias Dinis Fondo\n844386747\njeremiasfondo@gmail.com",
@@ -3319,6 +3398,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "888Bet",
         "eMolaAccountOtp": "",
         "representativeName": "Grace Kyeyune\ngrace.kyeyune@888africa.com\n'+256776847346",
@@ -3382,6 +3462,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Unitec",
         "eMolaAccountOtp": "",
         "representativeName": "William Cossa\nwilliam@unitec.co.mz\n'+258871979615",
@@ -3455,6 +3536,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Fidotech",
         "eMolaAccountOtp": "",
         "representativeName": "Iaroslav Gubaev\niaroslav.gubaev@b2tech.com",
@@ -3528,6 +3610,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Aika",
         "eMolaAccountOtp": "",
         "representativeName": "Happy\n86 146 9150",
@@ -3591,6 +3674,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "BragaLink",
         "eMolaAccountOtp": "",
         "representativeName": "Munir Bragança\n258845911289\nmunir.braganca@bragalink.co.mz",
@@ -3654,6 +3738,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Go-hosting",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -3704,6 +3789,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "TaAqui",
         "eMolaAccountOtp": "",
         "representativeName": "Adérito Mufume\naderito.muffins@taaqui.co.mz\n'258 858782674",
@@ -3767,6 +3853,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "VM VAMOS",
         "eMolaAccountOtp": "",
         "representativeName": "Octavio Cossa\nmtvamosmz@gmail.com\n+258844747755",
@@ -3830,6 +3917,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Jm Serviços",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -3880,6 +3968,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Tapago",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -3930,6 +4019,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Instituto Medio Politecnico de Moçambique",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -3980,6 +4070,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "BCX",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4030,6 +4121,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Karona 24h",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4080,6 +4172,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Sahara Games",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4130,6 +4223,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "EML SERVICE",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4180,6 +4274,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "NetHost",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4230,6 +4325,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "VOLET",
         "eMolaAccountOtp": "",
         "representativeName": "Yasser Nazir\n+258 862212157",
@@ -4293,6 +4389,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Save Moz",
         "eMolaAccountOtp": "",
         "representativeName": "SAVE MOZ \n258823085756",
@@ -4366,6 +4463,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Hotspot (betpawa)",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4416,6 +4514,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Kendras",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4466,6 +4565,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "DKeventos",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4516,6 +4616,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "SESPE Project  CEDSIF",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4566,6 +4667,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Thembani",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4616,6 +4718,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Bet77",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4666,6 +4769,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "SupremoGo",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4716,6 +4820,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "UBAZZAR",
         "eMolaAccountOtp": "",
         "representativeName": "Heitor Ferreira\n'+258842171200",
@@ -4779,6 +4884,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Teledata",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4829,6 +4935,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Cafre Market",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4879,6 +4986,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Hypertech",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -4929,6 +5037,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "ZAAS Tec",
         "eMolaAccountOtp": "",
         "representativeName": "Zelito Atumane Saide\n'842520280\nzelitosaide83@gmail.com",
@@ -4992,6 +5101,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "OPTIMIZEAds",
         "eMolaAccountOtp": "",
         "representativeName": "OPTIMIZE ADS, E.I.\n258867912790\nnuferdebetino2016@gmail.com",
@@ -5055,6 +5165,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Onca-Fastako",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -5105,6 +5216,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Digitalehealth",
         "eMolaAccountOtp": "",
         "representativeName": "",
@@ -5155,6 +5267,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Ted",
         "eMolaAccountOtp": "",
         "representativeName": "Gil Macarringue\n+258 82 904 9295",
@@ -5218,6 +5331,7 @@
       "notes": "",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "Check Mate",
         "eMolaAccountOtp": "",
         "representativeName": "Florinda Tembe\n258846248072",
@@ -5657,6 +5771,7 @@
     {
       "id": "connection-partner-2",
       "partnerId": "partner-2",
+      "groupLink": "",
       "companyName": "ALPHA PAY",
       "eMolaAccountOtp": "",
       "representativeName": "Carlos Alpha",
@@ -5688,7 +5803,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "Simulation: Statement approved; waiting for IP Core.",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -5699,6 +5814,7 @@
     {
       "id": "connection-partner-3",
       "partnerId": "partner-3",
+      "groupLink": "",
       "companyName": "BETA LOTTO",
       "eMolaAccountOtp": "",
       "representativeName": "Ana Beta",
@@ -5730,7 +5846,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "Simulation: IP Core and IT/FW complete; should enter Ready for Test.",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -5741,6 +5857,7 @@
     {
       "id": "connection-partner-4",
       "partnerId": "partner-4",
+      "groupLink": "",
       "companyName": "Thunes",
       "eMolaAccountOtp": "",
       "representativeName": "Ousmane",
@@ -5772,6 +5889,7 @@
     {
       "id": "connection-partner-5",
       "partnerId": "partner-5",
+      "groupLink": "",
       "companyName": "Wiremit",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -5790,7 +5908,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -5801,6 +5919,7 @@
     {
       "id": "connection-partner-6",
       "partnerId": "partner-6",
+      "groupLink": "",
       "companyName": "OlaLotto",
       "eMolaAccountOtp": "",
       "representativeName": "Shan - 869131313",
@@ -5842,7 +5961,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111433",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -5853,6 +5972,7 @@
     {
       "id": "connection-partner-7",
       "partnerId": "partner-7",
+      "groupLink": "",
       "companyName": "AlphaConnect",
       "eMolaAccountOtp": "",
       "representativeName": "Micheal Akinwonmi- 2347038102474",
@@ -5884,7 +6004,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111468",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -5895,6 +6015,7 @@
     {
       "id": "connection-partner-8",
       "partnerId": "partner-8",
+      "groupLink": "",
       "companyName": "Onde Tem",
       "eMolaAccountOtp": "",
       "representativeName": "Xefino José - 876337381",
@@ -5926,7 +6047,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111477",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -5937,6 +6058,7 @@
     {
       "id": "connection-partner-9",
       "partnerId": "partner-9",
+      "groupLink": "",
       "companyName": "Bionic",
       "eMolaAccountOtp": "",
       "representativeName": "Jumaa Kiswagara '+25255754378867",
@@ -6019,6 +6141,7 @@
     {
       "id": "connection-partner-10",
       "partnerId": "partner-10",
+      "groupLink": "",
       "companyName": "E-Davinci",
       "eMolaAccountOtp": "",
       "representativeName": "tech@e-davinci.com\n+258 83 673 5250",
@@ -6050,7 +6173,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111485",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -6061,6 +6184,7 @@
     {
       "id": "connection-partner-11",
       "partnerId": "partner-11",
+      "groupLink": "",
       "companyName": "Indicos seguros",
       "eMolaAccountOtp": "",
       "representativeName": "Alirio Figueiredo\n849826065",
@@ -6092,7 +6216,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -6103,6 +6227,7 @@
     {
       "id": "connection-partner-12",
       "partnerId": "partner-12",
+      "groupLink": "",
       "companyName": "Sociedade moçambicana de serviços e transformação digital",
       "eMolaAccountOtp": "",
       "representativeName": "Ayod Arune\n'877604760",
@@ -6134,7 +6259,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -6145,6 +6270,7 @@
     {
       "id": "connection-partner-13",
       "partnerId": "partner-13",
+      "groupLink": "",
       "companyName": "Ac Tech",
       "eMolaAccountOtp": "",
       "representativeName": "Angelino Nhampossa\n'+258846532574",
@@ -6187,6 +6313,7 @@
     {
       "id": "connection-partner-14",
       "partnerId": "partner-14",
+      "groupLink": "",
       "companyName": "Confianca Seguros",
       "eMolaAccountOtp": "",
       "representativeName": "Gerardio Chiluvane\n878893290",
@@ -6259,6 +6386,7 @@
     {
       "id": "connection-partner-15",
       "partnerId": "partner-15",
+      "groupLink": "",
       "companyName": "AraSul",
       "eMolaAccountOtp": "",
       "representativeName": "+258 82 389 6874\nElton B. Chidjoto",
@@ -6301,6 +6429,7 @@
     {
       "id": "connection-partner-16",
       "partnerId": "partner-16",
+      "groupLink": "",
       "companyName": "Recarga Aki",
       "eMolaAccountOtp": "",
       "representativeName": "84 476 4990\nJorge Loureiro",
@@ -6354,6 +6483,7 @@
     {
       "id": "connection-partner-17",
       "partnerId": "partner-17",
+      "groupLink": "",
       "companyName": "Alpha Media",
       "eMolaAccountOtp": "",
       "representativeName": "Camiro Fonseca\n'+25870969574",
@@ -6385,7 +6515,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111522",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -6396,6 +6526,7 @@
     {
       "id": "connection-partner-18",
       "partnerId": "partner-18",
+      "groupLink": "",
       "companyName": "Grupo Vim",
       "eMolaAccountOtp": "",
       "representativeName": "Prosperino Acacio António\n+258 870345291",
@@ -6438,6 +6569,7 @@
     {
       "id": "connection-partner-19",
       "partnerId": "partner-19",
+      "groupLink": "",
       "companyName": "Artec",
       "eMolaAccountOtp": "",
       "representativeName": "Octávio Magaia\n+258 840 358 010",
@@ -6480,6 +6612,7 @@
     {
       "id": "connection-partner-20",
       "partnerId": "partner-20",
+      "groupLink": "",
       "companyName": "Sporty",
       "eMolaAccountOtp": "",
       "representativeName": "Marin Babara\n'+37369233061",
@@ -6532,6 +6665,7 @@
     {
       "id": "connection-partner-21",
       "partnerId": "partner-21",
+      "groupLink": "",
       "companyName": "Am Creative",
       "eMolaAccountOtp": "",
       "representativeName": "+258 84 637 9977\nPiedoso Dos Santos",
@@ -6550,7 +6684,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -6561,6 +6695,7 @@
     {
       "id": "connection-partner-22",
       "partnerId": "partner-22",
+      "groupLink": "",
       "companyName": "Gesfrota",
       "eMolaAccountOtp": "",
       "representativeName": "Mussagy Cassamo\n258 846441124",
@@ -6603,6 +6738,7 @@
     {
       "id": "connection-partner-23",
       "partnerId": "partner-23",
+      "groupLink": "",
       "companyName": "Amor e Desejo",
       "eMolaAccountOtp": "",
       "representativeName": "Jeremias Dinis Fondo\n844386747\njeremiasfondo@gmail.com",
@@ -6655,6 +6791,7 @@
     {
       "id": "connection-partner-24",
       "partnerId": "partner-24",
+      "groupLink": "",
       "companyName": "888Bet",
       "eMolaAccountOtp": "",
       "representativeName": "Grace Kyeyune\ngrace.kyeyune@888africa.com\n'+256776847346",
@@ -6697,6 +6834,7 @@
     {
       "id": "connection-partner-25",
       "partnerId": "partner-25",
+      "groupLink": "",
       "companyName": "Unitec",
       "eMolaAccountOtp": "",
       "representativeName": "William Cossa\nwilliam@unitec.co.mz\n'+258871979615",
@@ -6749,6 +6887,7 @@
     {
       "id": "connection-partner-26",
       "partnerId": "partner-26",
+      "groupLink": "",
       "companyName": "Fidotech",
       "eMolaAccountOtp": "",
       "representativeName": "Iaroslav Gubaev\niaroslav.gubaev@b2tech.com",
@@ -6801,6 +6940,7 @@
     {
       "id": "connection-partner-27",
       "partnerId": "partner-27",
+      "groupLink": "",
       "companyName": "Aika",
       "eMolaAccountOtp": "",
       "representativeName": "Happy\n86 146 9150",
@@ -6832,7 +6972,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111425",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -6843,6 +6983,7 @@
     {
       "id": "connection-partner-28",
       "partnerId": "partner-28",
+      "groupLink": "",
       "companyName": "BragaLink",
       "eMolaAccountOtp": "",
       "representativeName": "Munir Bragança\n258845911289\nmunir.braganca@bragalink.co.mz",
@@ -6885,6 +7026,7 @@
     {
       "id": "connection-partner-29",
       "partnerId": "partner-29",
+      "groupLink": "",
       "companyName": "Go-hosting",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -6903,7 +7045,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -6914,6 +7056,7 @@
     {
       "id": "connection-partner-30",
       "partnerId": "partner-30",
+      "groupLink": "",
       "companyName": "TaAqui",
       "eMolaAccountOtp": "",
       "representativeName": "Adérito Mufume\naderito.muffins@taaqui.co.mz\n'258 858782674",
@@ -6945,7 +7088,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111679",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -6956,6 +7099,7 @@
     {
       "id": "connection-partner-31",
       "partnerId": "partner-31",
+      "groupLink": "",
       "companyName": "VM VAMOS",
       "eMolaAccountOtp": "",
       "representativeName": "Octavio Cossa\nmtvamosmz@gmail.com\n+258844747755",
@@ -6987,7 +7131,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111684",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -6998,6 +7142,7 @@
     {
       "id": "connection-partner-32",
       "partnerId": "partner-32",
+      "groupLink": "",
       "companyName": "Jm Serviços",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7016,7 +7161,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7027,6 +7172,7 @@
     {
       "id": "connection-partner-33",
       "partnerId": "partner-33",
+      "groupLink": "",
       "companyName": "Tapago",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7045,7 +7191,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7056,6 +7202,7 @@
     {
       "id": "connection-partner-34",
       "partnerId": "partner-34",
+      "groupLink": "",
       "companyName": "Instituto Medio Politecnico de Moçambique",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7074,7 +7221,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7085,6 +7232,7 @@
     {
       "id": "connection-partner-35",
       "partnerId": "partner-35",
+      "groupLink": "",
       "companyName": "BCX",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7103,7 +7251,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7114,6 +7262,7 @@
     {
       "id": "connection-partner-36",
       "partnerId": "partner-36",
+      "groupLink": "",
       "companyName": "Karona 24h",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7132,7 +7281,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7143,6 +7292,7 @@
     {
       "id": "connection-partner-37",
       "partnerId": "partner-37",
+      "groupLink": "",
       "companyName": "Sahara Games",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7161,7 +7311,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7172,6 +7322,7 @@
     {
       "id": "connection-partner-38",
       "partnerId": "partner-38",
+      "groupLink": "",
       "companyName": "EML SERVICE",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7190,7 +7341,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7201,6 +7352,7 @@
     {
       "id": "connection-partner-39",
       "partnerId": "partner-39",
+      "groupLink": "",
       "companyName": "NetHost",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7219,7 +7371,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7230,6 +7382,7 @@
     {
       "id": "connection-partner-40",
       "partnerId": "partner-40",
+      "groupLink": "",
       "companyName": "VOLET",
       "eMolaAccountOtp": "",
       "representativeName": "Yasser Nazir\n+258 862212157",
@@ -7261,7 +7414,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111613",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7272,6 +7425,7 @@
     {
       "id": "connection-partner-41",
       "partnerId": "partner-41",
+      "groupLink": "",
       "companyName": "Save Moz",
       "eMolaAccountOtp": "",
       "representativeName": "SAVE MOZ \n258823085756",
@@ -7313,7 +7467,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111600",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7324,6 +7478,7 @@
     {
       "id": "connection-partner-42",
       "partnerId": "partner-42",
+      "groupLink": "",
       "companyName": "Hotspot (betpawa)",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7353,6 +7508,7 @@
     {
       "id": "connection-partner-43",
       "partnerId": "partner-43",
+      "groupLink": "",
       "companyName": "Kendras",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7371,7 +7527,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7382,6 +7538,7 @@
     {
       "id": "connection-partner-44",
       "partnerId": "partner-44",
+      "groupLink": "",
       "companyName": "DKeventos",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7400,7 +7557,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7411,6 +7568,7 @@
     {
       "id": "connection-partner-45",
       "partnerId": "partner-45",
+      "groupLink": "",
       "companyName": "SESPE Project  CEDSIF",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7429,7 +7587,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7440,6 +7598,7 @@
     {
       "id": "connection-partner-46",
       "partnerId": "partner-46",
+      "groupLink": "",
       "companyName": "Thembani",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7458,7 +7617,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7469,6 +7628,7 @@
     {
       "id": "connection-partner-47",
       "partnerId": "partner-47",
+      "groupLink": "",
       "companyName": "Bet77",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7487,7 +7647,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7498,6 +7658,7 @@
     {
       "id": "connection-partner-48",
       "partnerId": "partner-48",
+      "groupLink": "",
       "companyName": "SupremoGo",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7516,7 +7677,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7527,6 +7688,7 @@
     {
       "id": "connection-partner-49",
       "partnerId": "partner-49",
+      "groupLink": "",
       "companyName": "UBAZZAR",
       "eMolaAccountOtp": "",
       "representativeName": "Heitor Ferreira\n'+258842171200",
@@ -7558,7 +7720,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111591",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7569,6 +7731,7 @@
     {
       "id": "connection-partner-50",
       "partnerId": "partner-50",
+      "groupLink": "",
       "companyName": "Teledata",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7587,7 +7750,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7598,6 +7761,7 @@
     {
       "id": "connection-partner-51",
       "partnerId": "partner-51",
+      "groupLink": "",
       "companyName": "Cafre Market",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7616,7 +7780,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7627,6 +7791,7 @@
     {
       "id": "connection-partner-52",
       "partnerId": "partner-52",
+      "groupLink": "",
       "companyName": "Hypertech",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7645,7 +7810,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7656,6 +7821,7 @@
     {
       "id": "connection-partner-53",
       "partnerId": "partner-53",
+      "groupLink": "",
       "companyName": "ZAAS Tec",
       "eMolaAccountOtp": "",
       "representativeName": "Zelito Atumane Saide\n'842520280\nzelitosaide83@gmail.com",
@@ -7687,7 +7853,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111703",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7698,6 +7864,7 @@
     {
       "id": "connection-partner-54",
       "partnerId": "partner-54",
+      "groupLink": "",
       "companyName": "OPTIMIZEAds",
       "eMolaAccountOtp": "",
       "representativeName": "OPTIMIZE ADS, E.I.\n258867912790\nnuferdebetino2016@gmail.com",
@@ -7729,7 +7896,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111697",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7740,6 +7907,7 @@
     {
       "id": "connection-partner-55",
       "partnerId": "partner-55",
+      "groupLink": "",
       "companyName": "Onca-Fastako",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7758,7 +7926,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7769,6 +7937,7 @@
     {
       "id": "connection-partner-56",
       "partnerId": "partner-56",
+      "groupLink": "",
       "companyName": "Digitalehealth",
       "eMolaAccountOtp": "",
       "representativeName": "",
@@ -7787,7 +7956,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "NOT_ESTABLISHED",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -7798,6 +7967,7 @@
     {
       "id": "connection-partner-57",
       "partnerId": "partner-57",
+      "groupLink": "",
       "companyName": "Ted",
       "eMolaAccountOtp": "",
       "representativeName": "Gil Macarringue\n+258 82 904 9295",
@@ -7840,6 +8010,7 @@
     {
       "id": "connection-partner-",
       "partnerId": "partner-",
+      "groupLink": "",
       "companyName": "Check Mate",
       "eMolaAccountOtp": "",
       "representativeName": "Florinda Tembe\n258846248072",
@@ -7871,7 +8042,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111710",
       "formNotes": "",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",

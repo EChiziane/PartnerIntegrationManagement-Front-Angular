@@ -277,6 +277,7 @@
         <div><span>Business Owner</span><strong>{{ partner.businessOwner || '-' }}</strong></div>
         <div><span>Phone</span><strong>{{ partner.phone || '-' }}</strong></div>
         <div><span>Email</span><strong>{{ partner.email || '-' }}</strong></div>
+        <div class="wide"><span>Group Link</span><strong><a *ngIf="partner.groupLink; else noGroupLink" [href]="partner.groupLink" target="_blank" rel="noopener">Open group</a><ng-template #noGroupLink>-</ng-template></strong></div>
         <div><span>Status</span><strong>{{ partner.status }}</strong></div>
         <div><span>Last Activity</span><strong>{{ partner.lastActivity || '-' }}</strong></div>
       </div>
@@ -285,6 +286,7 @@
         <label>Company Name <input [(ngModel)]="partnerDraft.name" nz-input/></label>
         <label>e-Mola Account (OTP) <input [(ngModel)]="partnerDraft.eMolaAccountOtp" nz-input/></label>
         <label>Representative <input [(ngModel)]="partnerDraft.representativeName" nz-input/></label>
+        <label class="wide">Group Link <input [(ngModel)]="partnerDraft.groupLink" nz-input/></label>
         <label>Business Owner <input [(ngModel)]="partnerDraft.businessOwner" nz-input/></label>
         <label>Phone <input [(ngModel)]="partnerDraft.phone" nz-input/></label>
         <label>Email <input [(ngModel)]="partnerDraft.email" nz-input/></label>

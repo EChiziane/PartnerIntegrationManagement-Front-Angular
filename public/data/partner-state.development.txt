@@ -1,7 +1,8 @@
 {
-  "version": "2026-08-23.dev.3",
+  "version": "2026-08-23.dev.4",
   "partners": [
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Carlos Alpha",
       "id": "partner-dev-alpha",
@@ -37,6 +38,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Ana Beta",
       "id": "partner-dev-beta",
@@ -67,6 +69,7 @@
       "lastActivity": "2026-08-23"
     },
     {
+      "groupLink": "",
       "eMolaAccountOtp": "",
       "representativeName": "Support Desk",
       "id": "partner-dev-trouble",
@@ -128,6 +131,7 @@
       "notes": "Development sample ready for connectivity.",
       "environment": "UAT+PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "DEV ALPHA PAY",
         "eMolaAccountOtp": "",
         "representativeName": "Carlos Alpha",
@@ -191,6 +195,7 @@
       "notes": "Development sample waiting signatures.",
       "environment": "UAT",
       "formData": {
+        "groupLink": "",
         "companyName": "DEV BETA PUSH",
         "eMolaAccountOtp": "",
         "representativeName": "Ana Beta",
@@ -249,6 +254,7 @@
       "notes": "Development sample troubleshooting.",
       "environment": "PRD",
       "formData": {
+        "groupLink": "",
         "companyName": "DEV TROUBLESHOOT",
         "eMolaAccountOtp": "",
         "representativeName": "Support Desk",
@@ -305,6 +311,7 @@
     {
       "id": "connection-partner-dev-alpha",
       "partnerId": "partner-dev-alpha",
+      "groupLink": "",
       "companyName": "DEV ALPHA PAY",
       "eMolaAccountOtp": "",
       "representativeName": "Carlos Alpha",
@@ -336,7 +343,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "https://owncloud.example.com/dev-alpha",
       "formNotes": "Development sample partner.",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -347,6 +354,7 @@
     {
       "id": "connection-partner-dev-beta",
       "partnerId": "partner-dev-beta",
+      "groupLink": "",
       "companyName": "DEV BETA PUSH",
       "eMolaAccountOtp": "",
       "representativeName": "Ana Beta",
@@ -373,7 +381,7 @@
       "authMethod": "",
       "ownCloudFolderUrl": "https://owncloud.example.com/dev-beta",
       "formNotes": "Development sample waiting approval.",
-      "health": "DEGRADED",
+      "health": "DOWN",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
@@ -384,6 +392,7 @@
     {
       "id": "connection-partner-dev-trouble",
       "partnerId": "partner-dev-trouble",
+      "groupLink": "",
       "companyName": "DEV TROUBLESHOOT",
       "eMolaAccountOtp": "",
       "representativeName": "Support Desk",

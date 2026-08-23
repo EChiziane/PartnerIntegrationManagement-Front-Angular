@@ -43,6 +43,7 @@ export interface Partner {
   name: string;
   eMolaAccountOtp?: string;
   representativeName?: string;
+  groupLink?: string;
   businessOwner: string;
   technicalContact: string;
   phone: string;
@@ -66,6 +67,7 @@ export interface RequestFormData {
   companyName: string;
   eMolaAccountOtp?: string;
   representativeName?: string;
+  groupLink?: string;
   businessOwner: string;
   technicalContact: string;
   phone: string;
