@@ -28,23 +28,55 @@
         <div><span>Stage start</span><strong>{{ request.stageStartDate || '-' }}</strong></div>
       </div>
 
-      <div class="actions-grid">
-        <button (click)="confirmAction('Send Form & API Spec', {formSent: true})" nz-button>Send Form & API Spec</button>
-        <button (click)="confirmAction('Form Received', {formReceived: true})" nz-button>Form Received</button>
-        <button (click)="confirmAction('Form Validated', {formValidated: true})" nz-button>Form Validated</button>
-        <button (click)="confirmAction('Statement Created', {statementCreated: true})" nz-button>Statement Created</button>
-        <button (click)="confirmAction('Send to vOffice', {statementSent: true})" nz-button>Send to vOffice</button>
-        <button (click)="confirmAction('Signatures Complete', {signaturesComplete: true})" nz-button>Signatures Complete</button>
-        <button (click)="confirmAction('Submit IP Core', {ipCoreStatus: 'SUBMITTED'})" nz-button>Submit IP Core</button>
-        <button (click)="confirmAction('Submit IT', {itStatus: 'SUBMITTED'})" nz-button>Submit IT</button>
-        <button (click)="confirmAction('Mark IP Core Done', {ipCoreStatus: 'DONE'})" nz-button>Mark IP Core Done</button>
-        <button (click)="confirmAction('Mark IT Done', {itStatus: 'DONE'})" nz-button>Mark IT Done</button>
-        <button (click)="confirmAction('VPN Up', {vpnStatus: 'UP'})" nz-button>VPN Up</button>
-        <button (click)="confirmAction('Connectivity PASS', {connectivityUat: 'PASS', connectivityPrd: 'PASS'})" nz-button nzType="primary">Connectivity PASS</button>
-        <button (click)="confirmAction('Connectivity FAIL', {connectivityUat: 'FAIL', blocker: 'Connectivity failed'})" nz-button nzDanger>Connectivity FAIL</button>
-        <button (click)="confirmAction('Provide Test Credentials', {credentialsProvided: true, uatStatus: 'IN_PROGRESS'})" nz-button>Provide Test Credentials</button>
-        <button (click)="confirmAction('UAT PASS', {uatStatus: 'PASS'})" nz-button>UAT PASS</button>
-        <button (click)="confirmAction('Handover Complete', {handoverComplete: true})" nz-button nzType="primary">Handover Complete</button>
+      <div class="flow-strip">
+        <span
+          *ngFor="let status of flow"
+          [class.current]="isCurrent(status)"
+          [class.next]="isNext(status)"
+          [class.past]="isPast(status)">
+          {{ partnerIntegration.statusLabel(status) }}
+        </span>
+      </div>
+
+      <div class="action-section">
+        <div>
+          <span class="panel-kicker">Allowed next step</span>
+          <h3>Only actions valid from the current status are enabled.</h3>
+        </div>
+
+        <div class="actions-grid" *ngIf="nextActions.length; else noForwardAction">
+          <article *ngFor="let item of nextActions" class="action-card">
+            <div>
+              <strong>{{ item.label }}</strong>
+              <span>{{ item.description }}</span>
+            </div>
+            <button (click)="confirmAction(item.label, item.patch)" nz-button [nzType]="item.tone === 'primary' ? 'primary' : 'default'">
+              Continue
+            </button>
+          </article>
+        </div>
+
+        <ng-template #noForwardAction>
+          <div class="empty-action">No forward action is available for this status.</div>
+        </ng-template>
+      </div>
+
+      <div class="exception-section" *ngIf="exceptionActions.length || previousAction">
+        <article *ngFor="let item of exceptionActions" class="action-card danger">
+          <div>
+            <strong>{{ item.label }}</strong>
+            <span>{{ item.description }}</span>
+          </div>
+          <button (click)="confirmAction(item.label, item.patch)" nz-button nzDanger>Register</button>
+        </article>
+
+        <article *ngIf="previousAction" class="action-card backtrack">
+          <div>
+            <strong>{{ previousAction.label }}</strong>
+            <span>{{ previousAction.description }}</span>
+          </div>
+          <button (click)="confirmPreviousAction()" nz-button nzType="default">Move Back</button>
+        </article>
       </div>
     </section>
 

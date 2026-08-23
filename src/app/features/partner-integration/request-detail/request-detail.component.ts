@@ -1,8 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
-import {Partner, PartnerRequest, TimelineEvent} from '@shared/models/partner-integration';
+import {Partner, PartnerRequest, TimelineEvent, WorkflowStatus} from '@shared/models/partner-integration';
 import {NzModalService} from 'ng-zorro-antd/modal';
+
+interface WorkflowAction {
+  label: string;
+  description: string;
+  patch: Partial<PartnerRequest>;
+  tone?: 'primary' | 'default' | 'danger';
+}
 
 @Component({
   selector: 'app-request-detail',
@@ -14,6 +21,20 @@ export class RequestDetailComponent implements OnInit {
   request: PartnerRequest | undefined;
   partner: Partner | undefined;
   events: TimelineEvent[] = [];
+  readonly flow: WorkflowStatus[] = [
+    'NEW',
+    'WAITING_FORM',
+    'FORM_VALIDATION',
+    'READY_STATEMENT',
+    'READY_IMPLEMENTATION',
+    'WAITING_SIGNATURES',
+    'IMPLEMENTATION',
+    'READY_CONNECTIVITY',
+    'READY_UAT',
+    'UAT_IN_PROGRESS',
+    'READY_HANDOVER',
+    'CLOSED'
+  ];
 
   constructor(
     public partnerIntegration: PartnerIntegrationService,
@@ -43,6 +64,190 @@ export class RequestDetailComponent implements OnInit {
       nzOkText: 'Confirm update',
       nzCancelText: 'Cancel',
       nzOnOk: () => this.applyAction(label, patch)
+    });
+  }
+
+  get nextActions(): WorkflowAction[] {
+    if (!this.request) return [];
+
+    const map: Partial<Record<WorkflowStatus, WorkflowAction[]>> = {
+      NEW: [{
+        label: 'Send Form & API Spec',
+        description: 'Moves the request to Waiting Form.',
+        patch: {formSent: true},
+        tone: 'primary'
+      }],
+      WAITING_FORM: [{
+        label: 'Form Received',
+        description: 'Moves the request to Form Validation.',
+        patch: {formReceived: true},
+        tone: 'primary'
+      }],
+      FORM_VALIDATION: [{
+        label: 'Form Validated',
+        description: 'Moves the request to Ready Statement.',
+        patch: {formValidated: true},
+        tone: 'primary'
+      }],
+      READY_STATEMENT: [{
+        label: 'Statement Created',
+        description: 'Makes the request ready for implementation submission.',
+        patch: {statementCreated: true},
+        tone: 'primary'
+      }],
+      READY_IMPLEMENTATION: [{
+        label: 'Send to vOffice',
+        description: 'Moves the request to Waiting Signatures.',
+        patch: {statementSent: true},
+        tone: 'primary'
+      }],
+      WAITING_SIGNATURES: [{
+        label: 'Approval Complete',
+        description: 'Confirms approvals/signatures and submits to IP Core + IT.',
+        patch: {signaturesComplete: true, ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'},
+        tone: 'primary'
+      }],
+      IMPLEMENTATION: [{
+        label: 'IP Core + IT Done',
+        description: 'Moves the request to connectivity testing readiness.',
+        patch: {ipCoreStatus: 'DONE', itStatus: 'DONE'},
+        tone: 'primary'
+      }],
+      READY_CONNECTIVITY: [{
+        label: 'Connectivity PASS',
+        description: 'Moves the request to Ready UAT.',
+        patch: {vpnStatus: 'UP', connectivityUat: 'PASS', connectivityPrd: 'PASS'},
+        tone: 'primary'
+      }],
+      READY_UAT: [{
+        label: 'Provide Test Credentials',
+        description: 'Moves the request to UAT in progress.',
+        patch: {credentialsProvided: true, uatStatus: 'IN_PROGRESS'},
+        tone: 'primary'
+      }],
+      UAT_IN_PROGRESS: [{
+        label: 'UAT PASS',
+        description: 'Moves the request to Ready Handover.',
+        patch: {uatStatus: 'PASS'},
+        tone: 'primary'
+      }],
+      READY_HANDOVER: [{
+        label: 'Handover Complete',
+        description: 'Closes the request.',
+        patch: {handoverComplete: true},
+        tone: 'primary'
+      }]
+    };
+
+    return map[this.request.currentStatus] || [];
+  }
+
+  get exceptionActions(): WorkflowAction[] {
+    if (!this.request || this.request.currentStatus === 'CLOSED') return [];
+
+    return [{
+      label: 'Register Issue',
+      description: 'Moves the request to Troubleshooting.',
+      patch: {connectivityUat: 'FAIL', blocker: 'Needs investigation'},
+      tone: 'danger'
+    }];
+  }
+
+  get previousAction(): WorkflowAction | null {
+    if (!this.request) return null;
+
+    const map: Partial<Record<WorkflowStatus, WorkflowAction>> = {
+      WAITING_FORM: {
+        label: 'Return to New',
+        description: 'Use only if the form/API spec was not actually sent.',
+        patch: {formSent: false}
+      },
+      FORM_VALIDATION: {
+        label: 'Return to Waiting Form',
+        description: 'Use if the received form is invalid or incomplete.',
+        patch: {formReceived: false, formValidated: false}
+      },
+      READY_STATEMENT: {
+        label: 'Return to Form Validation',
+        description: 'Use if validation needs to be reviewed.',
+        patch: {formValidated: false, statementCreated: false}
+      },
+      READY_IMPLEMENTATION: {
+        label: 'Return to Ready Statement',
+        description: 'Use if the statement is not ready for implementation.',
+        patch: {statementCreated: false, statementSent: false}
+      },
+      WAITING_SIGNATURES: {
+        label: 'Return to Ready Implementation',
+        description: 'Use if the statement should not be with approvers yet.',
+        patch: {statementSent: false, signaturesComplete: false}
+      },
+      IMPLEMENTATION: {
+        label: 'Return to Waiting Signatures',
+        description: 'Use if approval/signature completion was registered by mistake.',
+        patch: {signaturesComplete: false, ipCoreStatus: 'NOT_SUBMITTED', itStatus: 'NOT_SUBMITTED'}
+      },
+      READY_CONNECTIVITY: {
+        label: 'Return to Implementation',
+        description: 'Use if IP Core or IT is not actually complete.',
+        patch: {ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'}
+      },
+      READY_UAT: {
+        label: 'Return to Ready Connectivity',
+        description: 'Use if connectivity pass was registered by mistake.',
+        patch: {connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED', credentialsProvided: false, uatStatus: 'NOT_STARTED'}
+      },
+      UAT_IN_PROGRESS: {
+        label: 'Return to Ready UAT',
+        description: 'Use if credentials were not actually provided.',
+        patch: {credentialsProvided: false, uatStatus: 'NOT_STARTED'}
+      },
+      READY_HANDOVER: {
+        label: 'Return to UAT In Progress',
+        description: 'Use if UAT approval needs review.',
+        patch: {uatStatus: 'IN_PROGRESS', handoverComplete: false}
+      },
+      CLOSED: {
+        label: 'Reopen to Ready Handover',
+        description: 'Use if the request was closed by mistake.',
+        patch: {handoverComplete: false}
+      }
+    };
+
+    return map[this.request.currentStatus] || null;
+  }
+
+  isPast(status: WorkflowStatus): boolean {
+    if (!this.request) return false;
+    const currentIndex = this.flow.indexOf(this.request.currentStatus);
+    return currentIndex >= 0 && this.flow.indexOf(status) < currentIndex;
+  }
+
+  isCurrent(status: WorkflowStatus): boolean {
+    return this.request?.currentStatus === status;
+  }
+
+  isNext(status: WorkflowStatus): boolean {
+    if (!this.request) return false;
+    const currentIndex = this.flow.indexOf(this.request.currentStatus);
+    return currentIndex >= 0 && this.flow.indexOf(status) === currentIndex + 1;
+  }
+
+  confirmPreviousAction(): void {
+    const action = this.previousAction;
+    if (!action || !this.request) return;
+
+    const reason = window.prompt('Why do you need to move this request backwards?');
+    if (!reason?.trim()) {
+      return;
+    }
+
+    this.modal.confirm({
+      nzTitle: 'Confirm backwards movement',
+      nzContent: `This will move the request backwards from ${this.partnerIntegration.statusLabel(this.request.currentStatus)}. Reason was requested for control, but it will not be stored in the partner file.`,
+      nzOkText: 'Move backwards',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => this.applyAction(action.label, action.patch)
     });
   }
 
