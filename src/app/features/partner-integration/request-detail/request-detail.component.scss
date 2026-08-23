@@ -47,7 +47,26 @@ p,
 }
 
 .panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   margin-bottom: 14px;
+}
+
+.import-inline {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.import-notice {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid #bfe8dd;
+  border-radius: 8px;
+  color: #0b6d63;
+  background: #f1fbf8;
+  font-weight: 700;
 }
 
 .facts {
@@ -297,5 +316,14 @@ p,
 
   .credentials-actions {
     display: grid;
+  }
+
+  .panel header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .import-inline {
+    justify-content: stretch;
   }
 }

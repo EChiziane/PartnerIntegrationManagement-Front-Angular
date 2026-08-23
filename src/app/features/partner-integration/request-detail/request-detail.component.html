@@ -121,8 +121,17 @@
 
     <section class="panel">
       <header>
-        <span class="panel-kicker">Institution and integration</span>
-        <h2>Form data snapshot</h2>
+        <div>
+          <span class="panel-kicker">Institution and integration</span>
+          <h2>Form data snapshot</h2>
+        </div>
+        <div class="import-inline">
+          <input #requestFormInput (change)="importRequestForm($event)" accept=".xls,.xlsx" hidden type="file"/>
+          <button (click)="requestFormInput.click()" nz-button nzType="default">
+            <span nz-icon nzType="upload"></span>
+            Import VPN Form
+          </button>
+        </div>
       </header>
 
       <div class="facts stacked">
@@ -135,6 +144,8 @@
         <div><span>Auth Method</span><strong>{{ formData?.authMethod || '-' }}</strong></div>
         <div><span>Imported File</span><strong>{{ formData?.importedFileName || '-' }}</strong></div>
       </div>
+
+      <p *ngIf="importNotice" class="import-notice">{{ importNotice }}</p>
     </section>
   </div>
 

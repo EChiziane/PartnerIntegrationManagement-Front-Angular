@@ -1,7 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
-import {Partner, PartnerRequest, RequestFormData, TimelineEvent, WorkflowStatus} from '@shared/models/partner-integration';
+import {
+  Partner,
+  PartnerEnvironment,
+  PartnerPrivateEndpoint,
+  PartnerRequest,
+  RequestFormData,
+  TimelineEvent,
+  WorkflowStatus
+} from '@shared/models/partner-integration';
 import {NzModalService} from 'ng-zorro-antd/modal';
 
 interface WorkflowAction {
@@ -24,6 +32,7 @@ export class RequestDetailComponent implements OnInit {
   events: TimelineEvent[] = [];
   isCredentialsEditorOpen = false;
   credentialsDraft = '';
+  importNotice = '';
   readonly flow: WorkflowStatus[] = [
     'BLOCKED',
     'NEW',
@@ -77,6 +86,37 @@ export class RequestDetailComponent implements OnInit {
     }
 
     return this.formData?.partnerServerIp || '-';
+  }
+
+  async importRequestForm(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file || !this.request || !this.partner) return;
+
+    try {
+      const formData = await this.readPartnerForm(file, this.partner.name);
+      this.partnerIntegration.updatePartner(this.partner.id, {
+        name: formData.companyName || this.partner.name,
+        eMolaAccountOtp: formData.eMolaAccountOtp || this.partner.eMolaAccountOtp || '',
+        representativeName: formData.representativeName || this.partner.representativeName || '',
+        groupLink: formData.groupLink || this.partner.groupLink || '',
+        phone: formData.phone || this.partner.phone,
+        email: formData.email || this.partner.email
+      });
+      this.partnerIntegration.updateRequest(this.request.id, {
+        formData,
+        formSent: true,
+        formReceived: true,
+        formValidated: this.hasTechnicalData(formData)
+      }, this.hasTechnicalData(formData) ? 'VPN Integration Form Imported And Validated' : 'VPN Integration Form Data Updated');
+      this.importNotice = `Imported ${file.name}: request form data updated.`;
+      this.load();
+    } catch (error) {
+      console.error('VPN integration form import failed', error);
+      this.importNotice = 'Could not import this Excel form. Please check if the file is the VPN integration form.';
+    } finally {
+      input.value = '';
+    }
   }
 
   confirmAction(label: string, patch: Partial<PartnerRequest>): void {
@@ -435,5 +475,117 @@ export class RequestDetailComponent implements OnInit {
 
   back(): void {
     this.router.navigate(['/app/integrations']);
+  }
+
+  private async readPartnerForm(file: File, companyName: string): Promise<RequestFormData> {
+    const XLSX = await import('xlsx');
+    const workbook = XLSX.read(await file.arrayBuffer(), {type: 'array'});
+    const vpnRows = this.sheetRows(XLSX, workbook, 'IPSEC VPN Template');
+    const rulesRows = this.sheetRows(XLSX, workbook, 'Rules & Policies');
+    const publicPeerIps = this.splitValues(this.partnerCell(vpnRows, 'VPN Peer Address'));
+    const partnerDomainIp = this.firstIp(this.partnerCell(vpnRows, 'Encryption domain'));
+    const privateEndpoints = this.privateEndpointsFromRules(rulesRows, partnerDomainIp);
+    const current = this.formData;
+    const institutionEmail = this.partnerCell(vpnRows, 'Email Address');
+    const institutionPhone = this.partnerCell(vpnRows, 'Contact Phone Number');
+
+    return {
+      companyName: this.partnerCell(vpnRows, 'Company Name') || companyName,
+      eMolaAccountOtp: this.partnerCell(vpnRows, 'e-Mola Account (OTP)') || current?.eMolaAccountOtp || this.partner?.eMolaAccountOtp || '',
+      representativeName: this.partnerCell(vpnRows, 'Representative Name') || current?.representativeName || this.partner?.representativeName || '',
+      groupLink: current?.groupLink || this.partner?.groupLink || '',
+      businessOwner: current?.businessOwner || this.partner?.businessOwner || '',
+      technicalContact: this.partnerCell(vpnRows, 'Name') || current?.technicalContact || this.partner?.technicalContact || '',
+      phone: institutionPhone || this.partnerCell(vpnRows, 'Cell Phone') || current?.phone || this.partner?.phone || '',
+      email: institutionEmail || current?.email || this.partner?.email || '',
+      serviceApi: current?.serviceApi || this.partner?.serviceApi || '',
+      environment: privateEndpoints.length ? this.environmentFromEndpoints(privateEndpoints) : current?.environment || this.partner?.environment || 'UAT+PRD',
+      publicIp: publicPeerIps[0] || current?.publicIp || this.partner?.publicIp || '',
+      publicPeerIps: publicPeerIps.length ? publicPeerIps : current?.publicPeerIps || this.partner?.publicPeerIps || [],
+      partnerServerIp: privateEndpoints.find(endpoint => endpoint.ip)?.ip || current?.partnerServerIp || this.partner?.partnerServerIp || '',
+      uatPort: privateEndpoints.find(endpoint => endpoint.environment !== 'PRD' && endpoint.port)?.port || current?.uatPort || this.partner?.uatPort || '',
+      prdPort: privateEndpoints.find(endpoint => endpoint.environment !== 'UAT' && endpoint.port)?.port || current?.prdPort || this.partner?.prdPort || '',
+      privateEndpoints: privateEndpoints.length ? privateEndpoints : current?.privateEndpoints || this.partner?.privateEndpoints || [],
+      authMethod: this.partnerCell(vpnRows, 'Authentication Method') || current?.authMethod || this.partner?.authMethod || '',
+      ownCloudFolderUrl: current?.ownCloudFolderUrl || this.partner?.ownCloudFolderUrl || '',
+      formNotes: current?.formNotes || this.partner?.formNotes || '',
+      importedFileName: file.name,
+      importedAt: new Date().toISOString()
+    };
+  }
+
+  private sheetRows(
+    XLSX: typeof import('xlsx'),
+    workbook: import('xlsx').WorkBook,
+    sheetNamePart: string
+  ): string[][] {
+    const sheetName = workbook.SheetNames.find(name => name.toLowerCase().includes(sheetNamePart.toLowerCase()));
+    if (!sheetName) return [];
+    return XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header: 1, blankrows: false, defval: ''})
+      .map(row => (row as unknown[]).map(value => String(value ?? '').trim()));
+  }
+
+  private partnerCell(rows: string[][], label: string): string {
+    const row = rows.find(item => item[0]?.toLowerCase().replace(/\s+/g, ' ').trim() === label.toLowerCase());
+    return this.cleanPlaceholder(row?.[2] || row?.[1] || '', label);
+  }
+
+  private privateEndpointsFromRules(rows: string[][], partnerDomainIp: string): PartnerPrivateEndpoint[] {
+    const endpoints: PartnerPrivateEndpoint[] = [];
+
+    rows
+      .filter(row => /^rule\s+\d+/i.test(row[0] || ''))
+      .forEach(row => {
+        const sourceIps = this.splitValues(row[1]);
+        const destinationIps = this.splitValues(row[3]);
+        const ports = [...String(row[5] || '').matchAll(/\d{2,5}/g)].map(match => match[0]);
+        const environment = this.environmentFromPurpose(row[7]);
+        const endpointIps = partnerDomainIp ? [partnerDomainIp] : (/callback/i.test(row[7]) ? destinationIps : sourceIps);
+
+        endpointIps.forEach(ip => ports.forEach(port => endpoints.push({environment, ip, port})));
+      });
+
+    return endpoints.filter((endpoint, index, list) =>
+      list.findIndex(item => item.environment === endpoint.environment
+        && item.ip === endpoint.ip
+        && item.port === endpoint.port) === index
+    );
+  }
+
+  private environmentFromPurpose(value: string): PartnerEnvironment {
+    const normalized = value.toUpperCase();
+    if (normalized.includes('UAT') && normalized.includes('PRD')) return 'UAT+PRD';
+    if (normalized.includes('PRD')) return 'PRD';
+    return 'UAT';
+  }
+
+  private environmentFromEndpoints(endpoints: PartnerPrivateEndpoint[]): PartnerEnvironment {
+    const environments = new Set(endpoints.map(endpoint => endpoint.environment));
+    if (environments.has('UAT+PRD') || (environments.has('UAT') && environments.has('PRD'))) return 'UAT+PRD';
+    if (environments.has('PRD')) return 'PRD';
+    return 'UAT';
+  }
+
+  private splitValues(value: string): string[] {
+    return String(value || '')
+      .split(/[\n,;]+/)
+      .map(item => item.trim().replace(/\/32$/, ''))
+      .filter(Boolean);
+  }
+
+  private firstIp(value: string): string {
+    return this.splitValues(value).find(item => /\d+\.\d+\.\d+\.\d+/.test(item)) || '';
+  }
+
+  private cleanPlaceholder(value: string, placeholder: string): string {
+    const clean = String(value || '').trim();
+    return clean.toLowerCase().replace(/\s+/g, '') === placeholder.toLowerCase().replace(/\s+/g, '') ? '' : clean;
+  }
+
+  private hasTechnicalData(formData: RequestFormData): boolean {
+    return !!formData.publicIp
+      || !!formData.partnerServerIp
+      || !!formData.publicPeerIps?.length
+      || !!formData.privateEndpoints?.length;
   }
 }
