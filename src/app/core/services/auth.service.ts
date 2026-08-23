@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, switchMap, take, tap} from 'rxjs';
 
-import {environment} from '@env/environments';
+import {environment} from '@env/environment';
 import {User} from '@shared/models/user';
 
 @Injectable({

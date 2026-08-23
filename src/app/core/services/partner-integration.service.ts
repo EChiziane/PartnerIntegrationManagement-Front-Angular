@@ -11,6 +11,7 @@ import {
   WorkflowStatus,
   WorkflowTask
 } from '@shared/models/partner-integration';
+import {environment} from '@env/environment';
 
 interface PartnerState {
   partners: Partner[];
@@ -29,8 +30,8 @@ interface PartnerStorageEnvelope {
 
 @Injectable({providedIn: 'root'})
 export class PartnerIntegrationService {
-  private readonly storageKey = 'partner-integration-v1-state';
-  private readonly dataSourcePath = 'data/partner-state.txt';
+  private readonly storageKey = environment.partnerStorageKey;
+  private readonly dataSourcePath = environment.partnerDataSourcePath;
   private sourceState: PartnerSourceState | null = null;
 
   constructor(private http: HttpClient) {
@@ -43,7 +44,7 @@ export class PartnerIntegrationService {
     } catch (error) {
       console.warn('Partner text data could not be loaded. Falling back to bundled seed data.', error);
       this.sourceState = this.normalizeSourceState({
-        version: 'fallback-seed',
+        version: `fallback-seed-${environment.name}`,
         ...this.seedState()
       });
     }
@@ -391,7 +392,7 @@ export class PartnerIntegrationService {
   private getSourceState(): PartnerSourceState {
     if (!this.sourceState) {
       this.sourceState = this.normalizeSourceState({
-        version: 'fallback-seed',
+        version: `fallback-seed-${environment.name}`,
         ...this.seedState()
       });
     }

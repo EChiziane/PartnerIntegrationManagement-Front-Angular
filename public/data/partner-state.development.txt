@@ -1,0 +1,206 @@
+{
+  "version": "2026-08-23.dev.1",
+  "partners": [
+    {
+      "id": "partner-dev-alpha",
+      "name": "DEV ALPHA PAY",
+      "businessOwner": "Business Development",
+      "technicalContact": "Carlos Alpha",
+      "phone": "+258 84 100 2001",
+      "email": "alpha.dev@example.com",
+      "serviceApi": "Business Code",
+      "environment": "UAT+PRD",
+      "publicIp": "139.84.234.187",
+      "publicPeerIps": [
+        "139.84.234.187"
+      ],
+      "partnerServerIp": "10.177.0.10",
+      "uatPort": "8520",
+      "prdPort": "9921",
+      "privateEndpoints": [
+        {
+          "environment": "UAT",
+          "ip": "10.177.0.10",
+          "port": "8520"
+        },
+        {
+          "environment": "PRD",
+          "ip": "10.177.0.10",
+          "port": "9921"
+        }
+      ],
+      "ownCloudFolderUrl": "https://owncloud.example.com/dev-alpha",
+      "formNotes": "Development sample partner.",
+      "status": "ACTIVE",
+      "lastActivity": "2026-08-23"
+    },
+    {
+      "id": "partner-dev-beta",
+      "name": "DEV BETA PUSH",
+      "businessOwner": "M-MOLA Business",
+      "technicalContact": "Ana Beta",
+      "phone": "+258 84 100 2002",
+      "email": "beta.dev@example.com",
+      "serviceApi": "Push USSD",
+      "environment": "UAT",
+      "publicIp": "72.61.147.82",
+      "publicPeerIps": [
+        "72.61.147.82"
+      ],
+      "partnerServerIp": "10.177.0.20",
+      "uatPort": "8600",
+      "prdPort": "",
+      "privateEndpoints": [
+        {
+          "environment": "UAT",
+          "ip": "10.177.0.20",
+          "port": "8600"
+        }
+      ],
+      "ownCloudFolderUrl": "https://owncloud.example.com/dev-beta",
+      "formNotes": "Development sample waiting approval.",
+      "status": "ACTIVE",
+      "lastActivity": "2026-08-23"
+    },
+    {
+      "id": "partner-dev-trouble",
+      "name": "DEV TROUBLESHOOT",
+      "businessOwner": "VAS and Digital Channels",
+      "technicalContact": "Support Desk",
+      "phone": "+258 84 100 2003",
+      "email": "support.dev@example.com",
+      "serviceApi": "Push USSD",
+      "environment": "PRD",
+      "publicIp": "102.207.223.37",
+      "publicPeerIps": [
+        "102.207.223.37"
+      ],
+      "partnerServerIp": "10.0.1.12",
+      "uatPort": "",
+      "prdPort": "8685",
+      "privateEndpoints": [
+        {
+          "environment": "PRD",
+          "ip": "10.0.1.12",
+          "port": "8685"
+        }
+      ],
+      "ownCloudFolderUrl": "https://owncloud.example.com/dev-trouble",
+      "formNotes": "Development sample with connectivity issue.",
+      "status": "ACTIVE",
+      "lastActivity": "2026-08-23"
+    }
+  ],
+  "requests": [
+    {
+      "id": "request-dev-alpha",
+      "partnerId": "partner-dev-alpha",
+      "type": "NEW_INTEGRATION",
+      "openDate": "2026-08-15",
+      "currentStatus": "READY_CONNECTIVITY",
+      "currentOwner": "Me",
+      "nextAction": "Run connectivity tests",
+      "priority": "P3",
+      "followUpDate": "2026-08-23",
+      "stageStartDate": "2026-08-21",
+      "blocker": "",
+      "formSent": true,
+      "formReceived": true,
+      "formValidated": true,
+      "statementCreated": true,
+      "statementSent": true,
+      "signaturesComplete": true,
+      "ipCoreStatus": "DONE",
+      "itStatus": "DONE",
+      "vpnStatus": "NOT_STARTED",
+      "connectivityUat": "NOT_TESTED",
+      "connectivityPrd": "NOT_TESTED",
+      "credentialsProvided": false,
+      "uatStatus": "NOT_STARTED",
+      "handoverComplete": false,
+      "closeDate": null,
+      "notes": "Development sample ready for connectivity."
+    },
+    {
+      "id": "request-dev-beta",
+      "partnerId": "partner-dev-beta",
+      "type": "NEW_INTEGRATION",
+      "openDate": "2026-08-18",
+      "currentStatus": "WAITING_SIGNATURES",
+      "currentOwner": "vOffice / Signers",
+      "nextAction": "Follow up approval",
+      "priority": "P2",
+      "followUpDate": "2026-08-23",
+      "stageStartDate": "2026-08-20",
+      "blocker": "",
+      "formSent": true,
+      "formReceived": true,
+      "formValidated": true,
+      "statementCreated": true,
+      "statementSent": true,
+      "signaturesComplete": false,
+      "ipCoreStatus": "NOT_SUBMITTED",
+      "itStatus": "NOT_SUBMITTED",
+      "vpnStatus": "NOT_STARTED",
+      "connectivityUat": "NOT_TESTED",
+      "connectivityPrd": "NOT_TESTED",
+      "credentialsProvided": false,
+      "uatStatus": "NOT_STARTED",
+      "handoverComplete": false,
+      "closeDate": null,
+      "notes": "Development sample waiting signatures."
+    },
+    {
+      "id": "request-dev-trouble",
+      "partnerId": "partner-dev-trouble",
+      "type": "CONNECTIVITY_SUPPORT",
+      "openDate": "2026-08-19",
+      "currentStatus": "TROUBLESHOOTING",
+      "currentOwner": "Technical Team / Partner",
+      "nextAction": "Troubleshoot / identify owner / next action",
+      "priority": "P1",
+      "followUpDate": "2026-08-23",
+      "stageStartDate": "2026-08-20",
+      "blocker": "Partner reports VPN down",
+      "formSent": true,
+      "formReceived": true,
+      "formValidated": true,
+      "statementCreated": true,
+      "statementSent": true,
+      "signaturesComplete": true,
+      "ipCoreStatus": "DONE",
+      "itStatus": "DONE",
+      "vpnStatus": "DOWN",
+      "connectivityUat": "FAIL",
+      "connectivityPrd": "FAIL",
+      "credentialsProvided": false,
+      "uatStatus": "NOT_STARTED",
+      "handoverComplete": false,
+      "closeDate": null,
+      "notes": "Development sample troubleshooting."
+    }
+  ],
+  "events": [
+    {
+      "id": "event-dev-alpha",
+      "requestId": "request-dev-alpha",
+      "date": "2026-08-21T08:00:00.000Z",
+      "title": "Development Seed",
+      "description": "Ready for connectivity testing"
+    },
+    {
+      "id": "event-dev-beta",
+      "requestId": "request-dev-beta",
+      "date": "2026-08-20T08:00:00.000Z",
+      "title": "Development Seed",
+      "description": "Waiting approval"
+    },
+    {
+      "id": "event-dev-trouble",
+      "requestId": "request-dev-trouble",
+      "date": "2026-08-20T08:00:00.000Z",
+      "title": "Development Seed",
+      "description": "Troubleshooting"
+    }
+  ]
+}
