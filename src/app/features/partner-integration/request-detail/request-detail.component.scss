@@ -20,6 +20,13 @@
   gap: 16px;
 }
 
+.detail-header nz-tag {
+  width: fit-content;
+  max-width: 100%;
+  justify-self: end;
+  white-space: normal;
+}
+
 .detail-header > div,
 .detail-header h1,
 .detail-header p {
@@ -331,6 +338,14 @@ p,
   right: 10px;
 }
 
+.fact-with-action .icon-action {
+  display: inline-grid;
+  width: 30px;
+  min-width: 30px;
+  padding: 0;
+  place-items: center;
+}
+
 .fact-with-action strong {
   padding-right: 58px;
 }
@@ -429,6 +444,15 @@ p,
   gap: 4px;
   padding: 12px 0;
   border-top: 1px solid #e4edf3;
+}
+
+.sr-editor {
+  display: grid;
+  gap: 10px;
+}
+
+.sr-editor p {
+  color: #607786;
 }
 
 @media (max-width: 1000px) {

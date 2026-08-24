@@ -117,8 +117,14 @@
       </div>
 
       <div class="row-actions">
-        <button (click)="openPartner(partner)" nz-button nzType="default">{{ 'common.actions.open' | translate }}</button>
-        <button (click)="createRequest(partner)" nz-button nzType="primary">{{ 'partners.newAction' | translate }}</button>
+        <button (click)="openPartner(partner)" [title]="'common.actions.open' | translate" nz-button nzType="default">
+          <span nz-icon nzType="eye"></span>
+          <span class="action-label">{{ 'common.actions.open' | translate }}</span>
+        </button>
+        <button (click)="createRequest(partner)" [title]="'partners.newAction' | translate" nz-button nzType="primary">
+          <span nz-icon nzType="plus"></span>
+          <span class="action-label">{{ 'partners.newAction' | translate }}</span>
+        </button>
       </div>
     </article>
 

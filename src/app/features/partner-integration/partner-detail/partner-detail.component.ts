@@ -20,7 +20,10 @@ export class PartnerDetailComponent implements OnInit {
   requestType: RequestType = 'NEW_INTEGRATION';
   isEditingProfile = false;
   isCredentialsEditorOpen = false;
+  isSrEditorOpen = false;
   credentialsDraft = '';
+  srDraft = '';
+  private pendingSrAction: { label: string; patch: Partial<PartnerRequest> } | null = null;
   importNotice = '';
 
   constructor(
@@ -276,8 +279,11 @@ export class PartnerDetailComponent implements OnInit {
       });
       return;
     }
-    const nextPatch = this.withOptionalSrCode(request, patch);
-    if (!nextPatch) return;
+    if (this.needsSrCodeBeforeSubmit(request, patch)) {
+      this.pendingSrAction = {label, patch};
+      this.editActiveSrCode();
+      return;
+    }
 
     this.modal.confirm({
       nzTitle: this.t('modal.confirmWorkflowTitle'),
@@ -288,19 +294,42 @@ export class PartnerDetailComponent implements OnInit {
       }),
       nzOkText: this.t('modal.confirmUpdate'),
       nzCancelText: this.t('common.actions.cancel'),
-      nzOnOk: () => this.applyAction(label, nextPatch)
+      nzOnOk: () => this.applyAction(label, patch)
     });
   }
 
   editActiveSrCode(): void {
     const request = this.activeRequest;
     if (!request) return;
-    const value = window.prompt(this.t('modal.srCodePrompt'), request.srCode || '');
-    if (value === null) return;
+    this.srDraft = request.srCode || '';
+    this.isSrEditorOpen = true;
+  }
+
+  cancelSrEditor(): void {
+    this.isSrEditorOpen = false;
+    this.srDraft = '';
+    this.pendingSrAction = null;
+  }
+
+  saveSrCode(): void {
+    const request = this.activeRequest;
+    if (!request) return;
+    const value = this.srDraft.trim();
+    const pending = this.pendingSrAction;
+    this.pendingSrAction = null;
+
+    if (pending) {
+      this.isSrEditorOpen = false;
+      this.srDraft = '';
+      this.applyAction(pending.label, {...pending.patch, srCode: value});
+      return;
+    }
 
     this.partnerIntegration.updateRequest(request.id, {
-      srCode: value.trim()
-    }, value.trim() ? 'CNOC SR Code Updated' : 'CNOC SR Code Cleared');
+      srCode: value
+    }, value ? 'CNOC SR Code Updated' : 'CNOC SR Code Cleared');
+    this.isSrEditorOpen = false;
+    this.srDraft = '';
     this.load();
   }
 
@@ -349,16 +378,8 @@ export class PartnerDetailComponent implements OnInit {
     this.load();
   }
 
-  private withOptionalSrCode(request: PartnerRequest, patch: Partial<PartnerRequest>): Partial<PartnerRequest> | null {
-    const submitsToIpCore = patch.signaturesComplete === true && patch.ipCoreStatus === 'SUBMITTED';
-    if (!submitsToIpCore || request.srCode?.trim()) return patch;
-
-    const value = window.prompt(this.t('modal.srCodeSubmissionPrompt'), '');
-    if (value === null) return null;
-    return {
-      ...patch,
-      srCode: value.trim()
-    };
+  private needsSrCodeBeforeSubmit(request: PartnerRequest, patch: Partial<PartnerRequest>): boolean {
+    return patch.signaturesComplete === true && patch.ipCoreStatus === 'SUBMITTED' && !request.srCode?.trim();
   }
 
   downloadProfile(): void {

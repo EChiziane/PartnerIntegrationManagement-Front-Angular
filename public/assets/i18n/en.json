@@ -414,6 +414,9 @@
     "history": "History",
     "timeline": "Timeline",
     "continue": "Continue",
+    "srEditorTitle": "CNOC SR Code",
+    "srEditorHint": "Record the SR code used when submitting this request to IP Core. Example: SR_MVT_20260813_648534.",
+    "srEditorPlaceholder": "SR_MVT_20260813_648534",
     "actions": {
       "sendFormApiSpec": "Send Form & API Spec",
       "sendFormApiSpecDescription": "Moves the request to Waiting Form.",

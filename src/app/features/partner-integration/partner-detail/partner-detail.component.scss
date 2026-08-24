@@ -169,9 +169,24 @@ p,
 }
 
 .sr-code-card button {
+  display: inline-grid;
+  width: 30px;
+  min-width: 30px;
   position: absolute;
   top: 10px;
   right: 10px;
+  padding: 0;
+  place-items: center;
+}
+
+.sr-editor {
+  display: grid;
+  gap: 10px;
+}
+
+.sr-editor p {
+  margin: 0;
+  color: #607786;
 }
 
 .status-focus .current-status-card {

@@ -158,7 +158,9 @@
     "credentialsProvidedTitle": "Credenciais fornecidas", "uatCredentials": "Credenciais de teste UAT/API", "noCredentialsRecorded": "Sem credenciais registadas",
     "markedNoCredentialDetails": "Este pedido foi marcado como fornecido antes de os detalhes das credenciais serem capturados.",
     "noCredentialsYet": "Este pedido chegou a prontidao UAT, mas ainda nao tem credenciais registadas.", "history": "Historico", "timeline": "Linha do tempo",
-    "continue": "Continuar",
+    "continue": "Continuar", "srEditorTitle": "Codigo SR CNOC",
+    "srEditorHint": "Registe o codigo SR usado ao submeter este pedido ao IP Core. Exemplo: SR_MVT_20260813_648534.",
+    "srEditorPlaceholder": "SR_MVT_20260813_648534",
     "actions": {
       "sendFormApiSpec": "Enviar Form & API Spec", "sendFormApiSpecDescription": "Move o pedido para Aguardar Form.",
       "formReceived": "Form Recebido", "formReceivedDescription": "Move o pedido para Validacao do Form.",

@@ -29,8 +29,14 @@
         <div class="fact-with-action">
           <span>{{ 'fields.cnocSrCode' | translate }}</span>
           <strong>{{ request.srCode || '-' }}</strong>
-          <button (click)="editSrCode()" nz-button nzSize="small" nzType="default">
-            {{ request.srCode ? ('common.actions.edit' | translate) : ('common.actions.add' | translate) }}
+          <button
+            (click)="editSrCode()"
+            [attr.aria-label]="request.srCode ? ('common.actions.edit' | translate) : ('common.actions.add' | translate)"
+            class="icon-action"
+            nz-button
+            nzSize="small"
+            nzType="default">
+            <span nz-icon [nzType]="request.srCode ? 'edit' : 'plus'"></span>
           </button>
         </div>
         <div><span>IP Core</span><strong>{{ request.ipCoreStatus }}</strong></div>
@@ -271,4 +277,19 @@
       <p>{{ event.description }}</p>
     </article>
   </section>
+
+  <nz-modal
+    [(nzVisible)]="isSrEditorOpen"
+    [nzTitle]="'request.srEditorTitle' | translate"
+    [nzOkText]="'common.actions.save' | translate"
+    [nzCancelText]="'common.actions.cancel' | translate"
+    (nzOnCancel)="cancelSrEditor()"
+    (nzOnOk)="saveSrCode()">
+    <ng-container *nzModalContent>
+      <div class="sr-editor">
+        <p>{{ 'request.srEditorHint' | translate }}</p>
+        <input [(ngModel)]="srDraft" nz-input [placeholder]="'request.srEditorPlaceholder' | translate"/>
+      </div>
+    </ng-container>
+  </nz-modal>
 </div>
