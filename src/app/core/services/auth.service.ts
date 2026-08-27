@@ -15,7 +15,7 @@ export class AuthService {
   }
 
   login(login: string, password: string): Observable<User> {
-    if (login && password) {
+    if (environment.useLocalBackend && login && password) {
       const user = this.localDemoUser(login);
       localStorage.setItem('token', 'partner-integration-demo-token');
       this.storeSafeUser(user);
@@ -30,6 +30,20 @@ export class AuthService {
   }
 
   signup(user: any): Observable<{ token: string }> {
+    if (environment.useLocalBackend) {
+      const localUser = this.localDemoUser(user?.login || user?.email || 'local.user');
+      this.storeSafeUser({
+        ...localUser,
+        ...user,
+        id: localUser.id,
+        status: 'ACTIVE',
+        role: user?.role || localUser.role,
+        createdAt: localUser.createdAt
+      });
+      localStorage.setItem('token', 'partner-integration-demo-token');
+      return of({token: 'partner-integration-demo-token'});
+    }
+
     return this.http.post<{ token: string }>(`${this.baseURL}/register`, user);
   }
 
@@ -38,6 +52,14 @@ export class AuthService {
     maskedEmail: string;
     maskedPhone: string
   }> {
+    if (environment.useLocalBackend) {
+      return of({
+        maskedName: 'Integration Operations',
+        maskedEmail: 'in********@example.com',
+        maskedPhone: this.maskPhone(phoneWhatsApp)
+      });
+    }
+
     return this.http.post<{ maskedName: string; maskedEmail: string; maskedPhone: string }>(
       `${this.baseURL}/password/reset/request`,
       {phoneWhatsApp}
@@ -45,10 +67,18 @@ export class AuthService {
   }
 
   confirmPasswordReset(phoneWhatsApp: string): Observable<{ ok: boolean }> {
+    if (environment.useLocalBackend) {
+      return of({ok: !!phoneWhatsApp});
+    }
+
     return this.http.post<{ ok: boolean }>(`${this.baseURL}/password/reset/confirm`, {phoneWhatsApp}).pipe(take(1));
   }
 
   resetPassword(phoneWhatsApp: string, otpCode: string, newPassword: string): Observable<{ ok: boolean }> {
+    if (environment.useLocalBackend) {
+      return of({ok: !!phoneWhatsApp && !!otpCode && !!newPassword});
+    }
+
     return this.http.post<{ ok: boolean }>(
       `${this.baseURL}/password/reset`,
       {phoneWhatsApp, otpCode, newPassword}
@@ -61,14 +91,26 @@ export class AuthService {
       return of(JSON.parse(raw) as User);
     }
 
-    return this.http.get<User>(`${this.baseURL}/me`);
+    return environment.useLocalBackend
+      ? of(this.localDemoUser('local.user'))
+      : this.http.get<User>(`${this.baseURL}/me`);
   }
 
   getUsers(): Observable<User[]> {
+    if (environment.useLocalBackend) {
+      const raw = localStorage.getItem('user');
+      return of(raw ? [JSON.parse(raw) as User] : [this.localDemoUser('local.user')]);
+    }
+
     return this.http.get<User[]>(`${this.baseURL}/users`);
   }
 
   deleteUser(id: string): Observable<User> {
+    if (environment.useLocalBackend) {
+      const user = this.localDemoUser('local.user');
+      return of({...user, id, status: 'INACTIVE'});
+    }
+
     return this.http.delete<User>(`${this.baseURL}/${id}`).pipe(take(1));
   }
 
@@ -107,5 +149,11 @@ export class AuthService {
       role: 'ADMIN',
       createdAt: new Date().toISOString()
     } as User;
+  }
+
+  private maskPhone(phone: string): string {
+    const value = (phone || '').trim();
+    if (value.length <= 4) return value || '+258*********';
+    return `${value.slice(0, 4)}*****${value.slice(-2)}`;
   }
 }
