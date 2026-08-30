@@ -59,6 +59,11 @@
         <button (click)="unblockRequest()" nz-button nzType="primary">{{ 'request.unblockRequest' | translate }}</button>
       </div>
 
+      <div *ngIf="needsTroubleshootingFollowUp()" class="validation-gate urgent">
+        <strong>{{ 'request.troubleshootingFollowUpTitle' | translate }}</strong>
+        <span>{{ 'request.troubleshootingFollowUpHint' | translate }}</span>
+      </div>
+
       <div class="flow-strip" [attr.aria-label]="'request.workflow' | translate">
         <span
           *ngFor="let status of flow"

@@ -72,6 +72,7 @@ export class RequestDetailComponent implements OnInit {
     'IMPLEMENTATION',
     'READY_CONNECTIVITY',
     'CONNECTIVITY_TEST',
+    'TROUBLESHOOTING',
     'READY_UAT',
     'UAT_IN_PROGRESS',
     'READY_HANDOVER',
@@ -323,6 +324,7 @@ export class RequestDetailComponent implements OnInit {
         tone: 'primary'
       }],
       CONNECTIVITY_TEST: this.connectivityActions(),
+      TROUBLESHOOTING: this.troubleshootingActions(),
       READY_UAT: [{
         label: this.t('request.actions.provideCredentials'),
         description: this.t('request.actions.provideCredentialsDescription'),
@@ -350,20 +352,25 @@ export class RequestDetailComponent implements OnInit {
   get exceptionActions(): WorkflowAction[] {
     if (!this.request || this.request.currentStatus === 'CLOSED' || this.request.currentStatus === 'BLOCKED') return [];
 
-    return [
-      {
+    const actions: WorkflowAction[] = [];
+
+    if (this.request.currentStatus !== 'TROUBLESHOOTING') {
+      actions.push({
         label: this.t('request.actions.registerIssue'),
         description: this.t('request.actions.registerIssueDescription'),
         patch: {connectivityUat: 'FAIL', blocker: 'Needs investigation'},
         tone: 'danger'
-      },
-      {
-        label: this.t('request.actions.blockRequest'),
-        description: this.t('request.actions.blockRequestDescription'),
-        patch: {},
-        tone: 'danger'
-      }
-    ];
+      });
+    }
+
+    actions.push({
+      label: this.t('request.actions.blockRequest'),
+      description: this.t('request.actions.blockRequestDescription'),
+      patch: {},
+      tone: 'danger'
+    });
+
+    return actions;
   }
 
   isBlockAction(action: WorkflowAction): boolean {
@@ -434,6 +441,73 @@ export class RequestDetailComponent implements OnInit {
     }
 
     return actions;
+  }
+
+  private troubleshootingActions(): WorkflowAction[] {
+    if (!this.request) return [];
+
+    const actions: WorkflowAction[] = [];
+    const requiresUat = this.requiresUat();
+    const requiresPrd = this.requiresPrd();
+
+    if (this.request.vpnStatus === 'DOWN') {
+      actions.push({
+        label: this.t('request.actions.vpnRestored'),
+        description: this.t('request.actions.vpnRestoredDescription'),
+        patch: {
+          vpnStatus: 'UP',
+          connectivityUat: requiresUat && this.request.connectivityUat === 'FAIL' ? 'IN_PROGRESS' : this.request.connectivityUat,
+          connectivityPrd: requiresPrd && this.request.connectivityPrd === 'FAIL' ? 'IN_PROGRESS' : this.request.connectivityPrd,
+          blocker: ''
+        },
+        tone: 'primary'
+      });
+    }
+
+    if (requiresUat && this.request.connectivityUat !== 'PASS') {
+      actions.push({
+        label: this.t('request.actions.uatConnectivityRetestPass'),
+        description: this.t('request.actions.uatConnectivityRetestPassDescription'),
+        patch: {
+          vpnStatus: 'UP',
+          connectivityUat: 'PASS',
+          blocker: ''
+        },
+        tone: 'primary'
+      });
+    }
+
+    if (requiresPrd && this.request.connectivityPrd !== 'PASS') {
+      actions.push({
+        label: this.t('request.actions.prdConnectivityRetestPass'),
+        description: this.t('request.actions.prdConnectivityRetestPassDescription'),
+        patch: {
+          vpnStatus: 'UP',
+          connectivityPrd: 'PASS',
+          blocker: ''
+        },
+        tone: 'primary'
+      });
+    }
+
+    actions.push({
+      label: this.t('request.actions.returnConnectivityTest'),
+      description: this.t('request.actions.returnConnectivityTestDescription'),
+      patch: {
+        vpnStatus: this.request.vpnStatus === 'DOWN' ? 'IN_PROGRESS' : this.request.vpnStatus,
+        connectivityUat: requiresUat && this.request.connectivityUat !== 'PASS' ? 'IN_PROGRESS' : this.request.connectivityUat,
+        connectivityPrd: requiresPrd && this.request.connectivityPrd !== 'PASS' ? 'IN_PROGRESS' : this.request.connectivityPrd,
+        blocker: ''
+      }
+    });
+
+    return actions;
+  }
+
+  needsTroubleshootingFollowUp(): boolean {
+    return this.request?.currentStatus === 'TROUBLESHOOTING'
+      && this.request.priority === 'P1'
+      && !this.request.followUpDate;
   }
 
   private requiresUat(): boolean {
