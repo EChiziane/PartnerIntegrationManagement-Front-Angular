@@ -22,8 +22,11 @@ export class PartnerDetailComponent implements OnInit {
   isEditingProfile = false;
   isCredentialsEditorOpen = false;
   isSrEditorOpen = false;
+  isBlockReasonModalOpen = false;
+  isUnblockNoteModalOpen = false;
   credentialsDraft = '';
   srDraft = '';
+  reasonDraft = '';
   private pendingSrAction: { label: string; patch: Partial<PartnerRequest> } | null = null;
   importNotice = '';
 
@@ -352,9 +355,20 @@ export class PartnerDetailComponent implements OnInit {
     const request = this.activeRequest;
     if (!request) return;
 
-    const reason = window.prompt(this.t('modal.blockReason'));
-    if (!reason?.trim()) return;
+    this.reasonDraft = '';
+    this.isBlockReasonModalOpen = true;
+  }
 
+  cancelBlockReason(): void {
+    this.isBlockReasonModalOpen = false;
+    this.reasonDraft = '';
+  }
+
+  confirmBlockReason(): void {
+    const request = this.activeRequest;
+    if (!request || !this.reasonDraft.trim()) return;
+    const reason = this.reasonDraft.trim();
+    this.isBlockReasonModalOpen = false;
     this.modal.confirm({
       nzTitle: this.t('modal.blockTitle'),
       nzContent: this.t('modal.blockContent', {request: request.title || this.partner?.name || this.t('request.workflow')}),
@@ -367,13 +381,27 @@ export class PartnerDetailComponent implements OnInit {
         this.load();
       }
     });
+    this.reasonDraft = '';
   }
 
   unblockActiveRequest(): void {
     const request = this.activeRequest;
     if (!request) return;
 
-    const note = window.prompt(this.t('modal.unblockNote'));
+    this.reasonDraft = '';
+    this.isUnblockNoteModalOpen = true;
+  }
+
+  cancelUnblockNote(): void {
+    this.isUnblockNoteModalOpen = false;
+    this.reasonDraft = '';
+  }
+
+  confirmUnblockNote(): void {
+    const request = this.activeRequest;
+    if (!request) return;
+    const note = this.reasonDraft.trim();
+    this.isUnblockNoteModalOpen = false;
     this.modal.confirm({
       nzTitle: this.t('modal.unblockTitle'),
       nzContent: this.t('modal.unblockContent'),
@@ -385,6 +413,7 @@ export class PartnerDetailComponent implements OnInit {
         this.load();
       }
     });
+    this.reasonDraft = '';
   }
 
   private applyAction(label: string, patch: Partial<PartnerRequest>): void {

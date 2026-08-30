@@ -185,9 +185,19 @@ p,
   gap: 10px;
 }
 
-.sr-editor p {
+.sr-editor p,
+.reason-editor p {
   margin: 0;
   color: #607786;
+}
+
+.reason-editor {
+  display: grid;
+  gap: 10px;
+}
+
+.reason-editor textarea {
+  resize: vertical;
 }
 
 .status-focus .current-status-card {

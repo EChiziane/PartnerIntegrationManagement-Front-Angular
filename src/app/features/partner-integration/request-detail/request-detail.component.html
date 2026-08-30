@@ -289,6 +289,54 @@
   </nz-modal>
 
   <nz-modal
+    [(nzVisible)]="isBackReasonModalOpen"
+    [nzTitle]="'modal.backReasonTitle' | translate"
+    [nzOkText]="'modal.moveBack' | translate"
+    [nzCancelText]="'common.actions.cancel' | translate"
+    [nzOkDisabled]="!reasonDraft.trim()"
+    (nzOnCancel)="cancelBackReason()"
+    (nzOnOk)="confirmBackReason()">
+    <ng-container *nzModalContent>
+      <div class="reason-editor">
+        <p>{{ 'modal.backReasonContent' | translate }}</p>
+        <textarea [(ngModel)]="reasonDraft" nz-input rows="4" [placeholder]="'modal.reasonPlaceholder' | translate"></textarea>
+      </div>
+    </ng-container>
+  </nz-modal>
+
+  <nz-modal
+    [(nzVisible)]="isBlockReasonModalOpen"
+    [nzTitle]="'modal.blockReasonTitle' | translate"
+    [nzOkText]="'modal.blockOk' | translate"
+    [nzCancelText]="'common.actions.cancel' | translate"
+    [nzOkDanger]="true"
+    [nzOkDisabled]="!reasonDraft.trim()"
+    (nzOnCancel)="cancelBlockReason()"
+    (nzOnOk)="confirmBlockReason()">
+    <ng-container *nzModalContent>
+      <div class="reason-editor">
+        <p>{{ 'modal.blockReasonContent' | translate }}</p>
+        <textarea [(ngModel)]="reasonDraft" nz-input rows="4" [placeholder]="'modal.reasonPlaceholder' | translate"></textarea>
+      </div>
+    </ng-container>
+  </nz-modal>
+
+  <nz-modal
+    [(nzVisible)]="isUnblockNoteModalOpen"
+    [nzTitle]="'modal.unblockNoteTitle' | translate"
+    [nzOkText]="'modal.unblockOk' | translate"
+    [nzCancelText]="'modal.continueWithoutNote' | translate"
+    (nzOnCancel)="confirmUnblockNote()"
+    (nzOnOk)="confirmUnblockNote()">
+    <ng-container *nzModalContent>
+      <div class="reason-editor">
+        <p>{{ 'modal.unblockNoteContent' | translate }}</p>
+        <textarea [(ngModel)]="reasonDraft" nz-input rows="4" [placeholder]="'modal.reasonPlaceholder' | translate"></textarea>
+      </div>
+    </ng-container>
+  </nz-modal>
+
+  <nz-modal
     [(nzVisible)]="isSrEditorOpen"
     [nzTitle]="'request.srEditorTitle' | translate"
     [nzOkText]="'common.actions.save' | translate"

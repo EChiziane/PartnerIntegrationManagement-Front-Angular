@@ -48,9 +48,14 @@ export class RequestDetailComponent implements OnInit {
   isCredentialsEditorOpen = false;
   isTechnicalEditorOpen = false;
   isSrEditorOpen = false;
+  isBackReasonModalOpen = false;
+  isBlockReasonModalOpen = false;
+  isUnblockNoteModalOpen = false;
   credentialsDraft = '';
   srDraft = '';
+  reasonDraft = '';
   private pendingSrAction: { label: string; patch: Partial<PartnerRequest> } | null = null;
+  private pendingBackAction: WorkflowAction | null = null;
   technicalDraft: TechnicalDraft = this.emptyTechnicalDraft();
   importNotice = '';
   readonly flow: WorkflowStatus[] = [
@@ -583,11 +588,21 @@ export class RequestDetailComponent implements OnInit {
     const action = this.previousAction;
     if (!action || !this.request) return;
 
-    const reason = window.prompt(this.t('modal.backReason'));
-    if (!reason?.trim()) {
-      return;
-    }
+    this.pendingBackAction = action;
+    this.reasonDraft = '';
+    this.isBackReasonModalOpen = true;
+  }
 
+  cancelBackReason(): void {
+    this.isBackReasonModalOpen = false;
+    this.reasonDraft = '';
+    this.pendingBackAction = null;
+  }
+
+  confirmBackReason(): void {
+    const action = this.pendingBackAction;
+    if (!action || !this.request || !this.reasonDraft.trim()) return;
+    this.isBackReasonModalOpen = false;
     this.modal.confirm({
       nzTitle: this.t('modal.confirmBackTitle'),
       nzContent: this.t('modal.confirmBackContent', {status: this.partnerIntegration.statusLabel(this.request.currentStatus)}),
@@ -595,14 +610,26 @@ export class RequestDetailComponent implements OnInit {
       nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => this.applyAction(action.label, action.patch)
     });
+    this.reasonDraft = '';
+    this.pendingBackAction = null;
   }
 
   blockRequest(): void {
     if (!this.request) return;
 
-    const reason = window.prompt(this.t('modal.blockReason'));
-    if (!reason?.trim()) return;
+    this.reasonDraft = '';
+    this.isBlockReasonModalOpen = true;
+  }
 
+  cancelBlockReason(): void {
+    this.isBlockReasonModalOpen = false;
+    this.reasonDraft = '';
+  }
+
+  confirmBlockReason(): void {
+    if (!this.request || !this.reasonDraft.trim()) return;
+    const reason = this.reasonDraft.trim();
+    this.isBlockReasonModalOpen = false;
     this.modal.confirm({
       nzTitle: this.t('modal.blockTitle'),
       nzContent: this.t('modal.blockContent', {request: this.request.title || this.partner?.name || this.t('request.workflow')}),
@@ -615,12 +642,25 @@ export class RequestDetailComponent implements OnInit {
         this.load();
       }
     });
+    this.reasonDraft = '';
   }
 
   unblockRequest(): void {
     if (!this.request) return;
 
-    const note = window.prompt(this.t('modal.unblockNote'));
+    this.reasonDraft = '';
+    this.isUnblockNoteModalOpen = true;
+  }
+
+  cancelUnblockNote(): void {
+    this.isUnblockNoteModalOpen = false;
+    this.reasonDraft = '';
+  }
+
+  confirmUnblockNote(): void {
+    if (!this.request) return;
+    const note = this.reasonDraft.trim();
+    this.isUnblockNoteModalOpen = false;
     this.modal.confirm({
       nzTitle: this.t('modal.unblockTitle'),
       nzContent: this.t('modal.unblockContent'),
@@ -632,6 +672,7 @@ export class RequestDetailComponent implements OnInit {
         this.load();
       }
     });
+    this.reasonDraft = '';
   }
 
   private applyAction(label: string, patch: Partial<PartnerRequest>): void {
