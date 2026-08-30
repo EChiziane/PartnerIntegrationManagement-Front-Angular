@@ -28,19 +28,27 @@
 }
 
 h1,
-h2,
 p {
   margin: 0;
 }
 
 p,
-.connection-facts span {
+.connection-main span,
+.connection-service span,
+.active-request span {
   color: #607786;
 }
 
 .toolbar {
   display: grid;
-  max-width: 760px;
+  grid-template-columns: minmax(240px, 1.3fr) repeat(4, minmax(150px, 1fr)) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.toolbar nz-select,
+.toolbar input {
+  width: 100%;
 }
 
 .search-control {
@@ -63,75 +71,93 @@ p,
 
 .connection-card {
   display: grid;
-  gap: 14px;
+  grid-template-columns: minmax(180px, 1.2fr) minmax(130px, 0.75fr) minmax(110px, 0.55fr) minmax(140px, 0.65fr) minmax(150px, 0.7fr) 110px auto;
+  align-items: center;
+  gap: 12px;
 }
 
-.connection-main {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.connection-main > div {
-  min-width: 0;
-}
-
-.connection-main h2 {
-  margin-top: 4px;
-  color: #0f1f2a;
-  font-size: 20px;
-  overflow-wrap: anywhere;
-}
-
-.status-stack {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.connection-facts {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.connection-facts div {
+.connection-main,
+.connection-service,
+.active-request {
   display: grid;
   gap: 4px;
   min-width: 0;
-  padding: 10px;
-  border: 1px solid #e4edf3;
-  border-radius: 8px;
-  background: #f8fbfd;
 }
 
-.connection-facts strong {
+.connection-main strong,
+.connection-service strong,
+.active-request strong,
+.last-updated {
   min-width: 0;
+  overflow: hidden;
   color: #0f1f2a;
-  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.connection-main span,
+.connection-service span,
+.active-request span {
+  font-size: 12px;
 }
 
 .row-actions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
-@media (max-width: 900px) {
-  .connection-main {
-    align-items: stretch;
-    flex-direction: column;
+.row-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 1280px) {
+  .connection-card {
+    grid-template-columns: minmax(180px, 1.2fr) minmax(130px, 0.75fr) minmax(110px, 0.55fr) minmax(130px, 0.65fr) minmax(130px, 0.7fr) 96px 122px;
   }
 
-  .status-stack,
+  .row-actions button {
+    width: 34px;
+    min-width: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .row-actions .action-label {
+    display: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .connection-card {
+    grid-template-columns: 1fr;
+  }
+
   .row-actions {
     justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
-  .connection-facts {
+  .row-actions button {
+    width: auto;
+    min-width: 0;
+    padding: 4px 15px;
+  }
+
+  .row-actions .action-label {
+    display: inline;
+  }
+}
+
+@media (max-width: 620px) {
+  .toolbar {
     grid-template-columns: 1fr;
   }
 }

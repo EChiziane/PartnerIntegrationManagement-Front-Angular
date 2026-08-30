@@ -314,7 +314,7 @@
   "partners": {
     "eyebrow": "Partners",
     "title": "Partner registry",
-    "subtitle": "Search company profiles, inspect the current integration, and open controlled requests.",
+    "subtitle": "Search partners, check the main connection state, and open the profile when details are needed.",
     "newPartner": "New Partner",
     "downloadRegistry": "Download Registry",
     "searchPlaceholder": "Search by partner, representative, service, peer IP or private endpoint",
@@ -531,14 +531,20 @@
   },
   "pipeline": {
     "eyebrow": "Request pipeline",
-    "title": "Every request has its own workflow.",
-    "subtitle": "Track creation, update, block, unblock and troubleshooting requests by their current pipeline state.",
+    "title": "Request list",
+    "subtitle": "Choose a status, type, partner, owner or priority, then open the request that needs work.",
     "allStatuses": "All statuses",
     "download": "Download Request Pipeline",
     "workflowStages": "Workflow stages",
     "owner": "Owner: {{owner}}",
     "next": "Next: {{action}}",
-    "followUp": "Follow-up: {{date}}"
+    "followUp": "Follow-up: {{date}}",
+    "searchPlaceholder": "Search request, partner, owner, next action or SR code",
+    "openOnly": "Open only",
+    "allTypes": "All types",
+    "allPartners": "All partners",
+    "allOwners": "All owners",
+    "allPriorities": "All priorities"
   },
   "tasks": {
     "eyebrow": "Execution queue",
@@ -618,8 +624,8 @@
   },
   "connections": {
     "eyebrow": "Connections",
-    "title": "Connection registry",
-    "subtitle": "Track the real VPN/API connection state independently from request workflow.",
+    "title": "Connection list",
+    "subtitle": "See each connection, its health, current phase and active request. Open it for technical details.",
     "searchPlaceholder": "Search by connection, partner, service, environment, peer or endpoint",
     "totalRequests": "Total requests",
     "credentials": "Credentials",
@@ -628,7 +634,15 @@
     "connectionState": "Connection status",
     "realConnectionState": "Real state of the VPN/API connection",
     "requests": "Connection requests",
-    "requestsTitle": "Operational requests on this connection"
+    "requestsTitle": "Operational requests on this connection",
+    "download": "Download Connections",
+    "allHealth": "All health",
+    "allStages": "All stages",
+    "allEnvironments": "All environments",
+    "allServices": "All services",
+    "hasActiveRequest": "Active request",
+    "noActiveRequest": "No active request",
+    "openActiveRequest": "Open Request"
   },
   "uat": {
     "eyebrow": "UAT / CAB",

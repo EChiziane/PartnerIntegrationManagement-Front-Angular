@@ -68,7 +68,6 @@
       <span>{{ 'partners.headers.institution' | translate }}</span>
       <span>{{ 'partners.headers.service' | translate }}</span>
       <span>{{ 'partners.headers.integrationStatus' | translate }}</span>
-      <span>{{ 'partners.headers.integration' | translate }}</span>
       <span>{{ 'partners.headers.urgentRequest' | translate }}</span>
       <span>{{ 'partners.headers.date' | translate }}</span>
       <span>{{ 'partners.headers.actions' | translate }}</span>
@@ -92,13 +91,7 @@
         <span>{{ partnerIntegration.vpnStatusLabel(connectionForPartner(partner)?.vpnStatus) }} · UAT {{ partnerIntegration.testStatusLabel(connectionForPartner(partner)?.connectivityUat) }} · PRD {{ partnerIntegration.testStatusLabel(connectionForPartner(partner)?.connectivityPrd) }}</span>
       </div>
 
-      <div class="cell-stack compact">
-        <strong>{{ integrationName(partner) }}</strong>
-        <span>{{ 'partners.peer' | translate }}: {{ connectionPeersLabel(partner) }}</span>
-        <span>{{ 'partners.private' | translate }}: {{ connectionEndpointsLabel(partner) }}</span>
-      </div>
-
-      <div>
+      <div class="request-cell">
         <ng-container *ngIf="urgentRequest(partner.id) as request; else noStatus">
           <strong class="urgent-title">{{ partnerIntegration.requestDisplayTitle(request, partner) }}</strong>
           <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
@@ -108,7 +101,6 @@
         <ng-template #noStatus>
           <nz-tag nzColor="default">{{ 'common.clear' | translate }}</nz-tag>
         </ng-template>
-        <small class="next-action">{{ nextAction(partner.id) }}</small>
       </div>
 
       <div class="cell-stack compact">

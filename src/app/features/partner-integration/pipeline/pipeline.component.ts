@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
-import {Partner, PartnerRequest, WorkflowStatus} from '@shared/models/partner-integration';
+import {Partner, PartnerRequest, RequestType, TaskPriority, WorkflowStatus} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 
 interface WorkflowStage {
@@ -20,6 +20,12 @@ export class PipelineComponent implements OnInit {
   partners: Partner[] = [];
   requests: PartnerRequest[] = [];
   selectedStatus: WorkflowStatus | 'ALL' = 'ALL';
+  selectedType: RequestType | 'ALL' = 'ALL';
+  selectedPartnerId = 'ALL';
+  selectedOwner = 'ALL';
+  selectedPriority: TaskPriority | 'ALL' = 'ALL';
+  selectedScope: 'ALL' | 'OPEN' | 'CLOSED' | 'BLOCKED' = 'OPEN';
+  searchValue = '';
 
   readonly statuses: WorkflowStatus[] = [
     'BLOCKED',
@@ -38,6 +44,9 @@ export class PipelineComponent implements OnInit {
     'READY_HANDOVER',
     'CLOSED'
   ];
+
+  readonly requestTypes: RequestType[] = ['NEW_INTEGRATION', 'UPDATE_INTEGRATION', 'BLOCK_VPN', 'UNBLOCK_VPN', 'CONNECTIVITY_SUPPORT'];
+  readonly priorities: TaskPriority[] = ['P1', 'P2', 'P3', 'P4'];
 
   readonly workflowStages: WorkflowStage[] = [
     {label: 'Intake', tone: 'neutral', statuses: ['NEW', 'WAITING_FORM', 'FORM_VALIDATION', 'READY_STATEMENT']},
@@ -64,8 +73,33 @@ export class PipelineComponent implements OnInit {
   }
 
   get filteredRequests(): PartnerRequest[] {
-    if (this.selectedStatus === 'ALL') return this.requests;
-    return this.requests.filter(request => request.currentStatus === this.selectedStatus);
+    const query = this.searchValue.trim().toLowerCase();
+
+    return this.requests.filter(request => {
+      const partnerName = this.partnerName(request.partnerId);
+      const title = this.requestTitle(request);
+      const matchesQuery = !query
+        || title.toLowerCase().includes(query)
+        || partnerName.toLowerCase().includes(query)
+        || request.nextAction.toLowerCase().includes(query)
+        || request.currentOwner.toLowerCase().includes(query)
+        || (request.srCode || '').toLowerCase().includes(query);
+
+      if (!matchesQuery) return false;
+      if (this.selectedScope === 'OPEN' && request.currentStatus === 'CLOSED') return false;
+      if (this.selectedScope === 'CLOSED' && request.currentStatus !== 'CLOSED') return false;
+      if (this.selectedScope === 'BLOCKED' && request.currentStatus !== 'BLOCKED') return false;
+      if (this.selectedStatus !== 'ALL' && request.currentStatus !== this.selectedStatus) return false;
+      if (this.selectedType !== 'ALL' && request.type !== this.selectedType) return false;
+      if (this.selectedPartnerId !== 'ALL' && request.partnerId !== this.selectedPartnerId) return false;
+      if (this.selectedOwner !== 'ALL' && request.currentOwner !== this.selectedOwner) return false;
+      if (this.selectedPriority !== 'ALL' && request.priority !== this.selectedPriority) return false;
+      return true;
+    });
+  }
+
+  get owners(): string[] {
+    return [...new Set(this.requests.map(request => request.currentOwner).filter(Boolean))].sort();
   }
 
   partnerName(partnerId: string): string {
@@ -105,9 +139,14 @@ export class PipelineComponent implements OnInit {
   }
 
   downloadPipeline(): void {
-    const scope = this.selectedStatus === 'ALL'
-      ? 'All Request Pipeline'
-      : this.partnerIntegration.statusLabel(this.selectedStatus);
+    const scope = [
+      this.selectedScope,
+      this.selectedStatus === 'ALL' ? '' : this.partnerIntegration.statusLabel(this.selectedStatus),
+      this.selectedType === 'ALL' ? '' : this.partnerIntegration.typeLabel(this.selectedType),
+      this.selectedPartnerId === 'ALL' ? '' : this.partnerName(this.selectedPartnerId),
+      this.selectedPriority === 'ALL' ? '' : this.selectedPriority,
+      this.searchValue.trim() ? `SEARCH_${this.searchValue.trim()}` : ''
+    ].filter(Boolean).join(' / ');
     this.pdf.downloadPipeline(this.filteredRequests, this.partners, scope);
   }
 }

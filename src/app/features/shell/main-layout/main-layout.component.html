@@ -35,6 +35,13 @@
       </li>
 
       <li nz-menu-item nzMatchRouter>
+        <a routerLink="/app/partners">
+          <span nz-icon nzType="team"></span>
+          <span>{{ 'layout.nav.partners' | translate }}</span>
+        </a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter>
         <a routerLink="/app/connections">
           <span nz-icon nzType="partition"></span>
           <span>{{ 'layout.nav.connections' | translate }}</span>
@@ -66,13 +73,6 @@
         <a routerLink="/app/uat">
           <span nz-icon nzType="file-done"></span>
           <span>{{ 'layout.nav.uat' | translate }}</span>
-        </a>
-      </li>
-
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/app/partners">
-          <span nz-icon nzType="team"></span>
-          <span>{{ 'layout.nav.partners' | translate }}</span>
         </a>
       </li>
     </ul>
@@ -190,6 +190,11 @@
       <span>{{ 'layout.nav.home' | translate }}</span>
     </a>
 
+    <a routerLink="/app/partners" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="team"></span>
+      <span>{{ 'layout.nav.partners' | translate }}</span>
+    </a>
+
     <a routerLink="/app/connections" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="partition"></span>
       <span>{{ 'layout.nav.connections' | translate }}</span>
@@ -213,11 +218,6 @@
     <a routerLink="/app/uat" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="file-done"></span>
       <span>{{ 'layout.nav.uat' | translate }}</span>
-    </a>
-
-    <a routerLink="/app/partners" routerLinkActive="active" (click)="closeMobileMenu()">
-      <span nz-icon nzType="team"></span>
-      <span>{{ 'layout.nav.partners' | translate }}</span>
     </a>
 
     <div class="mobile-nav-section">{{ 'layout.language.label' | translate }}</div>

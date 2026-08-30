@@ -12,43 +12,72 @@
       <span nz-icon nzType="search"></span>
       <input [(ngModel)]="searchValue" nz-input [placeholder]="'connections.searchPlaceholder' | translate"/>
     </label>
+
+    <nz-select [(ngModel)]="selectedHealth">
+      <nz-option nzValue="ALL" [nzLabel]="'connections.allHealth' | translate"></nz-option>
+      <nz-option *ngFor="let health of healthOptions" [nzValue]="health" [nzLabel]="partnerIntegration.connectionHealthLabel(health)"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedStage">
+      <nz-option nzValue="ALL" [nzLabel]="'connections.allStages' | translate"></nz-option>
+      <nz-option *ngFor="let stage of stageOptions" [nzValue]="stage" [nzLabel]="partnerIntegration.connectionStageLabel(stage)"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedEnvironment">
+      <nz-option nzValue="ALL" [nzLabel]="'connections.allEnvironments' | translate"></nz-option>
+      <nz-option *ngFor="let environment of environments" [nzValue]="environment" [nzLabel]="environment"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedService">
+      <nz-option nzValue="ALL" [nzLabel]="'connections.allServices' | translate"></nz-option>
+      <nz-option *ngFor="let service of services" [nzValue]="service" [nzLabel]="service"></nz-option>
+    </nz-select>
+
+    <button (click)="downloadConnections()" nz-button nzType="default">
+      <span nz-icon nzType="download"></span>
+      {{ 'connections.download' | translate }}
+    </button>
   </section>
 
   <section class="connection-list">
     <article *ngFor="let connection of filteredConnections" class="connection-card">
       <div class="connection-main">
-        <div>
-          <span class="eyebrow">{{ partnerName(connection.partnerId) }}</span>
-          <h2>{{ connection.name }}</h2>
-          <p>{{ connection.serviceApi || '-' }} - {{ connection.environment }}</p>
-        </div>
-        <div class="status-stack">
-          <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection.health)">
-            {{ partnerIntegration.connectionHealthLabel(connection.health) }}
-          </nz-tag>
-          <nz-tag [nzColor]="partnerIntegration.connectionStageColor(connection.stage)">
-            {{ partnerIntegration.connectionStageLabel(connection.stage) }}
-          </nz-tag>
-        </div>
+        <strong>{{ connection.name }}</strong>
+        <span>{{ partnerName(connection.partnerId) }}</span>
       </div>
 
-      <div class="connection-facts">
-        <div><span>{{ 'fields.publicPeer' | translate }}</span><strong>{{ peersLabel(connection) }}</strong></div>
-        <div><span>{{ 'fields.privateEndpoints' | translate }}</span><strong>{{ endpointsLabel(connection) }}</strong></div>
-        <div><span>{{ 'fields.openRequests' | translate }}</span><strong>{{ connection.activeRequestId ? 1 : 0 }}</strong></div>
-        <div><span>{{ 'connections.totalRequests' | translate }}</span><strong>{{ connection.requestCount || 0 }}</strong></div>
-        <div><span>{{ 'connections.credentials' | translate }}</span><strong>{{ partnerIntegration.credentialsStatusLabel(connection.credentialsStatus) }}</strong></div>
-        <div><span>{{ 'fields.lastUpdated' | translate }}</span><strong>{{ connection.lastUpdated || '-' }}</strong></div>
+      <div class="connection-service">
+        <strong>{{ connection.serviceApi || '-' }}</strong>
+        <span>{{ connection.environment }}</span>
       </div>
+
+      <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection.health)">
+        {{ partnerIntegration.connectionHealthLabel(connection.health) }}
+      </nz-tag>
+
+      <nz-tag [nzColor]="partnerIntegration.connectionStageColor(connection.stage)">
+        {{ partnerIntegration.connectionStageLabel(connection.stage) }}
+      </nz-tag>
+
+      <div class="active-request">
+        <strong>{{ connection.activeRequestId ? ('connections.hasActiveRequest' | translate) : ('connections.noActiveRequest' | translate) }}</strong>
+        <span>{{ 'connections.totalRequests' | translate }}: {{ connection.requestCount || 0 }}</span>
+      </div>
+
+      <strong class="last-updated">{{ connection.lastUpdated || '-' }}</strong>
 
       <div class="row-actions">
+        <button (click)="openActiveRequest(connection)" [disabled]="!connection.activeRequestId" [title]="'connections.openActiveRequest' | translate" nz-button nzType="default">
+          <span nz-icon nzType="project"></span>
+          <span class="action-label">{{ 'connections.openActiveRequest' | translate }}</span>
+        </button>
         <button (click)="openPartner(connection)" nz-button nzType="default">
           <span nz-icon nzType="team"></span>
-          {{ 'layout.nav.partners' | translate }}
+          <span class="action-label">{{ 'layout.nav.partners' | translate }}</span>
         </button>
         <button (click)="openConnection(connection)" nz-button nzType="primary">
           <span nz-icon nzType="partition"></span>
-          {{ 'connections.openConnection' | translate }}
+          <span class="action-label">{{ 'common.actions.open' | translate }}</span>
         </button>
       </div>
     </article>

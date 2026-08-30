@@ -4,6 +4,7 @@ import type jsPDF from 'jspdf';
 import {DocumentFilenameService} from '@core/services/document-filename.service';
 import {
   Partner,
+  PartnerConnection,
   PartnerRequest,
   RequestFormData,
   TimelineEvent,
@@ -141,6 +142,50 @@ export class PartnerIntegrationPdfService {
     });
 
     doc.save(this.documentFilename.build('REQUEST_PIPELINE', 'REQUESTS', scopeLabel));
+  }
+
+  async downloadConnectionList(connections: PartnerConnection[], partners: Partner[], requests: PartnerRequest[], scopeLabel: string): Promise<void> {
+    const [{default: JsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
+    const doc = new JsPDF({orientation: 'landscape'});
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 14;
+
+    this.drawHeader(doc, 'CONNECTION REGISTER', scopeLabel);
+    this.drawSummaryTable(doc, autoTable, margin, 26, [
+      ['Connections', String(connections.length)],
+      ['Healthy', String(connections.filter(item => item.health === 'HEALTHY').length)],
+      ['Attention', String(connections.filter(item => item.health === 'DOWN' || item.health === 'DEGRADED').length)],
+      ['Open Requests', String(requests.filter(item => item.currentStatus !== 'CLOSED').length)]
+    ]);
+
+    autoTable(doc, {
+      startY: 44,
+      margin: {left: margin, right: margin, bottom: 20},
+      head: [['Connection', 'Partner', 'Service/API', 'Environment', 'Health', 'Stage', 'Active Request', 'Last Updated']],
+      body: connections.map(connection => {
+        const activeRequest = requests.find(request => request.id === connection.activeRequestId);
+        return [
+          connection.name || '-',
+          partners.find(partner => partner.id === connection.partnerId)?.name || '-',
+          connection.serviceApi || '-',
+          connection.environment || '-',
+          this.partnerIntegration.connectionHealthLabel(connection.health),
+          this.partnerIntegration.connectionStageLabel(connection.stage),
+          activeRequest ? this.partnerIntegration.requestDisplayTitle(activeRequest) : '-',
+          connection.lastUpdated || '-'
+        ];
+      }),
+      theme: 'grid',
+      styles: this.tableStyles(),
+      headStyles: this.headStyles(),
+      didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
+    });
+
+    doc.save(this.documentFilename.build('CONNECTIONS', 'REGISTER', scopeLabel));
   }
 
   async downloadPartnerProfile(

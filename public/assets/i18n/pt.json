@@ -314,7 +314,7 @@
   "partners": {
     "eyebrow": "Partners",
     "title": "Registo de partners",
-    "subtitle": "Pesquise perfis de empresas, veja a integracao atual e abra pedidos controlados.",
+    "subtitle": "Pesquise partners, veja o estado da conexao principal e abra o perfil quando precisar dos detalhes.",
     "newPartner": "Novo Partner",
     "downloadRegistry": "Baixar Registo",
     "searchPlaceholder": "Pesquisar por partner, representante, servico, peer IP ou endpoint privado",
@@ -531,14 +531,20 @@
   },
   "pipeline": {
     "eyebrow": "Pipeline de pedidos",
-    "title": "Cada pedido tem o seu proprio workflow.",
-    "subtitle": "Acompanhe pedidos de criacao, update, bloqueio, desbloqueio e troubleshooting pelo estado atual do pipeline.",
+    "title": "Lista de pedidos",
+    "subtitle": "Escolha estado, tipo, partner, responsavel ou prioridade, depois abra o pedido que precisa de trabalho.",
     "allStatuses": "Todos estados",
     "download": "Baixar Pipeline de Pedidos",
     "workflowStages": "Etapas do workflow",
     "owner": "Responsavel: {{owner}}",
     "next": "Proximo: {{action}}",
-    "followUp": "Follow-up: {{date}}"
+    "followUp": "Follow-up: {{date}}",
+    "searchPlaceholder": "Pesquisar pedido, partner, responsavel, proxima acao ou codigo SR",
+    "openOnly": "Apenas abertos",
+    "allTypes": "Todos tipos",
+    "allPartners": "Todos partners",
+    "allOwners": "Todos responsaveis",
+    "allPriorities": "Todas prioridades"
   },
   "tasks": {
     "eyebrow": "Fila de execucao",
@@ -618,8 +624,8 @@
   },
   "connections": {
     "eyebrow": "Conexoes",
-    "title": "Registo de conexoes",
-    "subtitle": "Acompanhe o estado real da conexao VPN/API separado do workflow dos pedidos.",
+    "title": "Lista de conexoes",
+    "subtitle": "Veja cada conexao, a saude, fase atual e pedido ativo. Abra para detalhes tecnicos.",
     "searchPlaceholder": "Pesquisar por conexao, partner, servico, ambiente, peer ou endpoint",
     "totalRequests": "Total de pedidos",
     "credentials": "Credenciais",
@@ -628,7 +634,15 @@
     "connectionState": "Estado da conexao",
     "realConnectionState": "Estado real da conexao VPN/API",
     "requests": "Pedidos da conexao",
-    "requestsTitle": "Pedidos operacionais nesta conexao"
+    "requestsTitle": "Pedidos operacionais nesta conexao",
+    "download": "Baixar Conexoes",
+    "allHealth": "Todas saudes",
+    "allStages": "Todas fases",
+    "allEnvironments": "Todos ambientes",
+    "allServices": "Todos servicos",
+    "hasActiveRequest": "Pedido ativo",
+    "noActiveRequest": "Sem pedido ativo",
+    "openActiveRequest": "Abrir Pedido"
   },
   "uat": {
     "eyebrow": "UAT / CAB",

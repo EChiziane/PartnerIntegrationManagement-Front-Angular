@@ -8,10 +8,43 @@
   </section>
 
   <section class="toolbar">
+    <label class="search-control">
+      <span nz-icon nzType="search"></span>
+      <input [(ngModel)]="searchValue" nz-input [placeholder]="'pipeline.searchPlaceholder' | translate"/>
+    </label>
+
+    <nz-select [(ngModel)]="selectedScope">
+      <nz-option nzValue="OPEN" [nzLabel]="'pipeline.openOnly' | translate"></nz-option>
+      <nz-option nzValue="ALL" [nzLabel]="'common.all' | translate"></nz-option>
+      <nz-option nzValue="CLOSED" [nzLabel]="partnerIntegration.statusLabel('CLOSED')"></nz-option>
+      <nz-option nzValue="BLOCKED" [nzLabel]="partnerIntegration.statusLabel('BLOCKED')"></nz-option>
+    </nz-select>
+
     <nz-select [(ngModel)]="selectedStatus">
       <nz-option nzValue="ALL" [nzLabel]="'pipeline.allStatuses' | translate"></nz-option>
       <nz-option *ngFor="let status of statuses" [nzValue]="status" [nzLabel]="partnerIntegration.statusLabel(status)"></nz-option>
     </nz-select>
+
+    <nz-select [(ngModel)]="selectedType">
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allTypes' | translate"></nz-option>
+      <nz-option *ngFor="let type of requestTypes" [nzValue]="type" [nzLabel]="partnerIntegration.typeLabel(type)"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedPartnerId">
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allPartners' | translate"></nz-option>
+      <nz-option *ngFor="let partner of partners" [nzValue]="partner.id" [nzLabel]="partner.name"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedOwner">
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allOwners' | translate"></nz-option>
+      <nz-option *ngFor="let owner of owners" [nzValue]="owner" [nzLabel]="partnerIntegration.ownerLabel(owner)"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedPriority">
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allPriorities' | translate"></nz-option>
+      <nz-option *ngFor="let priority of priorities" [nzValue]="priority" [nzLabel]="priority"></nz-option>
+    </nz-select>
+
     <button (click)="downloadPipeline()" nz-button nzType="default">
       <span nz-icon nzType="download"></span>
       {{ 'pipeline.download' | translate }}
@@ -31,7 +64,7 @@
 
   <section class="request-list">
     <article *ngFor="let request of filteredRequests" class="request-card">
-      <div>
+      <div class="request-title">
         <strong>{{ requestTitle(request) }}</strong>
         <span>{{ partnerName(request.partnerId) }} - {{ partnerIntegration.typeLabel(request.type) }}</span>
       </div>
