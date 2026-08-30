@@ -1,89 +1,107 @@
 <div class="partner-page">
-  <section class="dashboard-hero">
-    <div class="hero-copy">
+  <section class="ops-header">
+    <div>
       <span class="eyebrow">{{ 'dashboard.eyebrow' | translate }}</span>
       <h1>{{ 'dashboard.title' | translate }}</h1>
-      <p>{{ 'dashboard.subtitle' | translate }}</p>
     </div>
 
     <div class="hero-actions">
-      <button (click)="goPartners()" nz-button nzType="primary">
+      <button (click)="goPartners()" nz-button nzType="default">
         <span nz-icon nzType="team"></span>
         {{ 'layout.nav.partners' | translate }}
       </button>
-      <button (click)="goPipeline()" nz-button nzType="default">
+      <button (click)="goConnections()" nz-button nzType="default">
         <span nz-icon nzType="partition"></span>
-        {{ 'dashboard.openRequestPipeline' | translate }}
+        {{ 'layout.nav.connections' | translate }}
       </button>
-      <button (click)="reload()" nz-button nzType="default">
+      <button (click)="goOpenRequests()" nz-button nzType="primary">
+        <span nz-icon nzType="project"></span>
+        {{ 'layout.nav.requests' | translate }}
+      </button>
+      <button (click)="reload()" nz-button nzType="default" [title]="'common.actions.refresh' | translate">
         <span nz-icon nzType="reload"></span>
-        {{ 'common.actions.refresh' | translate }}
       </button>
     </div>
   </section>
 
-  <div class="metric-grid">
-    <button (click)="goPartners()" class="metric-card portfolio" type="button">
-      <span>{{ 'dashboard.partnerPortfolio' | translate }}</span>
+  <section class="metric-grid inventory-grid">
+    <button (click)="goPartners()" class="metric-card" type="button">
+      <span>{{ 'dashboard.partnersTotal' | translate }}</span>
       <strong>{{ partners.length }}</strong>
       <small>{{ 'dashboard.registeredProfiles' | translate }}</small>
     </button>
 
-    <button (click)="goConnections()" class="metric-card active" type="button">
-      <span>{{ 'dashboard.activeIntegrations' | translate }}</span>
-      <strong>{{ activeIntegrationsCount }}</strong>
-      <small>{{ 'dashboard.healthSummary' | translate:{healthy: healthyIntegrationsCount, attention: degradedIntegrationsCount + downIntegrationsCount} }}</small>
+    <button (click)="goConnections()" class="metric-card" type="button">
+      <span>{{ 'dashboard.connectionsTotal' | translate }}</span>
+      <strong>{{ connections.length }}</strong>
+      <small>{{ healthyIntegrationsCount }} {{ partnerIntegration.connectionHealthLabel('HEALTHY') }}</small>
     </button>
 
-    <button (click)="goPipeline()" class="metric-card ready" type="button">
-      <span>{{ 'dashboard.requestsTesting' | translate }}</span>
-      <strong>{{ testingCount }}</strong>
-      <small>{{ 'dashboard.testingHint' | translate }}</small>
+    <button (click)="goPipeline()" class="metric-card" type="button">
+      <span>{{ 'dashboard.requestsTotal' | translate }}</span>
+      <strong>{{ requests.length }}</strong>
+      <small>{{ openRequests.length }} {{ 'dashboard.open' | translate }} · {{ closedCount }} {{ partnerIntegration.statusLabel('CLOSED') }}</small>
     </button>
 
-    <button (click)="goPipeline('TROUBLESHOOTING')" class="metric-card risk" type="button">
-      <span>{{ 'dashboard.riskBlockers' | translate }}</span>
-      <strong>{{ attentionRequests.length }}</strong>
-      <small>{{ 'dashboard.riskHint' | translate }}</small>
-    </button>
-  </div>
-
-  <section class="command-strip">
-    <button (click)="goPipeline()" type="button">
-      <span>{{ 'dashboard.waitingExternal' | translate }}</span>
-      <strong>{{ waitingExternalCount }}</strong>
-    </button>
-    <button (click)="goTasks()" type="button">
-      <span>{{ 'dashboard.executionQueue' | translate }}</span>
-      <strong>{{ myTasksToday.length }}</strong>
-    </button>
-    <button (click)="goPipeline('CLOSED')" type="button">
-      <span>{{ 'dashboard.closedRequests' | translate }}</span>
-      <strong>{{ closedCount }}</strong>
-    </button>
-    <button (click)="goPipeline('READY_HANDOVER')" type="button">
-      <span>{{ 'dashboard.readyHandover' | translate }}</span>
-      <strong>{{ countByStatus('READY_HANDOVER') }}</strong>
+    <button (click)="goOpenRequests()" class="metric-card focus" type="button">
+      <span>{{ 'dashboard.openRequests' | translate }}</span>
+      <strong>{{ openRequests.length }}</strong>
+      <small>{{ myOpenRequestsCount }} {{ 'dashboard.withMe' | translate }}</small>
     </button>
   </section>
 
-  <div class="control-grid">
-    <section class="section-panel attention-panel">
+  <section class="signal-grid">
+    <button (click)="goConnectionsByHealth('DOWN')" class="signal-card risk" type="button">
+      <span>{{ partnerIntegration.connectionHealthLabel('DOWN') }}</span>
+      <strong>{{ downIntegrationsCount }}</strong>
+    </button>
+    <button (click)="goConnectionsByHealth('DEGRADED')" class="signal-card warning" type="button">
+      <span>{{ partnerIntegration.connectionHealthLabel('DEGRADED') }}</span>
+      <strong>{{ degradedIntegrationsCount }}</strong>
+    </button>
+    <button (click)="goConnectionsByHealth('NOT_ESTABLISHED')" class="signal-card neutral" type="button">
+      <span>{{ partnerIntegration.connectionHealthLabel('NOT_ESTABLISHED') }}</span>
+      <strong>{{ notEstablishedConnectionsCount }}</strong>
+    </button>
+    <button (click)="goPipeline('TROUBLESHOOTING')" class="signal-card risk" type="button">
+      <span>{{ partnerIntegration.statusLabel('TROUBLESHOOTING') }}</span>
+      <strong>{{ troubleshootingRequestsCount }}</strong>
+    </button>
+    <button (click)="goPipeline('BLOCKED')" class="signal-card warning" type="button">
+      <span>{{ partnerIntegration.statusLabel('BLOCKED') }}</span>
+      <strong>{{ blockedRequestsCount }}</strong>
+    </button>
+    <button (click)="goMyRequests()" class="signal-card work" type="button">
+      <span>{{ 'dashboard.myOpenRequests' | translate }}</span>
+      <strong>{{ myOpenRequestsCount }}</strong>
+    </button>
+    <button (click)="goPriority('P1')" class="signal-card risk" type="button">
+      <span>P1</span>
+      <strong>{{ p1OpenRequestsCount }}</strong>
+    </button>
+    <button (click)="goOpenRequests()" class="signal-card warning" type="button">
+      <span>{{ 'dashboard.overdue' | translate }}</span>
+      <strong>{{ overdueRequestsCount }}</strong>
+    </button>
+  </section>
+
+  <div class="ops-grid">
+    <section class="section-panel">
       <header>
         <div>
-          <span class="panel-kicker">{{ 'dashboard.managementFocus' | translate }}</span>
+          <span class="panel-kicker">{{ 'dashboard.decisionQueue' | translate }}</span>
           <h2>{{ 'dashboard.attentionQueue' | translate }}</h2>
         </div>
         <button (click)="goPipeline('TROUBLESHOOTING')" nz-button nzType="default">{{ 'dashboard.openRisks' | translate }}</button>
       </header>
 
-      <div class="request-list">
+      <div class="request-list dense-list">
         <article *ngFor="let request of commandQueue" class="request-row risk-row">
-          <div>
-            <nz-tag [nzColor]="request.priority === 'P1' ? 'red' : 'orange'">{{ request.priority }}</nz-tag>
-            <strong>{{ partnerName(request.partnerId) }}</strong>
-            <span>{{ partnerIntegration.statusLabel(request.currentStatus) }} - {{ 'dashboard.ageDays' | translate:{days: ageDays(request.stageStartDate)} }}</span>
-          </div>
+          <span>{{ request.priority }}</span>
+          <strong>{{ partnerName(request.partnerId) }}</strong>
+          <em>{{ partnerIntegration.statusLabel(request.currentStatus) }}</em>
+          <small>{{ partnerIntegration.ownerLabel(request.currentOwner) }}</small>
+          <small>{{ request.followUpDate || '-' }}</small>
           <button (click)="openRequest(request.id)" nz-button nzType="link">{{ 'common.actions.open' | translate }}</button>
         </article>
 
@@ -100,15 +118,13 @@
         <button (click)="goTasks()" nz-button nzType="default">{{ 'dashboard.viewTasks' | translate }}</button>
       </header>
 
-      <div class="task-list">
-        <article *ngFor="let task of myTasksToday" class="task-item">
-          <div>
-            <nz-tag [nzColor]="task.priority === 'P1' ? 'red' : task.priority === 'P2' ? 'orange' : 'blue'">
-              {{ task.priority }}
-            </nz-tag>
-            <strong>{{ task.title }}</strong>
-            <span>{{ task.partnerName }} - {{ partnerIntegration.typeLabel(task.requestType) }}</span>
-          </div>
+      <div class="request-list dense-list">
+        <article *ngFor="let task of myTasksToday" class="request-row">
+          <span>{{ task.priority }}</span>
+          <strong>{{ task.partnerName }}</strong>
+          <em>{{ task.title }}</em>
+          <small>{{ partnerIntegration.ownerLabel(task.owner) }}</small>
+          <small>{{ task.dueDate || '-' }}</small>
           <button (click)="openRequest(task.requestId)" nz-button nzType="link">{{ 'common.actions.open' | translate }}</button>
         </article>
 
@@ -120,10 +136,10 @@
   <section class="section-panel pipeline-panel">
     <header>
       <div>
-          <span class="panel-kicker">{{ 'dashboard.requestPipeline' | translate }}</span>
-          <h2>{{ 'dashboard.requestsByStatus' | translate }}</h2>
+        <span class="panel-kicker">{{ 'dashboard.requestPipeline' | translate }}</span>
+        <h2>{{ 'dashboard.requestsByStatus' | translate }}</h2>
       </div>
-      <button (click)="goPipeline()" nz-button nzType="default">{{ 'dashboard.openRequestPipeline' | translate }}</button>
+      <button (click)="goPipeline()" nz-button nzType="default">{{ 'dashboard.viewAll' | translate }}</button>
     </header>
 
     <div class="workflow-stage-grid">
@@ -131,7 +147,6 @@
         <button (click)="goPipeline()" class="stage-summary" type="button">
           <span>{{ stageLabel(stage) }}</span>
           <strong>{{ countByStage(stage) }}</strong>
-          <small>{{ stageDescription(stage) }}</small>
         </button>
 
         <div class="stage-status-list">
@@ -144,7 +159,7 @@
     </div>
   </section>
 
-  <div class="two-column">
+  <div class="ops-grid compact">
     <section class="section-panel">
       <header>
         <div>
@@ -154,10 +169,10 @@
       </header>
 
       <div class="type-list">
-        <div *ngFor="let type of requestTypes">
+        <button *ngFor="let type of requestTypes" (click)="goOpenRequests()" type="button">
           <span>{{ partnerIntegration.typeLabel(type) }}</span>
           <strong>{{ countByType(type) }}</strong>
-        </div>
+        </button>
       </div>
     </section>
 
@@ -167,18 +182,16 @@
           <span class="panel-kicker">{{ 'dashboard.currentActivity' | translate }}</span>
           <h2>{{ 'dashboard.recentRequests' | translate }}</h2>
         </div>
-        <button (click)="goPipeline()" nz-button nzType="default">{{ 'dashboard.viewAll' | translate }}</button>
+        <button (click)="goOpenRequests()" nz-button nzType="default">{{ 'dashboard.viewAll' | translate }}</button>
       </header>
 
-      <div class="request-list">
+      <div class="request-list dense-list">
         <article *ngFor="let request of liveRequests" class="request-row">
-          <div>
-            <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
-              {{ partnerIntegration.statusLabel(request.currentStatus) }}
-            </nz-tag>
-            <strong>{{ partnerName(request.partnerId) }}</strong>
-            <span>{{ partnerIntegration.typeLabel(request.type) }} - {{ partnerIntegration.ownerLabel(request.currentOwner) }}</span>
-          </div>
+          <span>{{ request.priority }}</span>
+          <strong>{{ partnerName(request.partnerId) }}</strong>
+          <em>{{ partnerIntegration.statusLabel(request.currentStatus) }}</em>
+          <small>{{ partnerIntegration.ownerLabel(request.currentOwner) }}</small>
+          <small>{{ request.followUpDate || '-' }}</small>
           <button (click)="openRequest(request.id)" nz-button nzType="link">{{ 'common.actions.open' | translate }}</button>
         </article>
       </div>

@@ -106,6 +106,14 @@ export class PartnerDashboardComponent implements OnInit {
     return this.requests.filter(request => request.currentStatus !== 'CLOSED');
   }
 
+  get blockedRequestsCount(): number {
+    return this.requests.filter(request => request.currentStatus === 'BLOCKED').length;
+  }
+
+  get troubleshootingRequestsCount(): number {
+    return this.requests.filter(request => request.currentStatus === 'TROUBLESHOOTING').length;
+  }
+
   get activeIntegrationsCount(): number {
     return this.connections.filter(connection => connection.health !== 'NOT_ESTABLISHED').length;
   }
@@ -122,6 +130,10 @@ export class PartnerDashboardComponent implements OnInit {
     return this.connections.filter(connection => connection.health === 'DOWN').length;
   }
 
+  get notEstablishedConnectionsCount(): number {
+    return this.connections.filter(connection => connection.health === 'NOT_ESTABLISHED').length;
+  }
+
   get attentionRequests(): PartnerRequest[] {
     return this.openRequests.filter(request =>
       request.currentStatus === 'BLOCKED'
@@ -133,6 +145,18 @@ export class PartnerDashboardComponent implements OnInit {
 
   get myTasksToday(): WorkflowTask[] {
     return this.tasks.filter(task => task.owner === 'Me' || task.priority === 'P1').slice(0, 6);
+  }
+
+  get myOpenRequestsCount(): number {
+    return this.openRequests.filter(request => request.currentOwner === 'Me').length;
+  }
+
+  get overdueRequestsCount(): number {
+    return this.openRequests.filter(request => this.isOverdue(request.followUpDate)).length;
+  }
+
+  get p1OpenRequestsCount(): number {
+    return this.openRequests.filter(request => request.priority === 'P1').length;
   }
 
   get waitingExternalCount(): number {
@@ -159,14 +183,15 @@ export class PartnerDashboardComponent implements OnInit {
 
   get commandQueue(): PartnerRequest[] {
     return [...this.attentionRequests]
-      .sort((a, b) => this.ageDays(b.stageStartDate) - this.ageDays(a.stageStartDate))
-      .slice(0, 5);
+      .sort((a, b) => this.priorityScore(a) - this.priorityScore(b)
+        || this.ageDays(b.stageStartDate) - this.ageDays(a.stageStartDate))
+      .slice(0, 8);
   }
 
   get liveRequests(): PartnerRequest[] {
     return this.openRequests
       .filter(request => !this.commandQueue.some(queueItem => queueItem.id === request.id))
-      .slice(0, 5);
+      .slice(0, 8);
   }
 
   countByStatus(status: WorkflowStatus): number {
@@ -197,12 +222,28 @@ export class PartnerDashboardComponent implements OnInit {
     this.router.navigate(['/app/requests'], {queryParams: status ? {status} : {}});
   }
 
+  goOpenRequests(): void {
+    this.router.navigate(['/app/requests'], {queryParams: {scope: 'OPEN'}});
+  }
+
+  goMyRequests(): void {
+    this.router.navigate(['/app/requests'], {queryParams: {scope: 'OPEN', owner: 'Me'}});
+  }
+
+  goPriority(priority: string): void {
+    this.router.navigate(['/app/requests'], {queryParams: {scope: 'OPEN', priority}});
+  }
+
   goTasks(): void {
     this.router.navigate(['/app/tasks']);
   }
 
   goConnections(): void {
     this.router.navigate(['/app/connections']);
+  }
+
+  goConnectionsByHealth(health: string): void {
+    this.router.navigate(['/app/connections'], {queryParams: {health}});
   }
 
   goPartners(): void {
@@ -216,5 +257,18 @@ export class PartnerDashboardComponent implements OnInit {
   ageDays(date: string): number {
     if (!date) return 0;
     return Math.max(0, Math.floor((Date.now() - new Date(date).getTime()) / 86400000));
+  }
+
+  private isOverdue(date: string): boolean {
+    if (!date) return false;
+    return new Date(date).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
+  }
+
+  private priorityScore(request: PartnerRequest): number {
+    if (request.currentStatus === 'TROUBLESHOOTING') return 1;
+    if (request.currentStatus === 'BLOCKED') return 2;
+    if (request.priority === 'P1') return 3;
+    if (this.isOverdue(request.followUpDate)) return 4;
+    return 10;
   }
 }

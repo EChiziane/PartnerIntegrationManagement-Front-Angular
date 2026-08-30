@@ -69,7 +69,13 @@ export class PipelineComponent implements OnInit {
     this.partners = this.partnerIntegration.getPartners();
     this.requests = this.partnerIntegration.getRequests();
     const status = this.route.snapshot.queryParamMap.get('status') as WorkflowStatus | null;
+    const scope = this.route.snapshot.queryParamMap.get('scope') as typeof this.selectedScope | null;
+    const owner = this.route.snapshot.queryParamMap.get('owner');
+    const priority = this.route.snapshot.queryParamMap.get('priority') as TaskPriority | null;
     if (status) this.selectedStatus = status;
+    if (scope) this.selectedScope = scope;
+    if (owner) this.selectedOwner = owner;
+    if (priority) this.selectedPriority = priority;
   }
 
   get filteredRequests(): PartnerRequest[] {

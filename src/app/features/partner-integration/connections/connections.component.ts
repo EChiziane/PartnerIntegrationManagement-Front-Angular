@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 import {ConnectionHealth, ConnectionStage, Partner, PartnerConnection, PartnerRequest} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
@@ -25,6 +25,7 @@ export class ConnectionsComponent implements OnInit {
   constructor(
     public partnerIntegration: PartnerIntegrationService,
     private pdf: PartnerIntegrationPdfService,
+    private route: ActivatedRoute,
     private router: Router
   ) {
   }
@@ -33,6 +34,10 @@ export class ConnectionsComponent implements OnInit {
     this.partners = this.partnerIntegration.getPartners();
     this.connections = this.partnerIntegration.getConnections();
     this.requests = this.partnerIntegration.getRequests();
+    const health = this.route.snapshot.queryParamMap.get('health') as ConnectionHealth | null;
+    const stage = this.route.snapshot.queryParamMap.get('stage') as ConnectionStage | null;
+    if (health) this.selectedHealth = health;
+    if (stage) this.selectedStage = stage;
   }
 
   get filteredConnections(): PartnerConnection[] {
