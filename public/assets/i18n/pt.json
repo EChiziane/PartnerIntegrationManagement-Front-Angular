@@ -653,7 +653,20 @@
     "allServices": "Todos servicos",
     "hasActiveRequest": "Pedido ativo",
     "noActiveRequest": "Sem pedido ativo",
-    "openActiveRequest": "Abrir Pedido"
+    "openActiveRequest": "Abrir Pedido",
+    "noConnectionsTitle": "Nenhuma conexao encontrada",
+    "noConnectionsHint": "Ajuste a pesquisa ou limpe os filtros ativos.",
+    "showingPage": "A mostrar {{shown}} de {{total}} conexoes filtradas",
+    "headers": {
+      "connection": "Conexao",
+      "partner": "Partner",
+      "service": "Servico",
+      "health": "Saude",
+      "stage": "Fase",
+      "activeRequest": "Pedido ativo",
+      "date": "Data",
+      "actions": "Acoes"
+    }
   },
   "uat": {
     "eyebrow": "UAT / CAB",

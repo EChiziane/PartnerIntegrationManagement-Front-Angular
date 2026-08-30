@@ -653,7 +653,20 @@
     "allServices": "All services",
     "hasActiveRequest": "Active request",
     "noActiveRequest": "No active request",
-    "openActiveRequest": "Open Request"
+    "openActiveRequest": "Open Request",
+    "noConnectionsTitle": "No connections found",
+    "noConnectionsHint": "Adjust the search or clear the active filters.",
+    "showingPage": "Showing {{shown}} of {{total}} filtered connections",
+    "headers": {
+      "connection": "Connection",
+      "partner": "Partner",
+      "service": "Service",
+      "health": "Health",
+      "stage": "Stage",
+      "activeRequest": "Active request",
+      "date": "Date",
+      "actions": "Actions"
+    }
   },
   "uat": {
     "eyebrow": "UAT / CAB",

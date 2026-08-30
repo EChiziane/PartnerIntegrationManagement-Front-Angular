@@ -3,83 +3,115 @@
     <div>
       <span class="eyebrow">{{ 'connections.eyebrow' | translate }}</span>
       <h1>{{ 'connections.title' | translate }}</h1>
-      <p>{{ 'connections.subtitle' | translate }}</p>
     </div>
-  </section>
-
-  <section class="toolbar">
-    <label class="search-control">
-      <span nz-icon nzType="search"></span>
-      <input [(ngModel)]="searchValue" nz-input [placeholder]="'connections.searchPlaceholder' | translate"/>
-    </label>
-
-    <nz-select [(ngModel)]="selectedHealth">
-      <nz-option nzValue="ALL" [nzLabel]="'connections.allHealth' | translate"></nz-option>
-      <nz-option *ngFor="let health of healthOptions" [nzValue]="health" [nzLabel]="partnerIntegration.connectionHealthLabel(health)"></nz-option>
-    </nz-select>
-
-    <nz-select [(ngModel)]="selectedStage">
-      <nz-option nzValue="ALL" [nzLabel]="'connections.allStages' | translate"></nz-option>
-      <nz-option *ngFor="let stage of stageOptions" [nzValue]="stage" [nzLabel]="partnerIntegration.connectionStageLabel(stage)"></nz-option>
-    </nz-select>
-
-    <nz-select [(ngModel)]="selectedEnvironment">
-      <nz-option nzValue="ALL" [nzLabel]="'connections.allEnvironments' | translate"></nz-option>
-      <nz-option *ngFor="let environment of environments" [nzValue]="environment" [nzLabel]="environment"></nz-option>
-    </nz-select>
-
-    <nz-select [(ngModel)]="selectedService">
-      <nz-option nzValue="ALL" [nzLabel]="'connections.allServices' | translate"></nz-option>
-      <nz-option *ngFor="let service of services" [nzValue]="service" [nzLabel]="service"></nz-option>
-    </nz-select>
-
     <button (click)="downloadConnections()" nz-button nzType="default">
       <span nz-icon nzType="download"></span>
       {{ 'connections.download' | translate }}
     </button>
   </section>
 
+  <section class="toolbar">
+    <label class="search-control">
+      <span nz-icon nzType="search"></span>
+      <input [(ngModel)]="searchValue" (ngModelChange)="resetPage()" nz-input [placeholder]="'connections.searchPlaceholder' | translate"/>
+    </label>
+
+    <nz-select [(ngModel)]="selectedHealth" (ngModelChange)="resetPage()">
+      <nz-option nzValue="ALL" [nzLabel]="'connections.allHealth' | translate"></nz-option>
+      <nz-option *ngFor="let health of healthOptions" [nzValue]="health" [nzLabel]="partnerIntegration.connectionHealthLabel(health)"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedStage" (ngModelChange)="resetPage()">
+      <nz-option nzValue="ALL" [nzLabel]="'connections.allStages' | translate"></nz-option>
+      <nz-option *ngFor="let stage of stageOptions" [nzValue]="stage" [nzLabel]="partnerIntegration.connectionStageLabel(stage)"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedEnvironment" (ngModelChange)="resetPage()">
+      <nz-option nzValue="ALL" [nzLabel]="'connections.allEnvironments' | translate"></nz-option>
+      <nz-option *ngFor="let environment of environments" [nzValue]="environment" [nzLabel]="environment"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedService" (ngModelChange)="resetPage()">
+      <nz-option nzValue="ALL" [nzLabel]="'connections.allServices' | translate"></nz-option>
+      <nz-option *ngFor="let service of services" [nzValue]="service" [nzLabel]="service"></nz-option>
+    </nz-select>
+  </section>
+
   <section class="connection-list">
-    <article *ngFor="let connection of filteredConnections" class="connection-card">
-      <div class="connection-main">
-        <strong>{{ connection.name }}</strong>
-        <span>{{ partnerName(connection.partnerId) }}</span>
-      </div>
+    <table>
+      <thead>
+      <tr>
+        <th>{{ 'connections.headers.connection' | translate }}</th>
+        <th>{{ 'connections.headers.partner' | translate }}</th>
+        <th>{{ 'connections.headers.service' | translate }}</th>
+        <th>{{ 'connections.headers.health' | translate }}</th>
+        <th>{{ 'connections.headers.stage' | translate }}</th>
+        <th>{{ 'connections.headers.activeRequest' | translate }}</th>
+        <th>{{ 'connections.headers.date' | translate }}</th>
+        <th>{{ 'connections.headers.actions' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let connection of pagedConnections">
+        <td>
+          <strong>{{ connection.name }}</strong>
+          <span>{{ peersLabel(connection) }}</span>
+        </td>
+        <td>
+          <strong>{{ partnerName(connection.partnerId) }}</strong>
+          <span>{{ endpointsLabel(connection) }}</span>
+        </td>
+        <td>
+          <strong>{{ connection.serviceApi || '-' }}</strong>
+          <span>{{ connection.environment }}</span>
+        </td>
+        <td>
+          <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection.health)">
+            {{ partnerIntegration.connectionHealthLabel(connection.health) }}
+          </nz-tag>
+        </td>
+        <td>
+          <span>{{ partnerIntegration.connectionStageLabel(connection.stage) }}</span>
+        </td>
+        <td>
+          <strong>{{ connection.activeRequestId ? ('connections.hasActiveRequest' | translate) : ('connections.noActiveRequest' | translate) }}</strong>
+          <span>{{ 'connections.totalRequests' | translate }}: {{ connection.requestCount || 0 }}</span>
+        </td>
+        <td>
+          <strong>{{ connection.lastUpdated || '-' }}</strong>
+        </td>
+        <td>
+          <div class="row-actions">
+            <button (click)="openActiveRequest(connection)" [disabled]="!connection.activeRequestId" [title]="'connections.openActiveRequest' | translate" nz-button nzSize="small" nzType="default">
+              <span nz-icon nzType="project"></span>
+            </button>
+            <button (click)="openPartner(connection)" [title]="'layout.nav.partners' | translate" nz-button nzSize="small" nzType="default">
+              <span nz-icon nzType="team"></span>
+            </button>
+            <button (click)="openConnection(connection)" [title]="'common.actions.open' | translate" nz-button nzSize="small" nzType="primary">
+              <span nz-icon nzType="partition"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
-      <div class="connection-service">
-        <strong>{{ connection.serviceApi || '-' }}</strong>
-        <span>{{ connection.environment }}</span>
-      </div>
+    <div *ngIf="!filteredConnections.length" class="empty-state">
+      <span nz-icon nzType="search"></span>
+      <strong>{{ 'connections.noConnectionsTitle' | translate }}</strong>
+      <p>{{ 'connections.noConnectionsHint' | translate }}</p>
+    </div>
 
-      <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection.health)">
-        {{ partnerIntegration.connectionHealthLabel(connection.health) }}
-      </nz-tag>
-
-      <nz-tag [nzColor]="partnerIntegration.connectionStageColor(connection.stage)">
-        {{ partnerIntegration.connectionStageLabel(connection.stage) }}
-      </nz-tag>
-
-      <div class="active-request">
-        <strong>{{ connection.activeRequestId ? ('connections.hasActiveRequest' | translate) : ('connections.noActiveRequest' | translate) }}</strong>
-        <span>{{ 'connections.totalRequests' | translate }}: {{ connection.requestCount || 0 }}</span>
-      </div>
-
-      <strong class="last-updated">{{ connection.lastUpdated || '-' }}</strong>
-
-      <div class="row-actions">
-        <button (click)="openActiveRequest(connection)" [disabled]="!connection.activeRequestId" [title]="'connections.openActiveRequest' | translate" nz-button nzType="default">
-          <span nz-icon nzType="project"></span>
-          <span class="action-label">{{ 'connections.openActiveRequest' | translate }}</span>
-        </button>
-        <button (click)="openPartner(connection)" nz-button nzType="default">
-          <span nz-icon nzType="team"></span>
-          <span class="action-label">{{ 'layout.nav.partners' | translate }}</span>
-        </button>
-        <button (click)="openConnection(connection)" nz-button nzType="primary">
-          <span nz-icon nzType="partition"></span>
-          <span class="action-label">{{ 'common.actions.open' | translate }}</span>
-        </button>
-      </div>
-    </article>
+    <div *ngIf="filteredConnections.length" class="table-footer">
+      <span>{{ 'connections.showingPage' | translate:{shown: pagedConnections.length, total: filteredConnections.length} }}</span>
+      <nz-pagination
+        [(nzPageIndex)]="pageIndex"
+        [(nzPageSize)]="pageSize"
+        [nzPageSizeOptions]="[10, 12, 20, 50]"
+        [nzShowSizeChanger]="true"
+        [nzTotal]="filteredConnections.length">
+      </nz-pagination>
+    </div>
   </section>
 </div>

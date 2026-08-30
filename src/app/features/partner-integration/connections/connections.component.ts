@@ -19,6 +19,8 @@ export class ConnectionsComponent implements OnInit {
   selectedStage: ConnectionStage | 'ALL' = 'ALL';
   selectedEnvironment = 'ALL';
   selectedService = 'ALL';
+  pageIndex = 1;
+  pageSize = 12;
   readonly healthOptions: ConnectionHealth[] = ['HEALTHY', 'DEGRADED', 'DOWN', 'NOT_ESTABLISHED', 'BLOCKED', 'DISABLED'];
   readonly stageOptions: ConnectionStage[] = ['DRAFT', 'AWAITING_APPROVAL', 'IMPLEMENTING', 'CONNECTIVITY_VALIDATION', 'API_UAT_VALIDATION', 'LIVE', 'TROUBLESHOOTING', 'BLOCKED'];
 
@@ -58,12 +60,21 @@ export class ConnectionsComponent implements OnInit {
     });
   }
 
+  get pagedConnections(): PartnerConnection[] {
+    const start = (this.pageIndex - 1) * this.pageSize;
+    return this.filteredConnections.slice(start, start + this.pageSize);
+  }
+
   get services(): string[] {
     return [...new Set(this.connections.map(connection => connection.serviceApi).filter(Boolean))].sort();
   }
 
   get environments(): string[] {
     return [...new Set(this.connections.map(connection => connection.environment).filter(Boolean))].sort();
+  }
+
+  resetPage(): void {
+    this.pageIndex = 1;
   }
 
   partnerName(partnerId: string): string {
