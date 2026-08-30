@@ -18,6 +18,10 @@
       <nz-tag [nzColor]="partnerIntegration.connectionStageColor(connection.stage)">
         {{ partnerIntegration.connectionStageLabel(connection.stage) }}
       </nz-tag>
+      <button (click)="downloadProfile()" nz-button nzType="default">
+        <span nz-icon nzType="download"></span>
+        {{ 'connections.downloadProfile' | translate }}
+      </button>
     </div>
   </section>
 

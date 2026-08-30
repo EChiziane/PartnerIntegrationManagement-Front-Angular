@@ -51,6 +51,7 @@ export class PartnersComponent implements OnInit {
   private categoryByPartnerId = new Map<string, string>();
 
   requestType: RequestType = 'NEW_INTEGRATION';
+  readonly requestTypeOptions: RequestType[] = ['NEW_INTEGRATION', 'UPDATE_INTEGRATION', 'CONNECTIVITY_SUPPORT', 'BLOCK_VPN', 'UNBLOCK_VPN'];
   isCreateVisible = false;
   importNotice = '';
   private createRequestFromImportedForm = false;
@@ -131,9 +132,12 @@ export class PartnersComponent implements OnInit {
   }
 
   reload(): void {
-    this.partners = this.partnerIntegration.getPartners();
-    this.requests = this.partnerIntegration.getRequests();
-    this.connections = this.partnerIntegration.getConnections();
+    this.partners = [...this.partnerIntegration.getPartners()].sort((a, b) => a.name.localeCompare(b.name));
+    this.requests = [...this.partnerIntegration.getRequests()].sort((a, b) => this.requestSortScore(a) - this.requestSortScore(b));
+    this.connections = [...this.partnerIntegration.getConnections()].sort((a, b) =>
+      this.partnerNameForSort(a.partnerId).localeCompare(this.partnerNameForSort(b.partnerId))
+      || a.name.localeCompare(b.name)
+    );
     this.rebuildIndexes();
   }
 
@@ -252,6 +256,10 @@ export class PartnersComponent implements OnInit {
     this.router.navigate(['/app/request', request.id]);
   }
 
+  partnerNameForSort(partnerId: string): string {
+    return this.partners.find(partner => partner.id === partnerId)?.name || '';
+  }
+
   publicPeersLabel(partner: Partner): string {
     const formData = this.requestFormDataForPartner(partner);
     return formData.publicPeerIps?.length ? formData.publicPeerIps.join(', ') : formData.publicIp || '-';
@@ -364,6 +372,29 @@ export class PartnersComponent implements OnInit {
   ageDays(date: string): number {
     if (!date) return 0;
     return Math.max(0, Math.floor((Date.now() - new Date(date).getTime()) / 86400000));
+  }
+
+  private requestSortScore(request: PartnerRequest): number {
+    const statusScore: Partial<Record<WorkflowStatus, number>> = {
+      TROUBLESHOOTING: 1,
+      BLOCKED: 2,
+      READY_CONNECTIVITY: 3,
+      CONNECTIVITY_TEST: 4,
+      READY_UAT: 5,
+      UAT_IN_PROGRESS: 6,
+      READY_HANDOVER: 7,
+      FORM_VALIDATION: 8,
+      READY_STATEMENT: 9,
+      IMPLEMENTATION: 10,
+      WAITING_SIGNATURES: 11,
+      WAITING_FORM: 12,
+      NEW: 13,
+      CLOSED: 99
+    };
+    const priorityScore: Record<string, number> = {P1: 1, P2: 2, P3: 3, P4: 4};
+    return (statusScore[request.currentStatus] || 50) * 100000000
+      + (priorityScore[request.priority] || 9) * 1000000
+      + (new Date(request.followUpDate || request.stageStartDate || request.openDate).getTime() || 0) / 100000;
   }
 
   private rebuildIndexes(): void {

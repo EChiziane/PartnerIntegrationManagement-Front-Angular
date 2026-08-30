@@ -47,7 +47,7 @@ export class PipelineComponent implements OnInit {
     'CLOSED'
   ];
 
-  readonly requestTypes: RequestType[] = ['NEW_INTEGRATION', 'UPDATE_INTEGRATION', 'BLOCK_VPN', 'UNBLOCK_VPN', 'CONNECTIVITY_SUPPORT'];
+  readonly requestTypes: RequestType[] = ['NEW_INTEGRATION', 'UPDATE_INTEGRATION', 'CONNECTIVITY_SUPPORT', 'BLOCK_VPN', 'UNBLOCK_VPN'];
   readonly priorities: TaskPriority[] = ['P1', 'P2', 'P3', 'P4'];
 
   readonly workflowStages: WorkflowStage[] = [
@@ -68,8 +68,8 @@ export class PipelineComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.partners = this.partnerIntegration.getPartners();
-    this.requests = this.partnerIntegration.getRequests();
+    this.partners = [...this.partnerIntegration.getPartners()].sort((a, b) => a.name.localeCompare(b.name));
+    this.requests = [...this.partnerIntegration.getRequests()].sort((a, b) => this.requestSortScore(a) - this.requestSortScore(b));
     const status = this.route.snapshot.queryParamMap.get('status') as WorkflowStatus | null;
     const scope = this.route.snapshot.queryParamMap.get('scope') as typeof this.selectedScope | null;
     const owner = this.route.snapshot.queryParamMap.get('owner');
@@ -147,6 +147,29 @@ export class PipelineComponent implements OnInit {
 
   trackByRequestId(_index: number, request: PartnerRequest): string {
     return request.id;
+  }
+
+  private requestSortScore(request: PartnerRequest): number {
+    const statusScore: Partial<Record<WorkflowStatus, number>> = {
+      TROUBLESHOOTING: 1,
+      BLOCKED: 2,
+      READY_CONNECTIVITY: 3,
+      CONNECTIVITY_TEST: 4,
+      READY_UAT: 5,
+      UAT_IN_PROGRESS: 6,
+      READY_HANDOVER: 7,
+      FORM_VALIDATION: 8,
+      READY_STATEMENT: 9,
+      IMPLEMENTATION: 10,
+      WAITING_SIGNATURES: 11,
+      WAITING_FORM: 12,
+      NEW: 13,
+      CLOSED: 99
+    };
+    const priorityScore: Record<string, number> = {P1: 1, P2: 2, P3: 3, P4: 4};
+    return (statusScore[request.currentStatus] || 50) * 100000000
+      + (priorityScore[request.priority] || 9) * 1000000
+      + (new Date(request.followUpDate || request.stageStartDate || request.openDate).getTime() || 0) / 100000;
   }
 
   requestTitle(request: PartnerRequest): string {

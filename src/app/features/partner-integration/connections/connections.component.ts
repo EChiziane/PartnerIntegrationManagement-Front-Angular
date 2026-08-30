@@ -33,9 +33,12 @@ export class ConnectionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.partners = this.partnerIntegration.getPartners();
-    this.connections = this.partnerIntegration.getConnections();
-    this.requests = this.partnerIntegration.getRequests();
+    this.partners = [...this.partnerIntegration.getPartners()].sort((a, b) => a.name.localeCompare(b.name));
+    this.connections = [...this.partnerIntegration.getConnections()].sort((a, b) =>
+      this.partnerName(a.partnerId).localeCompare(this.partnerName(b.partnerId))
+      || a.name.localeCompare(b.name)
+    );
+    this.requests = [...this.partnerIntegration.getRequests()].sort((a, b) => this.requestTimestamp(b) - this.requestTimestamp(a));
     const health = this.route.snapshot.queryParamMap.get('health') as ConnectionHealth | null;
     const stage = this.route.snapshot.queryParamMap.get('stage') as ConnectionStage | null;
     if (health) this.selectedHealth = health;
@@ -117,5 +120,9 @@ export class ConnectionsComponent implements OnInit {
     ].filter(Boolean).join(' / ') || 'All Connections';
 
     this.pdf.downloadConnectionList(this.filteredConnections, this.partners, this.requests, scope);
+  }
+
+  private requestTimestamp(request: PartnerRequest): number {
+    return new Date(request.followUpDate || request.stageStartDate || request.openDate).getTime() || 0;
   }
 }

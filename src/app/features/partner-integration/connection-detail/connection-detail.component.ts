@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 import {Partner, PartnerConnection, PartnerRequest, TimelineEvent} from '@shared/models/partner-integration';
+import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 
 @Component({
   selector: 'app-connection-detail',
@@ -17,6 +18,7 @@ export class ConnectionDetailComponent implements OnInit {
 
   constructor(
     public partnerIntegration: PartnerIntegrationService,
+    private pdf: PartnerIntegrationPdfService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -59,5 +61,10 @@ export class ConnectionDetailComponent implements OnInit {
     if (!this.connection) return;
     const request = this.partnerIntegration.createRequest(this.connection.partnerId, type, {connectionId: this.connection.id});
     this.router.navigate(['/app/request', request.id]);
+  }
+
+  downloadProfile(): void {
+    if (!this.connection || !this.partner) return;
+    this.pdf.downloadConnectionProfile(this.connection, this.partner, this.requests, this.events);
   }
 }

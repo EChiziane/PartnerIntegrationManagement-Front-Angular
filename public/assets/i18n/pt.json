@@ -660,6 +660,7 @@
     "requests": "Pedidos da conexao",
     "requestsTitle": "Pedidos operacionais nesta conexao",
     "download": "Baixar Conexoes",
+    "downloadProfile": "Baixar PDF",
     "allHealth": "Todas saudes",
     "allStages": "Todas fases",
     "allEnvironments": "Todos ambientes",

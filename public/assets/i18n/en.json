@@ -660,6 +660,7 @@
     "requests": "Connection requests",
     "requestsTitle": "Operational requests on this connection",
     "download": "Download Connections",
+    "downloadProfile": "Download PDF",
     "allHealth": "All health",
     "allStages": "All stages",
     "allEnvironments": "All environments",

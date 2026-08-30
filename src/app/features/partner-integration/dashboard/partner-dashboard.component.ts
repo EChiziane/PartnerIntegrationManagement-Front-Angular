@@ -82,7 +82,9 @@ export class PartnerDashboardComponent implements OnInit {
   readonly requestTypes: RequestType[] = [
     'NEW_INTEGRATION',
     'UPDATE_INTEGRATION',
-    'CONNECTIVITY_SUPPORT'
+    'CONNECTIVITY_SUPPORT',
+    'BLOCK_VPN',
+    'UNBLOCK_VPN'
   ];
 
   constructor(
@@ -96,9 +98,15 @@ export class PartnerDashboardComponent implements OnInit {
   }
 
   reload(): void {
-    this.partners = this.partnerIntegration.getPartners();
-    this.connections = this.partnerIntegration.getConnections();
-    this.requests = this.partnerIntegration.getRequests();
+    this.partners = [...this.partnerIntegration.getPartners()].sort((a, b) => a.name.localeCompare(b.name));
+    this.connections = [...this.partnerIntegration.getConnections()].sort((a, b) =>
+      this.partnerName(a.partnerId).localeCompare(this.partnerName(b.partnerId))
+      || a.name.localeCompare(b.name)
+    );
+    this.requests = [...this.partnerIntegration.getRequests()].sort((a, b) =>
+      this.priorityScore(a) - this.priorityScore(b)
+      || this.requestTimestamp(a) - this.requestTimestamp(b)
+    );
     this.tasks = this.partnerIntegration.getTasks();
   }
 
@@ -270,5 +278,9 @@ export class PartnerDashboardComponent implements OnInit {
     if (request.priority === 'P1') return 3;
     if (this.isOverdue(request.followUpDate)) return 4;
     return 10;
+  }
+
+  private requestTimestamp(request: PartnerRequest): number {
+    return new Date(request.followUpDate || request.stageStartDate || request.openDate).getTime() || 0;
   }
 }

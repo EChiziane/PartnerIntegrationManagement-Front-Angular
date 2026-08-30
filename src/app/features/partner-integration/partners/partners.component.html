@@ -55,11 +55,7 @@
     <div class="toolbar-field">
       <span>{{ 'partners.defaultRequestAction' | translate }}</span>
       <nz-select [(ngModel)]="requestType">
-        <nz-option nzValue="NEW_INTEGRATION" [nzLabel]="partnerIntegration.typeLabel('NEW_INTEGRATION')"></nz-option>
-        <nz-option nzValue="UPDATE_INTEGRATION" [nzLabel]="partnerIntegration.typeLabel('UPDATE_INTEGRATION')"></nz-option>
-        <nz-option nzValue="BLOCK_VPN" [nzLabel]="partnerIntegration.typeLabel('BLOCK_VPN')"></nz-option>
-        <nz-option nzValue="UNBLOCK_VPN" [nzLabel]="partnerIntegration.typeLabel('UNBLOCK_VPN')"></nz-option>
-        <nz-option nzValue="CONNECTIVITY_SUPPORT" [nzLabel]="partnerIntegration.typeLabel('CONNECTIVITY_SUPPORT')"></nz-option>
+        <nz-option *ngFor="let type of requestTypeOptions" [nzValue]="type" [nzLabel]="partnerIntegration.typeLabel(type)"></nz-option>
       </nz-select>
     </div>
   </section>

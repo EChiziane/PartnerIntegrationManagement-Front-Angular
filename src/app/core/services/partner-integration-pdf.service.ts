@@ -178,6 +178,94 @@ export class PartnerIntegrationPdfService {
     doc.save(this.documentFilename.build('CONNECTIONS', 'REGISTER', scopeLabel));
   }
 
+  async downloadConnectionProfile(
+    connection: PartnerConnection,
+    partner: Partner,
+    requests: PartnerRequest[],
+    events: TimelineEvent[]
+  ): Promise<void> {
+    const [{default: JsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
+    const doc = new JsPDF({orientation: 'portrait'});
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 14;
+
+    this.drawHeader(doc, 'CONNECTION PROFILE', connection.name || partner.name);
+    this.drawSummaryTable(doc, autoTable, margin, 26, [
+      ['Health', this.partnerIntegration.connectionHealthLabel(connection.health)],
+      ['Stage', this.partnerIntegration.connectionStageLabel(connection.stage)],
+      ['Requests', String(requests.length)],
+      ['Open', String(requests.filter(request => request.currentStatus !== 'CLOSED').length)]
+    ]);
+
+    autoTable(doc, {
+      startY: 44,
+      margin: {left: margin, right: margin, bottom: 20},
+      head: [['Field', 'Value']],
+      body: [
+        ['Partner', partner.name || '-'],
+        ['Connection', connection.name || '-'],
+        ['Service/API', connection.serviceApi || '-'],
+        ['Environment', connection.environment || '-'],
+        ['Public IP (Peer)', connection.publicPeerIps?.length ? connection.publicPeerIps.join(', ') : connection.publicIp || '-'],
+        ['Private Endpoints', connection.privateEndpoints?.length
+          ? connection.privateEndpoints.map(endpoint => `${endpoint.environment}: ${endpoint.ip || '-'}:${endpoint.port || '-'}`).join(' | ')
+          : connection.partnerServerIp || '-'],
+        ['Auth Method', connection.authMethod || '-'],
+        ['Technical Contact', connection.technicalContact || '-'],
+        ['OwnCloud Folder', connection.ownCloudFolderUrl || '-'],
+        ['Credentials', this.partnerIntegration.credentialsStatusLabel(connection.credentialsStatus)],
+        ['VPN', this.partnerIntegration.vpnStatusLabel(connection.vpnStatus)],
+        ['UAT Connectivity', this.partnerIntegration.testStatusLabel(connection.connectivityUat)],
+        ['PRD Connectivity', this.partnerIntegration.testStatusLabel(connection.connectivityPrd)],
+        ['UAT/API', this.partnerIntegration.uatStatusLabel(connection.uatStatus)],
+        ['Last Updated', connection.lastUpdated || '-']
+      ],
+      theme: 'grid',
+      styles: this.tableStyles(),
+      headStyles: this.headStyles(),
+      didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
+    });
+
+    autoTable(doc, {
+      startY: ((doc as any).lastAutoTable?.finalY || 120) + 8,
+      margin: {left: margin, right: margin, bottom: 20},
+      head: [['Request', 'Type', 'Status', 'Owner', 'Next Action', 'Follow-up']],
+      body: requests.length ? requests.map(request => [
+        this.partnerIntegration.requestDisplayTitle(request, partner),
+        this.partnerIntegration.typeLabel(request.type),
+        this.partnerIntegration.statusLabel(request.currentStatus),
+        request.currentOwner || '-',
+        request.nextAction || '-',
+        request.followUpDate || '-'
+      ]) : [['-', '-', '-', '-', '-', '-']],
+      theme: 'grid',
+      styles: this.tableStyles(),
+      headStyles: this.headStyles(),
+      didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
+    });
+
+    autoTable(doc, {
+      startY: ((doc as any).lastAutoTable?.finalY || 190) + 8,
+      margin: {left: margin, right: margin, bottom: 20},
+      head: [['Date', 'Event', 'Description']],
+      body: events.length ? events.map(event => [
+        this.formatDateTime(event.date),
+        event.title,
+        event.description
+      ]) : [['-', 'No history', '-']],
+      theme: 'grid',
+      styles: this.tableStyles(),
+      headStyles: this.headStyles(),
+      didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
+    });
+
+    doc.save(this.documentFilename.build('CONNECTION_PROFILE', connection.id, partner.name));
+  }
+
   async downloadPartnerProfile(
     partner: Partner,
     requests: PartnerRequest[],
