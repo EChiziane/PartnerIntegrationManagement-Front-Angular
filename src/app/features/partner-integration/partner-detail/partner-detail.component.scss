@@ -4,6 +4,26 @@
   gap: 16px;
 }
 
+.missing-partner {
+  max-width: 680px;
+  margin: 64px auto;
+  border: 1px solid #dfe8ef;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 24px;
+}
+
+.missing-partner h1 {
+  margin: 8px 0;
+  color: #05192d;
+  font-size: 26px;
+}
+
+.missing-partner p {
+  margin: 0 0 18px;
+  color: #526b7a;
+}
+
 .detail-header,
 .panel {
   border: 1px solid #dfe8ef;

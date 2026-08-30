@@ -420,7 +420,11 @@
     "openedOwnerFollow": "Aberto {{openDate}} · Responsavel {{owner}} · Follow-up {{followUp}}",
     "history": "Historico",
     "partnerHistory": "Historico do partner e da integracao",
-    "noHistory": "Ainda nao ha historico registado."
+    "noHistory": "Ainda nao ha historico registado.",
+    "notFoundEyebrow": "Partner nao encontrado",
+    "notFoundTitle": "Este partner nao existe no ficheiro ativo",
+    "notFoundHint": "O link pode pertencer a outro ambiente, ou o registo ainda nao foi gravado no TXT carregado pela app.",
+    "backToPartners": "Voltar para partners"
   },
   "request": {
     "pipelineBack": "Pipeline de Pedidos",

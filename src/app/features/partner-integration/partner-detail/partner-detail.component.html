@@ -1,4 +1,4 @@
-<div *ngIf="partner" class="partner-detail">
+<div *ngIf="partner; else partnerNotFound" class="partner-detail">
   <section class="detail-header">
     <div>
       <span class="eyebrow">{{ 'partnerDetail.cockpit' | translate }}</span>
@@ -383,3 +383,15 @@
     </ng-container>
   </nz-modal>
 </div>
+
+<ng-template #partnerNotFound>
+  <section class="missing-partner">
+    <span class="panel-kicker">{{ 'partnerDetail.notFoundEyebrow' | translate }}</span>
+    <h1>{{ 'partnerDetail.notFoundTitle' | translate }}</h1>
+    <p>{{ 'partnerDetail.notFoundHint' | translate }}</p>
+    <button routerLink="/app/partners" nz-button nzType="primary">
+      <span nz-icon nzType="unordered-list"></span>
+      {{ 'partnerDetail.backToPartners' | translate }}
+    </button>
+  </section>
+</ng-template>

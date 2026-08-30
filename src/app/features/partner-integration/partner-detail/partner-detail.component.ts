@@ -18,6 +18,12 @@ export class PartnerDetailComponent implements OnInit {
   partnerDraft: Partial<Partner> = {};
   requests: PartnerRequest[] = [];
   events: TimelineEvent[] = [];
+  activeRequest: PartnerRequest | undefined;
+  activeFormData: RequestFormData | undefined;
+  connection: PartnerConnection | undefined;
+  connections: PartnerConnection[] = [];
+  integrationDrivingRequest: PartnerRequest | undefined;
+  openRequestsCount = 0;
   requestType: RequestType = 'NEW_INTEGRATION';
   isEditingProfile = false;
   isCredentialsEditorOpen = false;
@@ -48,15 +54,31 @@ export class PartnerDetailComponent implements OnInit {
   load(): void {
     const id = this.route.snapshot.paramMap.get('id') || '';
     this.partner = this.partnerIntegration.getPartner(id);
-    this.partnerDraft = this.partner ? {...this.partner} : {};
+    if (!this.partner) {
+      this.partnerDraft = {};
+      this.requests = [];
+      this.events = [];
+      this.activeRequest = undefined;
+      this.activeFormData = undefined;
+      this.connection = undefined;
+      this.connections = [];
+      this.integrationDrivingRequest = undefined;
+      this.openRequestsCount = 0;
+      return;
+    }
+
+    this.partnerDraft = {...this.partner};
     this.requests = this.partnerIntegration.getRequests()
       .filter(request => request.partnerId === id)
       .sort((a, b) => this.requestTimestamp(b) - this.requestTimestamp(a));
     this.events = this.requests.flatMap(request => this.partnerIntegration.getEvents(request.id));
-  }
-
-  get activeRequest(): PartnerRequest | undefined {
-    return this.requests.find(request => request.currentStatus !== 'CLOSED') || this.requests[0];
+    this.connections = this.partnerIntegration.getPartnerConnections(this.partner.id);
+    this.connection = this.connections[0];
+    this.activeRequest = this.requests.find(request => request.currentStatus !== 'CLOSED') || this.requests[0];
+    this.activeFormData = this.activeRequest ? this.partnerIntegration.getRequestFormData(this.activeRequest, this.partner) : undefined;
+    this.integrationDrivingRequest = this.requests.find(request => request.id === this.connection?.lastRequestId)
+      || this.activeRequest;
+    this.openRequestsCount = this.requests.filter(request => request.currentStatus !== 'CLOSED').length;
   }
 
   get hasOpenRequest(): boolean {
@@ -66,29 +88,6 @@ export class PartnerDetailComponent implements OnInit {
   get canCreateNewRequest(): boolean {
     const active = this.activeRequest;
     return !active || active.currentStatus === 'CLOSED' || active.currentStatus === 'BLOCKED';
-  }
-
-  get activeFormData(): RequestFormData | undefined {
-    const request = this.activeRequest;
-    if (!request || !this.partner) return undefined;
-    return this.partnerIntegration.getRequestFormData(request, this.partner);
-  }
-
-  get connection(): PartnerConnection | undefined {
-    return this.partner ? this.partnerIntegration.getPartnerConnection(this.partner.id) : undefined;
-  }
-
-  get connections(): PartnerConnection[] {
-    return this.partner ? this.partnerIntegration.getPartnerConnections(this.partner.id) : [];
-  }
-
-  get integrationDrivingRequest(): PartnerRequest | undefined {
-    return this.requests.find(request => request.id === this.connection?.lastRequestId)
-      || this.activeRequest;
-  }
-
-  get openRequestsCount(): number {
-    return this.requests.filter(request => request.currentStatus !== 'CLOSED').length;
   }
 
   publicPeersLabel(partner: Partner): string {
