@@ -17,6 +17,7 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzAlertComponent} from 'ng-zorro-antd/alert';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {NzModalModule} from 'ng-zorro-antd/modal';
+import {NzMessageModule} from 'ng-zorro-antd/message';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 import {NzEmptyComponent} from 'ng-zorro-antd/empty';
@@ -35,6 +36,8 @@ import {TasksComponent} from '@features/partner-integration/tasks/tasks.componen
 import {ScanComponent} from '@features/partner-integration/scan/scan.component';
 import {RequestDetailComponent} from '@features/partner-integration/request-detail/request-detail.component';
 import {PartnerDetailComponent} from '@features/partner-integration/partner-detail/partner-detail.component';
+import {ConnectionsComponent} from '@features/partner-integration/connections/connections.component';
+import {ConnectionDetailComponent} from '@features/partner-integration/connection-detail/connection-detail.component';
 import {TranslatePipe} from '@shared/pipes/translate.pipe';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 
@@ -53,6 +56,8 @@ registerLocaleData(en);
     ScanComponent,
     RequestDetailComponent,
     PartnerDetailComponent,
+    ConnectionsComponent,
+    ConnectionDetailComponent,
     TranslatePipe
   ],
   imports: [
@@ -70,6 +75,7 @@ registerLocaleData(en);
     NzDrawerModule,
     NzSelectModule,
     NzModalModule,
+    NzMessageModule,
     NzCardComponent,
     NzTagComponent,
     NzAlertComponent,

@@ -16,6 +16,7 @@
 .detail-header,
 .panel header,
 .request-row,
+.connection-row,
 .new-request {
   display: flex;
   align-items: center;
@@ -449,24 +450,40 @@ p,
 }
 
 .request-row,
+.connection-row,
 .history-row {
   padding: 12px 0;
   border-top: 1px solid #e4edf3;
 }
 
 .request-row div,
+.connection-row div,
 .history-row {
   display: grid;
   gap: 4px;
   min-width: 0;
 }
 
-.request-row strong {
+.request-row strong,
+.connection-row strong {
   color: #0f1f2a;
 }
 
-.request-row small {
+.request-row small,
+.connection-row span {
   font-size: 12px;
+}
+
+.connection-tags {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.credentials-editor.modal-editor {
+  margin-top: 0;
 }
 
 .history-row span,
@@ -491,6 +508,7 @@ p,
   .active-request-header,
   .panel header,
   .request-row,
+  .connection-row,
   .new-request,
   .header-actions,
   .form-actions,
@@ -525,5 +543,9 @@ p,
   .blocked-notice {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .connection-tags {
+    justify-content: flex-start;
   }
 }

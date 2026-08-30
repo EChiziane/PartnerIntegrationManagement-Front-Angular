@@ -4,6 +4,7 @@ import {PartnerIntegrationService} from '@core/services/partner-integration.serv
 import {Partner, PartnerConnection, PartnerEnvironment, PartnerPrivateEndpoint, PartnerRequest, RequestFormData, RequestType, TimelineEvent} from '@shared/models/partner-integration';
 import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzMessageService} from 'ng-zorro-antd/message';
 import {TranslationService} from '@core/services/translation.service';
 
 @Component({
@@ -30,6 +31,7 @@ export class PartnerDetailComponent implements OnInit {
     public partnerIntegration: PartnerIntegrationService,
     private pdf: PartnerIntegrationPdfService,
     private modal: NzModalService,
+    private message: NzMessageService,
     private translation: TranslationService,
     private route: ActivatedRoute,
     private router: Router
@@ -71,6 +73,10 @@ export class PartnerDetailComponent implements OnInit {
 
   get connection(): PartnerConnection | undefined {
     return this.partner ? this.partnerIntegration.getPartnerConnection(this.partner.id) : undefined;
+  }
+
+  get connections(): PartnerConnection[] {
+    return this.partner ? this.partnerIntegration.getPartnerConnections(this.partner.id) : [];
   }
 
   get integrationDrivingRequest(): PartnerRequest | undefined {
@@ -121,6 +127,10 @@ export class PartnerDetailComponent implements OnInit {
 
   openRequest(request: PartnerRequest): void {
     this.router.navigate(['/app/request', request.id]);
+  }
+
+  openConnection(connection: PartnerConnection): void {
+    this.router.navigate(['/app/connection', connection.id]);
   }
 
   createRequest(): void {
@@ -197,6 +207,7 @@ export class PartnerDetailComponent implements OnInit {
   saveProfile(): void {
     if (!this.partner) return;
     this.partner = this.partnerIntegration.updatePartner(this.partner.id, this.partnerDraft);
+    this.message.success(this.t('messages.partnerSaved'));
     this.partnerDraft = {...this.partner};
     this.isEditingProfile = false;
     this.load();
@@ -225,10 +236,12 @@ export class PartnerDetailComponent implements OnInit {
         formValidated: this.hasTechnicalData(formData)
       }, this.hasTechnicalData(formData) ? 'Request Form Imported And Validated' : 'Request Form Data Updated');
       this.importNotice = this.t('messages.importedRequest', {file: file.name});
+      this.message.success(this.importNotice);
       this.load();
     } catch (error) {
       console.error('Partner form import failed', error);
       this.importNotice = this.t('messages.importFailed');
+      this.message.error(this.importNotice);
     } finally {
       input.value = '';
     }
@@ -255,6 +268,7 @@ export class PartnerDetailComponent implements OnInit {
       testCredentials: this.credentialsDraft.trim(),
       uatStatus: 'IN_PROGRESS'
     }, 'Test Credentials Provided');
+    this.message.success(this.t('messages.credentialsSaved'));
     this.isCredentialsEditorOpen = false;
     this.credentialsDraft = '';
     this.load();
@@ -328,6 +342,7 @@ export class PartnerDetailComponent implements OnInit {
     this.partnerIntegration.updateRequest(request.id, {
       srCode: value
     }, value ? 'CNOC SR Code Updated' : 'CNOC SR Code Cleared');
+    this.message.success(this.t('messages.srCodeSaved'));
     this.isSrEditorOpen = false;
     this.srDraft = '';
     this.load();
@@ -348,6 +363,7 @@ export class PartnerDetailComponent implements OnInit {
       nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => {
         this.partnerIntegration.blockRequest(request.id, reason);
+        this.message.warning(this.t('messages.requestBlocked'));
         this.load();
       }
     });
@@ -365,6 +381,7 @@ export class PartnerDetailComponent implements OnInit {
       nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => {
         this.partnerIntegration.unblockRequest(request.id, note || '');
+        this.message.success(this.t('messages.requestUnblocked'));
         this.load();
       }
     });
@@ -375,6 +392,7 @@ export class PartnerDetailComponent implements OnInit {
     if (!request) return;
 
     this.partnerIntegration.updateRequest(request.id, patch, label);
+    this.message.success(this.t('messages.workflowUpdated'));
     this.load();
   }
 

@@ -1,0 +1,56 @@
+<div class="connections-page">
+  <section class="page-header">
+    <div>
+      <span class="eyebrow">{{ 'connections.eyebrow' | translate }}</span>
+      <h1>{{ 'connections.title' | translate }}</h1>
+      <p>{{ 'connections.subtitle' | translate }}</p>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <label class="search-control">
+      <span nz-icon nzType="search"></span>
+      <input [(ngModel)]="searchValue" nz-input [placeholder]="'connections.searchPlaceholder' | translate"/>
+    </label>
+  </section>
+
+  <section class="connection-list">
+    <article *ngFor="let connection of filteredConnections" class="connection-card">
+      <div class="connection-main">
+        <div>
+          <span class="eyebrow">{{ partnerName(connection.partnerId) }}</span>
+          <h2>{{ connection.name }}</h2>
+          <p>{{ connection.serviceApi || '-' }} - {{ connection.environment }}</p>
+        </div>
+        <div class="status-stack">
+          <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection.health)">
+            {{ partnerIntegration.connectionHealthLabel(connection.health) }}
+          </nz-tag>
+          <nz-tag [nzColor]="partnerIntegration.connectionStageColor(connection.stage)">
+            {{ partnerIntegration.connectionStageLabel(connection.stage) }}
+          </nz-tag>
+        </div>
+      </div>
+
+      <div class="connection-facts">
+        <div><span>{{ 'fields.publicPeer' | translate }}</span><strong>{{ peersLabel(connection) }}</strong></div>
+        <div><span>{{ 'fields.privateEndpoints' | translate }}</span><strong>{{ endpointsLabel(connection) }}</strong></div>
+        <div><span>{{ 'fields.openRequests' | translate }}</span><strong>{{ connection.activeRequestId ? 1 : 0 }}</strong></div>
+        <div><span>{{ 'connections.totalRequests' | translate }}</span><strong>{{ connection.requestCount || 0 }}</strong></div>
+        <div><span>{{ 'connections.credentials' | translate }}</span><strong>{{ partnerIntegration.credentialsStatusLabel(connection.credentialsStatus) }}</strong></div>
+        <div><span>{{ 'fields.lastUpdated' | translate }}</span><strong>{{ connection.lastUpdated || '-' }}</strong></div>
+      </div>
+
+      <div class="row-actions">
+        <button (click)="openPartner(connection)" nz-button nzType="default">
+          <span nz-icon nzType="team"></span>
+          {{ 'layout.nav.partners' | translate }}
+        </button>
+        <button (click)="openConnection(connection)" nz-button nzType="primary">
+          <span nz-icon nzType="partition"></span>
+          {{ 'connections.openConnection' | translate }}
+        </button>
+      </div>
+    </article>
+  </section>
+</div>

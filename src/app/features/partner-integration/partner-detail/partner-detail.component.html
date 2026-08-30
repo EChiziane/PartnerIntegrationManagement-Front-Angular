@@ -121,6 +121,34 @@
     </section>
   </div>
 
+  <section class="panel connections-panel">
+    <header>
+      <div>
+        <span class="panel-kicker">{{ 'connections.eyebrow' | translate }}</span>
+        <h2>{{ 'connections.title' | translate }}</h2>
+      </div>
+    </header>
+
+    <article *ngFor="let item of connections" class="connection-row">
+      <div>
+        <strong>{{ item.name }}</strong>
+        <span>{{ item.serviceApi || '-' }} - {{ item.environment }}</span>
+      </div>
+      <div class="connection-tags">
+        <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(item.health)">
+          {{ partnerIntegration.connectionHealthLabel(item.health) }}
+        </nz-tag>
+        <nz-tag [nzColor]="partnerIntegration.connectionStageColor(item.stage)">
+          {{ partnerIntegration.connectionStageLabel(item.stage) }}
+        </nz-tag>
+      </div>
+      <button (click)="openConnection(item)" nz-button nzType="default">
+        <span nz-icon nzType="partition"></span>
+        {{ 'connections.openConnection' | translate }}
+      </button>
+    </article>
+  </section>
+
   <section class="panel connection-panel">
     <header>
       <div>
@@ -225,19 +253,7 @@
       <button (click)="blockActiveRequest()" nz-button nzDanger>{{ 'partnerDetail.blockRequest' | translate }}</button>
     </div>
 
-    <div *ngIf="isCredentialsEditorOpen" class="credentials-editor">
-      <div>
-        <span class="panel-kicker">{{ 'partnerDetail.testCredentials' | translate }}</span>
-        <h3>{{ 'partnerDetail.pasteCredentialsFor' | translate:{partner: partner.name} }}</h3>
-      </div>
-      <textarea [(ngModel)]="credentialsDraft" nz-input rows="7" [placeholder]="'partnerDetail.credentialsPlaceholder' | translate"></textarea>
-      <div class="credentials-actions">
-        <button (click)="cancelCredentialsEditor()" nz-button nzType="default">{{ 'common.actions.cancel' | translate }}</button>
-        <button (click)="saveCredentials()" [disabled]="!credentialsDraft.trim()" nz-button nzType="primary">{{ 'partnerDetail.saveMarkProvided' | translate }}</button>
-      </div>
-    </div>
-
-    <div *ngIf="shouldShowCredentialsPanel(activeRequest) && !isCredentialsEditorOpen" class="credentials-summary" [class.missing]="!activeRequest.testCredentials">
+    <div *ngIf="shouldShowCredentialsPanel(activeRequest)" class="credentials-summary" [class.missing]="!activeRequest.testCredentials">
       <span>{{ activeRequest.testCredentials ? ('partnerDetail.credentialsProvided' | translate) : ('partnerDetail.credentialsNotRecorded' | translate) }}</span>
       <pre *ngIf="activeRequest.testCredentials; else activeNoCredentials">{{ activeRequest.testCredentials }}</pre>
       <ng-template #activeNoCredentials>
@@ -300,6 +316,25 @@
 
     <div *ngIf="!events.length" class="empty-history">{{ 'partnerDetail.noHistory' | translate }}</div>
   </section>
+
+  <nz-modal
+    [(nzVisible)]="isCredentialsEditorOpen"
+    [nzTitle]="'partnerDetail.testCredentials' | translate"
+    [nzOkText]="'partnerDetail.saveMarkProvided' | translate"
+    [nzCancelText]="'common.actions.cancel' | translate"
+    [nzOkDisabled]="!credentialsDraft.trim()"
+    (nzOnCancel)="cancelCredentialsEditor()"
+    (nzOnOk)="saveCredentials()">
+    <ng-container *nzModalContent>
+      <div class="credentials-editor modal-editor">
+        <div>
+          <span class="panel-kicker">{{ 'partnerDetail.testCredentials' | translate }}</span>
+          <h3>{{ 'partnerDetail.pasteCredentialsFor' | translate:{partner: partner.name} }}</h3>
+        </div>
+        <textarea [(ngModel)]="credentialsDraft" nz-input rows="7" [placeholder]="'partnerDetail.credentialsPlaceholder' | translate"></textarea>
+      </div>
+    </ng-container>
+  </nz-modal>
 
   <nz-modal
     [(nzVisible)]="isSrEditorOpen"

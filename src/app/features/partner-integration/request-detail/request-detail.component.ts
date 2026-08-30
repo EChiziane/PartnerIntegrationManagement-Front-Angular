@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 import {
   Partner,
+  PartnerConnection,
   PartnerEnvironment,
   PartnerPrivateEndpoint,
   PartnerRequest,
@@ -11,6 +12,7 @@ import {
   WorkflowStatus
 } from '@shared/models/partner-integration';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzMessageService} from 'ng-zorro-antd/message';
 import {TranslationService} from '@core/services/translation.service';
 
 interface WorkflowAction {
@@ -71,6 +73,7 @@ export class RequestDetailComponent implements OnInit {
   constructor(
     public partnerIntegration: PartnerIntegrationService,
     private modal: NzModalService,
+    private message: NzMessageService,
     private translation: TranslationService,
     private route: ActivatedRoute,
     private router: Router
@@ -91,6 +94,10 @@ export class RequestDetailComponent implements OnInit {
   get formData(): RequestFormData | undefined {
     if (!this.request || !this.partner) return undefined;
     return this.partnerIntegration.getRequestFormData(this.request, this.partner);
+  }
+
+  get connection(): PartnerConnection | undefined {
+    return this.request?.connectionId ? this.partnerIntegration.getConnection(this.request.connectionId) : undefined;
   }
 
   publicPeersLabel(): string {
@@ -177,6 +184,7 @@ export class RequestDetailComponent implements OnInit {
       formValidated: this.hasTechnicalData(formData) ? this.request.formValidated : false
     }, 'VPN Integration Form Data Updated Manually');
     this.importNotice = this.t('messages.manualTechnicalSaved');
+    this.message.success(this.t('messages.technicalDataSaved'));
     this.isTechnicalEditorOpen = false;
     this.load();
   }
@@ -203,10 +211,12 @@ export class RequestDetailComponent implements OnInit {
         formValidated: this.hasTechnicalData(formData)
       }, this.hasTechnicalData(formData) ? 'VPN Integration Form Imported And Validated' : 'VPN Integration Form Data Updated');
       this.importNotice = this.t('messages.importedRequest', {file: file.name});
+      this.message.success(this.importNotice);
       this.load();
     } catch (error) {
       console.error('VPN integration form import failed', error);
       this.importNotice = this.t('messages.importFailed');
+      this.message.error(this.importNotice);
     } finally {
       input.value = '';
     }
@@ -430,6 +440,7 @@ export class RequestDetailComponent implements OnInit {
       testCredentials: this.credentialsDraft.trim(),
       uatStatus: 'IN_PROGRESS'
     }, 'Test Credentials Provided');
+    this.message.success(this.t('messages.credentialsSaved'));
     this.isCredentialsEditorOpen = false;
     this.credentialsDraft = '';
     this.load();
@@ -469,6 +480,7 @@ export class RequestDetailComponent implements OnInit {
     this.partnerIntegration.updateRequest(this.request.id, {
       srCode
     }, srCode ? 'CNOC SR Code Updated' : 'CNOC SR Code Cleared');
+    this.message.success(this.t('messages.srCodeSaved'));
     this.load();
   }
 
@@ -599,6 +611,7 @@ export class RequestDetailComponent implements OnInit {
       nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => {
         this.partnerIntegration.blockRequest(this.request!.id, reason);
+        this.message.warning(this.t('messages.requestBlocked'));
         this.load();
       }
     });
@@ -615,6 +628,7 @@ export class RequestDetailComponent implements OnInit {
       nzCancelText: this.t('common.actions.cancel'),
       nzOnOk: () => {
         this.partnerIntegration.unblockRequest(this.request!.id, note || '');
+        this.message.success(this.t('messages.requestUnblocked'));
         this.load();
       }
     });
@@ -623,6 +637,7 @@ export class RequestDetailComponent implements OnInit {
   private applyAction(label: string, patch: Partial<PartnerRequest>): void {
     if (!this.request) return;
     this.partnerIntegration.updateRequest(this.request.id, patch, label);
+    this.message.success(this.t('messages.workflowUpdated'));
     this.load();
   }
 
@@ -631,7 +646,11 @@ export class RequestDetailComponent implements OnInit {
   }
 
   back(): void {
-    this.router.navigate(['/app/integrations']);
+    this.router.navigate(['/app/requests']);
+  }
+
+  openConnection(): void {
+    if (this.connection) this.router.navigate(['/app/connection', this.connection.id]);
   }
 
   private async readPartnerForm(file: File, companyName: string): Promise<RequestFormData> {

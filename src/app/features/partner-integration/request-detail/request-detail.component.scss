@@ -34,6 +34,16 @@
   overflow-wrap: anywhere;
 }
 
+.connection-link {
+  height: auto;
+  margin-top: 4px;
+  padding: 0;
+  color: #0e7c72;
+  font-weight: 800;
+  white-space: normal;
+  text-align: left;
+}
+
 .eyebrow,
 .panel-kicker {
   color: #0e7c72;
@@ -326,6 +336,10 @@ p,
   width: 100%;
   font-family: Consolas, 'Courier New', monospace;
   resize: vertical;
+}
+
+.credentials-editor.modal-editor {
+  margin-top: 0;
 }
 
 .fact-with-action {

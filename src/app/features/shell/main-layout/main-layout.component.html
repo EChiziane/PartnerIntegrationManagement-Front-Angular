@@ -35,9 +35,16 @@
       </li>
 
       <li nz-menu-item nzMatchRouter>
-        <a routerLink="/app/integrations">
+        <a routerLink="/app/connections">
           <span nz-icon nzType="partition"></span>
-          <span>{{ 'layout.nav.pipeline' | translate }}</span>
+          <span>{{ 'layout.nav.connections' | translate }}</span>
+        </a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/app/requests">
+          <span nz-icon nzType="project"></span>
+          <span>{{ 'layout.nav.requests' | translate }}</span>
         </a>
       </li>
 
@@ -176,9 +183,14 @@
       <span>{{ 'layout.nav.home' | translate }}</span>
     </a>
 
-    <a routerLink="/app/integrations" routerLinkActive="active" (click)="closeMobileMenu()">
+    <a routerLink="/app/connections" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="partition"></span>
-      <span>{{ 'layout.nav.pipeline' | translate }}</span>
+      <span>{{ 'layout.nav.connections' | translate }}</span>
+    </a>
+
+    <a routerLink="/app/requests" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="project"></span>
+      <span>{{ 'layout.nav.requests' | translate }}</span>
     </a>
 
     <a routerLink="/app/tasks" routerLinkActive="active" (click)="closeMobileMenu()">

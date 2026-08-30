@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-23.dev.5",
+  "version": "2026-08-23.dev.5.connection-model-v1",
   "partners": [
     {
       "groupLink": "",
@@ -163,7 +163,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "https://owncloud.example.com/dev-alpha",
         "formNotes": "Development sample partner."
-      }
+      },
+      "connectionId": "connection-partner-dev-alpha"
     },
     {
       "id": "request-dev-beta",
@@ -222,7 +223,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "https://owncloud.example.com/dev-beta",
         "formNotes": "Development sample waiting approval."
-      }
+      },
+      "connectionId": "connection-partner-dev-beta"
     },
     {
       "id": "request-dev-trouble",
@@ -281,7 +283,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "https://owncloud.example.com/dev-trouble",
         "formNotes": "Development sample with connectivity issue."
-      }
+      },
+      "connectionId": "connection-partner-dev-trouble"
     }
   ],
   "events": [
@@ -311,6 +314,7 @@
     {
       "id": "connection-partner-dev-alpha",
       "partnerId": "partner-dev-alpha",
+      "name": "eMola - DEV ALPHA PAY",
       "groupLink": "",
       "companyName": "DEV ALPHA PAY",
       "eMolaAccountOtp": "",
@@ -343,17 +347,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "https://owncloud.example.com/dev-alpha",
       "formNotes": "Development sample partner.",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "IMPLEMENTING",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-dev-alpha",
+      "requestCount": 1,
       "lastRequestId": "request-dev-alpha",
+      "lastRequestStatus": "READY_CONNECTIVITY",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-21"
     },
     {
       "id": "connection-partner-dev-beta",
       "partnerId": "partner-dev-beta",
+      "name": "eMola - DEV BETA PUSH",
       "groupLink": "",
       "companyName": "DEV BETA PUSH",
       "eMolaAccountOtp": "",
@@ -381,17 +392,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "https://owncloud.example.com/dev-beta",
       "formNotes": "Development sample waiting approval.",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-dev-beta",
+      "requestCount": 1,
       "lastRequestId": "request-dev-beta",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-20"
     },
     {
       "id": "connection-partner-dev-trouble",
       "partnerId": "partner-dev-trouble",
+      "name": "eMola - DEV TROUBLESHOOT",
       "groupLink": "",
       "companyName": "DEV TROUBLESHOOT",
       "eMolaAccountOtp": "",
@@ -420,11 +438,17 @@
       "ownCloudFolderUrl": "https://owncloud.example.com/dev-trouble",
       "formNotes": "Development sample with connectivity issue.",
       "health": "DOWN",
+      "stage": "TROUBLESHOOTING",
       "vpnStatus": "DOWN",
       "connectivityUat": "FAIL",
       "connectivityPrd": "FAIL",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-dev-trouble",
+      "requestCount": 1,
       "lastRequestId": "request-dev-trouble",
+      "lastRequestStatus": "TROUBLESHOOTING",
+      "lastRequestType": "CONNECTIVITY_SUPPORT",
       "lastUpdated": "2026-08-20"
     }
   ]

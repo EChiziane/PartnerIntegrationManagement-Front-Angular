@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-23.prod.5",
+  "version": "2026-08-23.prod.5.connection-model-v1",
   "partners": [
     {
       "groupLink": "",
@@ -1948,7 +1948,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": "Simulation: Statement approved; waiting for IP Core."
-      }
+      },
+      "connectionId": "connection-partner-2"
     },
     {
       "id": "request-3",
@@ -2012,7 +2013,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": "Simulation: IP Core and IT/FW complete; should enter Ready for Test."
-      }
+      },
+      "connectionId": "connection-partner-3"
     },
     {
       "id": "request-4",
@@ -2065,7 +2067,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-4"
     },
     {
       "id": "request-5",
@@ -2116,7 +2119,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-5"
     },
     {
       "id": "request-6",
@@ -2190,7 +2194,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111433",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-6"
     },
     {
       "id": "request-7",
@@ -2254,7 +2259,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111468",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-7"
     },
     {
       "id": "request-8",
@@ -2318,7 +2324,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111477",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-8"
     },
     {
       "id": "request-9",
@@ -2422,7 +2429,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111479",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-9"
     },
     {
       "id": "request-10",
@@ -2486,7 +2494,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111485",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-10"
     },
     {
       "id": "request-11",
@@ -2550,7 +2559,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-11"
     },
     {
       "id": "request-12",
@@ -2614,7 +2624,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-12"
     },
     {
       "id": "request-13",
@@ -2678,7 +2689,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111498",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-13"
     },
     {
       "id": "request-14",
@@ -2772,7 +2784,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111504",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-14"
     },
     {
       "id": "request-15",
@@ -2836,7 +2849,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111510",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-15"
     },
     {
       "id": "request-16",
@@ -2911,7 +2925,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111516",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-16"
     },
     {
       "id": "request-17",
@@ -2975,7 +2990,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111522",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-17"
     },
     {
       "id": "request-18",
@@ -3039,7 +3055,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111527",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-18"
     },
     {
       "id": "request-19",
@@ -3103,7 +3120,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111536",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-19"
     },
     {
       "id": "request-20",
@@ -3177,7 +3195,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111543",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-20"
     },
     {
       "id": "request-21",
@@ -3228,7 +3247,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-21"
     },
     {
       "id": "request-22",
@@ -3292,7 +3312,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111549",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-22"
     },
     {
       "id": "request-23",
@@ -3366,7 +3387,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111561",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-23"
     },
     {
       "id": "request-24",
@@ -3430,7 +3452,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111645",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-24"
     },
     {
       "id": "request-25",
@@ -3504,7 +3527,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111659",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-25"
     },
     {
       "id": "request-26",
@@ -3578,7 +3602,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111666",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-26"
     },
     {
       "id": "request-27",
@@ -3642,7 +3667,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111425",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-27"
     },
     {
       "id": "request-28",
@@ -3706,7 +3732,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111672",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-28"
     },
     {
       "id": "request-29",
@@ -3757,7 +3784,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-29"
     },
     {
       "id": "request-30",
@@ -3821,7 +3849,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111679",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-30"
     },
     {
       "id": "request-31",
@@ -3885,7 +3914,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111684",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-31"
     },
     {
       "id": "request-32",
@@ -3936,7 +3966,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-32"
     },
     {
       "id": "request-33",
@@ -3987,7 +4018,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-33"
     },
     {
       "id": "request-34",
@@ -4038,7 +4070,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-34"
     },
     {
       "id": "request-35",
@@ -4089,7 +4122,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-35"
     },
     {
       "id": "request-36",
@@ -4140,7 +4174,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-36"
     },
     {
       "id": "request-37",
@@ -4191,7 +4226,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-37"
     },
     {
       "id": "request-38",
@@ -4242,7 +4278,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-38"
     },
     {
       "id": "request-39",
@@ -4293,7 +4330,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-39"
     },
     {
       "id": "request-40",
@@ -4357,7 +4395,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111613",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-40"
     },
     {
       "id": "request-41",
@@ -4431,7 +4470,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111600",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-41"
     },
     {
       "id": "request-42",
@@ -4482,7 +4522,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-42"
     },
     {
       "id": "request-43",
@@ -4533,7 +4574,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-43"
     },
     {
       "id": "request-44",
@@ -4584,7 +4626,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-44"
     },
     {
       "id": "request-45",
@@ -4635,7 +4678,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-45"
     },
     {
       "id": "request-46",
@@ -4686,7 +4730,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-46"
     },
     {
       "id": "request-47",
@@ -4737,7 +4782,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-47"
     },
     {
       "id": "request-48",
@@ -4788,7 +4834,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-48"
     },
     {
       "id": "request-49",
@@ -4852,7 +4899,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111591",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-49"
     },
     {
       "id": "request-50",
@@ -4903,7 +4951,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-50"
     },
     {
       "id": "request-51",
@@ -4954,7 +5003,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-51"
     },
     {
       "id": "request-52",
@@ -5005,7 +5055,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-52"
     },
     {
       "id": "request-53",
@@ -5069,7 +5120,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111703",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-53"
     },
     {
       "id": "request-54",
@@ -5133,7 +5185,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111697",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-54"
     },
     {
       "id": "request-55",
@@ -5184,7 +5237,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-55"
     },
     {
       "id": "request-56",
@@ -5235,7 +5289,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-56"
     },
     {
       "id": "request-57",
@@ -5299,7 +5354,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111606",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-57"
     },
     {
       "id": "request-",
@@ -5363,7 +5419,8 @@
         "authMethod": "",
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111710",
         "formNotes": ""
-      }
+      },
+      "connectionId": "connection-partner-"
     }
   ],
   "events": [
@@ -5771,6 +5828,7 @@
     {
       "id": "connection-partner-2",
       "partnerId": "partner-2",
+      "name": "eMola - ALPHA PAY",
       "groupLink": "",
       "companyName": "ALPHA PAY",
       "eMolaAccountOtp": "",
@@ -5803,17 +5861,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "Simulation: Statement approved; waiting for IP Core.",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "IMPLEMENTING",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-2",
+      "requestCount": 1,
       "lastRequestId": "request-2",
+      "lastRequestStatus": "IMPLEMENTATION",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-16"
     },
     {
       "id": "connection-partner-3",
       "partnerId": "partner-3",
+      "name": "eMola - BETA LOTTO",
       "groupLink": "",
       "companyName": "BETA LOTTO",
       "eMolaAccountOtp": "",
@@ -5846,17 +5911,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "",
       "formNotes": "Simulation: IP Core and IT/FW complete; should enter Ready for Test.",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "IMPLEMENTING",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-3",
+      "requestCount": 1,
       "lastRequestId": "request-3",
+      "lastRequestStatus": "READY_CONNECTIVITY",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-16"
     },
     {
       "id": "connection-partner-4",
       "partnerId": "partner-4",
+      "name": "eMola - Thunes",
       "groupLink": "",
       "companyName": "Thunes",
       "eMolaAccountOtp": "",
@@ -5879,16 +5951,23 @@
       "ownCloudFolderUrl": "",
       "formNotes": "",
       "health": "HEALTHY",
+      "stage": "CONNECTIVITY_VALIDATION",
       "vpnStatus": "UP",
       "connectivityUat": "PASS",
       "connectivityPrd": "PASS",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_RECORDED",
+      "activeRequestId": "request-4",
+      "requestCount": 1,
       "lastRequestId": "request-4",
+      "lastRequestStatus": "READY_UAT",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-15"
     },
     {
       "id": "connection-partner-5",
       "partnerId": "partner-5",
+      "name": "eMola - Wiremit",
       "groupLink": "",
       "companyName": "Wiremit",
       "eMolaAccountOtp": "",
@@ -5914,11 +5993,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-5",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-5",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-6",
       "partnerId": "partner-6",
+      "name": "eMola - OlaLotto",
       "groupLink": "",
       "companyName": "OlaLotto",
       "eMolaAccountOtp": "",
@@ -5961,17 +6047,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111433",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-6",
+      "requestCount": 1,
       "lastRequestId": "request-6",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-15"
     },
     {
       "id": "connection-partner-7",
       "partnerId": "partner-7",
+      "name": "eMola - AlphaConnect",
       "groupLink": "",
       "companyName": "AlphaConnect",
       "eMolaAccountOtp": "",
@@ -6004,17 +6097,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111468",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-7",
+      "requestCount": 1,
       "lastRequestId": "request-7",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-15"
     },
     {
       "id": "connection-partner-8",
       "partnerId": "partner-8",
+      "name": "eMola - Onde Tem",
       "groupLink": "",
       "companyName": "Onde Tem",
       "eMolaAccountOtp": "",
@@ -6047,17 +6147,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111477",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-8",
+      "requestCount": 1,
       "lastRequestId": "request-8",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-9",
       "partnerId": "partner-9",
+      "name": "eMola - Bionic",
       "groupLink": "",
       "companyName": "Bionic",
       "eMolaAccountOtp": "",
@@ -6131,16 +6238,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111479",
       "formNotes": "",
       "health": "HEALTHY",
+      "stage": "LIVE",
       "vpnStatus": "UP",
       "connectivityUat": "PASS",
       "connectivityPrd": "PASS",
       "uatStatus": "PASS",
+      "credentialsStatus": "UNKNOWN_LEGACY",
+      "activeRequestId": "",
+      "requestCount": 1,
       "lastRequestId": "request-9",
+      "lastRequestStatus": "CLOSED",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-23"
     },
     {
       "id": "connection-partner-10",
       "partnerId": "partner-10",
+      "name": "eMola - E-Davinci",
       "groupLink": "",
       "companyName": "E-Davinci",
       "eMolaAccountOtp": "",
@@ -6173,17 +6287,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111485",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-10",
+      "requestCount": 1,
       "lastRequestId": "request-10",
+      "lastRequestStatus": "READY_STATEMENT",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-11",
       "partnerId": "partner-11",
+      "name": "eMola - Indicos seguros",
       "groupLink": "",
       "companyName": "Indicos seguros",
       "eMolaAccountOtp": "",
@@ -6216,17 +6337,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-11",
+      "requestCount": 1,
       "lastRequestId": "request-11",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-12",
       "partnerId": "partner-12",
+      "name": "eMola - Sociedade moçambicana de serviços e transformação digital",
       "groupLink": "",
       "companyName": "Sociedade moçambicana de serviços e transformação digital",
       "eMolaAccountOtp": "",
@@ -6259,17 +6387,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-12",
+      "requestCount": 1,
       "lastRequestId": "request-12",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-13",
       "partnerId": "partner-13",
+      "name": "eMola - Ac Tech",
       "groupLink": "",
       "companyName": "Ac Tech",
       "eMolaAccountOtp": "",
@@ -6303,16 +6438,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111498",
       "formNotes": "",
       "health": "HEALTHY",
+      "stage": "API_UAT_VALIDATION",
       "vpnStatus": "UP",
       "connectivityUat": "PASS",
       "connectivityPrd": "PASS",
       "uatStatus": "IN_PROGRESS",
+      "credentialsStatus": "UNKNOWN_LEGACY",
+      "activeRequestId": "request-13",
+      "requestCount": 1,
       "lastRequestId": "request-13",
+      "lastRequestStatus": "UAT_IN_PROGRESS",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-14",
       "partnerId": "partner-14",
+      "name": "eMola - Confianca Seguros",
       "groupLink": "",
       "companyName": "Confianca Seguros",
       "eMolaAccountOtp": "",
@@ -6376,16 +6518,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111504",
       "formNotes": "",
       "health": "HEALTHY",
+      "stage": "LIVE",
       "vpnStatus": "UP",
       "connectivityUat": "PASS",
       "connectivityPrd": "PASS",
       "uatStatus": "PASS",
+      "credentialsStatus": "UNKNOWN_LEGACY",
+      "activeRequestId": "",
+      "requestCount": 1,
       "lastRequestId": "request-14",
+      "lastRequestStatus": "CLOSED",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-23"
     },
     {
       "id": "connection-partner-15",
       "partnerId": "partner-15",
+      "name": "eMola - AraSul",
       "groupLink": "",
       "companyName": "AraSul",
       "eMolaAccountOtp": "",
@@ -6419,16 +6568,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111510",
       "formNotes": "",
       "health": "HEALTHY",
+      "stage": "LIVE",
       "vpnStatus": "UP",
       "connectivityUat": "PASS",
       "connectivityPrd": "PASS",
       "uatStatus": "PASS",
+      "credentialsStatus": "UNKNOWN_LEGACY",
+      "activeRequestId": "",
+      "requestCount": 1,
       "lastRequestId": "request-15",
+      "lastRequestStatus": "CLOSED",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-23"
     },
     {
       "id": "connection-partner-16",
       "partnerId": "partner-16",
+      "name": "eMola - Recarga Aki",
       "groupLink": "",
       "companyName": "Recarga Aki",
       "eMolaAccountOtp": "",
@@ -6473,16 +6629,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111516",
       "formNotes": "",
       "health": "DOWN",
+      "stage": "TROUBLESHOOTING",
       "vpnStatus": "DOWN",
       "connectivityUat": "FAIL",
       "connectivityPrd": "FAIL",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-16",
+      "requestCount": 1,
       "lastRequestId": "request-16",
+      "lastRequestStatus": "TROUBLESHOOTING",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-17",
       "partnerId": "partner-17",
+      "name": "eMola - Alpha Media",
       "groupLink": "",
       "companyName": "Alpha Media",
       "eMolaAccountOtp": "",
@@ -6515,17 +6678,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111522",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-17",
+      "requestCount": 1,
       "lastRequestId": "request-17",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-18",
       "partnerId": "partner-18",
+      "name": "eMola - Grupo Vim",
       "groupLink": "",
       "companyName": "Grupo Vim",
       "eMolaAccountOtp": "",
@@ -6559,16 +6729,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111527",
       "formNotes": "",
       "health": "DOWN",
+      "stage": "TROUBLESHOOTING",
       "vpnStatus": "DOWN",
       "connectivityUat": "FAIL",
       "connectivityPrd": "FAIL",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-18",
+      "requestCount": 1,
       "lastRequestId": "request-18",
+      "lastRequestStatus": "TROUBLESHOOTING",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-19",
       "partnerId": "partner-19",
+      "name": "eMola - Artec",
       "groupLink": "",
       "companyName": "Artec",
       "eMolaAccountOtp": "",
@@ -6602,16 +6779,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111536",
       "formNotes": "",
       "health": "DOWN",
+      "stage": "TROUBLESHOOTING",
       "vpnStatus": "DOWN",
       "connectivityUat": "FAIL",
       "connectivityPrd": "FAIL",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-19",
+      "requestCount": 1,
       "lastRequestId": "request-19",
+      "lastRequestStatus": "TROUBLESHOOTING",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-20",
       "partnerId": "partner-20",
+      "name": "eMola - Sporty",
       "groupLink": "",
       "companyName": "Sporty",
       "eMolaAccountOtp": "",
@@ -6655,16 +6839,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111543",
       "formNotes": "",
       "health": "DOWN",
+      "stage": "TROUBLESHOOTING",
       "vpnStatus": "DOWN",
       "connectivityUat": "FAIL",
       "connectivityPrd": "FAIL",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-20",
+      "requestCount": 1,
       "lastRequestId": "request-20",
+      "lastRequestStatus": "TROUBLESHOOTING",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-21",
       "partnerId": "partner-21",
+      "name": "eMola - Am Creative",
       "groupLink": "",
       "companyName": "Am Creative",
       "eMolaAccountOtp": "",
@@ -6690,11 +6881,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-21",
-      "lastUpdated": "2026-07-16"
+      "lastUpdated": "2026-07-16",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-21",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-22",
       "partnerId": "partner-22",
+      "name": "eMola - Gesfrota",
       "groupLink": "",
       "companyName": "Gesfrota",
       "eMolaAccountOtp": "",
@@ -6728,16 +6926,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111549",
       "formNotes": "",
       "health": "HEALTHY",
+      "stage": "LIVE",
       "vpnStatus": "UP",
       "connectivityUat": "PASS",
       "connectivityPrd": "PASS",
       "uatStatus": "PASS",
+      "credentialsStatus": "UNKNOWN_LEGACY",
+      "activeRequestId": "",
+      "requestCount": 1,
       "lastRequestId": "request-22",
+      "lastRequestStatus": "CLOSED",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-23"
     },
     {
       "id": "connection-partner-23",
       "partnerId": "partner-23",
+      "name": "eMola - Amor e Desejo",
       "groupLink": "",
       "companyName": "Amor e Desejo",
       "eMolaAccountOtp": "",
@@ -6781,16 +6986,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111561",
       "formNotes": "",
       "health": "HEALTHY",
+      "stage": "LIVE",
       "vpnStatus": "UP",
       "connectivityUat": "PASS",
       "connectivityPrd": "PASS",
       "uatStatus": "PASS",
+      "credentialsStatus": "UNKNOWN_LEGACY",
+      "activeRequestId": "",
+      "requestCount": 1,
       "lastRequestId": "request-23",
+      "lastRequestStatus": "CLOSED",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-23"
     },
     {
       "id": "connection-partner-24",
       "partnerId": "partner-24",
+      "name": "eMola - 888Bet",
       "groupLink": "",
       "companyName": "888Bet",
       "eMolaAccountOtp": "",
@@ -6824,16 +7036,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111645",
       "formNotes": "",
       "health": "HEALTHY",
+      "stage": "API_UAT_VALIDATION",
       "vpnStatus": "UP",
       "connectivityUat": "PASS",
       "connectivityPrd": "PASS",
       "uatStatus": "IN_PROGRESS",
+      "credentialsStatus": "UNKNOWN_LEGACY",
+      "activeRequestId": "request-24",
+      "requestCount": 1,
       "lastRequestId": "request-24",
+      "lastRequestStatus": "UAT_IN_PROGRESS",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-19"
     },
     {
       "id": "connection-partner-25",
       "partnerId": "partner-25",
+      "name": "eMola - Unitec",
       "groupLink": "",
       "companyName": "Unitec",
       "eMolaAccountOtp": "",
@@ -6877,16 +7096,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111659",
       "formNotes": "",
       "health": "DOWN",
+      "stage": "TROUBLESHOOTING",
       "vpnStatus": "DOWN",
       "connectivityUat": "FAIL",
       "connectivityPrd": "FAIL",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-25",
+      "requestCount": 1,
       "lastRequestId": "request-25",
+      "lastRequestStatus": "TROUBLESHOOTING",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-20"
     },
     {
       "id": "connection-partner-26",
       "partnerId": "partner-26",
+      "name": "eMola - Fidotech",
       "groupLink": "",
       "companyName": "Fidotech",
       "eMolaAccountOtp": "",
@@ -6930,16 +7156,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111666",
       "formNotes": "",
       "health": "DOWN",
+      "stage": "TROUBLESHOOTING",
       "vpnStatus": "DOWN",
       "connectivityUat": "FAIL",
       "connectivityPrd": "FAIL",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-26",
+      "requestCount": 1,
       "lastRequestId": "request-26",
+      "lastRequestStatus": "TROUBLESHOOTING",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-21"
     },
     {
       "id": "connection-partner-27",
       "partnerId": "partner-27",
+      "name": "eMola - Aika",
       "groupLink": "",
       "companyName": "Aika",
       "eMolaAccountOtp": "",
@@ -6972,17 +7205,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111425",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-27",
+      "requestCount": 1,
       "lastRequestId": "request-27",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-22"
     },
     {
       "id": "connection-partner-28",
       "partnerId": "partner-28",
+      "name": "eMola - BragaLink",
       "groupLink": "",
       "companyName": "BragaLink",
       "eMolaAccountOtp": "",
@@ -7016,16 +7256,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111672",
       "formNotes": "",
       "health": "DOWN",
+      "stage": "TROUBLESHOOTING",
       "vpnStatus": "DOWN",
       "connectivityUat": "FAIL",
       "connectivityPrd": "FAIL",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-28",
+      "requestCount": 1,
       "lastRequestId": "request-28",
+      "lastRequestStatus": "TROUBLESHOOTING",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-23"
     },
     {
       "id": "connection-partner-29",
       "partnerId": "partner-29",
+      "name": "eMola - Go-hosting",
       "groupLink": "",
       "companyName": "Go-hosting",
       "eMolaAccountOtp": "",
@@ -7051,11 +7298,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-29",
-      "lastUpdated": "2026-07-24"
+      "lastUpdated": "2026-07-24",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-29",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-30",
       "partnerId": "partner-30",
+      "name": "eMola - TaAqui",
       "groupLink": "",
       "companyName": "TaAqui",
       "eMolaAccountOtp": "",
@@ -7088,17 +7342,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111679",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-30",
+      "requestCount": 1,
       "lastRequestId": "request-30",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-25"
     },
     {
       "id": "connection-partner-31",
       "partnerId": "partner-31",
+      "name": "eMola - VM VAMOS",
       "groupLink": "",
       "companyName": "VM VAMOS",
       "eMolaAccountOtp": "",
@@ -7131,17 +7392,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111684",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-31",
+      "requestCount": 1,
       "lastRequestId": "request-31",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-26"
     },
     {
       "id": "connection-partner-32",
       "partnerId": "partner-32",
+      "name": "eMola - Jm Serviços",
       "groupLink": "",
       "companyName": "Jm Serviços",
       "eMolaAccountOtp": "",
@@ -7167,11 +7435,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-32",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-32",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-33",
       "partnerId": "partner-33",
+      "name": "eMola - Tapago",
       "groupLink": "",
       "companyName": "Tapago",
       "eMolaAccountOtp": "",
@@ -7197,11 +7472,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-33",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-33",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-34",
       "partnerId": "partner-34",
+      "name": "eMola - Instituto Medio Politecnico de Moçambique",
       "groupLink": "",
       "companyName": "Instituto Medio Politecnico de Moçambique",
       "eMolaAccountOtp": "",
@@ -7227,11 +7509,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-34",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-34",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-35",
       "partnerId": "partner-35",
+      "name": "eMola - BCX",
       "groupLink": "",
       "companyName": "BCX",
       "eMolaAccountOtp": "",
@@ -7257,11 +7546,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-35",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-35",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-36",
       "partnerId": "partner-36",
+      "name": "eMola - Karona 24h",
       "groupLink": "",
       "companyName": "Karona 24h",
       "eMolaAccountOtp": "",
@@ -7287,11 +7583,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-36",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-36",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-37",
       "partnerId": "partner-37",
+      "name": "eMola - Sahara Games",
       "groupLink": "",
       "companyName": "Sahara Games",
       "eMolaAccountOtp": "",
@@ -7317,11 +7620,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-37",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-37",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-38",
       "partnerId": "partner-38",
+      "name": "eMola - EML SERVICE",
       "groupLink": "",
       "companyName": "EML SERVICE",
       "eMolaAccountOtp": "",
@@ -7347,11 +7657,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-38",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-38",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-39",
       "partnerId": "partner-39",
+      "name": "eMola - NetHost",
       "groupLink": "",
       "companyName": "NetHost",
       "eMolaAccountOtp": "",
@@ -7377,11 +7694,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-39",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-39",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-40",
       "partnerId": "partner-40",
+      "name": "eMola - VOLET",
       "groupLink": "",
       "companyName": "VOLET",
       "eMolaAccountOtp": "",
@@ -7414,17 +7738,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111613",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "IMPLEMENTING",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-40",
+      "requestCount": 1,
       "lastRequestId": "request-40",
+      "lastRequestStatus": "IMPLEMENTATION",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-41",
       "partnerId": "partner-41",
+      "name": "eMola - Save Moz",
       "groupLink": "",
       "companyName": "Save Moz",
       "eMolaAccountOtp": "",
@@ -7467,17 +7798,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111600",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-41",
+      "requestCount": 1,
       "lastRequestId": "request-41",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-07-16"
     },
     {
       "id": "connection-partner-42",
       "partnerId": "partner-42",
+      "name": "eMola - Hotspot (betpawa)",
       "groupLink": "",
       "companyName": "Hotspot (betpawa)",
       "eMolaAccountOtp": "",
@@ -7503,11 +7841,18 @@
       "connectivityPrd": "PASS",
       "uatStatus": "PASS",
       "lastRequestId": "request-42",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "LIVE",
+      "credentialsStatus": "UNKNOWN_LEGACY",
+      "activeRequestId": "",
+      "requestCount": 1,
+      "lastRequestStatus": "CLOSED",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-43",
       "partnerId": "partner-43",
+      "name": "eMola - Kendras",
       "groupLink": "",
       "companyName": "Kendras",
       "eMolaAccountOtp": "",
@@ -7533,11 +7878,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-43",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-43",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-44",
       "partnerId": "partner-44",
+      "name": "eMola - DKeventos",
       "groupLink": "",
       "companyName": "DKeventos",
       "eMolaAccountOtp": "",
@@ -7563,11 +7915,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-44",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-44",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-45",
       "partnerId": "partner-45",
+      "name": "eMola - SESPE Project  CEDSIF",
       "groupLink": "",
       "companyName": "SESPE Project  CEDSIF",
       "eMolaAccountOtp": "",
@@ -7593,11 +7952,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-45",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-45",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-46",
       "partnerId": "partner-46",
+      "name": "eMola - Thembani",
       "groupLink": "",
       "companyName": "Thembani",
       "eMolaAccountOtp": "",
@@ -7623,11 +7989,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-46",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-46",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-47",
       "partnerId": "partner-47",
+      "name": "eMola - Bet77",
       "groupLink": "",
       "companyName": "Bet77",
       "eMolaAccountOtp": "",
@@ -7653,11 +8026,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-47",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-47",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-48",
       "partnerId": "partner-48",
+      "name": "eMola - SupremoGo",
       "groupLink": "",
       "companyName": "SupremoGo",
       "eMolaAccountOtp": "",
@@ -7683,11 +8063,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-48",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-48",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-49",
       "partnerId": "partner-49",
+      "name": "eMola - UBAZZAR",
       "groupLink": "",
       "companyName": "UBAZZAR",
       "eMolaAccountOtp": "",
@@ -7720,17 +8107,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111591",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "IMPLEMENTING",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-49",
+      "requestCount": 1,
       "lastRequestId": "request-49",
+      "lastRequestStatus": "READY_CONNECTIVITY",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-10"
     },
     {
       "id": "connection-partner-50",
       "partnerId": "partner-50",
+      "name": "eMola - Teledata",
       "groupLink": "",
       "companyName": "Teledata",
       "eMolaAccountOtp": "",
@@ -7756,11 +8150,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-50",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-50",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-51",
       "partnerId": "partner-51",
+      "name": "eMola - Cafre Market",
       "groupLink": "",
       "companyName": "Cafre Market",
       "eMolaAccountOtp": "",
@@ -7786,11 +8187,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-51",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-51",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-52",
       "partnerId": "partner-52",
+      "name": "eMola - Hypertech",
       "groupLink": "",
       "companyName": "Hypertech",
       "eMolaAccountOtp": "",
@@ -7816,11 +8224,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-52",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-52",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-53",
       "partnerId": "partner-53",
+      "name": "eMola - ZAAS Tec",
       "groupLink": "",
       "companyName": "ZAAS Tec",
       "eMolaAccountOtp": "",
@@ -7853,17 +8268,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111703",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "IMPLEMENTING",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-53",
+      "requestCount": 1,
       "lastRequestId": "request-53",
+      "lastRequestStatus": "READY_CONNECTIVITY",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-23"
     },
     {
       "id": "connection-partner-54",
       "partnerId": "partner-54",
+      "name": "eMola - OPTIMIZEAds",
       "groupLink": "",
       "companyName": "OPTIMIZEAds",
       "eMolaAccountOtp": "",
@@ -7896,17 +8318,24 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111697",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-54",
+      "requestCount": 1,
       "lastRequestId": "request-54",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-23"
     },
     {
       "id": "connection-partner-55",
       "partnerId": "partner-55",
+      "name": "eMola - Onca-Fastako",
       "groupLink": "",
       "companyName": "Onca-Fastako",
       "eMolaAccountOtp": "",
@@ -7932,11 +8361,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-55",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-55",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-56",
       "partnerId": "partner-56",
+      "name": "eMola - Digitalehealth",
       "groupLink": "",
       "companyName": "Digitalehealth",
       "eMolaAccountOtp": "",
@@ -7962,11 +8398,18 @@
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
       "lastRequestId": "request-56",
-      "lastUpdated": "2026-08-23"
+      "lastUpdated": "2026-08-23",
+      "stage": "DRAFT",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-56",
+      "requestCount": 1,
+      "lastRequestStatus": "NEW",
+      "lastRequestType": "NEW_INTEGRATION"
     },
     {
       "id": "connection-partner-57",
       "partnerId": "partner-57",
+      "name": "eMola - Ted",
       "groupLink": "",
       "companyName": "Ted",
       "eMolaAccountOtp": "",
@@ -8000,16 +8443,23 @@
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111606",
       "formNotes": "",
       "health": "HEALTHY",
+      "stage": "API_UAT_VALIDATION",
       "vpnStatus": "UP",
       "connectivityUat": "PASS",
       "connectivityPrd": "PASS",
       "uatStatus": "IN_PROGRESS",
+      "credentialsStatus": "UNKNOWN_LEGACY",
+      "activeRequestId": "request-57",
+      "requestCount": 1,
       "lastRequestId": "request-57",
+      "lastRequestStatus": "UAT_IN_PROGRESS",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-10"
     },
     {
       "id": "connection-partner-",
       "partnerId": "partner-",
+      "name": "eMola - Check Mate",
       "groupLink": "",
       "companyName": "Check Mate",
       "eMolaAccountOtp": "",
@@ -8042,12 +8492,18 @@
       "authMethod": "",
       "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111710",
       "formNotes": "",
-      "health": "PENDING_SETUP",
+      "health": "NOT_ESTABLISHED",
+      "stage": "AWAITING_APPROVAL",
       "vpnStatus": "NOT_STARTED",
       "connectivityUat": "NOT_TESTED",
       "connectivityPrd": "NOT_TESTED",
       "uatStatus": "NOT_STARTED",
+      "credentialsStatus": "NOT_REQUIRED",
+      "activeRequestId": "request-",
+      "requestCount": 1,
       "lastRequestId": "request-",
+      "lastRequestStatus": "WAITING_SIGNATURES",
+      "lastRequestType": "NEW_INTEGRATION",
       "lastUpdated": "2026-08-19"
     }
   ]

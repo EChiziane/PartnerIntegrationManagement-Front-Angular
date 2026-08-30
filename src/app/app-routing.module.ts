@@ -12,6 +12,8 @@ import {TasksComponent} from '@features/partner-integration/tasks/tasks.componen
 import {ScanComponent} from '@features/partner-integration/scan/scan.component';
 import {RequestDetailComponent} from '@features/partner-integration/request-detail/request-detail.component';
 import {PartnerDetailComponent} from '@features/partner-integration/partner-detail/partner-detail.component';
+import {ConnectionsComponent} from '@features/partner-integration/connections/connections.component';
+import {ConnectionDetailComponent} from '@features/partner-integration/connection-detail/connection-detail.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'landing-page', pathMatch: 'full'},
@@ -24,6 +26,9 @@ const routes: Routes = [
     children: [
       {path: 'home', component: PartnerDashboardComponent},
       {path: 'partners', component: PartnersComponent},
+      {path: 'connections', component: ConnectionsComponent},
+      {path: 'connection/:id', component: ConnectionDetailComponent},
+      {path: 'requests', component: PipelineComponent},
       {path: 'integrations', component: PipelineComponent},
       {path: 'pipeline', component: PipelineComponent},
       {path: 'tasks', component: TasksComponent},

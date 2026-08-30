@@ -1,0 +1,101 @@
+<div *ngIf="connection && partner" class="connection-detail">
+  <section class="detail-header">
+    <button (click)="openPartner()" nz-button nzType="default">
+      <span nz-icon nzType="arrow-left"></span>
+      {{ partner.name }}
+    </button>
+
+    <div>
+      <span class="eyebrow">{{ 'connections.detailEyebrow' | translate }}</span>
+      <h1>{{ connection.name }}</h1>
+      <p>{{ connection.serviceApi || '-' }} - {{ connection.environment }}</p>
+    </div>
+
+    <div class="status-stack">
+      <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connection.health)">
+        {{ partnerIntegration.connectionHealthLabel(connection.health) }}
+      </nz-tag>
+      <nz-tag [nzColor]="partnerIntegration.connectionStageColor(connection.stage)">
+        {{ partnerIntegration.connectionStageLabel(connection.stage) }}
+      </nz-tag>
+    </div>
+  </section>
+
+  <section class="panel hero-panel">
+    <header>
+      <div>
+        <span class="panel-kicker">{{ 'connections.connectionState' | translate }}</span>
+        <h2>{{ 'connections.realConnectionState' | translate }}</h2>
+      </div>
+    </header>
+
+    <div class="facts">
+      <div><span>{{ 'workflow.healthLabel' | translate }}</span><strong>{{ partnerIntegration.connectionHealthLabel(connection.health) }}</strong></div>
+      <div><span>{{ 'workflow.stageLabel' | translate }}</span><strong>{{ partnerIntegration.connectionStageLabel(connection.stage) }}</strong></div>
+      <div><span>{{ 'fields.vpn' | translate }}</span><strong>{{ connection.vpnStatus }}</strong></div>
+      <div><span>UAT {{ 'fields.connectivity' | translate }}</span><strong>{{ connection.connectivityUat }}</strong></div>
+      <div><span>PRD {{ 'fields.connectivity' | translate }}</span><strong>{{ connection.connectivityPrd }}</strong></div>
+      <div><span>{{ 'fields.uatApi' | translate }}</span><strong>{{ connection.uatStatus }}</strong></div>
+    </div>
+  </section>
+
+  <div class="detail-grid">
+    <section class="panel">
+      <header>
+        <div>
+          <span class="panel-kicker">{{ 'partnerDetail.currentIntegration' | translate }}</span>
+          <h2>{{ 'partnerDetail.technicalProfile' | translate }}</h2>
+        </div>
+      </header>
+
+      <div class="facts stacked">
+        <div><span>{{ 'fields.publicPeer' | translate }}</span><strong>{{ peersLabel() }}</strong></div>
+        <div><span>{{ 'fields.privateEndpoints' | translate }}</span><strong>{{ endpointsLabel() }}</strong></div>
+        <div><span>{{ 'fields.authMethod' | translate }}</span><strong>{{ connection.authMethod || '-' }}</strong></div>
+        <div><span>{{ 'fields.technicalContact' | translate }}</span><strong>{{ connection.technicalContact || '-' }}</strong></div>
+        <div><span>{{ 'fields.ownCloudFolder' | translate }}</span><strong>{{ connection.ownCloudFolderUrl || '-' }}</strong></div>
+        <div><span>{{ 'connections.credentials' | translate }}</span><strong>{{ partnerIntegration.credentialsStatusLabel(connection.credentialsStatus) }}</strong></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <header>
+        <div>
+          <span class="panel-kicker">{{ 'connections.requests' | translate }}</span>
+          <h2>{{ 'connections.requestsTitle' | translate }}</h2>
+        </div>
+      </header>
+
+      <div class="request-actions">
+        <button (click)="startRequest('UPDATE_INTEGRATION')" nz-button nzType="primary">{{ partnerIntegration.typeLabel('UPDATE_INTEGRATION') }}</button>
+        <button (click)="startRequest('CONNECTIVITY_SUPPORT')" nz-button nzType="default">{{ partnerIntegration.typeLabel('CONNECTIVITY_SUPPORT') }}</button>
+        <button (click)="startRequest('BLOCK_VPN')" nz-button nzType="default" nzDanger>{{ partnerIntegration.typeLabel('BLOCK_VPN') }}</button>
+        <button (click)="startRequest('UNBLOCK_VPN')" nz-button nzType="default">{{ partnerIntegration.typeLabel('UNBLOCK_VPN') }}</button>
+      </div>
+
+      <article *ngFor="let request of requests" class="request-row">
+        <div>
+          <strong>{{ partnerIntegration.requestDisplayTitle(request, partner) }}</strong>
+          <span>{{ partnerIntegration.typeLabel(request.type) }} - {{ partnerIntegration.actionLabel(request.nextAction) }}</span>
+        </div>
+        <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
+          {{ partnerIntegration.statusLabel(request.currentStatus) }}
+        </nz-tag>
+        <button (click)="openRequest(request)" nz-button nzType="default">{{ 'common.actions.open' | translate }}</button>
+      </article>
+    </section>
+  </div>
+
+  <section class="panel">
+    <header>
+      <span class="panel-kicker">{{ 'request.history' | translate }}</span>
+      <h2>{{ 'request.timeline' | translate }}</h2>
+    </header>
+
+    <article *ngFor="let event of events" class="history-row">
+      <span>{{ event.date | date: 'yyyy-MM-dd HH:mm' }}</span>
+      <strong>{{ event.title }}</strong>
+      <p>{{ event.description }}</p>
+    </article>
+  </section>
+</div>

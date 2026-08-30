@@ -4,6 +4,9 @@ import {firstValueFrom} from 'rxjs';
 import {
   Partner,
   PartnerConnection,
+  ConnectionHealth,
+  ConnectionStage,
+  CredentialsStatus,
   PartnerEnvironment,
   PartnerRequest,
   RequestFormData,
@@ -89,6 +92,28 @@ export class PartnerIntegrationService {
     return this.getConnections().find(connection => connection.partnerId === partnerId);
   }
 
+  getPartnerConnections(partnerId: string): PartnerConnection[] {
+    return this.getConnections().filter(connection => connection.partnerId === partnerId);
+  }
+
+  getConnection(id: string): PartnerConnection | undefined {
+    return this.getConnections().find(connection => connection.id === id);
+  }
+
+  getConnectionRequests(connectionId: string): PartnerRequest[] {
+    const partnerId = this.getConnection(connectionId)?.partnerId || '';
+    return this.getRequests()
+      .filter(request => (request.connectionId || this.defaultConnectionId(request.partnerId || partnerId)) === connectionId)
+      .sort((a, b) => this.requestTimestamp(b) - this.requestTimestamp(a));
+  }
+
+  getConnectionEvents(connectionId: string): TimelineEvent[] {
+    const requestIds = new Set(this.getConnectionRequests(connectionId).map(request => request.id));
+    return this.state().events
+      .filter(event => requestIds.has(event.requestId))
+      .sort((a, b) => b.date.localeCompare(a.date));
+  }
+
   getEvents(requestId: string): TimelineEvent[] {
     return this.state().events
       .filter(event => event.requestId === requestId)
@@ -131,10 +156,13 @@ export class PartnerIntegrationService {
     const partner = state.partners.find(item => item.id === partnerId);
     const requestId = this.id('request');
     const {id: _id, partnerId: _partnerId, type: _type, ...safePatch} = patch;
-    const baseFormData = this.formDataFromPartner(partner);
+    const connectionId = safePatch.connectionId || this.defaultConnectionId(partnerId);
+    const baseConnection = this.normalizeConnections(state, state.partners).find(connection => connection.id === connectionId);
+    const baseFormData = baseConnection || this.formDataFromPartner(partner);
     const request = this.recalculateRequest({
       id: requestId,
       partnerId,
+      connectionId,
       title: this.defaultRequestTitle(type, partner?.name || 'Unknown Partner'),
       environment: partner?.environment || 'UAT+PRD',
       formData: {...baseFormData, ...(safePatch.formData || {})},
@@ -296,6 +324,26 @@ export class PartnerIntegrationService {
       : this.translation.instant('workflow.health.NOT_ESTABLISHED');
   }
 
+  connectionStageLabel(stage: ConnectionStage | undefined): string {
+    return stage
+      ? this.labelFromKey(`workflow.connectionStage.${stage}`, stage.replace(/_/g, ' '))
+      : this.translation.instant('workflow.connectionStage.DRAFT');
+  }
+
+  credentialsStatusLabel(status: CredentialsStatus | undefined): string {
+    return status
+      ? this.labelFromKey(`workflow.credentials.${status}`, status.replace(/_/g, ' '))
+      : this.translation.instant('workflow.credentials.NOT_RECORDED');
+  }
+
+  connectionStageColor(stage: ConnectionStage | undefined): string {
+    if (stage === 'LIVE') return 'green';
+    if (stage === 'BLOCKED' || stage === 'TROUBLESHOOTING') return 'red';
+    if (stage === 'AWAITING_APPROVAL') return 'orange';
+    if (stage === 'IMPLEMENTING' || stage === 'CONNECTIVITY_VALIDATION' || stage === 'API_UAT_VALIDATION') return 'blue';
+    return 'default';
+  }
+
   ownerLabel(owner: string | undefined): string {
     if (!owner) return '-';
     return this.labelFromKey(`workflow.owner.${owner}`, owner);
@@ -316,9 +364,9 @@ export class PartnerIntegrationService {
 
   connectionHealthColor(health: PartnerConnection['health'] | undefined): string {
     if (health === 'HEALTHY') return 'green';
-    if (health === 'PENDING_SETUP' || health === 'IMPLEMENTING' || health === 'TESTING') return 'blue';
     if (health === 'DEGRADED') return 'orange';
     if (health === 'DOWN' || health === 'BLOCKED') return 'red';
+    if (health === 'DISABLED') return 'default';
     return 'default';
   }
 
@@ -509,6 +557,10 @@ export class PartnerIntegrationService {
     return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
   }
 
+  private defaultConnectionId(partnerId: string): string {
+    return `connection-${partnerId}`;
+  }
+
   private today(): string {
     return new Date().toISOString().slice(0, 10);
   }
@@ -565,7 +617,10 @@ export class PartnerIntegrationService {
 
   private normalizeRequests(requests: PartnerRequest[], partners: Partner[]): PartnerRequest[] {
     return this.removeDuplicateCreationRequests(
-      requests.map(request => this.recalculateRequest(this.withRequestData(request, partners)))
+      requests.map(request => this.recalculateRequest(this.withRequestData({
+        ...request,
+        connectionId: request.connectionId || this.defaultConnectionId(request.partnerId)
+      }, partners)))
     );
   }
 
@@ -600,14 +655,16 @@ export class PartnerIntegrationService {
   private normalizeConnections(state: PartnerState, partners: Partner[]): PartnerConnection[] {
     const existing = state.connections || [];
     return partners.map(partner => {
-      const request = this.integrationDrivingRequest(partner.id, state.requests || []);
+      const connectionId = this.defaultConnectionId(partner.id);
+      const requests = (state.requests || []).filter(request => (request.connectionId || connectionId) === connectionId);
+      const request = this.integrationDrivingRequest(partner.id, state.requests || [], connectionId);
       const current = this.effectiveConnectionBeforeRequest(
         partner,
         state.requests || [],
         request,
-        this.cleanStoredConnection(existing.find(connection => connection.partnerId === partner.id))
+        this.cleanStoredConnection(existing.find(connection => connection.id === connectionId || connection.partnerId === partner.id))
       );
-      return this.connectionFromPartnerAndRequest(partner, request, current);
+      return this.connectionFromPartnerAndRequest(partner, request, current, requests);
     });
   }
 
@@ -615,9 +672,11 @@ export class PartnerIntegrationService {
     const partner = state.partners.find(item => item.id === request.partnerId);
     if (!partner) return;
     const connections = state.connections || this.normalizeConnections(state, state.partners);
-    const index = connections.findIndex(connection => connection.partnerId === request.partnerId);
+    const connectionId = request.connectionId || this.defaultConnectionId(request.partnerId);
+    const index = connections.findIndex(connection => connection.id === connectionId || connection.partnerId === request.partnerId);
     const current = this.effectiveConnectionBeforeRequest(partner, state.requests || [], request);
-    const nextConnection = this.connectionFromPartnerAndRequest(partner, request, current);
+    const requests = (state.requests || []).filter(item => (item.connectionId || this.defaultConnectionId(item.partnerId)) === connectionId);
+    const nextConnection = this.connectionFromPartnerAndRequest(partner, request, current, requests);
     if (index >= 0) {
       connections[index] = nextConnection;
     } else {
@@ -629,7 +688,8 @@ export class PartnerIntegrationService {
   private connectionFromPartnerAndRequest(
     partner: Partner,
     request?: PartnerRequest,
-    current?: PartnerConnection
+    current?: PartnerConnection,
+    requests: PartnerRequest[] = []
   ): PartnerConnection {
     const requestFormData = request ? this.getRequestFormData(request, partner) : this.formDataFromPartner(partner);
     const currentFormData: RequestFormData = current || this.formDataFromPartner(partner);
@@ -641,14 +701,19 @@ export class PartnerIntegrationService {
       : current;
 
     return {
-      id: `connection-${partner.id}`,
+      id: request?.connectionId || current?.id || this.defaultConnectionId(partner.id),
       partnerId: partner.id,
+      name: current?.name || `eMola - ${partner.name}`,
       ...formData,
       health: this.connectionHealth(request, current),
+      stage: this.connectionStage(request, current),
       vpnStatus: operationalSource?.vpnStatus || 'NOT_STARTED',
       connectivityUat: operationalSource?.connectivityUat || 'NOT_TESTED',
       connectivityPrd: operationalSource?.connectivityPrd || 'NOT_TESTED',
       uatStatus: operationalSource?.uatStatus || 'NOT_STARTED',
+      credentialsStatus: this.connectionCredentialsStatus(requests),
+      activeRequestId: requests.find(item => item.currentStatus !== 'CLOSED')?.id || '',
+      requestCount: requests.length,
       lastRequestId: request?.id || '',
       lastRequestStatus: request?.currentStatus,
       lastRequestType: request?.type,
@@ -685,7 +750,7 @@ export class PartnerIntegrationService {
     return false;
   }
 
-  private connectionHealth(request?: PartnerRequest, current?: PartnerConnection): PartnerConnection['health'] {
+  private connectionHealth(request?: PartnerRequest, current?: PartnerConnection): ConnectionHealth {
     if (!request) return this.connectionSnapshotHealth(current);
     if (this.shouldKeepCurrentConnectionHealth(request, current)) {
       return this.connectionSnapshotHealth(current);
@@ -694,13 +759,23 @@ export class PartnerIntegrationService {
     if (request.currentStatus === 'BLOCKED') return current ? this.connectionSnapshotHealth(current) : 'BLOCKED';
     if (request.vpnStatus === 'DOWN' || request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL') return 'DOWN';
     if (request.currentStatus === 'TROUBLESHOOTING' || request.uatStatus === 'ISSUE') return 'DEGRADED';
-    if (request.currentStatus === 'CLOSED' && this.requiredConnectivityPassed(request)) return 'HEALTHY';
     if (request.vpnStatus === 'UP' && this.requiredConnectivityPassed(request) && request.uatStatus === 'PASS') return 'HEALTHY';
     if (!this.hasTechnicalData(request.formData) && request.vpnStatus !== 'UP') return 'NOT_ESTABLISHED';
-    if (['NEW', 'WAITING_FORM', 'FORM_VALIDATION', 'READY_STATEMENT', 'READY_IMPLEMENTATION', 'WAITING_SIGNATURES'].includes(request.currentStatus)) return 'PENDING_SETUP';
+    return this.connectionSnapshotHealth(current);
+  }
+
+  private connectionStage(request?: PartnerRequest, current?: PartnerConnection): ConnectionStage {
+    if (!request) return current?.stage || 'DRAFT';
+    if (request.currentStatus === 'BLOCKED') return 'BLOCKED';
+    if (request.type === 'CONNECTIVITY_SUPPORT' || request.currentStatus === 'TROUBLESHOOTING') return 'TROUBLESHOOTING';
+    if (request.currentStatus === 'CLOSED' && this.connectionHealth(request, current) === 'HEALTHY') return 'LIVE';
+    if (['NEW', 'WAITING_FORM', 'FORM_VALIDATION', 'READY_STATEMENT', 'READY_IMPLEMENTATION', 'WAITING_SIGNATURES'].includes(request.currentStatus)) {
+      return this.hasTechnicalData(request.formData) ? 'AWAITING_APPROVAL' : 'DRAFT';
+    }
     if (request.currentStatus === 'IMPLEMENTATION' || request.currentStatus === 'READY_CONNECTIVITY') return 'IMPLEMENTING';
-    if (request.currentStatus === 'CONNECTIVITY_TEST' || request.currentStatus === 'READY_UAT' || request.currentStatus === 'UAT_IN_PROGRESS' || request.currentStatus === 'READY_HANDOVER') return 'TESTING';
-    return 'DEGRADED';
+    if (request.currentStatus === 'CONNECTIVITY_TEST' || request.currentStatus === 'READY_UAT') return 'CONNECTIVITY_VALIDATION';
+    if (request.currentStatus === 'UAT_IN_PROGRESS' || request.currentStatus === 'READY_HANDOVER') return 'API_UAT_VALIDATION';
+    return current?.stage || 'DRAFT';
   }
 
   private shouldKeepCurrentConnectionHealth(request: PartnerRequest, current?: PartnerConnection): boolean {
@@ -715,30 +790,34 @@ export class PartnerIntegrationService {
     return true;
   }
 
-  private connectionSnapshotHealth(current?: PartnerConnection): PartnerConnection['health'] {
+  private connectionSnapshotHealth(current?: PartnerConnection): ConnectionHealth {
     if (!current || !this.hasTechnicalData(current)) return 'NOT_ESTABLISHED';
     if (current.health === 'DISABLED' || current.health === 'BLOCKED') return current.health;
     if (current.vpnStatus === 'DOWN' || current.connectivityUat === 'FAIL' || current.connectivityPrd === 'FAIL') return 'DOWN';
     if (current.uatStatus === 'ISSUE') return 'DEGRADED';
-    if (current.vpnStatus === 'NOT_STARTED'
-      && current.connectivityUat === 'NOT_TESTED'
-      && current.connectivityPrd === 'NOT_TESTED'
-      && current.uatStatus === 'NOT_STARTED') {
-      return current.health === 'IMPLEMENTING' ? 'IMPLEMENTING' : 'PENDING_SETUP';
-    }
     if (current.vpnStatus === 'UP'
       && (!this.requiresUat(current.environment) || current.connectivityUat === 'PASS')
-      && (!this.requiresPrd(current.environment) || current.connectivityPrd === 'PASS')) {
+      && (!this.requiresPrd(current.environment) || current.connectivityPrd === 'PASS')
+      && current.uatStatus === 'PASS') {
       return 'HEALTHY';
     }
-    if (current.vpnStatus === 'IN_PROGRESS'
-      || current.connectivityUat === 'IN_PROGRESS'
-      || current.connectivityPrd === 'IN_PROGRESS'
-      || current.uatStatus === 'IN_PROGRESS') {
-      return 'TESTING';
-    }
-    if (current.health && current.health !== 'PENDING_SETUP') return current.health;
-    return 'DEGRADED';
+    if (current.health && ['HEALTHY', 'DEGRADED', 'DOWN', 'BLOCKED', 'DISABLED', 'NOT_ESTABLISHED'].includes(current.health)) return current.health;
+    return 'NOT_ESTABLISHED';
+  }
+
+  private connectionCredentialsStatus(requests: PartnerRequest[]): CredentialsStatus {
+    const relevant = requests.filter(request =>
+      request.currentStatus === 'READY_UAT'
+      || request.currentStatus === 'UAT_IN_PROGRESS'
+      || request.currentStatus === 'READY_HANDOVER'
+      || request.currentStatus === 'CLOSED'
+      || request.credentialsProvided
+      || !!request.testCredentials?.trim()
+    );
+    if (!relevant.length) return 'NOT_REQUIRED';
+    if (relevant.some(request => !!request.testCredentials?.trim())) return 'RECORDED';
+    if (relevant.some(request => request.credentialsProvided || request.currentStatus === 'CLOSED' || request.uatStatus === 'PASS')) return 'UNKNOWN_LEGACY';
+    return 'NOT_RECORDED';
   }
 
   private cleanStoredConnection(current?: PartnerConnection): PartnerConnection | undefined {
@@ -758,6 +837,7 @@ export class PartnerIntegrationService {
     const effectiveRequest = this.latestRequest(
       requests
         .filter(request => request.partnerId === partner.id && request.id !== drivingRequest?.id)
+        .filter(request => (request.connectionId || this.defaultConnectionId(request.partnerId)) === (drivingRequest?.connectionId || this.defaultConnectionId(partner.id)))
         .map(request => this.recalculateRequest(this.withRequestFormData(request, partner)))
         .filter(request => this.requestHasEffectiveConnectionState(request))
     );
@@ -778,9 +858,10 @@ export class PartnerIntegrationService {
     return false;
   }
 
-  private integrationDrivingRequest(partnerId: string, requests: PartnerRequest[]): PartnerRequest | undefined {
+  private integrationDrivingRequest(partnerId: string, requests: PartnerRequest[], connectionId = this.defaultConnectionId(partnerId)): PartnerRequest | undefined {
     const partnerRequests = requests
       .filter(request => request.partnerId === partnerId)
+      .filter(request => (request.connectionId || this.defaultConnectionId(request.partnerId)) === connectionId)
       .map(request => this.recalculateRequest(request));
     const openRequests = partnerRequests.filter(request => request.currentStatus !== 'CLOSED');
     return this.latestRequest(openRequests) || this.latestRequest(partnerRequests);

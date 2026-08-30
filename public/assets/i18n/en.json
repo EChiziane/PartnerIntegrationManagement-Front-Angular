@@ -13,7 +13,9 @@
       "tasks": "Execution",
       "scan": "Control",
       "partners": "Partners",
-      "mobile": "Mobile navigation"
+      "mobile": "Mobile navigation",
+      "connections": "Connections",
+      "requests": "Requests"
     },
     "topbar": {
       "subtitle": "Partners, integrations and requests"
@@ -186,6 +188,24 @@
       "implementationDescription": "IP Core, IT and readiness",
       "intakeDescription": "Request opened and form validation",
       "testingDescription": "VPN, connectivity and UAT"
+    },
+    "healthLabel": "Health",
+    "stageLabel": "Stage",
+    "connectionStage": {
+      "DRAFT": "Draft",
+      "AWAITING_APPROVAL": "Awaiting Approval",
+      "IMPLEMENTING": "Implementation",
+      "CONNECTIVITY_VALIDATION": "Connectivity Validation",
+      "API_UAT_VALIDATION": "API/UAT Validation",
+      "LIVE": "Live",
+      "TROUBLESHOOTING": "Troubleshooting",
+      "BLOCKED": "Blocked"
+    },
+    "credentials": {
+      "NOT_REQUIRED": "Not Required",
+      "NOT_RECORDED": "Not Recorded",
+      "RECORDED": "Recorded",
+      "UNKNOWN_LEGACY": "Legacy Unknown"
     }
   },
   "dashboard": {
@@ -553,6 +573,27 @@
     "manualTechnicalSaved": "Manual technical data saved on this request.",
     "importedRequest": "Imported {{file}}: request form data updated.",
     "importedPartner": "Imported {{file}}: {{endpoints}} endpoint(s), {{peers}} peer IP(s). Request will start in Ready Statement.",
-    "importFailed": "Could not import this Excel form. Please check if the file is the VPN integration form."
+    "importFailed": "Could not import this Excel form. Please check if the file is the VPN integration form.",
+    "workflowUpdated": "Workflow updated.",
+    "credentialsSaved": "Test credentials saved.",
+    "srCodeSaved": "CNOC SR code saved.",
+    "technicalDataSaved": "Technical data saved.",
+    "requestBlocked": "Request blocked.",
+    "requestUnblocked": "Request unblocked.",
+    "partnerSaved": "Partner data saved."
+  },
+  "connections": {
+    "eyebrow": "Connections",
+    "title": "Connection registry",
+    "subtitle": "Track the real VPN/API connection state independently from request workflow.",
+    "searchPlaceholder": "Search by connection, partner, service, environment, peer or endpoint",
+    "totalRequests": "Total requests",
+    "credentials": "Credentials",
+    "openConnection": "Open Connection",
+    "detailEyebrow": "Connection cockpit",
+    "connectionState": "Connection status",
+    "realConnectionState": "Real state of the VPN/API connection",
+    "requests": "Connection requests",
+    "requestsTitle": "Operational requests on this connection"
   }
 }

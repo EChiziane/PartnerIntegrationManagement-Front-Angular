@@ -32,14 +32,23 @@ export type TaskPriority = 'P1' | 'P2' | 'P3' | 'P4';
 export type PartnerEnvironment = 'UAT' | 'PRD' | 'UAT+PRD';
 export type ConnectionHealth =
   | 'NOT_ESTABLISHED'
-  | 'PENDING_SETUP'
-  | 'IMPLEMENTING'
-  | 'TESTING'
   | 'HEALTHY'
   | 'DEGRADED'
   | 'DOWN'
   | 'BLOCKED'
   | 'DISABLED';
+
+export type ConnectionStage =
+  | 'DRAFT'
+  | 'AWAITING_APPROVAL'
+  | 'IMPLEMENTING'
+  | 'CONNECTIVITY_VALIDATION'
+  | 'API_UAT_VALIDATION'
+  | 'LIVE'
+  | 'TROUBLESHOOTING'
+  | 'BLOCKED';
+
+export type CredentialsStatus = 'NOT_REQUIRED' | 'NOT_RECORDED' | 'RECORDED' | 'UNKNOWN_LEGACY';
 
 export interface PartnerPrivateEndpoint {
   environment: PartnerEnvironment;
@@ -99,11 +108,16 @@ export interface RequestFormData {
 export interface PartnerConnection extends RequestFormData {
   id: string;
   partnerId: string;
+  name: string;
   health: ConnectionHealth;
+  stage: ConnectionStage;
   vpnStatus: VpnStatus;
   connectivityUat: TestStatus;
   connectivityPrd: TestStatus;
   uatStatus: UatStatus;
+  credentialsStatus?: CredentialsStatus;
+  activeRequestId?: string;
+  requestCount?: number;
   lastRequestId?: string;
   lastRequestStatus?: WorkflowStatus;
   lastRequestType?: RequestType;
@@ -113,6 +127,7 @@ export interface PartnerConnection extends RequestFormData {
 export interface PartnerRequest {
   id: string;
   partnerId: string;
+  connectionId?: string;
   title?: string;
   environment?: PartnerEnvironment;
   formData?: RequestFormData;

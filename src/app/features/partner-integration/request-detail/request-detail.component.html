@@ -8,6 +8,10 @@
       <span class="eyebrow">{{ partnerIntegration.typeLabel(request.type) }}</span>
       <h1>{{ partnerIntegration.requestDisplayTitle(request, partner) }}</h1>
       <p>{{ partner.name }} - {{ partnerIntegration.actionLabel(request.nextAction) }}</p>
+      <button *ngIf="connection" (click)="openConnection()" class="connection-link" nz-button nzType="link">
+        <span nz-icon nzType="partition"></span>
+        {{ connection.name }} · {{ partnerIntegration.connectionHealthLabel(connection.health) }}
+      </button>
     </div>
     <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
       {{ partnerIntegration.statusLabel(request.currentStatus) }}
@@ -114,23 +118,6 @@
         </article>
       </div>
 
-      <div *ngIf="isCredentialsEditorOpen" class="credentials-editor">
-        <div>
-          <span class="panel-kicker">{{ 'request.testCredentials' | translate }}</span>
-          <h3>{{ 'request.pasteCredentialsFor' | translate:{partner: partner.name} }}</h3>
-        </div>
-        <textarea
-          [(ngModel)]="credentialsDraft"
-          nz-input
-          rows="8"
-          [placeholder]="'request.credentialsPlaceholder' | translate"></textarea>
-        <div class="credentials-actions">
-          <button (click)="cancelCredentialsEditor()" nz-button nzType="default">{{ 'common.actions.cancel' | translate }}</button>
-          <button (click)="saveCredentials()" [disabled]="!credentialsDraft.trim()" nz-button nzType="primary">
-            {{ 'request.saveMarkProvided' | translate }}
-          </button>
-        </div>
-      </div>
     </section>
 
     <section class="panel">
@@ -277,6 +264,29 @@
       <p>{{ event.description }}</p>
     </article>
   </section>
+
+  <nz-modal
+    [(nzVisible)]="isCredentialsEditorOpen"
+    [nzTitle]="'request.testCredentials' | translate"
+    [nzOkText]="'request.saveMarkProvided' | translate"
+    [nzCancelText]="'common.actions.cancel' | translate"
+    [nzOkDisabled]="!credentialsDraft.trim()"
+    (nzOnCancel)="cancelCredentialsEditor()"
+    (nzOnOk)="saveCredentials()">
+    <ng-container *nzModalContent>
+      <div class="credentials-editor modal-editor">
+        <div>
+          <span class="panel-kicker">{{ 'request.testCredentials' | translate }}</span>
+          <h3>{{ 'request.pasteCredentialsFor' | translate:{partner: partner.name} }}</h3>
+        </div>
+        <textarea
+          [(ngModel)]="credentialsDraft"
+          nz-input
+          rows="8"
+          [placeholder]="'request.credentialsPlaceholder' | translate"></textarea>
+      </div>
+    </ng-container>
+  </nz-modal>
 
   <nz-modal
     [(nzVisible)]="isSrEditorOpen"
