@@ -161,10 +161,10 @@
     </header>
 
     <div class="facts integration-facts">
-      <div><span>{{ 'fields.vpn' | translate }}</span><strong>{{ connection?.vpnStatus || 'NOT_STARTED' }}</strong></div>
-      <div><span>UAT {{ 'fields.connectivity' | translate }}</span><strong>{{ connection?.connectivityUat || 'NOT_TESTED' }}</strong></div>
-      <div><span>PRD {{ 'fields.connectivity' | translate }}</span><strong>{{ connection?.connectivityPrd || 'NOT_TESTED' }}</strong></div>
-      <div><span>{{ 'fields.uatApi' | translate }}</span><strong>{{ connection?.uatStatus || 'NOT_STARTED' }}</strong></div>
+      <div><span>{{ 'fields.vpn' | translate }}</span><strong>{{ partnerIntegration.vpnStatusLabel(connection?.vpnStatus) }}</strong></div>
+      <div><span>UAT {{ 'fields.connectivity' | translate }}</span><strong>{{ partnerIntegration.testStatusLabel(connection?.connectivityUat) }}</strong></div>
+      <div><span>PRD {{ 'fields.connectivity' | translate }}</span><strong>{{ partnerIntegration.testStatusLabel(connection?.connectivityPrd) }}</strong></div>
+      <div><span>{{ 'fields.uatApi' | translate }}</span><strong>{{ partnerIntegration.uatStatusLabel(connection?.uatStatus) }}</strong></div>
       <div><span>{{ 'partnerDetail.stateDrivenBy' | translate }}</span><strong>{{ integrationDrivingRequest ? partnerIntegration.requestDisplayTitle(integrationDrivingRequest, partner) : '-' }}</strong></div>
       <div><span>{{ 'fields.requestStatus' | translate }}</span><strong>{{ integrationDrivingRequest ? partnerIntegration.statusLabel(integrationDrivingRequest.currentStatus) : '-' }}</strong></div>
       <div><span>{{ 'fields.lastUpdated' | translate }}</span><strong>{{ connection?.lastUpdated || '-' }}</strong></div>

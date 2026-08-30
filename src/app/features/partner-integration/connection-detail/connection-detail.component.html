@@ -32,10 +32,10 @@
     <div class="facts">
       <div><span>{{ 'workflow.healthLabel' | translate }}</span><strong>{{ partnerIntegration.connectionHealthLabel(connection.health) }}</strong></div>
       <div><span>{{ 'workflow.stageLabel' | translate }}</span><strong>{{ partnerIntegration.connectionStageLabel(connection.stage) }}</strong></div>
-      <div><span>{{ 'fields.vpn' | translate }}</span><strong>{{ connection.vpnStatus }}</strong></div>
-      <div><span>UAT {{ 'fields.connectivity' | translate }}</span><strong>{{ connection.connectivityUat }}</strong></div>
-      <div><span>PRD {{ 'fields.connectivity' | translate }}</span><strong>{{ connection.connectivityPrd }}</strong></div>
-      <div><span>{{ 'fields.uatApi' | translate }}</span><strong>{{ connection.uatStatus }}</strong></div>
+      <div><span>{{ 'fields.vpn' | translate }}</span><strong>{{ partnerIntegration.vpnStatusLabel(connection.vpnStatus) }}</strong></div>
+      <div><span>UAT {{ 'fields.connectivity' | translate }}</span><strong>{{ partnerIntegration.testStatusLabel(connection.connectivityUat) }}</strong></div>
+      <div><span>PRD {{ 'fields.connectivity' | translate }}</span><strong>{{ partnerIntegration.testStatusLabel(connection.connectivityPrd) }}</strong></div>
+      <div><span>{{ 'fields.uatApi' | translate }}</span><strong>{{ partnerIntegration.uatStatusLabel(connection.uatStatus) }}</strong></div>
     </div>
   </section>
 

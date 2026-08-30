@@ -205,10 +205,10 @@ export class PartnerIntegrationPdfService {
       head: [['Connection Health', 'VPN', 'UAT Connectivity', 'PRD Connectivity', 'UAT/API', 'Last Updated']],
       body: [[
         this.partnerIntegration.connectionHealthLabel(connection?.health),
-        connection?.vpnStatus || 'NOT_STARTED',
-        connection?.connectivityUat || 'NOT_TESTED',
-        connection?.connectivityPrd || 'NOT_TESTED',
-        connection?.uatStatus || 'NOT_STARTED',
+        this.partnerIntegration.vpnStatusLabel(connection?.vpnStatus),
+        this.partnerIntegration.testStatusLabel(connection?.connectivityUat),
+        this.partnerIntegration.testStatusLabel(connection?.connectivityPrd),
+        this.partnerIntegration.uatStatusLabel(connection?.uatStatus),
         connection?.lastUpdated || '-'
       ]],
       theme: 'grid',

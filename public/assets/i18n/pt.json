@@ -206,6 +206,31 @@
       "NOT_RECORDED": "Nao Registadas",
       "RECORDED": "Registadas",
       "UNKNOWN_LEGACY": "Legado Sem Detalhe"
+    },
+    "vpn": {
+      "NOT_STARTED": "Nao iniciado",
+      "IN_PROGRESS": "Em curso",
+      "UP": "Up",
+      "DOWN": "Down"
+    },
+    "test": {
+      "NOT_TESTED": "Nao testado",
+      "IN_PROGRESS": "Em curso",
+      "PASS": "Passou",
+      "FAIL": "Falhou"
+    },
+    "uat": {
+      "NOT_STARTED": "Nao iniciado",
+      "IN_PROGRESS": "Em curso",
+      "PASS": "Passou",
+      "ISSUE": "Com problema",
+      "WAITING_PARTNER": "Aguardar partner"
+    },
+    "implementation": {
+      "NOT_SUBMITTED": "Nao submetido",
+      "SUBMITTED": "Submetido",
+      "IN_PROGRESS": "Em curso",
+      "DONE": "Concluido"
     }
   },
   "dashboard": {
@@ -567,7 +592,15 @@
     "includeCredentialsTitle": "Incluir credenciais de teste?",
     "includeCredentialsContent": "Este partner tem credenciais de teste registadas. Oculte-as excepto se este PDF precisar mesmo desses dados sensiveis.",
     "includeCredentials": "Incluir credenciais",
-    "hideCredentials": "Ocultar credenciais"
+    "hideCredentials": "Ocultar credenciais",
+    "backReasonTitle": "Voltar estado do pedido",
+    "backReasonContent": "Informe a razao de controlo para mover este pedido para tras. A razao e obrigatoria para confirmar, mas nao sera gravada.",
+    "blockReasonTitle": "Bloquear pedido",
+    "blockReasonContent": "Informe a razao do bloqueio. Isto sera gravado no historico do pedido.",
+    "unblockNoteTitle": "Desbloquear pedido",
+    "unblockNoteContent": "Adicione uma nota opcional para a acao de desbloqueio.",
+    "reasonPlaceholder": "Razao ou nota operacional",
+    "continueWithoutNote": "Continuar sem nota"
   },
   "messages": {
     "manualTechnicalSaved": "Dados tecnicos manuais gravados neste pedido.",
@@ -595,5 +628,11 @@
     "realConnectionState": "Estado real da conexao VPN/API",
     "requests": "Pedidos da conexao",
     "requestsTitle": "Pedidos operacionais nesta conexao"
+  },
+  "uat": {
+    "eyebrow": "UAT / CAB",
+    "title": "Checklist operacional de UAT",
+    "subtitle": "Cenarios para validar antes de aprovar a mudanca.",
+    "download": "Baixar Checklist UAT"
   }
 }

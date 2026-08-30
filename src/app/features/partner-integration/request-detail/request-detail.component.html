@@ -43,10 +43,10 @@
             <span nz-icon [nzType]="request.srCode ? 'edit' : 'plus'"></span>
           </button>
         </div>
-        <div><span>IP Core</span><strong>{{ request.ipCoreStatus }}</strong></div>
-        <div><span>IT</span><strong>{{ request.itStatus }}</strong></div>
-        <div><span>VPN</span><strong>{{ request.vpnStatus }}</strong></div>
-        <div><span>{{ 'fields.connectivity' | translate }}</span><strong>{{ request.connectivityUat }} / {{ request.connectivityPrd }}</strong></div>
+        <div><span>IP Core</span><strong>{{ partnerIntegration.implementationStatusLabel(request.ipCoreStatus) }}</strong></div>
+        <div><span>IT</span><strong>{{ partnerIntegration.implementationStatusLabel(request.itStatus) }}</strong></div>
+        <div><span>VPN</span><strong>{{ partnerIntegration.vpnStatusLabel(request.vpnStatus) }}</strong></div>
+        <div><span>{{ 'fields.connectivity' | translate }}</span><strong>{{ partnerIntegration.testStatusLabel(request.connectivityUat) }} / {{ partnerIntegration.testStatusLabel(request.connectivityPrd) }}</strong></div>
       </div>
 
       <div *ngIf="request.currentStatus === 'BLOCKED'" class="blocked-notice">

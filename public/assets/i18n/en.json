@@ -206,6 +206,31 @@
       "NOT_RECORDED": "Not Recorded",
       "RECORDED": "Recorded",
       "UNKNOWN_LEGACY": "Legacy Unknown"
+    },
+    "vpn": {
+      "NOT_STARTED": "Not Started",
+      "IN_PROGRESS": "In Progress",
+      "UP": "Up",
+      "DOWN": "Down"
+    },
+    "test": {
+      "NOT_TESTED": "Not Tested",
+      "IN_PROGRESS": "In Progress",
+      "PASS": "Pass",
+      "FAIL": "Fail"
+    },
+    "uat": {
+      "NOT_STARTED": "Not Started",
+      "IN_PROGRESS": "In Progress",
+      "PASS": "Pass",
+      "ISSUE": "Issue",
+      "WAITING_PARTNER": "Waiting Partner"
+    },
+    "implementation": {
+      "NOT_SUBMITTED": "Not Submitted",
+      "SUBMITTED": "Submitted",
+      "IN_PROGRESS": "In Progress",
+      "DONE": "Done"
     }
   },
   "dashboard": {
@@ -567,7 +592,15 @@
     "includeCredentialsTitle": "Include test credentials?",
     "includeCredentialsContent": "This partner has recorded test credentials. Hide them unless this PDF really needs to include sensitive details.",
     "includeCredentials": "Include credentials",
-    "hideCredentials": "Hide credentials"
+    "hideCredentials": "Hide credentials",
+    "backReasonTitle": "Move request backwards",
+    "backReasonContent": "Enter the control reason for moving this request backwards. The reason is required for confirmation but will not be stored.",
+    "blockReasonTitle": "Block request",
+    "blockReasonContent": "Enter the blocker reason. This will be stored in the request history.",
+    "unblockNoteTitle": "Unblock request",
+    "unblockNoteContent": "Add an optional note for the unblock action.",
+    "reasonPlaceholder": "Reason or operational note",
+    "continueWithoutNote": "Continue without note"
   },
   "messages": {
     "manualTechnicalSaved": "Manual technical data saved on this request.",
@@ -595,5 +628,11 @@
     "realConnectionState": "Real state of the VPN/API connection",
     "requests": "Connection requests",
     "requestsTitle": "Operational requests on this connection"
+  },
+  "uat": {
+    "eyebrow": "UAT / CAB",
+    "title": "Operational UAT checklist",
+    "subtitle": "Scenarios to validate before approving the change.",
+    "download": "Download UAT Checklist"
   }
 }

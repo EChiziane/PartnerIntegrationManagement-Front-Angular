@@ -336,6 +336,30 @@ export class PartnerIntegrationService {
       : this.translation.instant('workflow.credentials.NOT_RECORDED');
   }
 
+  vpnStatusLabel(status: string | undefined): string {
+    return status
+      ? this.labelFromKey(`workflow.vpn.${status}`, status.replace(/_/g, ' '))
+      : this.translation.instant('workflow.vpn.NOT_STARTED');
+  }
+
+  testStatusLabel(status: string | undefined): string {
+    return status
+      ? this.labelFromKey(`workflow.test.${status}`, status.replace(/_/g, ' '))
+      : this.translation.instant('workflow.test.NOT_TESTED');
+  }
+
+  uatStatusLabel(status: string | undefined): string {
+    return status
+      ? this.labelFromKey(`workflow.uat.${status}`, status.replace(/_/g, ' '))
+      : this.translation.instant('workflow.uat.NOT_STARTED');
+  }
+
+  implementationStatusLabel(status: string | undefined): string {
+    return status
+      ? this.labelFromKey(`workflow.implementation.${status}`, status.replace(/_/g, ' '))
+      : this.translation.instant('workflow.implementation.NOT_SUBMITTED');
+  }
+
   connectionStageColor(stage: ConnectionStage | undefined): string {
     if (stage === 'LIVE') return 'green';
     if (stage === 'BLOCKED' || stage === 'TROUBLESHOOTING') return 'red';
@@ -853,8 +877,11 @@ export class PartnerIntegrationService {
     if (request.type === 'BLOCK_VPN' && request.currentStatus === 'CLOSED') return true;
     if (request.vpnStatus === 'DOWN' || request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL') return true;
     if (request.currentStatus === 'TROUBLESHOOTING' || request.uatStatus === 'ISSUE') return true;
-    if (request.vpnStatus === 'UP' && this.requiredConnectivityPassed(request)) return true;
-    if (request.currentStatus === 'CLOSED' && request.vpnStatus === 'UP' && this.hasTechnicalData(request.formData)) return true;
+    if (request.currentStatus === 'CLOSED'
+      && request.vpnStatus === 'UP'
+      && this.requiredConnectivityPassed(request)
+      && request.uatStatus === 'PASS'
+      && this.hasTechnicalData(request.formData)) return true;
     return false;
   }
 
