@@ -555,7 +555,20 @@
     "allTypes": "All types",
     "allPartners": "All partners",
     "allOwners": "All owners",
-    "allPriorities": "All priorities"
+    "allPriorities": "All priorities",
+    "noRequestsTitle": "No requests found",
+    "noRequestsHint": "Adjust the search or clear the active filters.",
+    "showingPage": "Showing {{shown}} of {{total}} filtered requests",
+    "headers": {
+      "request": "Request",
+      "partner": "Partner",
+      "status": "Status",
+      "owner": "Owner",
+      "nextAction": "Next action",
+      "priority": "Prio.",
+      "followUp": "Follow-up",
+      "actions": "Actions"
+    }
   },
   "tasks": {
     "eyebrow": "Execution queue",

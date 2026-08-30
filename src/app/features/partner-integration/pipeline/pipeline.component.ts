@@ -26,6 +26,8 @@ export class PipelineComponent implements OnInit {
   selectedPriority: TaskPriority | 'ALL' = 'ALL';
   selectedScope: 'ALL' | 'OPEN' | 'CLOSED' | 'BLOCKED' = 'OPEN';
   searchValue = '';
+  pageIndex = 1;
+  pageSize = 12;
 
   readonly statuses: WorkflowStatus[] = [
     'BLOCKED',
@@ -104,6 +106,11 @@ export class PipelineComponent implements OnInit {
     });
   }
 
+  get pagedRequests(): PartnerRequest[] {
+    const start = (this.pageIndex - 1) * this.pageSize;
+    return this.filteredRequests.slice(start, start + this.pageSize);
+  }
+
   get owners(): string[] {
     return [...new Set(this.requests.map(request => request.currentOwner).filter(Boolean))].sort();
   }
@@ -131,6 +138,15 @@ export class PipelineComponent implements OnInit {
   selectStage(stage: WorkflowStage): void {
     const firstStatusWithRequests = stage.statuses.find(status => this.countByStatus(status) > 0);
     this.selectedStatus = firstStatusWithRequests || stage.statuses[0];
+    this.resetPage();
+  }
+
+  resetPage(): void {
+    this.pageIndex = 1;
+  }
+
+  trackByRequestId(_index: number, request: PartnerRequest): string {
+    return request.id;
   }
 
   requestTitle(request: PartnerRequest): string {

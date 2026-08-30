@@ -555,7 +555,20 @@
     "allTypes": "Todos tipos",
     "allPartners": "Todos partners",
     "allOwners": "Todos responsaveis",
-    "allPriorities": "Todas prioridades"
+    "allPriorities": "Todas prioridades",
+    "noRequestsTitle": "Nenhum pedido encontrado",
+    "noRequestsHint": "Ajuste a pesquisa ou limpe os filtros ativos.",
+    "showingPage": "A mostrar {{shown}} de {{total}} pedidos filtrados",
+    "headers": {
+      "request": "Pedido",
+      "partner": "Partner",
+      "status": "Estado",
+      "owner": "Responsavel",
+      "nextAction": "Proxima acao",
+      "priority": "Prior.",
+      "followUp": "Follow-up",
+      "actions": "Acoes"
+    }
   },
   "tasks": {
     "eyebrow": "Fila de execucao",

@@ -3,81 +3,123 @@
     <div>
       <span class="eyebrow">{{ 'pipeline.eyebrow' | translate }}</span>
       <h1>{{ 'pipeline.title' | translate }}</h1>
-      <p>{{ 'pipeline.subtitle' | translate }}</p>
     </div>
-  </section>
-
-  <section class="toolbar">
-    <label class="search-control">
-      <span nz-icon nzType="search"></span>
-      <input [(ngModel)]="searchValue" nz-input [placeholder]="'pipeline.searchPlaceholder' | translate"/>
-    </label>
-
-    <nz-select [(ngModel)]="selectedScope">
-      <nz-option nzValue="OPEN" [nzLabel]="'pipeline.openOnly' | translate"></nz-option>
-      <nz-option nzValue="ALL" [nzLabel]="'common.all' | translate"></nz-option>
-      <nz-option nzValue="CLOSED" [nzLabel]="partnerIntegration.statusLabel('CLOSED')"></nz-option>
-      <nz-option nzValue="BLOCKED" [nzLabel]="partnerIntegration.statusLabel('BLOCKED')"></nz-option>
-    </nz-select>
-
-    <nz-select [(ngModel)]="selectedStatus">
-      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allStatuses' | translate"></nz-option>
-      <nz-option *ngFor="let status of statuses" [nzValue]="status" [nzLabel]="partnerIntegration.statusLabel(status)"></nz-option>
-    </nz-select>
-
-    <nz-select [(ngModel)]="selectedType">
-      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allTypes' | translate"></nz-option>
-      <nz-option *ngFor="let type of requestTypes" [nzValue]="type" [nzLabel]="partnerIntegration.typeLabel(type)"></nz-option>
-    </nz-select>
-
-    <nz-select [(ngModel)]="selectedPartnerId">
-      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allPartners' | translate"></nz-option>
-      <nz-option *ngFor="let partner of partners" [nzValue]="partner.id" [nzLabel]="partner.name"></nz-option>
-    </nz-select>
-
-    <nz-select [(ngModel)]="selectedOwner">
-      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allOwners' | translate"></nz-option>
-      <nz-option *ngFor="let owner of owners" [nzValue]="owner" [nzLabel]="partnerIntegration.ownerLabel(owner)"></nz-option>
-    </nz-select>
-
-    <nz-select [(ngModel)]="selectedPriority">
-      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allPriorities' | translate"></nz-option>
-      <nz-option *ngFor="let priority of priorities" [nzValue]="priority" [nzLabel]="priority"></nz-option>
-    </nz-select>
-
     <button (click)="downloadPipeline()" nz-button nzType="default">
       <span nz-icon nzType="download"></span>
       {{ 'pipeline.download' | translate }}
     </button>
   </section>
 
-  <section class="stage-strip" [attr.aria-label]="'pipeline.workflowStages' | translate">
-    <button
-      *ngFor="let stage of workflowStages"
-      (click)="selectStage(stage)"
-      [class]="'stage-chip tone-' + stage.tone"
-      type="button">
-      <span>{{ stageLabel(stage) }}</span>
-      <strong>{{ countByStage(stage) }}</strong>
-    </button>
+  <section class="toolbar">
+    <label class="search-control">
+      <span nz-icon nzType="search"></span>
+      <input [(ngModel)]="searchValue" (ngModelChange)="resetPage()" nz-input [placeholder]="'pipeline.searchPlaceholder' | translate"/>
+    </label>
+
+    <nz-select [(ngModel)]="selectedScope" (ngModelChange)="resetPage()">
+      <nz-option nzValue="OPEN" [nzLabel]="'pipeline.openOnly' | translate"></nz-option>
+      <nz-option nzValue="ALL" [nzLabel]="'common.all' | translate"></nz-option>
+      <nz-option nzValue="CLOSED" [nzLabel]="partnerIntegration.statusLabel('CLOSED')"></nz-option>
+      <nz-option nzValue="BLOCKED" [nzLabel]="partnerIntegration.statusLabel('BLOCKED')"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedStatus" (ngModelChange)="resetPage()">
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allStatuses' | translate"></nz-option>
+      <nz-option *ngFor="let status of statuses" [nzValue]="status" [nzLabel]="partnerIntegration.statusLabel(status)"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedType" (ngModelChange)="resetPage()">
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allTypes' | translate"></nz-option>
+      <nz-option *ngFor="let type of requestTypes" [nzValue]="type" [nzLabel]="partnerIntegration.typeLabel(type)"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedPartnerId" (ngModelChange)="resetPage()">
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allPartners' | translate"></nz-option>
+      <nz-option *ngFor="let partner of partners" [nzValue]="partner.id" [nzLabel]="partner.name"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedOwner" (ngModelChange)="resetPage()">
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allOwners' | translate"></nz-option>
+      <nz-option *ngFor="let owner of owners" [nzValue]="owner" [nzLabel]="partnerIntegration.ownerLabel(owner)"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="selectedPriority" (ngModelChange)="resetPage()">
+      <nz-option nzValue="ALL" [nzLabel]="'pipeline.allPriorities' | translate"></nz-option>
+      <nz-option *ngFor="let priority of priorities" [nzValue]="priority" [nzLabel]="priority"></nz-option>
+    </nz-select>
+
   </section>
 
   <section class="request-list">
-    <article *ngFor="let request of filteredRequests" class="request-card">
-      <div class="request-title">
-        <strong>{{ requestTitle(request) }}</strong>
-        <span>{{ partnerName(request.partnerId) }} - {{ partnerIntegration.typeLabel(request.type) }}</span>
-      </div>
-      <div [class]="'request-status tone-' + stageForStatus(request.currentStatus).tone">
-        <span>{{ stageLabel(stageForStatus(request.currentStatus)) }}</span>
-        <strong>{{ partnerIntegration.statusLabel(request.currentStatus) }}</strong>
-      </div>
-      <div class="request-meta">
-        <span>{{ 'pipeline.owner' | translate:{owner: partnerIntegration.ownerLabel(request.currentOwner)} }}</span>
-        <span>{{ 'pipeline.next' | translate:{action: partnerIntegration.actionLabel(request.nextAction)} }}</span>
-        <span>{{ 'pipeline.followUp' | translate:{date: request.followUpDate || '-'} }}</span>
-      </div>
-      <button (click)="openRequest(request)" nz-button nzType="default">{{ 'common.actions.open' | translate }}</button>
-    </article>
+    <table>
+      <thead>
+      <tr>
+        <th>{{ 'pipeline.headers.request' | translate }}</th>
+        <th>{{ 'pipeline.headers.partner' | translate }}</th>
+        <th>{{ 'pipeline.headers.status' | translate }}</th>
+        <th>{{ 'pipeline.headers.owner' | translate }}</th>
+        <th>{{ 'pipeline.headers.nextAction' | translate }}</th>
+        <th>{{ 'pipeline.headers.priority' | translate }}</th>
+        <th>{{ 'pipeline.headers.followUp' | translate }}</th>
+        <th>{{ 'pipeline.headers.actions' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let request of pagedRequests; trackBy: trackByRequestId">
+        <td>
+          <strong>{{ requestTitle(request) }}</strong>
+          <span>{{ partnerIntegration.typeLabel(request.type) }}</span>
+        </td>
+        <td>
+          <strong>{{ partnerName(request.partnerId) }}</strong>
+          <span>{{ request.environment || '-' }}</span>
+        </td>
+        <td>
+          <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
+            {{ partnerIntegration.statusLabel(request.currentStatus) }}
+          </nz-tag>
+          <span>{{ stageLabel(stageForStatus(request.currentStatus)) }}</span>
+        </td>
+        <td>
+          <strong>{{ partnerIntegration.ownerLabel(request.currentOwner) }}</strong>
+        </td>
+        <td>
+          <strong>{{ partnerIntegration.actionLabel(request.nextAction) }}</strong>
+          <span>{{ request.srCode || '-' }}</span>
+        </td>
+        <td>
+          <strong>{{ request.priority }}</strong>
+        </td>
+        <td>
+          <strong>{{ request.followUpDate || '-' }}</strong>
+          <span>{{ request.stageStartDate || '-' }}</span>
+        </td>
+        <td>
+          <div class="row-actions">
+            <button (click)="openRequest(request)" [title]="'common.actions.open' | translate" nz-button nzSize="small" nzType="primary">
+              <span nz-icon nzType="eye"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!filteredRequests.length" class="empty-state">
+      <span nz-icon nzType="search"></span>
+      <strong>{{ 'pipeline.noRequestsTitle' | translate }}</strong>
+      <p>{{ 'pipeline.noRequestsHint' | translate }}</p>
+    </div>
+
+    <div *ngIf="filteredRequests.length" class="table-footer">
+      <span>{{ 'pipeline.showingPage' | translate:{shown: pagedRequests.length, total: filteredRequests.length} }}</span>
+      <nz-pagination
+        [(nzPageIndex)]="pageIndex"
+        [(nzPageSize)]="pageSize"
+        [nzPageSizeOptions]="[10, 12, 20, 50]"
+        [nzShowSizeChanger]="true"
+        [nzTotal]="filteredRequests.length">
+      </nz-pagination>
+    </div>
   </section>
 </div>
