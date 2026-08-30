@@ -89,7 +89,7 @@
         <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connectionForPartner(partner)?.health)">
           {{ partnerIntegration.connectionHealthLabel(connectionForPartner(partner)?.health) }}
         </nz-tag>
-        <span>{{ connectionForPartner(partner)?.vpnStatus || 'NOT_STARTED' }} · UAT {{ connectionForPartner(partner)?.connectivityUat || 'NOT_TESTED' }} · PRD {{ connectionForPartner(partner)?.connectivityPrd || 'NOT_TESTED' }}</span>
+        <span>{{ partnerIntegration.vpnStatusLabel(connectionForPartner(partner)?.vpnStatus) }} · UAT {{ partnerIntegration.testStatusLabel(connectionForPartner(partner)?.connectivityUat) }} · PRD {{ partnerIntegration.testStatusLabel(connectionForPartner(partner)?.connectivityPrd) }}</span>
       </div>
 
       <div class="cell-stack compact">

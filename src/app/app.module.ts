@@ -38,6 +38,7 @@ import {RequestDetailComponent} from '@features/partner-integration/request-deta
 import {PartnerDetailComponent} from '@features/partner-integration/partner-detail/partner-detail.component';
 import {ConnectionsComponent} from '@features/partner-integration/connections/connections.component';
 import {ConnectionDetailComponent} from '@features/partner-integration/connection-detail/connection-detail.component';
+import {UatChecklistComponent} from '@features/partner-integration/uat/uat-checklist.component';
 import {TranslatePipe} from '@shared/pipes/translate.pipe';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
 
@@ -58,6 +59,7 @@ registerLocaleData(en);
     PartnerDetailComponent,
     ConnectionsComponent,
     ConnectionDetailComponent,
+    UatChecklistComponent,
     TranslatePipe
   ],
   imports: [

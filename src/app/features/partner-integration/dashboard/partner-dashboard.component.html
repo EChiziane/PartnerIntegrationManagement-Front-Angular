@@ -29,7 +29,7 @@
       <small>{{ 'dashboard.registeredProfiles' | translate }}</small>
     </button>
 
-    <button (click)="goPipeline()" class="metric-card active" type="button">
+    <button (click)="goConnections()" class="metric-card active" type="button">
       <span>{{ 'dashboard.activeIntegrations' | translate }}</span>
       <strong>{{ activeIntegrationsCount }}</strong>
       <small>{{ 'dashboard.healthSummary' | translate:{healthy: healthyIntegrationsCount, attention: degradedIntegrationsCount + downIntegrationsCount} }}</small>

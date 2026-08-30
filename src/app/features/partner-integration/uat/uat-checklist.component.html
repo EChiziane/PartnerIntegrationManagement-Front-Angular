@@ -1,0 +1,17 @@
+<div class="uat-page">
+  <section class="page-header">
+    <div>
+      <span class="eyebrow">{{ 'uat.eyebrow' | translate }}</span>
+      <h1>{{ 'uat.title' | translate }}</h1>
+      <p>{{ 'uat.subtitle' | translate }}</p>
+    </div>
+  </section>
+
+  <section class="scenario-grid">
+    <article *ngFor="let scenario of scenarios" class="scenario-card">
+      <span>{{ scenario.areaKey | translate }}</span>
+      <h2>{{ scenario.titleKey | translate }}</h2>
+      <p>{{ scenario.expectedKey | translate }}</p>
+    </article>
+  </section>
+</div>

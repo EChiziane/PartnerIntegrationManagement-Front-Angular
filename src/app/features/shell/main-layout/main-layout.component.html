@@ -63,6 +63,13 @@
       </li>
 
       <li nz-menu-item nzMatchRouter>
+        <a routerLink="/app/uat">
+          <span nz-icon nzType="file-done"></span>
+          <span>{{ 'layout.nav.uat' | translate }}</span>
+        </a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter>
         <a routerLink="/app/partners">
           <span nz-icon nzType="team"></span>
           <span>{{ 'layout.nav.partners' | translate }}</span>
@@ -201,6 +208,11 @@
     <a routerLink="/app/scan" routerLinkActive="active" (click)="closeMobileMenu()">
       <span nz-icon nzType="radar-chart"></span>
       <span>{{ 'layout.nav.scan' | translate }}</span>
+    </a>
+
+    <a routerLink="/app/uat" routerLinkActive="active" (click)="closeMobileMenu()">
+      <span nz-icon nzType="file-done"></span>
+      <span>{{ 'layout.nav.uat' | translate }}</span>
     </a>
 
     <a routerLink="/app/partners" routerLinkActive="active" (click)="closeMobileMenu()">

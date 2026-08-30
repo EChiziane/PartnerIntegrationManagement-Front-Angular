@@ -14,6 +14,7 @@ import {RequestDetailComponent} from '@features/partner-integration/request-deta
 import {PartnerDetailComponent} from '@features/partner-integration/partner-detail/partner-detail.component';
 import {ConnectionsComponent} from '@features/partner-integration/connections/connections.component';
 import {ConnectionDetailComponent} from '@features/partner-integration/connection-detail/connection-detail.component';
+import {UatChecklistComponent} from '@features/partner-integration/uat/uat-checklist.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'landing-page', pathMatch: 'full'},
@@ -33,6 +34,7 @@ const routes: Routes = [
       {path: 'pipeline', component: PipelineComponent},
       {path: 'tasks', component: TasksComponent},
       {path: 'scan', component: ScanComponent},
+      {path: 'uat', component: UatChecklistComponent},
       {path: 'request/:id', component: RequestDetailComponent},
       {path: 'partner/:id', component: PartnerDetailComponent},
       {path: '', redirectTo: 'home', pathMatch: 'full'}

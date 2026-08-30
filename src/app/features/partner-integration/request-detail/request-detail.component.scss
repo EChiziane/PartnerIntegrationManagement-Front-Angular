@@ -259,41 +259,70 @@ p,
 }
 
 .flow-strip {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 8px;
+  overflow: hidden;
   margin: 0 0 16px;
-  padding: 2px 0 10px;
+  padding: 2px 0;
 }
 
 .flow-strip span {
-  flex: 0 0 auto;
-  padding: 6px 9px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 7px 9px;
   border: 1px solid #dfe8ef;
-  border-radius: 999px;
+  border-left: 3px solid #c8d5dd;
+  border-radius: 8px;
   color: #7a8f9d;
-  background: #ffffff;
+  background: #f8fbfd;
   font-size: 11px;
   font-weight: 800;
-  white-space: nowrap;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.flow-strip i {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #c8d5dd;
 }
 
 .flow-strip span.past {
   color: #0e7c72;
   border-color: #bfe8dd;
+  border-left-color: #0e7c72;
   background: #f1fbf8;
+}
+
+.flow-strip span.past i {
+  background: #0e7c72;
 }
 
 .flow-strip span.current {
   color: #ffffff;
   border-color: #0e7c72;
+  border-left-color: #0b6d63;
   background: #0e7c72;
+}
+
+.flow-strip span.current i {
+  background: #ffffff;
 }
 
 .flow-strip span.next {
   color: #0f1f2a;
   border-color: #f4c26b;
+  border-left-color: #d97706;
   background: #fff8e8;
+}
+
+.flow-strip span.next i {
+  background: #d97706;
 }
 
 .action-section,
@@ -550,6 +579,16 @@ p,
 
   .facts {
     grid-template-columns: 1fr;
+  }
+
+  .flow-strip {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .flow-strip span {
+    flex: 0 0 148px;
   }
 
   .fact-with-action button {

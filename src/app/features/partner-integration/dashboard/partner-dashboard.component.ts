@@ -194,11 +194,15 @@ export class PartnerDashboardComponent implements OnInit {
   }
 
   goPipeline(status?: WorkflowStatus): void {
-    this.router.navigate(['/app/integrations'], {queryParams: status ? {status} : {}});
+    this.router.navigate(['/app/requests'], {queryParams: status ? {status} : {}});
   }
 
   goTasks(): void {
     this.router.navigate(['/app/tasks']);
+  }
+
+  goConnections(): void {
+    this.router.navigate(['/app/connections']);
   }
 
   goPartners(): void {

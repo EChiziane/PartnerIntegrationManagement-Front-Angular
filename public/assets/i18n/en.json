@@ -15,7 +15,8 @@
       "partners": "Partners",
       "mobile": "Mobile navigation",
       "connections": "Connections",
-      "requests": "Requests"
+      "requests": "Requests",
+      "uat": "UAT"
     },
     "topbar": {
       "subtitle": "Partners, integrations and requests"
@@ -633,6 +634,67 @@
     "eyebrow": "UAT / CAB",
     "title": "Operational UAT checklist",
     "subtitle": "Scenarios to validate before approving the change.",
-    "download": "Download UAT Checklist"
+    "download": "Download UAT Checklist",
+    "areas": {
+      "partner": "Partner",
+      "connection": "Connection",
+      "testing": "Testing",
+      "update": "Update",
+      "risk": "Risk",
+      "control": "Control",
+      "security": "Security",
+      "language": "Language",
+      "responsive": "Responsive"
+    },
+    "scenarios": {
+      "partnerName": {
+        "title": "Create partner with name only",
+        "expected": "Partner is saved, connection remains Draft / Not Established, and request can receive a VPN form later."
+      },
+      "partnerImport": {
+        "title": "Import VPN form while creating partner",
+        "expected": "Company data, peer IPs and private endpoints are populated, then a create connection request is available for validation."
+      },
+      "statement": {
+        "title": "Create request reaches signed statement",
+        "expected": "Connection stays Awaiting Approval until signatures are complete and implementation starts."
+      },
+      "implementation": {
+        "title": "IP Core and IT finish on different days",
+        "expected": "Request remains in Implementation until both IP Core and IT are Done."
+      },
+      "testing": {
+        "title": "VPN, UAT connectivity, PRD connectivity and API/UAT pass",
+        "expected": "Connection becomes Live / Healthy only after all required tests and UAT pass."
+      },
+      "updateOpen": {
+        "title": "Open update request on healthy connection",
+        "expected": "Connection remains Healthy until tests fail or the update closes successfully."
+      },
+      "updateClose": {
+        "title": "Update request closes successfully",
+        "expected": "New form data becomes the official connection technical profile."
+      },
+      "risk": {
+        "title": "Connectivity or UAT fails",
+        "expected": "Request moves to Troubleshooting and connection health becomes Down or Degraded."
+      },
+      "control": {
+        "title": "Block and unblock request",
+        "expected": "Reason is captured in an app modal; unblock uses an app modal and keeps the same request."
+      },
+      "security": {
+        "title": "Provide test credentials",
+        "expected": "Credentials are captured in a modal, visible in the request, and printable only when explicitly included."
+      },
+      "language": {
+        "title": "Switch EN/PT",
+        "expected": "Navigation, actions, labels, modals, statuses and messages switch language consistently."
+      },
+      "responsive": {
+        "title": "Laptop and desktop resolution",
+        "expected": "Partner list, request detail and pipeline do not require hidden horizontal page scrolling."
+      }
+    }
   }
 }

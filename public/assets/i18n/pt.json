@@ -15,7 +15,8 @@
       "partners": "Partners",
       "mobile": "Navegacao mobile",
       "connections": "Conexoes",
-      "requests": "Pedidos"
+      "requests": "Pedidos",
+      "uat": "UAT"
     },
     "topbar": {
       "subtitle": "Partners, integracoes e pedidos"
@@ -633,6 +634,67 @@
     "eyebrow": "UAT / CAB",
     "title": "Checklist operacional de UAT",
     "subtitle": "Cenarios para validar antes de aprovar a mudanca.",
-    "download": "Baixar Checklist UAT"
+    "download": "Baixar Checklist UAT",
+    "areas": {
+      "partner": "Partner",
+      "connection": "Conexao",
+      "testing": "Testes",
+      "update": "Update",
+      "risk": "Risco",
+      "control": "Controlo",
+      "security": "Seguranca",
+      "language": "Idioma",
+      "responsive": "Responsivo"
+    },
+    "scenarios": {
+      "partnerName": {
+        "title": "Criar partner apenas com nome",
+        "expected": "O partner e gravado, a conexao fica em Rascunho / Nao Estabelecida, e o pedido pode receber o form VPN depois."
+      },
+      "partnerImport": {
+        "title": "Importar form VPN ao criar partner",
+        "expected": "Dados da empresa, peers e endpoints privados sao preenchidos, e o pedido de criacao de conexao fica pronto para validacao."
+      },
+      "statement": {
+        "title": "Pedido de criacao chega ao statement assinado",
+        "expected": "A conexao fica em Aguardar Aprovacao ate as assinaturas terminarem e a implementacao iniciar."
+      },
+      "implementation": {
+        "title": "IP Core e IT terminam em dias diferentes",
+        "expected": "O pedido continua em Implementacao ate IP Core e IT ficarem Concluidos."
+      },
+      "testing": {
+        "title": "VPN, UAT, PRD e API/UAT passam",
+        "expected": "A conexao so fica Live / Saudavel depois de todos os testes obrigatorios e UAT passarem."
+      },
+      "updateOpen": {
+        "title": "Abrir update numa conexao saudavel",
+        "expected": "A conexao continua Saudavel ate os testes falharem ou o update fechar com sucesso."
+      },
+      "updateClose": {
+        "title": "Update fecha com sucesso",
+        "expected": "Os novos dados do form passam a ser o perfil tecnico oficial da conexao."
+      },
+      "risk": {
+        "title": "Conectividade ou UAT falha",
+        "expected": "O pedido vai para Troubleshooting e a conexao fica Down ou Degradada."
+      },
+      "control": {
+        "title": "Bloquear e desbloquear pedido",
+        "expected": "A razao e capturada num modal da app; o desbloqueio usa modal e mantem o mesmo pedido."
+      },
+      "security": {
+        "title": "Fornecer credenciais de teste",
+        "expected": "As credenciais sao capturadas em modal, visiveis no pedido e impressas apenas quando explicitamente incluido."
+      },
+      "language": {
+        "title": "Trocar EN/PT",
+        "expected": "Navegacao, acoes, labels, modais, estados e mensagens trocam de idioma de forma consistente."
+      },
+      "responsive": {
+        "title": "Resolucao de laptop e desktop",
+        "expected": "Lista de partners, detalhe do request e pipeline nao exigem scroll horizontal escondido."
+      }
+    }
   }
 }
