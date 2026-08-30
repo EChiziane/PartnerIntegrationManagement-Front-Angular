@@ -22,6 +22,7 @@ interface WorkflowAction {
   tone?: 'primary' | 'default' | 'danger';
   requiresCredentialsText?: boolean;
   requiresTechnicalData?: boolean;
+  requiresStatementCreator?: boolean;
 }
 
 interface TechnicalDraft {
@@ -48,11 +49,13 @@ export class RequestDetailComponent implements OnInit {
   isCredentialsEditorOpen = false;
   isTechnicalEditorOpen = false;
   isSrEditorOpen = false;
+  isStatementCreatorEditorOpen = false;
   isBackReasonModalOpen = false;
   isBlockReasonModalOpen = false;
   isUnblockNoteModalOpen = false;
   credentialsDraft = '';
   srDraft = '';
+  statementCreatorDraft = '';
   reasonDraft = '';
   private pendingSrAction: { label: string; patch: Partial<PartnerRequest> } | null = null;
   private pendingBackAction: WorkflowAction | null = null;
@@ -255,6 +258,19 @@ export class RequestDetailComponent implements OnInit {
     });
   }
 
+  handleNextAction(action: WorkflowAction): void {
+    if (action.requiresCredentialsText) {
+      this.openCredentialsEditor();
+      return;
+    }
+    if (action.requiresStatementCreator) {
+      this.openStatementCreatorEditor();
+      return;
+    }
+
+    this.confirmAction(action.label, action.patch);
+  }
+
   get nextActions(): WorkflowAction[] {
     if (!this.request) return [];
 
@@ -284,7 +300,8 @@ export class RequestDetailComponent implements OnInit {
         label: this.t('request.actions.statementCreated'),
         description: this.t('request.actions.statementCreatedDescription'),
         patch: {statementCreated: true},
-        tone: 'primary'
+        tone: 'primary',
+        requiresStatementCreator: true
       }],
       READY_IMPLEMENTATION: [{
         label: this.t('request.actions.sendToVoffice'),
@@ -487,6 +504,27 @@ export class RequestDetailComponent implements OnInit {
     }, srCode ? 'CNOC SR Code Updated' : 'CNOC SR Code Cleared');
     this.message.success(this.t('messages.srCodeSaved'));
     this.load();
+  }
+
+  openStatementCreatorEditor(): void {
+    this.statementCreatorDraft = this.request?.connectionCreatedBy || '';
+    this.isStatementCreatorEditorOpen = true;
+  }
+
+  cancelStatementCreatorEditor(): void {
+    this.isStatementCreatorEditorOpen = false;
+    this.statementCreatorDraft = '';
+  }
+
+  saveStatementCreator(): void {
+    if (!this.request) return;
+    const connectionCreatedBy = this.statementCreatorDraft.trim();
+    this.isStatementCreatorEditorOpen = false;
+    this.statementCreatorDraft = '';
+    this.confirmAction(this.t('request.actions.statementCreated'), {
+      statementCreated: true,
+      connectionCreatedBy
+    });
   }
 
   shouldShowCredentialsPanel(): boolean {

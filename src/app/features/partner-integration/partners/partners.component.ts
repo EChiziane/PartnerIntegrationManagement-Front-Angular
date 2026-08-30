@@ -40,6 +40,8 @@ export class PartnersComponent implements OnInit {
   searchValue = '';
   activeFilter: PartnerFilter = 'ALL';
   categoryFilter: PartnerCategory = 'ALL';
+  pageIndex = 1;
+  pageSize = 12;
   private requestsByPartnerId = new Map<string, PartnerRequest[]>();
   private connectionByPartnerId = new Map<string, PartnerConnection>();
   private formDataByPartnerId = new Map<string, RequestFormData>();
@@ -115,6 +117,11 @@ export class PartnersComponent implements OnInit {
     });
   }
 
+  get pagedPartners(): Partner[] {
+    const start = (this.pageIndex - 1) * this.pageSize;
+    return this.filteredPartners.slice(start, start + this.pageSize);
+  }
+
   get openPartnersCount(): number {
     return this.partners.filter(partner => this.openRequestCount(partner.id) > 0).length;
   }
@@ -132,6 +139,11 @@ export class PartnersComponent implements OnInit {
 
   setFilter(filter: PartnerFilter): void {
     this.activeFilter = filter;
+    this.resetPage();
+  }
+
+  resetPage(): void {
+    this.pageIndex = 1;
   }
 
   downloadList(): void {
@@ -435,6 +447,7 @@ export class PartnersComponent implements OnInit {
       formReceived: false,
       formValidated: false,
       statementCreated: false,
+      connectionCreatedBy: '',
       statementSent: false,
       signaturesComplete: false,
       srCode: '',

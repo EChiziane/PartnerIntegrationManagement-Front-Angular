@@ -93,6 +93,19 @@
   gap: 10px;
 }
 
+.request-open-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e4edf3;
+  color: #607786;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+
 .header-actions button,
 .form-actions button,
 .step-actions button,

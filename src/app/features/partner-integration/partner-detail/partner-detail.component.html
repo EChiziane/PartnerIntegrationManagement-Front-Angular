@@ -211,6 +211,10 @@
           <span nz-icon [nzType]="activeRequest.srCode ? 'edit' : 'plus'"></span>
         </button>
       </div>
+      <div>
+        <span>{{ 'fields.connectionCreatedBy' | translate }}</span>
+        <strong>{{ activeRequest.connectionCreatedBy || '-' }}</strong>
+      </div>
     </div>
 
     <div class="next-step">
@@ -233,36 +237,9 @@
       <button (click)="unblockActiveRequest()" nz-button nzType="primary">{{ 'partnerDetail.unblockRequest' | translate }}</button>
     </div>
 
-    <div *ngIf="activeRequest.currentStatus !== 'BLOCKED'" class="step-actions">
-      <button *ngIf="activeRequest.currentStatus === 'NEW'" (click)="confirmAction('Form and API Spec Sent', {formSent: true})" nz-button nzType="primary">{{ 'partnerDetail.sendFormApiSpec' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'WAITING_FORM'" (click)="confirmAction('VPN Integration Form Received', {formReceived: true})" nz-button nzType="primary">{{ 'partnerDetail.markVpnFormReceived' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'FORM_VALIDATION'" (click)="confirmAction('Form Validated', {formValidated: true})" [disabled]="!canValidateActiveForm()" nz-button nzType="primary">{{ 'partnerDetail.validateForm' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_STATEMENT'" (click)="confirmAction('Statement Created', {statementCreated: true})" nz-button nzType="primary">{{ 'partnerDetail.statementCreated' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_IMPLEMENTATION'" (click)="confirmAction('Sent to vOffice', {statementSent: true})" nz-button nzType="primary">{{ 'partnerDetail.sendToVoffice' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'WAITING_SIGNATURES'" (click)="confirmAction('Approval / Signatures Complete', {signaturesComplete: true, ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'})" nz-button nzType="primary">{{ 'partnerDetail.approvalComplete' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION' && activeRequest.ipCoreStatus !== 'DONE'" (click)="confirmAction('IP Core Done', {ipCoreStatus: 'DONE'})" nz-button nzType="primary">{{ 'partnerDetail.ipCoreDone' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'IMPLEMENTATION' && activeRequest.itStatus !== 'DONE'" (click)="confirmAction('IT Done', {itStatus: 'DONE'})" nz-button nzType="primary">{{ 'partnerDetail.itDone' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_CONNECTIVITY'" (click)="confirmAction('Connectivity Test Started', {vpnStatus: 'IN_PROGRESS', connectivityUat: 'NOT_TESTED', connectivityPrd: 'NOT_TESTED'})" nz-button nzType="primary">{{ 'partnerDetail.startConnectivityTest' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus !== 'UP'" (click)="confirmAction('VPN UP', {vpnStatus: 'UP'})" nz-button nzType="primary">{{ 'partnerDetail.vpnUp' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus === 'UP' && requiresUat() && activeRequest.connectivityUat !== 'PASS'" (click)="confirmAction('UAT Connectivity Passed', {connectivityUat: 'PASS'})" nz-button nzType="primary">{{ 'partnerDetail.uatConnectivityPass' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'CONNECTIVITY_TEST' && activeRequest.vpnStatus === 'UP' && requiresPrd() && activeRequest.connectivityPrd !== 'PASS'" (click)="confirmAction('PRD Connectivity Passed', {connectivityPrd: 'PASS'})" nz-button nzType="primary">{{ 'partnerDetail.prdConnectivityPass' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_UAT'" (click)="openCredentialsEditor()" nz-button nzType="primary">{{ 'partnerDetail.provideCredentials' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'UAT_IN_PROGRESS'" (click)="confirmAction('UAT Passed', {uatStatus: 'PASS'})" nz-button nzType="primary">{{ 'partnerDetail.uatPass' | translate }}</button>
-      <button *ngIf="activeRequest.currentStatus === 'READY_HANDOVER'" (click)="confirmAction('Handover Complete', {handoverComplete: true})" nz-button nzType="primary">{{ 'partnerDetail.closeRequest' | translate }}</button>
-      <button (click)="confirmAction('Issue / Blocker Registered', {connectivityUat: 'FAIL', blocker: 'Needs investigation'})" nz-button nzDanger>{{ 'partnerDetail.markIssue' | translate }}</button>
-      <button (click)="blockActiveRequest()" nz-button nzDanger>{{ 'partnerDetail.blockRequest' | translate }}</button>
-    </div>
-
-    <div *ngIf="shouldShowCredentialsPanel(activeRequest)" class="credentials-summary" [class.missing]="!activeRequest.testCredentials">
-      <span>{{ activeRequest.testCredentials ? ('partnerDetail.credentialsProvided' | translate) : ('partnerDetail.credentialsNotRecorded' | translate) }}</span>
-      <pre *ngIf="activeRequest.testCredentials; else activeNoCredentials">{{ activeRequest.testCredentials }}</pre>
-      <ng-template #activeNoCredentials>
-        <p *ngIf="activeRequest.credentialsProvided; else activeNotProvidedYet">{{ 'partnerDetail.markedNoCredentialDetails' | translate }}</p>
-        <ng-template #activeNotProvidedYet>
-          <p>{{ 'partnerDetail.noCredentialsRequest' | translate }}</p>
-        </ng-template>
-        <button (click)="openCredentialsEditor()" nz-button nzType="default">{{ 'partnerDetail.addCredentials' | translate }}</button>
-      </ng-template>
+    <div class="request-open-strip">
+      <span>{{ 'partnerDetail.manageRequestHint' | translate }}</span>
+      <button (click)="openRequest(activeRequest)" nz-button nzType="primary">{{ 'partnerDetail.openFullRequest' | translate }}</button>
     </div>
   </section>
 

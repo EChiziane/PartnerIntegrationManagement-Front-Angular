@@ -164,7 +164,8 @@
         "ownCloudFolderUrl": "https://owncloud.example.com/dev-alpha",
         "formNotes": "Development sample partner."
       },
-      "connectionId": "connection-partner-dev-alpha"
+      "connectionId": "connection-partner-dev-alpha",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-dev-beta",
@@ -224,7 +225,8 @@
         "ownCloudFolderUrl": "https://owncloud.example.com/dev-beta",
         "formNotes": "Development sample waiting approval."
       },
-      "connectionId": "connection-partner-dev-beta"
+      "connectionId": "connection-partner-dev-beta",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-dev-trouble",
@@ -284,7 +286,8 @@
         "ownCloudFolderUrl": "https://owncloud.example.com/dev-trouble",
         "formNotes": "Development sample with connectivity issue."
       },
-      "connectionId": "connection-partner-dev-trouble"
+      "connectionId": "connection-partner-dev-trouble",
+      "connectionCreatedBy": ""
     }
   ],
   "events": [

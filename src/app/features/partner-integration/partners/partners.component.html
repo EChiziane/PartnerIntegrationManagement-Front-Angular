@@ -3,22 +3,23 @@
     <div>
       <span class="eyebrow">{{ 'partners.eyebrow' | translate }}</span>
       <h1>{{ 'partners.title' | translate }}</h1>
-      <p>{{ 'partners.subtitle' | translate }}</p>
     </div>
-    <button (click)="openCreate()" nz-button nzType="primary">
-      <span nz-icon nzType="plus"></span>
-      {{ 'partners.newPartner' | translate }}
-    </button>
-    <button (click)="downloadList()" nz-button nzType="default">
-      <span nz-icon nzType="download"></span>
-      {{ 'partners.downloadRegistry' | translate }}
-    </button>
+    <div class="header-actions">
+      <button (click)="downloadList()" nz-button nzType="default">
+        <span nz-icon nzType="download"></span>
+        {{ 'partners.downloadRegistry' | translate }}
+      </button>
+      <button (click)="openCreate()" nz-button nzType="primary">
+        <span nz-icon nzType="plus"></span>
+        {{ 'partners.newPartner' | translate }}
+      </button>
+    </div>
   </section>
 
   <section class="toolbar">
     <label class="search-control">
       <span nz-icon nzType="search"></span>
-      <input [(ngModel)]="searchValue" nz-input [placeholder]="'partners.searchPlaceholder' | translate"/>
+      <input [(ngModel)]="searchValue" (ngModelChange)="resetPage()" nz-input [placeholder]="'partners.searchPlaceholder' | translate"/>
     </label>
 
     <div class="filter-strip">
@@ -40,7 +41,7 @@
   <section class="request-toolbar">
     <div class="toolbar-field">
       <span>{{ 'partners.category' | translate }}</span>
-      <nz-select [(ngModel)]="categoryFilter">
+      <nz-select [(ngModel)]="categoryFilter" (ngModelChange)="resetPage()">
         <nz-option nzValue="ALL" [nzLabel]="'partners.allCategories' | translate"></nz-option>
         <nz-option nzValue="Payment API" nzLabel="Payment API"></nz-option>
         <nz-option nzValue="USSD / Push USSD" nzLabel="USSD / Push USSD"></nz-option>
@@ -64,66 +65,75 @@
   </section>
 
   <section class="partners-table" aria-label="Partner list">
-    <div class="table-head">
-      <span>{{ 'partners.headers.institution' | translate }}</span>
-      <span>{{ 'partners.headers.service' | translate }}</span>
-      <span>{{ 'partners.headers.integrationStatus' | translate }}</span>
-      <span>{{ 'partners.headers.urgentRequest' | translate }}</span>
-      <span>{{ 'partners.headers.date' | translate }}</span>
-      <span>{{ 'partners.headers.actions' | translate }}</span>
-    </div>
-
-    <article *ngFor="let partner of filteredPartners; trackBy: trackByPartnerId" class="partner-row" [class.needs-attention]="hasAttention(partner.id)">
-      <div class="partner-identity">
-        <strong>{{ partner.name }}</strong>
-        <span>{{ partner.representativeName || partner.businessOwner || ('partners.noRepresentative' | translate) }}</span>
-      </div>
-
-      <div class="cell-stack">
-        <strong>{{ connectionForPartner(partner)?.serviceApi || partner.serviceApi || '-' }}</strong>
-        <span>{{ categoryForPartner(partner) }} · {{ connectionForPartner(partner)?.environment || partner.environment }}</span>
-      </div>
-
-      <div class="cell-stack status-cell">
-        <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connectionForPartner(partner)?.health)">
-          {{ partnerIntegration.connectionHealthLabel(connectionForPartner(partner)?.health) }}
-        </nz-tag>
-        <span>{{ partnerIntegration.vpnStatusLabel(connectionForPartner(partner)?.vpnStatus) }} · UAT {{ partnerIntegration.testStatusLabel(connectionForPartner(partner)?.connectivityUat) }} · PRD {{ partnerIntegration.testStatusLabel(connectionForPartner(partner)?.connectivityPrd) }}</span>
-      </div>
-
-      <div class="request-cell">
-        <ng-container *ngIf="urgentRequest(partner.id) as request; else noStatus">
-          <strong class="urgent-title">{{ partnerIntegration.requestDisplayTitle(request, partner) }}</strong>
-          <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
-            {{ partnerIntegration.statusLabel(request.currentStatus) }}
+    <table>
+      <thead>
+      <tr>
+        <th>{{ 'partners.headers.institution' | translate }}</th>
+        <th>{{ 'partners.headers.service' | translate }}</th>
+        <th>{{ 'partners.headers.integrationStatus' | translate }}</th>
+        <th>{{ 'partners.headers.urgentRequest' | translate }}</th>
+        <th>{{ 'partners.headers.date' | translate }}</th>
+        <th>{{ 'partners.headers.actions' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let partner of pagedPartners; trackBy: trackByPartnerId" [class.needs-attention]="hasAttention(partner.id)">
+        <td>
+          <strong>{{ partner.name }}</strong>
+          <span>{{ partner.representativeName || partner.businessOwner || ('partners.noRepresentative' | translate) }}</span>
+        </td>
+        <td>
+          <strong>{{ connectionForPartner(partner)?.serviceApi || partner.serviceApi || '-' }}</strong>
+          <span>{{ categoryForPartner(partner) }} · {{ connectionForPartner(partner)?.environment || partner.environment }}</span>
+        </td>
+        <td>
+          <nz-tag [nzColor]="partnerIntegration.connectionHealthColor(connectionForPartner(partner)?.health)">
+            {{ partnerIntegration.connectionHealthLabel(connectionForPartner(partner)?.health) }}
           </nz-tag>
-        </ng-container>
-        <ng-template #noStatus>
-          <nz-tag nzColor="default">{{ 'common.clear' | translate }}</nz-tag>
-        </ng-template>
-      </div>
-
-      <div class="cell-stack compact">
-        <strong>{{ partner.lastActivity || '-' }}</strong>
-        <span *ngIf="hasAttention(partner.id)" class="attention-label">{{ 'partners.needsAttention' | translate }}</span>
-      </div>
-
-      <div class="row-actions">
-        <button (click)="openPartner(partner)" [title]="'common.actions.open' | translate" nz-button nzType="default">
-          <span nz-icon nzType="eye"></span>
-          <span class="action-label">{{ 'common.actions.open' | translate }}</span>
-        </button>
-        <button (click)="createRequest(partner)" [title]="'partners.newAction' | translate" nz-button nzType="primary">
-          <span nz-icon nzType="plus"></span>
-          <span class="action-label">{{ 'partners.newAction' | translate }}</span>
-        </button>
-      </div>
-    </article>
+          <span>{{ partnerIntegration.vpnStatusLabel(connectionForPartner(partner)?.vpnStatus) }} · UAT {{ partnerIntegration.testStatusLabel(connectionForPartner(partner)?.connectivityUat) }} · PRD {{ partnerIntegration.testStatusLabel(connectionForPartner(partner)?.connectivityPrd) }}</span>
+        </td>
+        <td>
+          <ng-container *ngIf="urgentRequest(partner.id) as request; else noStatus">
+            <strong>{{ partnerIntegration.requestDisplayTitle(request, partner) }}</strong>
+            <span>{{ partnerIntegration.statusLabel(request.currentStatus) }}</span>
+          </ng-container>
+          <ng-template #noStatus>
+            <span>{{ 'common.clear' | translate }}</span>
+          </ng-template>
+        </td>
+        <td>
+          <strong>{{ partner.lastActivity || '-' }}</strong>
+          <span *ngIf="hasAttention(partner.id)" class="attention-label">{{ 'partners.needsAttention' | translate }}</span>
+        </td>
+        <td>
+          <div class="row-actions">
+            <button (click)="openPartner(partner)" [title]="'common.actions.open' | translate" nz-button nzSize="small" nzType="default">
+              <span nz-icon nzType="eye"></span>
+            </button>
+            <button (click)="createRequest(partner)" [title]="'partners.newAction' | translate" nz-button nzSize="small" nzType="primary">
+              <span nz-icon nzType="plus"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
     <div *ngIf="!filteredPartners.length" class="empty-state">
       <span nz-icon nzType="search"></span>
       <strong>{{ 'partners.noPartnersTitle' | translate }}</strong>
       <p>{{ 'partners.noPartnersHint' | translate }}</p>
+    </div>
+
+    <div *ngIf="filteredPartners.length" class="table-footer">
+      <span>{{ 'partners.showingPage' | translate:{shown: pagedPartners.length, total: filteredPartners.length} }}</span>
+      <nz-pagination
+        [(nzPageIndex)]="pageIndex"
+        [(nzPageSize)]="pageSize"
+        [nzPageSizeOptions]="[10, 12, 20, 50]"
+        [nzShowSizeChanger]="true"
+        [nzTotal]="filteredPartners.length">
+      </nz-pagination>
     </div>
   </section>
 </div>

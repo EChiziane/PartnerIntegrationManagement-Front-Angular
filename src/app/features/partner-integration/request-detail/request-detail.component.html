@@ -43,6 +43,7 @@
             <span nz-icon [nzType]="request.srCode ? 'edit' : 'plus'"></span>
           </button>
         </div>
+        <div><span>{{ 'fields.connectionCreatedBy' | translate }}</span><strong>{{ request.connectionCreatedBy || '-' }}</strong></div>
         <div><span>IP Core</span><strong>{{ partnerIntegration.implementationStatusLabel(request.ipCoreStatus) }}</strong></div>
         <div><span>IT</span><strong>{{ partnerIntegration.implementationStatusLabel(request.itStatus) }}</strong></div>
         <div><span>VPN</span><strong>{{ partnerIntegration.vpnStatusLabel(request.vpnStatus) }}</strong></div>
@@ -82,7 +83,7 @@
               <span>{{ item.description }}</span>
             </div>
             <button
-              (click)="item.requiresCredentialsText ? openCredentialsEditor() : confirmAction(item.label, item.patch)"
+              (click)="handleNextAction(item)"
               [disabled]="item.requiresTechnicalData && !canValidateForm()"
               nz-button
               [nzType]="item.tone === 'primary' ? 'primary' : 'default'">
@@ -265,6 +266,24 @@
       <p>{{ event.description }}</p>
     </article>
   </section>
+
+  <nz-modal
+    [(nzVisible)]="isStatementCreatorEditorOpen"
+    [nzTitle]="'request.statementCreatorTitle' | translate"
+    [nzOkText]="'request.statementCreatorOk' | translate"
+    [nzCancelText]="'common.actions.cancel' | translate"
+    (nzOnCancel)="cancelStatementCreatorEditor()"
+    (nzOnOk)="saveStatementCreator()">
+    <ng-container *nzModalContent>
+      <div class="modal-editor">
+        <div>
+          <span class="panel-kicker">{{ 'fields.connectionCreatedBy' | translate }}</span>
+          <h3>{{ 'request.statementCreatorHint' | translate }}</h3>
+        </div>
+        <input [(ngModel)]="statementCreatorDraft" nz-input [placeholder]="'request.statementCreatorPlaceholder' | translate"/>
+      </div>
+    </ng-container>
+  </nz-modal>
 
   <nz-modal
     [(nzVisible)]="isCredentialsEditorOpen"

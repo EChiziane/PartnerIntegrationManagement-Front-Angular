@@ -1949,7 +1949,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": "Simulation: Statement approved; waiting for IP Core."
       },
-      "connectionId": "connection-partner-2"
+      "connectionId": "connection-partner-2",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-3",
@@ -2014,7 +2015,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": "Simulation: IP Core and IT/FW complete; should enter Ready for Test."
       },
-      "connectionId": "connection-partner-3"
+      "connectionId": "connection-partner-3",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-4",
@@ -2068,7 +2070,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-4"
+      "connectionId": "connection-partner-4",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-5",
@@ -2120,7 +2123,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-5"
+      "connectionId": "connection-partner-5",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-6",
@@ -2195,7 +2199,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111433",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-6"
+      "connectionId": "connection-partner-6",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-7",
@@ -2260,7 +2265,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111468",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-7"
+      "connectionId": "connection-partner-7",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-8",
@@ -2325,7 +2331,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111477",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-8"
+      "connectionId": "connection-partner-8",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-9",
@@ -2430,7 +2437,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111479",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-9"
+      "connectionId": "connection-partner-9",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-10",
@@ -2495,7 +2503,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111485",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-10"
+      "connectionId": "connection-partner-10",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-11",
@@ -2560,7 +2569,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-11"
+      "connectionId": "connection-partner-11",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-12",
@@ -2625,7 +2635,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111488",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-12"
+      "connectionId": "connection-partner-12",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-13",
@@ -2690,7 +2701,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111498",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-13"
+      "connectionId": "connection-partner-13",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-14",
@@ -2785,7 +2797,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111504",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-14"
+      "connectionId": "connection-partner-14",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-15",
@@ -2850,7 +2863,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111510",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-15"
+      "connectionId": "connection-partner-15",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-16",
@@ -2926,7 +2940,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111516",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-16"
+      "connectionId": "connection-partner-16",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-17",
@@ -2991,7 +3006,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111522",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-17"
+      "connectionId": "connection-partner-17",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-18",
@@ -3056,7 +3072,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111527",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-18"
+      "connectionId": "connection-partner-18",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-19",
@@ -3121,7 +3138,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111536",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-19"
+      "connectionId": "connection-partner-19",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-20",
@@ -3196,7 +3214,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111543",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-20"
+      "connectionId": "connection-partner-20",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-21",
@@ -3248,7 +3267,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-21"
+      "connectionId": "connection-partner-21",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-22",
@@ -3313,7 +3333,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111549",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-22"
+      "connectionId": "connection-partner-22",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-23",
@@ -3388,7 +3409,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111561",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-23"
+      "connectionId": "connection-partner-23",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-24",
@@ -3453,7 +3475,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111645",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-24"
+      "connectionId": "connection-partner-24",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-25",
@@ -3528,7 +3551,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111659",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-25"
+      "connectionId": "connection-partner-25",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-26",
@@ -3603,7 +3627,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111666",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-26"
+      "connectionId": "connection-partner-26",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-27",
@@ -3668,7 +3693,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111425",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-27"
+      "connectionId": "connection-partner-27",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-28",
@@ -3733,7 +3759,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111672",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-28"
+      "connectionId": "connection-partner-28",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-29",
@@ -3785,7 +3812,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-29"
+      "connectionId": "connection-partner-29",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-30",
@@ -3850,7 +3878,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111679",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-30"
+      "connectionId": "connection-partner-30",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-31",
@@ -3915,7 +3944,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111684",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-31"
+      "connectionId": "connection-partner-31",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-32",
@@ -3967,7 +3997,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-32"
+      "connectionId": "connection-partner-32",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-33",
@@ -4019,7 +4050,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-33"
+      "connectionId": "connection-partner-33",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-34",
@@ -4071,7 +4103,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-34"
+      "connectionId": "connection-partner-34",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-35",
@@ -4123,7 +4156,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-35"
+      "connectionId": "connection-partner-35",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-36",
@@ -4175,7 +4209,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-36"
+      "connectionId": "connection-partner-36",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-37",
@@ -4227,7 +4262,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-37"
+      "connectionId": "connection-partner-37",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-38",
@@ -4279,7 +4315,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-38"
+      "connectionId": "connection-partner-38",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-39",
@@ -4331,7 +4368,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-39"
+      "connectionId": "connection-partner-39",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-40",
@@ -4396,7 +4434,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111613",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-40"
+      "connectionId": "connection-partner-40",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-41",
@@ -4471,7 +4510,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111600",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-41"
+      "connectionId": "connection-partner-41",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-42",
@@ -4523,7 +4563,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-42"
+      "connectionId": "connection-partner-42",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-43",
@@ -4575,7 +4616,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-43"
+      "connectionId": "connection-partner-43",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-44",
@@ -4627,7 +4669,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-44"
+      "connectionId": "connection-partner-44",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-45",
@@ -4679,7 +4722,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-45"
+      "connectionId": "connection-partner-45",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-46",
@@ -4731,7 +4775,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-46"
+      "connectionId": "connection-partner-46",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-47",
@@ -4783,7 +4828,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-47"
+      "connectionId": "connection-partner-47",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-48",
@@ -4835,7 +4881,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-48"
+      "connectionId": "connection-partner-48",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-49",
@@ -4900,7 +4947,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111591",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-49"
+      "connectionId": "connection-partner-49",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-50",
@@ -4952,7 +5000,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-50"
+      "connectionId": "connection-partner-50",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-51",
@@ -5004,7 +5053,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-51"
+      "connectionId": "connection-partner-51",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-52",
@@ -5056,7 +5106,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-52"
+      "connectionId": "connection-partner-52",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-53",
@@ -5121,7 +5172,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111703",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-53"
+      "connectionId": "connection-partner-53",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-54",
@@ -5186,7 +5238,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111697",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-54"
+      "connectionId": "connection-partner-54",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-55",
@@ -5238,7 +5291,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-55"
+      "connectionId": "connection-partner-55",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-56",
@@ -5290,7 +5344,8 @@
         "ownCloudFolderUrl": "",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-56"
+      "connectionId": "connection-partner-56",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-57",
@@ -5355,7 +5410,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111606",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-57"
+      "connectionId": "connection-partner-57",
+      "connectionCreatedBy": ""
     },
     {
       "id": "request-",
@@ -5420,7 +5476,8 @@
         "ownCloudFolderUrl": "http://docs.mmola.co.mz/index.php/f/111710",
         "formNotes": ""
       },
-      "connectionId": "connection-partner-"
+      "connectionId": "connection-partner-",
+      "connectionCreatedBy": ""
     }
   ],
   "events": [

@@ -1,7 +1,7 @@
 .list-page {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .page-header,
@@ -17,14 +17,21 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 22px;
+  gap: 12px;
+  padding: 12px 14px;
   flex-wrap: wrap;
 }
 
 .page-header > div {
   min-width: min(100%, 420px);
   flex: 1 1 420px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .eyebrow {
@@ -41,8 +48,10 @@ p {
 }
 
 h1 {
-  margin-top: 6px;
+  margin-top: 3px;
   color: #10212b;
+  font-size: 22px;
+  line-height: 1.1;
 }
 
 p {
@@ -53,8 +62,8 @@ p {
   display: grid;
   grid-template-columns: minmax(280px, 1fr) auto;
   align-items: center;
-  gap: 12px;
-  padding: 14px;
+  gap: 10px;
+  padding: 10px 12px;
 }
 
 .search-control {
@@ -96,8 +105,8 @@ p {
 .request-toolbar {
   display: grid;
   grid-template-columns: repeat(2, minmax(220px, 1fr));
-  gap: 12px;
-  padding: 12px 14px;
+  gap: 10px;
+  padding: 10px 12px;
   color: #607786;
   font-size: 12px;
   font-weight: 800;
@@ -113,78 +122,78 @@ p {
 }
 
 .partners-table {
-  overflow: visible;
+  overflow: hidden;
 }
 
-.table-head,
-.partner-row {
-  display: grid;
-  grid-template-columns: minmax(160px, 1.2fr) minmax(140px, 0.9fr) minmax(180px, 1fr) minmax(210px, 1.2fr) minmax(94px, 0.45fr) auto;
-  gap: 12px;
-  align-items: center;
-  min-width: 0;
+.partners-table table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
-.table-head {
-  padding: 12px 14px;
+.partners-table th {
+  padding: 8px 10px;
   color: #7a8f9d;
   background: #f8fbfd;
   font-size: 11px;
   font-weight: 850;
   letter-spacing: 0.06em;
+  text-align: left;
   text-transform: uppercase;
 }
 
-.partner-row {
-  padding: 14px;
+.partners-table td {
+  padding: 8px 10px;
   border-top: 1px solid #e4edf3;
+  color: #607786;
+  font-size: 12px;
+  vertical-align: middle;
 }
 
-.partner-row.needs-attention {
+.partners-table th:nth-child(1),
+.partners-table td:nth-child(1) { width: 20%; }
+
+.partners-table th:nth-child(2),
+.partners-table td:nth-child(2) { width: 17%; }
+
+.partners-table th:nth-child(3),
+.partners-table td:nth-child(3) { width: 25%; }
+
+.partners-table th:nth-child(4),
+.partners-table td:nth-child(4) { width: 21%; }
+
+.partners-table th:nth-child(5),
+.partners-table td:nth-child(5) { width: 10%; }
+
+.partners-table th:nth-child(6),
+.partners-table td:nth-child(6) {
+  width: 7%;
+  text-align: right;
+}
+
+.partners-table tr.needs-attention {
   background: #fffafa;
   box-shadow: inset 3px 0 0 #ef4444;
 }
 
-.partner-identity,
-.cell-stack {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-}
-
-.partner-identity strong,
-.cell-stack strong {
-  overflow: hidden;
-  color: #10212b;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.partner-identity span,
-.cell-stack span,
-.next-action {
-  color: #607786;
-  font-size: 12px;
-}
-
-.cell-stack.compact span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.status-cell nz-tag {
-  width: fit-content;
-  font-weight: 800;
-}
-
-.urgent-title {
+.partners-table td strong,
+.partners-table td span {
   display: block;
-  margin-bottom: 6px;
   overflow: hidden;
-  color: #10212b;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.partners-table td strong {
+  color: #10212b;
+  font-size: 13px;
+}
+
+.partners-table nz-tag {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  font-weight: 800;
 }
 
 .attention-label {
@@ -195,15 +204,29 @@ p {
 .row-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: nowrap;
 }
 
 .row-actions button {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-width: 0;
+  justify-content: center;
+  width: 30px;
+  min-width: 30px;
+  padding: 0;
+}
+
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-top: 1px solid #e4edf3;
+  color: #607786;
+  font-size: 12px;
+  flex-wrap: wrap;
 }
 
 .empty-state {
@@ -392,29 +415,10 @@ p {
 }
 
 @media (max-width: 1320px) {
-  .table-head,
-  .partner-row {
-    grid-template-columns: minmax(150px, 1.2fr) minmax(130px, 0.85fr) minmax(160px, 0.95fr) minmax(190px, 1.15fr) minmax(86px, 0.45fr) 84px;
-    gap: 10px;
-  }
-
-  .row-actions {
-    justify-content: center;
-  }
-
-  .row-actions button {
-    width: 36px;
-    min-width: 36px;
-    padding: 0;
-    justify-content: center;
-  }
-
-  .row-actions .action-label {
-    display: none;
-  }
-
-  .urgent-title {
-    max-width: 100%;
+  .partners-table td,
+  .partners-table th {
+    padding-right: 8px;
+    padding-left: 8px;
   }
 }
 
@@ -433,30 +437,45 @@ p {
     flex-direction: column;
   }
 
-  .table-head {
+  .partners-table thead {
     display: none;
   }
 
-  .partner-row {
-    min-width: 0;
-    grid-template-columns: 1fr;
-    align-items: stretch;
+  .partners-table table,
+  .partners-table tbody,
+  .partners-table tr,
+  .partners-table td {
+    display: block;
+    width: 100%;
   }
 
-  .row-actions {
-    justify-content: flex-start;
-    flex-wrap: wrap;
+  .partners-table tr {
+    border-top: 1px solid #e4edf3;
   }
 
-  .row-actions button {
-    width: auto;
-    min-width: 0;
-    padding: 4px 15px;
+  .partners-table td {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 8px;
+    border-top: 0;
+    text-align: left !important;
   }
 
-  .row-actions .action-label {
-    display: inline;
+  .partners-table td::before {
+    color: #7a8f9d;
+    font-size: 11px;
+    font-weight: 850;
+    text-transform: uppercase;
   }
+
+  .partners-table td:nth-child(1)::before { content: "Partner"; }
+  .partners-table td:nth-child(2)::before { content: "Service"; }
+  .partners-table td:nth-child(3)::before { content: "Status"; }
+  .partners-table td:nth-child(4)::before { content: "Request"; }
+  .partners-table td:nth-child(5)::before { content: "Date"; }
+  .partners-table td:nth-child(6)::before { content: "Actions"; }
+
+  .row-actions { justify-content: flex-start; }
 
   .drawer-section {
     margin-right: 10px;

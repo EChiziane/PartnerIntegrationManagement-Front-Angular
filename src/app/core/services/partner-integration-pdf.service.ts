@@ -29,7 +29,7 @@ export class PartnerIntegrationPdfService {
       import('jspdf'),
       import('jspdf-autotable')
     ]);
-    const doc = new JsPDF({orientation: 'landscape'});
+    const doc = new JsPDF({orientation: 'portrait'});
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;
@@ -48,11 +48,7 @@ export class PartnerIntegrationPdfService {
       head: [[
         'Partner',
         'Category / Health',
-        'Business Owner',
-        'Technical Contact',
         'Environment',
-        'Public IP (Peer)',
-        'Private Endpoints',
         'Open',
         'Urgent Request',
         'Next Action'
@@ -67,11 +63,7 @@ export class PartnerIntegrationPdfService {
         return [
           partner.name || '-',
           `${this.partnerCategoryFromValue(`${formData.serviceApi || partner.serviceApi || ''} ${partner.name || ''}`)} / ${this.partnerIntegration.connectionHealthLabel(connection?.health)}`,
-          partner.businessOwner || '-',
-          formData.technicalContact || partner.technicalContact || '-',
           formData.environment || partner.environment || '-',
-          this.publicPeers(formData, partner),
-          this.privateEndpoints(formData, partner),
           String(partnerRequests.filter(request => request.currentStatus !== 'CLOSED').length),
           urgent ? this.partnerIntegration.statusLabel(urgent) : 'Clear',
           next
@@ -114,6 +106,7 @@ export class PartnerIntegrationPdfService {
         'Owner',
         'Next Action',
         'CNOC SR Code',
+        'Connection Created By',
         'Priority',
         'Open Date',
         'Follow-up',
@@ -128,6 +121,7 @@ export class PartnerIntegrationPdfService {
         request.currentOwner || '-',
         request.nextAction || '-',
         request.srCode || '-',
+        request.connectionCreatedBy || '-',
         request.priority || '-',
         request.openDate || '-',
         request.followUpDate || '-',
@@ -149,7 +143,7 @@ export class PartnerIntegrationPdfService {
       import('jspdf'),
       import('jspdf-autotable')
     ]);
-    const doc = new JsPDF({orientation: 'landscape'});
+    const doc = new JsPDF({orientation: 'portrait'});
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;
@@ -165,20 +159,16 @@ export class PartnerIntegrationPdfService {
     autoTable(doc, {
       startY: 44,
       margin: {left: margin, right: margin, bottom: 20},
-      head: [['Connection', 'Partner', 'Service/API', 'Environment', 'Health', 'Stage', 'Active Request', 'Last Updated']],
-      body: connections.map(connection => {
-        const activeRequest = requests.find(request => request.id === connection.activeRequestId);
-        return [
+      head: [['Connection', 'Partner', 'Service/API', 'Environment', 'Health', 'Stage', 'Last Updated']],
+      body: connections.map(connection => [
           connection.name || '-',
           partners.find(partner => partner.id === connection.partnerId)?.name || '-',
           connection.serviceApi || '-',
           connection.environment || '-',
           this.partnerIntegration.connectionHealthLabel(connection.health),
           this.partnerIntegration.connectionStageLabel(connection.stage),
-          activeRequest ? this.partnerIntegration.requestDisplayTitle(activeRequest) : '-',
           connection.lastUpdated || '-'
-        ];
-      }),
+        ]),
       theme: 'grid',
       styles: this.tableStyles(),
       headStyles: this.headStyles(),
@@ -198,7 +188,7 @@ export class PartnerIntegrationPdfService {
       import('jspdf'),
       import('jspdf-autotable')
     ]);
-    const doc = new JsPDF({orientation: 'landscape'});
+    const doc = new JsPDF({orientation: 'portrait'});
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 14;
@@ -216,8 +206,8 @@ export class PartnerIntegrationPdfService {
     autoTable(doc, {
       startY: 44,
       margin: {left: margin, right: margin, bottom: 20},
-      head: [['Field', 'Value', 'Field', 'Value']],
-      body: this.pairRows([
+      head: [['Field', 'Value']],
+      body: [
       ['Company Name', partner.name || '-'],
       ['e-Mola Account (OTP)', partner.eMolaAccountOtp || '-'],
       ['Representative', partner.representativeName || partner.technicalContact || '-'],
@@ -227,6 +217,7 @@ export class PartnerIntegrationPdfService {
       ['Current Integration Service/API', profileFormData.serviceApi || partner.serviceApi || '-'],
       ['Current Integration Environment', profileFormData.environment || partner.environment || '-'],
       ['Request Technical Contact', profileFormData.technicalContact || partner.technicalContact || '-'],
+      ['Connection Created By', requests.find(request => request.connectionCreatedBy)?.connectionCreatedBy || '-'],
       ['Public IP (Peer)', this.publicPeers(profileFormData, partner)],
       ['Private Endpoints', this.privateEndpoints(profileFormData, partner)],
       ['Auth Method', profileFormData.authMethod || partner.authMethod || '-'],
@@ -235,7 +226,7 @@ export class PartnerIntegrationPdfService {
       ['Form Notes', profileFormData.formNotes || partner.formNotes || '-'],
       ['Last Activity', partner.lastActivity || '-'],
       ['Partner ID', partner.id || '-']
-      ]),
+      ],
       theme: 'grid',
       styles: this.tableStyles(),
       headStyles: this.headStyles(),
@@ -356,8 +347,7 @@ export class PartnerIntegrationPdfService {
         minCellHeight: 6
       },
       columnStyles: rows.reduce((styles, _, index) => {
-        styles[String(index * 2)] = {fontStyle: 'bold', fillColor: [245, 247, 250], cellWidth: 24};
-        styles[String(index * 2 + 1)] = {cellWidth: 36};
+        styles[String(index * 2)] = {fontStyle: 'bold', fillColor: [245, 247, 250]};
         return styles;
       }, {} as Record<string, Partial<import('jspdf-autotable').Styles>>)
     });
@@ -392,16 +382,6 @@ export class PartnerIntegrationPdfService {
       textColor: [20, 27, 35],
       fontStyle: 'bold'
     };
-  }
-
-  private pairRows(rows: Array<[string, string]>): string[][] {
-    const output: string[][] = [];
-    for (let index = 0; index < rows.length; index += 2) {
-      const first = rows[index];
-      const second = rows[index + 1] || ['', ''];
-      output.push([first[0], first[1], second[0], second[1]]);
-    }
-    return output;
   }
 
   private publicPeers(formData: RequestFormData, partner: Partner): string {
@@ -440,6 +420,7 @@ export class PartnerIntegrationPdfService {
       formReceived: false,
       formValidated: false,
       statementCreated: false,
+      connectionCreatedBy: '',
       statementSent: false,
       signaturesComplete: false,
       srCode: '',

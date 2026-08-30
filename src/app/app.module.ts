@@ -21,6 +21,7 @@ import {NzMessageModule} from 'ng-zorro-antd/message';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 import {NzEmptyComponent} from 'ng-zorro-antd/empty';
+import {NzPaginationModule} from 'ng-zorro-antd/pagination';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 
 import {AppComponent} from './app.component';
@@ -83,7 +84,8 @@ registerLocaleData(en);
     NzAlertComponent,
     NzSpinComponent,
     NzCheckboxComponent,
-    NzEmptyComponent
+    NzEmptyComponent,
+    NzPaginationModule
   ],
   providers: [
     provideClientHydration(withEventReplay()),

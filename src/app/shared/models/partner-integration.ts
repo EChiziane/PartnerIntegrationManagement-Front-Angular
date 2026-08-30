@@ -149,6 +149,7 @@ export interface PartnerRequest {
   formReceived: boolean;
   formValidated: boolean;
   statementCreated: boolean;
+  connectionCreatedBy?: string;
   statementSent: boolean;
   signaturesComplete: boolean;
   srCode?: string;
