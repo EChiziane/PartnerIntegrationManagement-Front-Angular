@@ -62,7 +62,19 @@
             <span nz-icon [nzType]="request.gnocSrCode ? 'edit' : 'plus'"></span>
           </button>
         </div>
-        <div><span>{{ 'fields.connectionCreatedBy' | translate }}</span><strong>{{ request.connectionCreatedBy || '-' }}</strong></div>
+        <div class="fact-with-action">
+          <span>{{ 'fields.connectionCreatedBy' | translate }}</span>
+          <strong>{{ request.connectionCreatedBy || '-' }}</strong>
+          <button
+            (click)="openStatementCreatorEditor()"
+            [attr.aria-label]="request.connectionCreatedBy ? ('common.actions.edit' | translate) : ('common.actions.add' | translate)"
+            class="icon-action"
+            nz-button
+            nzSize="small"
+            nzType="default">
+            <span nz-icon [nzType]="request.connectionCreatedBy ? 'edit' : 'plus'"></span>
+          </button>
+        </div>
         <div><span>{{ 'fields.statementDate' | translate }}</span><strong>{{ request.statementDate || '-' }}</strong></div>
         <div><span>IP Core</span><strong>{{ partnerIntegration.implementationStatusLabel(request.ipCoreStatus) }}</strong></div>
         <div><span>IT</span><strong>{{ partnerIntegration.implementationStatusLabel(request.itStatus) }}</strong></div>
