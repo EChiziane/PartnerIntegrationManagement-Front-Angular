@@ -150,9 +150,11 @@ export interface PartnerRequest {
   formValidated: boolean;
   statementCreated: boolean;
   connectionCreatedBy?: string;
+  statementDate?: string;
   statementSent: boolean;
   signaturesComplete: boolean;
   srCode?: string;
+  gnocSrCode?: string;
   ipCoreStatus: ImplementationStatus;
   itStatus: ImplementationStatus;
   vpnStatus: VpnStatus;
@@ -160,6 +162,7 @@ export interface PartnerRequest {
   connectivityPrd: TestStatus;
   credentialsProvided: boolean;
   testCredentials?: string;
+  whitelistNumbers?: string;
   uatStatus: UatStatus;
   handoverComplete: boolean;
   closeDate: string | null;

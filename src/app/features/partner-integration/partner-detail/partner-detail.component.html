@@ -212,8 +212,16 @@
         </button>
       </div>
       <div>
+        <span>{{ 'fields.gnocSrCode' | translate }}</span>
+        <strong>{{ activeRequest.gnocSrCode || '-' }}</strong>
+      </div>
+      <div>
         <span>{{ 'fields.connectionCreatedBy' | translate }}</span>
         <strong>{{ activeRequest.connectionCreatedBy || '-' }}</strong>
+      </div>
+      <div>
+        <span>{{ 'fields.statementDate' | translate }}</span>
+        <strong>{{ activeRequest.statementDate || '-' }}</strong>
       </div>
     </div>
 

@@ -91,7 +91,8 @@ export class PipelineComponent implements OnInit {
         || partnerName.toLowerCase().includes(query)
         || request.nextAction.toLowerCase().includes(query)
         || request.currentOwner.toLowerCase().includes(query)
-        || (request.srCode || '').toLowerCase().includes(query);
+        || (request.srCode || '').toLowerCase().includes(query)
+        || (request.gnocSrCode || '').toLowerCase().includes(query);
 
       if (!matchesQuery) return false;
       if (this.selectedScope === 'OPEN' && request.currentStatus === 'CLOSED') return false;

@@ -106,7 +106,9 @@ export class PartnerIntegrationPdfService {
         'Owner',
         'Next Action',
         'CNOC SR Code',
+        'GNOC 2.0 SR Code',
         'Connection Created By',
+        'Statement Date',
         'Priority',
         'Open Date',
         'Follow-up',
@@ -121,7 +123,9 @@ export class PartnerIntegrationPdfService {
         request.currentOwner || '-',
         request.nextAction || '-',
         request.srCode || '-',
+        request.gnocSrCode || '-',
         request.connectionCreatedBy || '-',
+        request.statementDate || '-',
         request.priority || '-',
         request.openDate || '-',
         request.followUpDate || '-',
@@ -266,6 +270,104 @@ export class PartnerIntegrationPdfService {
     doc.save(this.documentFilename.build('CONNECTION_PROFILE', connection.id, partner.name));
   }
 
+  async downloadRequestProfile(
+    request: PartnerRequest,
+    partner: Partner,
+    connection: PartnerConnection | undefined,
+    events: TimelineEvent[]
+  ): Promise<void> {
+    const [{default: JsPDF}, {default: autoTable}] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable')
+    ]);
+    const doc = new JsPDF({orientation: 'portrait'});
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 14;
+    const formData = this.partnerIntegration.getRequestFormData(request, partner);
+
+    this.drawHeader(doc, 'REQUEST PROFILE', this.partnerIntegration.requestDisplayTitle(request, partner));
+    this.drawSummaryTable(doc, autoTable, margin, 26, [
+      ['Partner', partner.name || '-'],
+      ['Status', this.partnerIntegration.statusLabel(request.currentStatus)],
+      ['Owner', request.currentOwner || '-'],
+      ['Connection', connection?.name || '-']
+    ]);
+
+    autoTable(doc, {
+      startY: 44,
+      margin: {left: margin, right: margin, bottom: 20},
+      head: [['Field', 'Value']],
+      body: [
+        ['Request', this.partnerIntegration.requestDisplayTitle(request, partner)],
+        ['Type', this.partnerIntegration.typeLabel(request.type)],
+        ['Priority', request.priority || '-'],
+        ['Next Action', request.nextAction || '-'],
+        ['Open Date', request.openDate || '-'],
+        ['Follow-up', request.followUpDate || '-'],
+        ['Stage Start', request.stageStartDate || '-'],
+        ['Statement Date', request.statementDate || '-'],
+        ['Connection Created By', request.connectionCreatedBy || '-'],
+        ['CNOC SR Code', request.srCode || '-'],
+        ['GNOC 2.0 SR Code', request.gnocSrCode || '-'],
+        ['IP Core', this.partnerIntegration.implementationStatusLabel(request.ipCoreStatus)],
+        ['IT', this.partnerIntegration.implementationStatusLabel(request.itStatus)],
+        ['VPN', this.partnerIntegration.vpnStatusLabel(request.vpnStatus)],
+        ['UAT Connectivity', this.partnerIntegration.testStatusLabel(request.connectivityUat)],
+        ['PRD Connectivity', this.partnerIntegration.testStatusLabel(request.connectivityPrd)],
+        ['UAT/API', this.partnerIntegration.uatStatusLabel(request.uatStatus)],
+        ['Whitelist Numbers', request.whitelistNumbers || '-'],
+        ['Credentials', this.credentialsStatus(request)],
+        ['Blocker', request.blocker || request.blockReason || '-']
+      ],
+      theme: 'grid',
+      styles: this.tableStyles(),
+      headStyles: this.headStyles(),
+      didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
+    });
+
+    autoTable(doc, {
+      startY: ((doc as any).lastAutoTable?.finalY || 140) + 8,
+      margin: {left: margin, right: margin, bottom: 20},
+      head: [['Form Snapshot', 'Value']],
+      body: [
+        ['Company', formData.companyName || partner.name || '-'],
+        ['Service/API', formData.serviceApi || '-'],
+        ['Environment', formData.environment || '-'],
+        ['Technical Contact', formData.technicalContact || '-'],
+        ['Public IP (Peer)', formData.publicPeerIps?.length ? formData.publicPeerIps.join(', ') : formData.publicIp || '-'],
+        ['Private Endpoints', formData.privateEndpoints?.length
+          ? formData.privateEndpoints.map(endpoint => `${endpoint.environment}: ${endpoint.ip || '-'}:${endpoint.port || '-'}`).join(' | ')
+          : formData.partnerServerIp || '-'],
+        ['Auth Method', formData.authMethod || '-'],
+        ['Imported File', formData.importedFileName || '-'],
+        ['OwnCloud Folder', formData.ownCloudFolderUrl || '-'],
+        ['Form Notes', formData.formNotes || '-']
+      ],
+      theme: 'grid',
+      styles: this.tableStyles(),
+      headStyles: this.headStyles(),
+      didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
+    });
+
+    autoTable(doc, {
+      startY: ((doc as any).lastAutoTable?.finalY || 220) + 8,
+      margin: {left: margin, right: margin, bottom: 20},
+      head: [['Date', 'Event', 'Description']],
+      body: events.length ? events.map(event => [
+        this.formatDateTime(event.date),
+        event.title,
+        event.description
+      ]) : [['-', 'No history', '-']],
+      theme: 'grid',
+      styles: this.tableStyles(),
+      headStyles: this.headStyles(),
+      didDrawPage: () => this.drawFooter(doc, pageWidth, pageHeight)
+    });
+
+    doc.save(this.documentFilename.build('REQUEST_PROFILE', request.id, partner.name));
+  }
+
   async downloadPartnerProfile(
     partner: Partner,
     requests: PartnerRequest[],
@@ -344,7 +446,7 @@ export class PartnerIntegrationPdfService {
     autoTable(doc, {
       startY: ((doc as any).lastAutoTable?.finalY || profileFinalY) + 8,
       margin: {left: margin, right: margin, bottom: 20},
-      head: [['Request Type', 'Status', 'Service/API', 'Environment', 'Technical Contact', 'Owner', 'Next Action', 'CNOC SR Code', 'Open Date', 'Credentials', 'Blocker']],
+      head: [['Request Type', 'Status', 'Service/API', 'Environment', 'Technical Contact', 'Owner', 'Next Action', 'CNOC SR Code', 'GNOC 2.0 SR Code', 'Open Date', 'Credentials', 'Blocker']],
       body: requests.map(request => [
         this.partnerIntegration.requestDisplayTitle(request, partner),
         this.partnerIntegration.statusLabel(request.currentStatus),
@@ -354,6 +456,7 @@ export class PartnerIntegrationPdfService {
         request.currentOwner || '-',
         request.nextAction || '-',
         request.srCode || '-',
+        request.gnocSrCode || '-',
         request.openDate || '-',
         this.credentialsStatus(request),
         request.blocker || '-'

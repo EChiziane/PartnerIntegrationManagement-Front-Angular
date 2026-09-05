@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PartnerIntegrationService} from '@core/services/partner-integration.service';
+import {PartnerIntegrationPdfService} from '@core/services/partner-integration-pdf.service';
 import {
+  ImplementationStatus,
   Partner,
   PartnerConnection,
   PartnerEnvironment,
@@ -23,6 +25,8 @@ interface WorkflowAction {
   requiresCredentialsText?: boolean;
   requiresTechnicalData?: boolean;
   requiresStatementCreator?: boolean;
+  requiresCnocSr?: boolean;
+  requiresGnocSr?: boolean;
 }
 
 interface TechnicalDraft {
@@ -54,13 +58,26 @@ export class RequestDetailComponent implements OnInit {
   isBlockReasonModalOpen = false;
   isUnblockNoteModalOpen = false;
   credentialsDraft = '';
+  whitelistDraft = '';
   srDraft = '';
+  srEditorKind: 'cnoc' | 'gnoc' = 'cnoc';
+  statementDateDraft = '';
   statementCreatorDraft = '';
   reasonDraft = '';
-  private pendingSrAction: { label: string; patch: Partial<PartnerRequest> } | null = null;
+  private pendingSrAction: { label: string; patch: Partial<PartnerRequest>; kind: 'cnoc' | 'gnoc' } | null = null;
   private pendingBackAction: WorkflowAction | null = null;
   technicalDraft: TechnicalDraft = this.emptyTechnicalDraft();
   importNotice = '';
+  readonly connectionCreatorOptions = [
+    'Ednilson Chiziane',
+    'Samson Mambo',
+    'Germano Mondlhane',
+    'Paulo Lombene',
+    'Domingos Junior',
+    'Edwilson Pene',
+    'Estevao Mulungo',
+    'Egas'
+  ];
   readonly flow: WorkflowStatus[] = [
     'BLOCKED',
     'NEW',
@@ -81,6 +98,7 @@ export class RequestDetailComponent implements OnInit {
 
   constructor(
     public partnerIntegration: PartnerIntegrationService,
+    private pdf: PartnerIntegrationPdfService,
     private modal: NzModalService,
     private message: NzMessageService,
     private translation: TranslationService,
@@ -233,16 +251,9 @@ export class RequestDetailComponent implements OnInit {
 
   confirmAction(label: string, patch: Partial<PartnerRequest>): void {
     if (!this.request) return;
-    if (patch.formValidated && !this.canValidateForm()) {
-      this.modal.warning({
-        nzTitle: this.t('modal.technicalRequiredTitle'),
-        nzContent: this.t('modal.technicalRequiredContent')
-      });
-      return;
-    }
     if (this.needsSrCodeBeforeSubmit(this.request, patch)) {
-      this.pendingSrAction = {label, patch};
-      this.openSrEditor();
+      this.pendingSrAction = {label, patch, kind: 'cnoc'};
+      this.openSrEditor('cnoc');
       return;
     }
 
@@ -266,6 +277,16 @@ export class RequestDetailComponent implements OnInit {
     }
     if (action.requiresStatementCreator) {
       this.openStatementCreatorEditor();
+      return;
+    }
+    if (action.requiresCnocSr) {
+      this.pendingSrAction = {label: action.label, patch: action.patch, kind: 'cnoc'};
+      this.openSrEditor('cnoc');
+      return;
+    }
+    if (action.requiresGnocSr) {
+      this.pendingSrAction = {label: action.label, patch: action.patch, kind: 'gnoc'};
+      this.openSrEditor('gnoc');
       return;
     }
 
@@ -294,8 +315,7 @@ export class RequestDetailComponent implements OnInit {
           ? this.t('request.actions.formValidatedDescription')
           : this.t('request.actions.formNeedsDataDescription'),
         patch: {formValidated: true},
-        tone: 'primary',
-        requiresTechnicalData: true
+        tone: 'primary'
       }],
       READY_STATEMENT: [{
         label: this.t('request.actions.statementCreated'),
@@ -304,18 +324,13 @@ export class RequestDetailComponent implements OnInit {
         tone: 'primary',
         requiresStatementCreator: true
       }],
-      READY_IMPLEMENTATION: [{
-        label: this.t('request.actions.sendToVoffice'),
-        description: this.t('request.actions.sendToVofficeDescription'),
-        patch: {statementSent: true},
-        tone: 'primary'
-      }],
       WAITING_SIGNATURES: [{
         label: this.t('request.actions.approvalComplete'),
         description: this.t('request.actions.approvalCompleteDescription'),
-        patch: {signaturesComplete: true, ipCoreStatus: 'SUBMITTED', itStatus: 'SUBMITTED'},
+        patch: {signaturesComplete: true},
         tone: 'primary'
       }],
+      READY_IMPLEMENTATION: this.readyImplementationActions(),
       IMPLEMENTATION: this.implementationActions(),
       READY_CONNECTIVITY: [{
         label: this.t('request.actions.startConnectivity'),
@@ -337,6 +352,22 @@ export class RequestDetailComponent implements OnInit {
         description: this.t('request.actions.uatPassDescription'),
         patch: {uatStatus: 'PASS'},
         tone: 'primary'
+      }, {
+        label: this.t('request.actions.uatFailed'),
+        description: this.t('request.actions.uatFailedDescription'),
+        patch: {uatStatus: 'ISSUE', blocker: 'UAT/API failed'},
+        tone: 'danger'
+      }, {
+        label: this.t('request.actions.waitingPartner'),
+        description: this.t('request.actions.waitingPartnerDescription'),
+        patch: {uatStatus: 'WAITING_PARTNER'},
+        tone: 'default'
+      }, {
+        label: this.t('request.actions.needCredentialsUpdate'),
+        description: this.t('request.actions.needCredentialsUpdateDescription'),
+        patch: {},
+        tone: 'default',
+        requiresCredentialsText: true
       }],
       READY_HANDOVER: [{
         label: this.t('request.actions.handoverComplete'),
@@ -382,29 +413,61 @@ export class RequestDetailComponent implements OnInit {
 
     const actions: WorkflowAction[] = [];
 
-    if (this.request.ipCoreStatus !== 'DONE') {
-      actions.push({
-        label: this.t('request.actions.ipCoreDone'),
-        description: this.request.itStatus === 'DONE'
-          ? this.t('request.actions.ipCoreDoneItAlready')
-          : this.t('request.actions.ipCoreDoneDescription'),
-        patch: {ipCoreStatus: 'DONE'},
-        tone: 'primary'
-      });
-    }
-
-    if (this.request.itStatus !== 'DONE') {
-      actions.push({
-        label: this.t('request.actions.itDone'),
-        description: this.request.ipCoreStatus === 'DONE'
-          ? this.t('request.actions.itDoneIpAlready')
-          : this.t('request.actions.itDoneDescription'),
-        patch: {itStatus: 'DONE'},
-        tone: 'primary'
-      });
-    }
+    actions.push(...this.implementationTrackActions('ipCoreStatus', this.request.ipCoreStatus));
+    actions.push(...this.implementationTrackActions('itStatus', this.request.itStatus));
 
     return actions;
+  }
+
+  private readyImplementationActions(): WorkflowAction[] {
+    if (!this.request) return [];
+
+    if (!this.request.statementSent || !this.request.signaturesComplete) {
+      return [{
+        label: this.t('request.actions.sendToVoffice'),
+        description: this.t('request.actions.sendToVofficeDescription'),
+        patch: {statementSent: true},
+        tone: 'primary'
+      }];
+    }
+
+    return this.implementationActions();
+  }
+
+  private implementationTrackActions(field: 'ipCoreStatus' | 'itStatus', status: ImplementationStatus): WorkflowAction[] {
+    const isIpCore = field === 'ipCoreStatus';
+    const labelPrefix = isIpCore ? 'ipCore' : 'it';
+    const srRequirement = isIpCore ? {requiresCnocSr: true} : {requiresGnocSr: true};
+
+    if (status === 'NOT_SUBMITTED') {
+      return [{
+        label: this.t(`request.actions.${labelPrefix}Submit`),
+        description: this.t(`request.actions.${labelPrefix}SubmitDescription`),
+        patch: {[field]: 'SUBMITTED'} as Partial<PartnerRequest>,
+        tone: 'primary',
+        ...srRequirement
+      }];
+    }
+
+    if (status === 'SUBMITTED') {
+      return [{
+        label: this.t(`request.actions.${labelPrefix}InProgress`),
+        description: this.t(`request.actions.${labelPrefix}InProgressDescription`),
+        patch: {[field]: 'IN_PROGRESS'} as Partial<PartnerRequest>,
+        tone: 'primary'
+      }];
+    }
+
+    if (status === 'IN_PROGRESS') {
+      return [{
+        label: this.t(`request.actions.${labelPrefix}Done`),
+        description: this.t(`request.actions.${labelPrefix}DoneDescription`),
+        patch: {[field]: 'DONE'} as Partial<PartnerRequest>,
+        tone: 'primary'
+      }];
+    }
+
+    return [];
   }
 
   private connectivityActions(): WorkflowAction[] {
@@ -418,6 +481,11 @@ export class RequestDetailComponent implements OnInit {
         description: this.t('request.actions.vpnUpDescription'),
         patch: {vpnStatus: 'UP'},
         tone: 'primary'
+      }, {
+        label: this.t('request.actions.vpnDown'),
+        description: this.t('request.actions.vpnDownDescription'),
+        patch: {vpnStatus: 'DOWN', blocker: 'VPN down'},
+        tone: 'danger'
       });
       return actions;
     }
@@ -428,6 +496,11 @@ export class RequestDetailComponent implements OnInit {
         description: this.t('request.actions.uatConnectivityPassDescription'),
         patch: {connectivityUat: 'PASS'},
         tone: 'primary'
+      }, {
+        label: this.t('request.actions.uatConnectivityFail'),
+        description: this.t('request.actions.uatConnectivityFailDescription'),
+        patch: {connectivityUat: 'FAIL', blocker: 'UAT connectivity failed'},
+        tone: 'danger'
       });
     }
 
@@ -437,6 +510,11 @@ export class RequestDetailComponent implements OnInit {
         description: this.t('request.actions.prdConnectivityPassDescription'),
         patch: {connectivityPrd: 'PASS'},
         tone: 'primary'
+      }, {
+        label: this.t('request.actions.prdConnectivityFail'),
+        description: this.t('request.actions.prdConnectivityFailDescription'),
+        patch: {connectivityPrd: 'FAIL', blocker: 'PRD connectivity failed'},
+        tone: 'danger'
       });
     }
 
@@ -510,6 +588,10 @@ export class RequestDetailComponent implements OnInit {
       && !this.request.followUpDate;
   }
 
+  needsTechnicalDataWarning(): boolean {
+    return !!this.request?.formValidated && !this.canValidateForm();
+  }
+
   private requiresUat(): boolean {
     return this.formData?.environment !== 'PRD';
   }
@@ -521,41 +603,54 @@ export class RequestDetailComponent implements OnInit {
   openCredentialsEditor(): void {
     if (!this.request) return;
     this.credentialsDraft = this.request.testCredentials || '';
+    this.whitelistDraft = this.request.whitelistNumbers || '';
     this.isCredentialsEditorOpen = true;
   }
 
   cancelCredentialsEditor(): void {
     this.isCredentialsEditorOpen = false;
     this.credentialsDraft = '';
+    this.whitelistDraft = '';
   }
 
   saveCredentials(): void {
-    if (!this.request || !this.credentialsDraft.trim()) return;
+    if (!this.request) return;
     this.partnerIntegration.updateRequest(this.request.id, {
       credentialsProvided: true,
       testCredentials: this.credentialsDraft.trim(),
+      whitelistNumbers: this.whitelistDraft.trim(),
       uatStatus: 'IN_PROGRESS'
     }, 'Test Credentials Provided');
     this.message.success(this.t('messages.credentialsSaved'));
     this.isCredentialsEditorOpen = false;
     this.credentialsDraft = '';
+    this.whitelistDraft = '';
     this.load();
   }
 
   editSrCode(): void {
     if (!this.request) return;
     this.pendingSrAction = null;
-    this.openSrEditor();
+    this.openSrEditor('cnoc');
   }
 
-  openSrEditor(): void {
-    this.srDraft = this.request?.srCode || '';
+  editGnocSrCode(): void {
+    if (!this.request) return;
+    this.pendingSrAction = null;
+    this.openSrEditor('gnoc');
+  }
+
+  openSrEditor(kind: 'cnoc' | 'gnoc' = 'cnoc'): void {
+    this.srEditorKind = kind;
+    this.pendingSrAction = this.pendingSrAction ? {...this.pendingSrAction, kind} : null;
+    this.srDraft = kind === 'gnoc' ? this.request?.gnocSrCode || '' : this.request?.srCode || '';
     this.isSrEditorOpen = true;
   }
 
   cancelSrEditor(): void {
     this.isSrEditorOpen = false;
     this.srDraft = '';
+    this.srEditorKind = 'cnoc';
     this.pendingSrAction = null;
   }
 
@@ -567,37 +662,45 @@ export class RequestDetailComponent implements OnInit {
     this.isSrEditorOpen = false;
     this.srDraft = '';
     this.pendingSrAction = null;
+    const srKind = pending?.kind || this.srEditorKind;
+    this.srEditorKind = 'cnoc';
 
     if (pending) {
-      this.applyAction(pending.label, {...pending.patch, srCode});
+      const srPatch = srKind === 'gnoc' ? {gnocSrCode: srCode} : {srCode};
+      this.applyAction(pending.label, {...pending.patch, ...srPatch});
       return;
     }
 
     this.partnerIntegration.updateRequest(this.request.id, {
-      srCode
-    }, srCode ? 'CNOC SR Code Updated' : 'CNOC SR Code Cleared');
+      [srKind === 'gnoc' ? 'gnocSrCode' : 'srCode']: srCode
+    }, srCode ? (srKind === 'gnoc' ? 'GNOC 2.0 SR Code Updated' : 'CNOC SR Code Updated') : 'SR Code Cleared');
     this.message.success(this.t('messages.srCodeSaved'));
     this.load();
   }
 
   openStatementCreatorEditor(): void {
     this.statementCreatorDraft = this.request?.connectionCreatedBy || '';
+    this.statementDateDraft = this.request?.statementDate || this.request?.stageStartDate || '';
     this.isStatementCreatorEditorOpen = true;
   }
 
   cancelStatementCreatorEditor(): void {
     this.isStatementCreatorEditorOpen = false;
     this.statementCreatorDraft = '';
+    this.statementDateDraft = '';
   }
 
   saveStatementCreator(): void {
     if (!this.request) return;
     const connectionCreatedBy = this.statementCreatorDraft.trim();
+    const statementDate = this.statementDateDraft.trim();
     this.isStatementCreatorEditorOpen = false;
     this.statementCreatorDraft = '';
+    this.statementDateDraft = '';
     this.confirmAction(this.t('request.actions.statementCreated'), {
       statementCreated: true,
-      connectionCreatedBy
+      connectionCreatedBy,
+      statementDate
     });
   }
 
@@ -613,6 +716,14 @@ export class RequestDetailComponent implements OnInit {
 
   get previousAction(): WorkflowAction | null {
     if (!this.request || this.request.currentStatus === 'BLOCKED') return null;
+
+    if (this.request.currentStatus === 'READY_IMPLEMENTATION' && this.request.signaturesComplete) {
+      return {
+        label: this.t('request.backActions.returnWaitingSignatures'),
+        description: this.t('request.backActions.returnWaitingSignaturesDescription'),
+        patch: {signaturesComplete: false}
+      };
+    }
 
     const map: Partial<Record<WorkflowStatus, WorkflowAction>> = {
       WAITING_FORM: {
@@ -796,6 +907,11 @@ export class RequestDetailComponent implements OnInit {
 
   private needsSrCodeBeforeSubmit(request: PartnerRequest, patch: Partial<PartnerRequest>): boolean {
     return patch.signaturesComplete === true && patch.ipCoreStatus === 'SUBMITTED' && !request.srCode?.trim();
+  }
+
+  downloadRequestPdf(): void {
+    if (!this.request || !this.partner) return;
+    this.pdf.downloadRequestProfile(this.request, this.partner, this.connection, this.events);
   }
 
   back(): void {

@@ -13,9 +13,15 @@
         {{ connection.name }} · {{ partnerIntegration.connectionHealthLabel(connection.health) }}
       </button>
     </div>
-    <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
-      {{ partnerIntegration.statusLabel(request.currentStatus) }}
-    </nz-tag>
+    <div class="header-actions">
+      <button (click)="downloadRequestPdf()" nz-button nzType="default">
+        <span nz-icon nzType="download"></span>
+        {{ 'request.downloadPdf' | translate }}
+      </button>
+      <nz-tag [nzColor]="partnerIntegration.statusColor(request.currentStatus)">
+        {{ partnerIntegration.statusLabel(request.currentStatus) }}
+      </nz-tag>
+    </div>
   </section>
 
   <div class="detail-grid">
@@ -43,7 +49,21 @@
             <span nz-icon [nzType]="request.srCode ? 'edit' : 'plus'"></span>
           </button>
         </div>
+        <div class="fact-with-action">
+          <span>{{ 'fields.gnocSrCode' | translate }}</span>
+          <strong>{{ request.gnocSrCode || '-' }}</strong>
+          <button
+            (click)="editGnocSrCode()"
+            [attr.aria-label]="request.gnocSrCode ? ('common.actions.edit' | translate) : ('common.actions.add' | translate)"
+            class="icon-action"
+            nz-button
+            nzSize="small"
+            nzType="default">
+            <span nz-icon [nzType]="request.gnocSrCode ? 'edit' : 'plus'"></span>
+          </button>
+        </div>
         <div><span>{{ 'fields.connectionCreatedBy' | translate }}</span><strong>{{ request.connectionCreatedBy || '-' }}</strong></div>
+        <div><span>{{ 'fields.statementDate' | translate }}</span><strong>{{ request.statementDate || '-' }}</strong></div>
         <div><span>IP Core</span><strong>{{ partnerIntegration.implementationStatusLabel(request.ipCoreStatus) }}</strong></div>
         <div><span>IT</span><strong>{{ partnerIntegration.implementationStatusLabel(request.itStatus) }}</strong></div>
         <div><span>VPN</span><strong>{{ partnerIntegration.vpnStatusLabel(request.vpnStatus) }}</strong></div>
@@ -62,6 +82,11 @@
       <div *ngIf="needsTroubleshootingFollowUp()" class="validation-gate urgent">
         <strong>{{ 'request.troubleshootingFollowUpTitle' | translate }}</strong>
         <span>{{ 'request.troubleshootingFollowUpHint' | translate }}</span>
+      </div>
+
+      <div *ngIf="needsTechnicalDataWarning()" class="validation-gate">
+        <strong>{{ 'request.technicalRequiredTitle' | translate }}</strong>
+        <span>{{ 'request.technicalRequiredHint' | translate }}</span>
       </div>
 
       <div class="flow-strip" [attr.aria-label]="'request.workflow' | translate">
@@ -91,8 +116,9 @@
               (click)="handleNextAction(item)"
               [disabled]="item.requiresTechnicalData && !canValidateForm()"
               nz-button
+              [nzDanger]="item.tone === 'danger'"
               [nzType]="item.tone === 'primary' ? 'primary' : 'default'">
-              {{ 'request.continue' | translate }}
+              {{ item.label }}
             </button>
           </article>
         </div>
@@ -245,6 +271,10 @@
       <h2>{{ 'request.uatCredentials' | translate }}</h2>
     </header>
     <pre *ngIf="request.testCredentials; else noCredentialsRecorded" class="credentials-output">{{ request.testCredentials }}</pre>
+    <div *ngIf="request.whitelistNumbers" class="whitelist-output">
+      <span>{{ 'request.whitelistNumbers' | translate }}</span>
+      <strong>{{ request.whitelistNumbers }}</strong>
+    </div>
     <ng-template #noCredentialsRecorded>
       <div class="credentials-empty">
         <div>
@@ -285,7 +315,13 @@
           <span class="panel-kicker">{{ 'fields.connectionCreatedBy' | translate }}</span>
           <h3>{{ 'request.statementCreatorHint' | translate }}</h3>
         </div>
-        <input [(ngModel)]="statementCreatorDraft" nz-input [placeholder]="'request.statementCreatorPlaceholder' | translate"/>
+        <nz-select [(ngModel)]="statementCreatorDraft" nzAllowClear [nzPlaceHolder]="'request.statementCreatorPlaceholder' | translate">
+          <nz-option *ngFor="let option of connectionCreatorOptions" [nzValue]="option" [nzLabel]="option"></nz-option>
+        </nz-select>
+        <label>
+          {{ 'fields.statementDate' | translate }}
+          <input [(ngModel)]="statementDateDraft" nz-input type="date"/>
+        </label>
       </div>
     </ng-container>
   </nz-modal>
@@ -295,7 +331,6 @@
     [nzTitle]="'request.testCredentials' | translate"
     [nzOkText]="'request.saveMarkProvided' | translate"
     [nzCancelText]="'common.actions.cancel' | translate"
-    [nzOkDisabled]="!credentialsDraft.trim()"
     (nzOnCancel)="cancelCredentialsEditor()"
     (nzOnOk)="saveCredentials()">
     <ng-container *nzModalContent>
@@ -309,6 +344,14 @@
           nz-input
           rows="8"
           [placeholder]="'request.credentialsPlaceholder' | translate"></textarea>
+        <label>
+          {{ 'request.whitelistNumbers' | translate }}
+          <textarea
+            [(ngModel)]="whitelistDraft"
+            nz-input
+            rows="4"
+            [placeholder]="'request.whitelistPlaceholder' | translate"></textarea>
+        </label>
       </div>
     </ng-container>
   </nz-modal>
@@ -363,15 +406,15 @@
 
   <nz-modal
     [(nzVisible)]="isSrEditorOpen"
-    [nzTitle]="'request.srEditorTitle' | translate"
+    [nzTitle]="srEditorKind === 'gnoc' ? ('request.gnocSrEditorTitle' | translate) : ('request.srEditorTitle' | translate)"
     [nzOkText]="'common.actions.save' | translate"
     [nzCancelText]="'common.actions.cancel' | translate"
     (nzOnCancel)="cancelSrEditor()"
     (nzOnOk)="saveSrCode()">
     <ng-container *nzModalContent>
       <div class="sr-editor">
-        <p>{{ 'request.srEditorHint' | translate }}</p>
-        <input [(ngModel)]="srDraft" nz-input [placeholder]="'request.srEditorPlaceholder' | translate"/>
+        <p>{{ srEditorKind === 'gnoc' ? ('request.gnocSrEditorHint' | translate) : ('request.srEditorHint' | translate) }}</p>
+        <input [(ngModel)]="srDraft" nz-input [placeholder]="srEditorKind === 'gnoc' ? ('request.gnocSrEditorPlaceholder' | translate) : ('request.srEditorPlaceholder' | translate)"/>
       </div>
     </ng-container>
   </nz-modal>

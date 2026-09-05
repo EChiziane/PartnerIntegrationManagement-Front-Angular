@@ -27,6 +27,14 @@
   white-space: normal;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .detail-header > div,
 .detail-header h1,
 .detail-header p {
@@ -423,6 +431,27 @@ p,
   background: #f8fbfd;
   font-family: Consolas, 'Courier New', monospace;
   font-size: 13px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.whitelist-output {
+  display: grid;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #dfe8ef;
+  border-radius: 8px;
+  background: #f8fbfd;
+}
+
+.whitelist-output span {
+  color: #536c7c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.whitelist-output strong {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }

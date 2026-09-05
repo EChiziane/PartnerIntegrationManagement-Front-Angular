@@ -185,15 +185,18 @@ export class PartnerIntegrationService {
       formValidated: false,
       statementCreated: false,
       connectionCreatedBy: '',
+      statementDate: '',
       statementSent: false,
       signaturesComplete: false,
       srCode: '',
+      gnocSrCode: '',
       ipCoreStatus: 'NOT_SUBMITTED',
       itStatus: 'NOT_SUBMITTED',
       vpnStatus: 'NOT_STARTED',
       connectivityUat: 'NOT_TESTED',
       connectivityPrd: 'NOT_TESTED',
       credentialsProvided: false,
+      whitelistNumbers: '',
       uatStatus: 'NOT_STARTED',
       handoverComplete: false,
       closeDate: null,
@@ -428,11 +431,12 @@ export class PartnerIntegrationService {
     if (request.type === 'CONNECTIVITY_SUPPORT' && request.connectivityUat === 'FAIL') return 'TROUBLESHOOTING';
     if (request.handoverComplete) return 'CLOSED';
     if (request.uatStatus === 'PASS') return 'READY_HANDOVER';
-    if (request.uatStatus === 'IN_PROGRESS' || request.credentialsProvided) return 'UAT_IN_PROGRESS';
+    if (request.uatStatus === 'IN_PROGRESS' || request.uatStatus === 'WAITING_PARTNER' || request.credentialsProvided) return 'UAT_IN_PROGRESS';
     if (request.connectivityUat === 'FAIL' || request.connectivityPrd === 'FAIL' || request.uatStatus === 'ISSUE') return 'TROUBLESHOOTING';
     if (this.requiredConnectivityPassed(request)) return 'READY_UAT';
     if (this.connectivityStarted(request)) return 'CONNECTIVITY_TEST';
     if (request.ipCoreStatus === 'DONE' && request.itStatus === 'DONE') return 'READY_CONNECTIVITY';
+    if (request.signaturesComplete && request.ipCoreStatus === 'NOT_SUBMITTED' && request.itStatus === 'NOT_SUBMITTED') return 'READY_IMPLEMENTATION';
     if (request.signaturesComplete && (request.ipCoreStatus !== 'DONE' || request.itStatus !== 'DONE')) return 'IMPLEMENTATION';
     if (request.statementSent && !request.signaturesComplete) return 'WAITING_SIGNATURES';
     if (request.statementCreated && !request.statementSent) return 'READY_IMPLEMENTATION';
@@ -1034,15 +1038,18 @@ export class PartnerIntegrationService {
       formValidated: false,
       statementCreated: false,
       connectionCreatedBy: '',
+      statementDate: '',
       statementSent: false,
       signaturesComplete: false,
       srCode: '',
+      gnocSrCode: '',
       ipCoreStatus: 'NOT_SUBMITTED',
       itStatus: 'NOT_SUBMITTED',
       vpnStatus: 'NOT_STARTED',
       connectivityUat: 'NOT_TESTED',
       connectivityPrd: 'NOT_TESTED',
       credentialsProvided: false,
+      whitelistNumbers: '',
       uatStatus: 'NOT_STARTED',
       handoverComplete: false,
       closeDate: null,
